@@ -1,0 +1,64 @@
+[build-system]
+requires      = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name        = "zodiac"
+version     = "0.0.1"
+description = "Generative media sequencer"
+readme      = "README.md"
+
+requires-python = ">=3.12"
+dependencies = [
+    "dspy>=2.6.13",
+    "litellm>=1.67.0.post1",
+    "networkx>=3.4.2",
+    # "nnll[nnll-05,nnll-06,nnll-11,nnll-15] @ git+https://github.com/darkshapes/nnll@main",
+
+    "numpy>=2.2.5",
+    "sounddevice>=0.5.1",
+    "textual[syntax]>=3.1.1",
+    "tree-sitter>=0.24.0",
+    "textual-plotext>=1.0.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/darkshapes/zodiac"
+
+[project.optional-dependencies]
+ollama   = ["ollama>=0.4.8"]
+lmstudio = ["lmstudio>=1.2.0"]
+hub      = ["huggingface-hub>=0.30.2"]
+
+[dependency-groups]
+dev = [
+    "matplotlib>=3.10.1",
+    "pytest>=8.3.5",
+    "ruff>=0.11.6",
+    "textual-dev>=1.7.0",
+    "tiktoken>=0.9.0",
+]
+
+[tool.setuptools]
+packages = ["zodiac"]
+
+[tool.ruff]
+line-length    = 140
+include        = ["*.py"]
+extend-exclude = ["^tests/.*$", "test.*$"]
+
+[tool.pylint]
+max-line-length = 140
+ignore-paths    = ["^tests/.*$", "test_.*$"]
+disable         = ["C0415"]
+
+[tool.ruff.lint.pycodestyle]
+max-line-length               = 140
+ignore-overlong-task-comments = true
+
+[tool.typos]
+files.extend-exclude = ["^tests/.*$", "test.*$"]
+default.extend-words = { "ot" = "ot" }
+
+# [tool.uv]
+# nnll = { git = "https://github.com/darkshapes/nnll/" }
