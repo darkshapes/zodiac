@@ -105,21 +105,26 @@ class IntentProcessor:
 
         self.has_graph()
         self.has_path()
-        self.ckpts = pull_path_entries(self.intent_graph, self.coord_path)
-        self.models = []
-        nfo(self.ckpts)
-        self.ckpts = sorted(self.ckpts, key=lambda x: x["weight"])
-        nfo([x["weight"] for x in self.ckpts])
-        for registry in self.ckpts:
-            model = registry["entry"].model
-            weight = registry.get("weight")
-            if weight != 1.0:
-                self.models.insert(0, (f"*{os.path.basename(model)}", model))
-                nfo("adjusted model :", f"*{os.path.basename(model)}", weight)
-            else:
-                self.models.append((os.path.basename(model), model))
-                # nfo("model : ", model, weight)
-        self.models = sorted(self.models, key=lambda x: "*" in x)
+        try:
+            self.ckpts = pull_path_entries(self.intent_graph, self.coord_path)
+        except KeyError as error_log:
+            dbug(error_log)
+            return ["", ""]
+        if len(self.ckpts) != 0:
+            self.models = []
+            nfo(self.ckpts)
+            self.ckpts = sorted(self.ckpts, key=lambda x: x["weight"])
+            nfo([x["weight"] for x in self.ckpts])
+            for registry in self.ckpts:
+                model = registry["entry"].model
+                weight = registry.get("weight")
+                if weight != 1.0:
+                    self.models.insert(0, (f"*{os.path.basename(model)}", model))
+                    nfo("adjusted model :", f"*{os.path.basename(model)}", weight)
+                else:
+                    self.models.append((os.path.basename(model), model))
+                    # nfo("model : ", model, weight)
+            self.models = sorted(self.models, key=lambda x: "*" in x)
 
     @debug_monitor
     def edit_weight(self, selection: str, mode_in: str, mode_out: str) -> None:

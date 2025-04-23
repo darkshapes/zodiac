@@ -3,7 +3,9 @@
 .python-version
 README.md
 pyproject.toml
+textual.log
 uv.lock
+img_src/screenshot.png
 img_src/zodiac_dark_bg.png
 img_src/zodiac_dark_stealth.png
 img_src/zodiac_light_stealth.png

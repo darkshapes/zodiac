@@ -1182,8 +1182,8 @@ wheels = [
 
 [[package]]
 name = "nnll"
-version = "0.1.dev280+ga426568.d20250423"
-source = { git = "https://github.com/darkshapes/nnll?rev=main#a426568ff21b296a5a54b82dabe4284a2047e0be" }
+version = "0.1.dev274+geef99c6.d20250422"
+source = { git = "https://github.com/darkshapes/nnll?rev=x%2Fdev#5cdf04890c851b2d7f796bf2ac7e703a5d98cc96" }
 
 [package.optional-dependencies]
 nnll-01 = [
@@ -2563,7 +2563,7 @@ requires-dist = [
     { name = "litellm", specifier = ">=1.67.0.post1" },
     { name = "lmstudio", marker = "extra == 'lmstudio'", specifier = ">=1.2.0" },
     { name = "networkx", specifier = ">=3.4.2" },
-    { name = "nnll", extras = ["nnll-01", "nnll-05", "nnll-06", "nnll-11", "nnll-15"], git = "https://github.com/darkshapes/nnll?rev=main" },
+    { name = "nnll", extras = ["nnll-01", "nnll-05", "nnll-06", "nnll-11", "nnll-15"], git = "https://github.com/darkshapes/nnll?rev=x%2Fdev" },
     { name = "numpy", specifier = ">=2.2.5" },
     { name = "ollama", marker = "extra == 'ollama'", specifier = ">=0.4.8" },
     { name = "sounddevice", specifier = ">=0.5.1" },
