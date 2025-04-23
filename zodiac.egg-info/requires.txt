@@ -7,6 +7,7 @@ sounddevice>=0.5.1
 textual[syntax]>=3.1.1
 tree-sitter>=0.24.0
 textual-plotext>=1.0.1
+sympy>=1.13.3
 
 [hub]
 huggingface-hub>=0.30.2

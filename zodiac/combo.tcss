@@ -97,6 +97,7 @@ $selection-fg: $background;
     width: 100%;
     layer: above;
     text-overflow: ellipsis;
+    &.input-selection-background {background: $negative-space 7%;}
     &:focus {
         background: white 10%;
     }
@@ -299,13 +300,16 @@ SidebarLeft, SidebarRight {
     layer: above;
     background: $top-surface;
     background-tint: 0%;
+    link-background-hover: $top-surface;
     .datatable--cursor {
         color: $background-lighten-3;
+        text-style: none;
         background: $top-surface;
     }
     &:hover {
         .datatable--cursor {
             color: $foreground-darken-1;
+            text-style: none;
             background: $top-surface;
         }
     }

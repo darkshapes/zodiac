@@ -19,7 +19,7 @@ class Combo(App):
     CSS_PATH = "combo.tcss"
     BINDINGS = [Binding("escape", "safe_exit", "◼︎ / ⏏︎")]  # Cancel response
 
-    safety: reactive[int] = reactive(1)
+    safety: reactive[int] = reactive(2)
 
     def on_mount(self) -> None:
         """Draw screen"""
@@ -35,8 +35,8 @@ class Combo(App):
         if event.key not in ["escape", "ctrl+left_square_brace"]:
             self.safety += 1
         else:
-            self.safety -= 1
-            if self.safety < 0:
+            self.notify("Press ESC again to quit")
+            self.safety = max(0, self.safety - 1)
+            if self.safety == 0:
                 event.prevent_default()
-
                 await self.app.action_quit()

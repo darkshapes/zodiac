@@ -1,4 +1,5 @@
 .DS_Store
+.gitignore
 .python-version
 README.md
 pyproject.toml

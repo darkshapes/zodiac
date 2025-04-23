@@ -28,36 +28,16 @@ class Carousel(DataTable):
         self.cursor_type = "cell"
 
     @debug_monitor
-    def emulate_scroll_down(self, interval: int = 1) -> str:
+    def emulate_scroll(self, direction: int = 1) -> str:
         """Trigger datatable cursor movement using fractional sensitivity
-        :param ceiling: Total entry count of the table *column*
+        :param direction: Positive integer for up, negative integer for down
         :return: The datata in the table *row*
         """
-
-        if (self.row_count - 1) >= (self.current_row + interval):
-            if self.y_coord < self.scroll_counter:
-                self.y_coord += interval
-            else:
-                self.y_coord = interval
-                self.current_row += interval
-                self.move_cursor(row=self.current_row, column=1)
-        self.current_cell = self.get_cell_at((self.current_row, 1))
-        return self.current_cell
-
-    @debug_monitor
-    def emulate_scroll_up(self, interval: int = 1) -> str:
-        """Trigger datatable cursor movement using fractional sensitivity
-        :param ceiling: Total entry count of the table *column*
-        :return: The datata in the table *row*
-        """
-
-        if 0 <= self.current_row - interval:
-            if self.y_coord >= 1:
-                self.y_coord -= interval
-            else:
-                self.y_coord = self.scroll_counter
-                self.current_row -= interval
-                self.move_cursor(row=self.current_row, column=1)
+        self.scroll_counter += abs(direction)
+        if self.scroll_counter >= 10:
+            self.current_row = max(0, min(self.row_count - 1, self.current_row + direction))
+            self.move_cursor(row=self.current_row, column=1)
+            self.scroll_counter = 10
         self.current_cell = self.get_cell_at((self.current_row, 1))
         return self.current_cell
 
@@ -67,12 +47,20 @@ class Carousel(DataTable):
         :param up: Scroll direction, defaults to False
         """
         if up:
-            self.current_cell = self.emulate_scroll_up(interval=self.y_coord + 1)
+            self.scroll_counter = 9
+            self.current_cell = self.emulate_scroll(direction=-1)
             if self.id == "input_tag":
-                self.query_ancestor(Screen).foldr["ps"].current = self.query_ancestor(Screen).input_map[self.current_cell]
+                self.query_ancestor(Screen).ui["ps"].current = self.query_ancestor(Screen).input_map[self.current_cell]
                 self.query_ancestor(Screen).ready_tx(io_only=True)
         else:
-            self.current_cell = self.emulate_scroll_down(interval=self.scroll_counter - self.y_coord - 1)
+            self.scroll_counter = 9
+            self.current_cell = self.emulate_scroll(direction=1)
             if self.id == "input_tag":
-                self.query_ancestor(Screen).foldr["ps"].current = self.query_ancestor(Screen).input_map[self.current_cell]
+                self.query_ancestor(Screen).ui["ps"].current = self.query_ancestor(Screen).input_map[self.current_cell]
                 self.query_ancestor(Screen).ready_tx(io_only=True)
+
+        # if (self.row_count - 1) >= (self.current_row + interval):
+        #     if self.y_coord < self.scroll_counter:
+        #         self.y_coord += interval
+        #     else:
+        #         self.y_coord = interval
