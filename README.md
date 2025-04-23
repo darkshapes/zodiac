@@ -124,7 +124,7 @@ Be aware that even though Zodiac is local first, your huggingface/ollama/vllm/et
 <img alt="A screenshot of two grey text fields. At the top, someone has entered 'What is crystalline intelligence vs liquid intelligence?' The bottom shows a reply stating 'Crystalline intelligence refers to traditional, rule-based knowledge acquisition and application. It's like a well-structured database where information is stored in a rigid format, similar to a crystal lattice. This type of intelligence excels in well-defined tasks with clear rules, such as chess or trivia games.
 Liquid intelligence, on the other hand, represents adaptability and the ability to navigate uncertainty. It's dynamic and flexible, much like liquid, allowing individuals to thrive in novel situations requiring creativity, problem-solving, and social skills. This form of intelligence is increasingly valuable in our rapidly changing world where many tasks don't have straightforward solutions. Both forms of intelligence are important and serve different purposes, reflecting the evolving nature of human cognition and the diverse demands of modern life.'" src="img_src/screenshot.png">
 
-To use Zodiac, simply write into the text field, then choose your input and output forms. Moving out of the text field and tapping ``` (grave accent) will send your message along. To clear the log or any received input, hold shift and tap `backspace`. If you want to pick specific models, the box on the right will show you all the models available that can take you from your input to your output type.
+To use Zodiac, simply write into the text field, then choose your input and output forms. Moving out of the text field and tapping **\`** (grave accent) will send your message along. To clear the log or any received input, hold shift and tap `backspace`. If you want to pick specific models, the box on the right will show you all the models available that can take you from your input to your output type.
 
 ### Keyboard Reference:
 ```
@@ -191,13 +191,13 @@ textual     run --dev zodiac     = Run an instance in command prompt using dev o
 
 ## Connecting
 
-<center>
+<div align='center'>
 
 ![Image of the darkshapes 'neuron' logo, the letters DS with a superimposed illustration of a brain cell-type structure on top](https://cdn-avatars.huggingface.co/v1/production/uploads/65ff1816871b36bf84fc3c37/JZLA1RQXQ7NanLF5G9c6Q.png)<br>
  d a r k s h a p e s<br><br>
 
 ### [ <A href="discord.gg/RYaJw9mPPe">Discord</a> ] [ <A href="https://github.com/darkshapes">GitHub</a> ] [ <A href="https://huggingface.co/darkshapes">HuggingFace</a> ] [ <A href="https://github.com/maxtretikov">MaxTretikov</a> ] [ <A href="https://github.com/exdysa">EXDYSA</a> ]
-</center>
+</div>
 
 
 

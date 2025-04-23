@@ -15,3 +15,5 @@ build/lib/zodiac/response_panel.py
 build/lib/zodiac/selectah.py
 build/lib/zodiac/token_counters.py
 build/lib/zodiac/voice_panel.py
+textual.log
+.DS_Store
