@@ -16,8 +16,6 @@ from textual.screen import Screen
 
 # from textual.widget import Widget
 from textual.widgets import Static, ContentSwitcher  # , DataTable
-from textual.widget import Widget
-
 
 from nnll_01 import debug_monitor, info_message as nfo, debug_message as dbug
 from zodiac.message_panel import MessagePanel
@@ -79,8 +77,8 @@ class Fold(Screen[bool]):
                     yield Selectah(
                         id="selectah",
                         classes="selectah",
-                        prompt=os.path.basename(next(iter(self.int_proc.models))[0]),
-                        options=self.int_proc.models,
+                        prompt=os.path.basename(next(iter(self.int_proc.models))[0]) if self.int_proc.models is not None else "No model",
+                        options=self.int_proc.models if self.int_proc.models is not None else [("No model", "No models")],
                         type_to_search=True,
                     )
                 with Container(id="responsive_display"):  #
@@ -100,9 +98,10 @@ class Fold(Screen[bool]):
         self.ui["rp"] = self.query_one("#response_panel")
         self.ui["vp"] = self.query_one("#voice_panel")
         self.ui["sl"] = self.query_one("#selectah")
-        self.ready_tx()
-        self.walk_intent()
-        # id_name = self.input_tag.highlight_link_id
+        if self.int_proc.models is not None:
+            self.ready_tx()
+            self.walk_intent()
+            # id_name = self.input_tag.highlight_link_id
 
     @work(exit_on_error=False)
     async def on_resize(self, event=events.Resize) -> None:

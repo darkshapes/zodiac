@@ -61,7 +61,8 @@ class Selectah(Select):
         """Expand panel immediately when clicked in terminal"""
         if SelectOverlay.has_focus or self.has_focus:
             self.focused = True
-            self.set_options(self.graph.models)
+            if self.graph is not None and hasattr(self.graph, "models") and self.graph.models is not None:
+                self.set_options(self.graph.models)
 
     @work(exclusive=True)
     @on(events.MouseDown)
