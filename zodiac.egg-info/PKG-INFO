@@ -1,13 +1,14 @@
 Metadata-Version: 2.4
 Name: zodiac
 Version: 0.0.1
-Summary: Add your description here
+Summary: Generative media sequencer
 Project-URL: Homepage, https://github.com/darkshapes/zodiac
 Requires-Python: >=3.12
 Description-Content-Type: text/markdown
 Requires-Dist: dspy>=2.6.13
 Requires-Dist: litellm>=1.67.0.post1
 Requires-Dist: networkx>=3.4.2
+Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15]@ git+https://github.com/darkshapes/nnll@main
 Requires-Dist: numpy>=2.2.5
 Requires-Dist: sounddevice>=0.5.1
 Requires-Dist: textual[syntax]>=3.1.1
@@ -29,12 +30,13 @@ Requires-Dist: huggingface-hub>=0.30.2; extra == "hub"
 
 # Zodiac
 
-    "rich>=13.9.4",
-    "dspy>=2.6.13",
-    "sounddevice>=0.5.1",
-    "textual[syntax]>=2.1.2",
-    "textual-plotext>=1.0.1",
-    "ollama>=0.4.7",
-    "numpy>=2.2.3",
-    "tree-sitter>=0.24.0",
-    "litellm>=1.65.0",
+Zodiac is a creative tool for DIY Generative AI. Guided by text, audio, or copied/pasted files, Zodiac easily chains sophisticated model systems together so that you can concentrate on making the art you want to make, the story you want to tell, and the tools you want to build, rather than build the tool to begin with.
+
+- Zodiac runs locally and only on your device. Outside connections are disabled by default. Read the code & see for yourself.
+
+- We currently support popular repositories like Ollama and LMStudio, and will support models from HuggingFace, CivitAI, and ModelScope through [sdbx](https://github.com/darkshapes/sdbx).
+
+
+<!--
+Models come in many sizes, shapes and formats, and from many different providers all over the world.  -->
+

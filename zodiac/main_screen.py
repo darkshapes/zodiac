@@ -57,10 +57,10 @@ class Fold(Screen[bool]):
         """Textual API widget constructor, build graph, apply custom widget classes"""
         from textual.containers import Horizontal
         from textual.widgets import Footer
-        from nnll_10.package.display_bar import DisplayBar
+        from zodiac.display_bar import DisplayBar
 
-        from nnll_10.package.response_panel import ResponsePanel
-        from nnll_10.package.voice_panel import VoicePanel
+        from zodiac.response_panel import ResponsePanel
+        from zodiac.voice_panel import VoicePanel
 
         self.int_proc = IntentProcessor()
         self.int_proc.calc_graph()

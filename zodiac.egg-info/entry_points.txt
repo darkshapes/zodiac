@@ -1,0 +1,2 @@
+[console_scripts]
+zodiac = zodiac.__init__:main

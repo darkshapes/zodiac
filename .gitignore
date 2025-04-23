@@ -1,0 +1,17 @@
+log/
+log/.nnll20250422
+build/
+build/lib/zodiac/__init__.py
+build/lib/zodiac/__main__.py
+build/lib/zodiac/carousel.py
+build/lib/zodiac/combo.tcss
+build/lib/zodiac/display_bar.py
+build/lib/zodiac/graph.py
+build/lib/zodiac/input_tag.py
+build/lib/zodiac/main_screen.py
+build/lib/zodiac/message_panel.py
+build/lib/zodiac/output_tag.py
+build/lib/zodiac/response_panel.py
+build/lib/zodiac/selectah.py
+build/lib/zodiac/token_counters.py
+build/lib/zodiac/voice_panel.py

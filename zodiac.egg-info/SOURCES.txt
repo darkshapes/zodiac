@@ -1,10 +1,17 @@
+.DS_Store
+.python-version
 README.md
 pyproject.toml
+uv.lock
+img_src/zodiac_dark_bg.png
+img_src/zodiac_dark_stealth.png
+img_src/zodiac_light_stealth.png
 tests/test_14_draw_graph.py
 tests/test_14_graph.py
 zodiac/__init__.py
 zodiac/__main__.py
 zodiac/carousel.py
+zodiac/combo.tcss
 zodiac/display_bar.py
 zodiac/graph.py
 zodiac/input_tag.py
@@ -18,5 +25,6 @@ zodiac/voice_panel.py
 zodiac.egg-info/PKG-INFO
 zodiac.egg-info/SOURCES.txt
 zodiac.egg-info/dependency_links.txt
+zodiac.egg-info/entry_points.txt
 zodiac.egg-info/requires.txt
 zodiac.egg-info/top_level.txt
