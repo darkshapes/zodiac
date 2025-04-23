@@ -166,10 +166,10 @@ class Fold(Screen[bool]):
         scroll_delta = [self.ui["it"].current_cell, self.ui["ot"].current_cell]
         if self.ui["rd"].has_focus_within != self.ui["rp"].has_focus and not self.ui["sl"].has_focus:
             event.prevent_default()
-            self.ui["ot"].emulate_scroll_down()
+            self.ui["ot"].emulate_scroll(direction=1)
         elif self.ui["it"].has_focus:
             event.prevent_default()
-            mode_in_name = self.ui["it"].emulate_scroll_down()
+            mode_in_name = self.ui["it"].emulate_scroll(direction=1)
             self.ui["ps"].current = self.input_map.get(mode_in_name)
         if scroll_delta != [self.ui["it"].current_cell, self.ui["ot"].current_cell]:
             self.ready_tx()
@@ -187,10 +187,10 @@ class Fold(Screen[bool]):
         scroll_delta = [self.ui["it"].current_cell, self.ui["ot"].current_cell]
         if self.ui["rd"].has_focus_within != self.ui["rp"].has_focus and not self.ui["sl"].has_focus:
             event.prevent_default()
-            self.ui["ot"].emulate_scroll_up()
+            self.ui["ot"].emulate_scroll(direction=-1)
         elif self.ui["it"].has_focus:
             event.prevent_default()
-            mode_name = self.ui["it"].emulate_scroll_up()
+            mode_name = self.ui["it"].emulate_scroll(direction=-1)
             self.ui["ps"].current = self.input_map.get(mode_name)
         if scroll_delta != [self.ui["it"].current_cell, self.ui["ot"].current_cell]:
             self.ready_tx()
