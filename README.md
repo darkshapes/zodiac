@@ -119,7 +119,7 @@ Be aware that even though Zodiac is local first, your huggingface/ollama/vllm/et
 ## Using
 
 > [!IMPORTANT]
-> Please note Zodiac is in a very incomplete demonstration state at the moment. At the moment, generating from speech recording, image generation, and simpler clipboard copying are not yet implemented, only the process of evaluating paths for those models and pasting in and out of console. Please check in with us as we continue to grow, or read about <A href="#contributing">contributing</a>.
+> Please note Zodiac is in a very incomplete demonstration state. Generating from speech recording, image generation, and full support for clipboard copying are not yet implemented, only the process of evaluating paths for models and pasting in and out of console. Please check in with us as we continue to grow, or read about <A href="#contributing">contributing</a>.
 
 <img alt="A screenshot of two grey text fields. At the top, someone has entered 'What is crystalline intelligence vs liquid intelligence?' The bottom shows a reply stating 'Crystalline intelligence refers to traditional, rule-based knowledge acquisition and application. It's like a well-structured database where information is stored in a rigid format, similar to a crystal lattice. This type of intelligence excels in well-defined tasks with clear rules, such as chess or trivia games.
 Liquid intelligence, on the other hand, represents adaptability and the ability to navigate uncertainty. It's dynamic and flexible, much like liquid, allowing individuals to thrive in novel situations requiring creativity, problem-solving, and social skills. This form of intelligence is increasingly valuable in our rapidly changing world where many tasks don't have straightforward solutions. Both forms of intelligence are important and serve different purposes, reflecting the evolving nature of human cognition and the diverse demands of modern life.'" src="img_src/screenshot.png">
@@ -147,12 +147,16 @@ Up/Down Arrow        : Change option
 ### Technical Details
 
 Currently we support models hosted using:
-- [Ollama](https://github.com/ollama/ollama)
-- [VLLM](https://github.com/vllm-project/vllm)
+- [Ollama](https://ollama.com/)
+- [Cortex](http://cortex.so)
+- [Llamafile](http://github.com/Mozilla-Ocho/llamafile)
 - [LMStudio](http://lmstudio.ai/)
-- [Llamafile](http://lmstudio.ai)
-<!-- - CORTEX
-- TensorBlock -->
+
+Also considering adding support for:
+[TensorBlock](https://github.com/TensorBlock/TensorBlock-Studio) (Read<A href="#contributing">contributing</a>)
+[VLLM](https://github.com/vllm-project/vllm) (Compile-only for cpu, read <A href="#contributing">contributing</a>)
+
+If you have a strong preference, talk to us in issues or on <A href="discord.gg/RYaJw9mPPe">Discord</a>
 
 Zodiac works by graphing available local model services, then pathing a route through the graph to complete the user request. The system relies heavily on the [Textual](https://github.com/Textualize/textual), [LiteLLM](https://github.com/BerriAI/litellm), [dspy](https://github.com/stanfordnlp/dspy), and [networkx](https://github.com/networkx/networkx) libraries.
 
@@ -185,8 +189,6 @@ zodiac  [-h] [-n] [-t]            = Run Zodiac in the current terminal window
 textual     console [-x EVENTS]  = Run a live console logging session (use before textual --devzodiac/textual serve --dev)
 textual     serve [--dev] zodiac = Host a localmachine server (shows CSS edits live, Python edits on refresh)
 textual     run --dev zodiac     = Run an instance in command prompt using dev options (shows CSS edits live, relaunch for Python edits)
-
-
 ```
 
 ## Connecting

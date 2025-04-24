@@ -54,3 +54,22 @@ async def tiktoken_counter(model="cl100k_base", message: str = ""):
 
     encoding = tiktoken.get_encoding(model)
     return len(encoding.encode(message))
+
+
+async def cortex_counter(model: str, message: str) -> int:
+    """
+    Return token count of message based on cortex model\n
+    :param model: Model to lookup tokenizer for
+    :param message: Message to tokenize
+    :return: `int` Number of tokens needed to represent message
+    """
+    import requests
+
+    payload = {"input": message, "model": model, "encoding_format": "float"}
+    headers = {"Content-Type": "application/json"}
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post("http://127.0.0.1:39281/v1/embeddings", json=payload, headers=headers, timeout=(1, 1))
+    embedding = response.json()
+    return len(next(iter(embedding["data"])).get("embedding"))
