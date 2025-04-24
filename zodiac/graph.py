@@ -130,6 +130,8 @@ class IntentProcessor:
     def edit_weight(self, selection: str, mode_in: str, mode_out: str) -> None:
         """Determine entry edge, determine index, then adjust weight"""
         reg_entries = [nbrdict for n, nbrdict in self.intent_graph.adjacency()]
+        if not reg_entries[0].get(mode_out):
+            raise ValueError("No models available.")
         index = [x for x in reg_entries[0][mode_out] if selection in reg_entries[0][mode_out][x].get("entry").model]
         model = reg_entries[0][mode_out][index[0]].get("entry").model
         weight = reg_entries[0][mode_out][index[0]].get("weight")

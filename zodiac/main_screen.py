@@ -203,8 +203,9 @@ class Fold(Screen[bool]):
     async def txt_to_token(self) -> None:
         """Transmit info to token calculation"""
         message = self.ui["mp"].text
-        next_model = next(iter(self.int_proc.models))[1]
-        self.ui["db"].show_tokens(next_model, message=message)
+        if self.int_proc.models:
+            next_model = next(iter(self.int_proc.models))[1]
+            self.ui["db"].show_tokens(next_model, message=message)
 
     @work(exclusive=True)
     async def audio_to_token(self) -> None:

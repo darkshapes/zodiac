@@ -33,13 +33,16 @@ class Carousel(DataTable):
         :param direction: Positive integer for up, negative integer for down
         :return: The datata in the table *row*
         """
-        self.scroll_counter += abs(direction)
-        if self.scroll_counter >= 10:
-            self.current_row = max(0, min(self.row_count - 1, self.current_row + direction))
-            self.move_cursor(row=self.current_row, column=1)
-            self.scroll_counter = 10
-        self.current_cell = self.get_cell_at((self.current_row, 1))
-        return self.current_cell
+        if self.row_count == 0:
+            return
+        else:
+            self.scroll_counter += abs(direction)
+            if self.scroll_counter >= 10:
+                self.current_row = max(0, min(self.row_count - 1, self.current_row + direction))
+                self.move_cursor(row=self.current_row, column=1)
+                self.scroll_counter = 10
+            self.current_cell = self.get_cell_at((self.current_row, 1))
+            return self.current_cell
 
     @debug_monitor
     def action_scroll_button(self, up: bool = False) -> None:
@@ -52,12 +55,15 @@ class Carousel(DataTable):
             if self.id == "input_tag":
                 self.query_ancestor(Screen).ui["ps"].current = self.query_ancestor(Screen).input_map[self.current_cell]
                 self.query_ancestor(Screen).ready_tx(io_only=True)
+                self.query_ancestor(Screen).walk_intent()
+
         else:
             self.scroll_counter = 9
             self.current_cell = self.emulate_scroll(direction=1)
             if self.id == "input_tag":
                 self.query_ancestor(Screen).ui["ps"].current = self.query_ancestor(Screen).input_map[self.current_cell]
                 self.query_ancestor(Screen).ready_tx(io_only=True)
+                self.query_ancestor(Screen).walk_intent()
 
         # if (self.row_count - 1) >= (self.current_row + interval):
         #     if self.y_coord < self.scroll_counter:

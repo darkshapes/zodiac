@@ -29,15 +29,21 @@ class Selectah(Select):
     @on(Select.Changed)
     async def on_changed(self) -> None:  # event: Select.Changed) -> None:
         """Rearrange models"""
+        self.graph = self.query_ancestor(Screen).int_proc
         try:
             assert self.query_one(SelectCurrent).has_value
+            assert self.graph.models is not None
         except AssertionError as error_log:
             dbug(error_log)
         else:
-            self.graph.edit_weight(selection=self.value, mode_in=self.mode_in, mode_out=self.mode_out)
-            self.set_options(self.graph.models)
-            self.prompt = next(iter(self.graph.models))[0]
-            self.expanded = False
+            try:
+                self.graph.edit_weight(selection=self.value, mode_in=self.mode_in, mode_out=self.mode_out)
+            except ValueError as error_log:
+                dbug(error_log)
+            else:
+                self.set_options(self.graph.models)
+                self.prompt = next(iter(self.graph.models))[0]
+        self.expanded = False
 
     @debug_monitor
     @work(exclusive=True)
@@ -61,8 +67,11 @@ class Selectah(Select):
         """Expand panel immediately when clicked in terminal"""
         if SelectOverlay.has_focus or self.has_focus:
             self.focused = True
+            self.graph = self.query_ancestor(Screen).int_proc
             if self.graph is not None and hasattr(self.graph, "models") and self.graph.models is not None:
                 self.set_options(self.graph.models)
+            else:
+                self.focused = False
 
     @work(exclusive=True)
     @on(events.MouseDown)
