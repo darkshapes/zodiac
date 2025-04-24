@@ -37,10 +37,15 @@ async def ollama_counter(model: str, message: str) -> int:
     :param message: Message to tokenize
     :return: `int` Number of tokens needed to represent message
     """
-    from ollama import embed
+    from nnll_15 import LibType
 
-    response = embed(model, input=message)
-    return len(response["embeddings"])
+    if not LibType.OLLAMA:
+        return 0
+    else:
+        from ollama import embed
+
+        response = embed(model, input=message)
+        return len(response["embeddings"])
 
 
 async def tiktoken_counter(model="cl100k_base", message: str = ""):
@@ -63,13 +68,37 @@ async def cortex_counter(model: str, message: str) -> int:
     :param message: Message to tokenize
     :return: `int` Number of tokens needed to represent message
     """
-    import requests
+    from nnll_15 import LibType
 
-    payload = {"input": message, "model": model, "encoding_format": "float"}
-    headers = {"Content-Type": "application/json"}
+    if not LibType.CORTEX:
+        return 0
+    else:
+        import requests
 
-    headers = {"Content-Type": "application/json"}
+        payload = {"input": message, "model": model, "encoding_format": "float"}
+        headers = {"Content-Type": "application/json"}
 
-    response = requests.post("http://127.0.0.1:39281/v1/embeddings", json=payload, headers=headers, timeout=(1, 1))
-    embedding = response.json()
-    return len(next(iter(embedding["data"])).get("embedding"))
+        headers = {"Content-Type": "application/json"}
+
+        response = requests.post("http://127.0.0.1:39281/v1/embeddings", json=payload, headers=headers, timeout=(1, 1))
+        embedding = response.json()
+        return len(next(iter(embedding["data"])).get("embedding"))
+
+
+async def lmstudio_counter(model: str, message: str) -> int:
+    """
+    Return token count of message based on lm studio model\n
+    :param model: Model to lookup tokenizer for
+    :param message: Message to tokenize
+    :return: `int` Number of tokens needed to represent message
+    """
+    from nnll_15 import LibType
+
+    if not LibType.LM_STUDIO:
+        return 0
+    else:
+        from lmstudio import llm
+
+        model = llm()
+
+        return len(model.tokenize(message))
