@@ -147,12 +147,16 @@ Up/Down Arrow        : Change option
 ### Technical Details
 
 Currently we support models hosted using:
-- [Ollama](https://github.com/ollama/ollama)
-- [VLLM](https://github.com/vllm-project/vllm)
+- [Ollama](https://ollama.com/)
 - [LMStudio](http://lmstudio.ai/)
-- [Llamafile](http://lmstudio.ai)
-<!-- - CORTEX
-- TensorBlock -->
+- [Cortex](http://cortex.so)
+- [Llamafile](http://github.com/Mozilla-Ocho/llamafile)
+
+Also considering adding support for:
+[VLLM](https://github.com/vllm-project/vllm)
+[TensorBlock](https://github.com/TensorBlock/TensorBlock-Studio)
+
+If you have a strong preference, talk to us in issues or on <A href="discord.gg/RYaJw9mPPe">Discord</a>
 
 Zodiac works by graphing available local model services, then pathing a route through the graph to complete the user request. The system relies heavily on the [Textual](https://github.com/Textualize/textual), [LiteLLM](https://github.com/BerriAI/litellm), [dspy](https://github.com/stanfordnlp/dspy), and [networkx](https://github.com/networkx/networkx) libraries.
 
