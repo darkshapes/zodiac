@@ -39,7 +39,7 @@ class Fold(Screen[bool]):
         Binding("escape", "cancel_generation", "◼︎ / ⏏︎"),  # Cancel response
         Binding("`", "loop_sender", "✎", priority=True),  # Send to LLM
     ]
-
+    id: str = "fold_screen"
     ui: dict = defaultdict(dict)
     int_proc: reactive[Callable] = reactive(None)
     tx_data: dict = {}
