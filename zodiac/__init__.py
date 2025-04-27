@@ -6,13 +6,6 @@ sys.path.append(os.getcwd())
 
 
 def set_env(args: bool) -> None:
-    import litellm
-
-    litellm.disable_end_user_cost_tracking = True
-    litellm.telemetry = False
-
-    litellm.disable_hf_tokenizer_download = args.net
-
     try:
         import huggingface_hub
 
@@ -22,6 +15,9 @@ def set_env(args: bool) -> None:
         huggingface_hub.constants.HF_HUB_ENABLE_HF_TRANSFER = True
         huggingface_hub.constants.HF_HUB_DISABLE_IMPLICIT_TOKEN = True
 
+        import litellm
+
+        litellm.disable_hf_tokenizer_download = not args.net
         huggingface_hub.constants.HF_HUB_OFFLINE = not args.net
 
     except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
@@ -31,7 +27,6 @@ def set_env(args: bool) -> None:
 def main() -> None:
     """Launch textual UI"""
     import argparse
-
     from zodiac.__main__ import Combo
     from nnll_01 import info_message as nfo
 
@@ -44,13 +39,10 @@ def main() -> None:
     set_env(args)
 
     if args.trace:
-        import litellm
         from viztracer import VizTracer
 
-        litellm.suppress_debug_info = False
         tracer = VizTracer()
         tracer.start()
-
     app = Combo(ansi_color=False)
 
     nfo("Launching...")

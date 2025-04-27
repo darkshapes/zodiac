@@ -1110,7 +1110,7 @@ wheels = [
 
 [[package]]
 name = "litellm"
-version = "1.67.0.post1"
+version = "1.67.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -1125,9 +1125,9 @@ dependencies = [
     { name = "tiktoken" },
     { name = "tokenizers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3d/05/6f71548f24b8e5eb4a04080a10c37d8ff5f34e00f624df7b425b8a03bb79/litellm-1.67.0.post1.tar.gz", hash = "sha256:1adf69769ee5df93c834c093fad760f406feeb6c59e79638c3f448226887554d", size = 7245557 }
+sdist = { url = "https://files.pythonhosted.org/packages/54/a4/bb3e9ae59e5a9857443448de7c04752630dc84cddcbd8cee037c0976f44f/litellm-1.67.1.tar.gz", hash = "sha256:78eab1bd3d759ec13aa4a05864356a4a4725634e78501db609d451bf72150ee7", size = 7242044 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/49/f5/9cecf2a6d50c6febf1f363af6145038868fe5945c684394d5ee542c5414a/litellm-1.67.0.post1-py3-none-any.whl", hash = "sha256:b7b3c6a6a032b059a45b326673d24318dc8b65b1016a93194c9ea7ee94b0e00d", size = 7600342 },
+    { url = "https://files.pythonhosted.org/packages/88/86/c14d3c24ae13c08296d068e6f79fd4bd17a0a07bddbda94990b87c35d20e/litellm-1.67.1-py3-none-any.whl", hash = "sha256:8fff5b2a16b63bb594b94d6c071ad0f27d3d8cd4348bd5acea2fd40c8e0c11e8", size = 7607266 },
 ]
 
 [[package]]
@@ -1541,7 +1541,7 @@ wheels = [
 
 [[package]]
 name = "nnll"
-version = "0.1.dev277+g5cdf048.d20250423"
+version = "0.1.dev303+g7d259e8.d20250424"
 source = { git = "https://github.com/darkshapes/nnll?rev=main#7d259e8f2aed8a7e23fe03dff40270258b2df4c5" }
 
 [package.optional-dependencies]
@@ -3378,7 +3378,7 @@ dev = [
 requires-dist = [
     { name = "dspy", specifier = ">=2.6.13" },
     { name = "huggingface-hub", marker = "extra == 'hub'", specifier = ">=0.30.2" },
-    { name = "litellm", specifier = ">=1.67.0.post1" },
+    { name = "litellm", specifier = "==1.67.1" },
     { name = "lmstudio", marker = "extra == 'lmstudio'", specifier = ">=1.2.0" },
     { name = "networkx", specifier = ">=3.4.2" },
     { name = "nnll", extras = ["nnll-01", "nnll-05", "nnll-06", "nnll-11", "nnll-15"], git = "https://github.com/darkshapes/nnll?rev=main" },
