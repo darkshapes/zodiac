@@ -17,8 +17,8 @@ def set_env(args: bool) -> None:
 
         import litellm
 
-        litellm.disable_hf_tokenizer_download = True if args.net else False
-        huggingface_hub.constants.HF_HUB_OFFLINE = False if args.net else True
+        litellm.disable_hf_tokenizer_download = not args.net
+        huggingface_hub.constants.HF_HUB_OFFLINE = not args.net
 
     except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
         pass
