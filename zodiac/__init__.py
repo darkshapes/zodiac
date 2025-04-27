@@ -6,13 +6,6 @@ sys.path.append(os.getcwd())
 
 
 def set_env(args: bool) -> None:
-    import litellm
-
-    litellm.disable_end_user_cost_tracking = True
-    litellm.telemetry = False
-
-    litellm.disable_hf_tokenizer_download = args.net
-
     try:
         import huggingface_hub
 
@@ -44,10 +37,9 @@ def main() -> None:
     set_env(args)
 
     if args.trace:
-        import litellm
         from viztracer import VizTracer
+        import litellm
 
-        litellm.suppress_debug_info = False
         tracer = VizTracer()
         tracer.start()
 

@@ -67,7 +67,6 @@ We currently support popular repositories like  and will support models from Hug
 >>> **(powershell):**
 >>> ```
 >>> Set-ExecutionPolicy Bypass -Scope Process -Force; .venv\Scripts\Activate.ps1
->>>
 >>> ```
 >>>
 >>> **(cmd):**
@@ -97,8 +96,9 @@ We currently support popular repositories like  and will support models from Hug
 
 </details><br>
 
+If you are on Linux, you'll want to ensure `libportaudio2` is installed through your system package manager. This doesn't apply to Windows or MacOS.
 
-Once installed use this command for terminal client:
+Once installed, ensure [Ollama](https://ollama.com/), [LMStudio](http://lmstudio.ai/), [Cortex](http://cortex.so), [Llamafile](http://github.com/Mozilla-Ocho/llamafile) is running your models of choice. Then use this command to open the terminal client:
 ```
 zodiac
 ```
@@ -185,7 +185,7 @@ Support is planned for:
 
 As mentioned above, the system can be served to a mobile device on the LAN (textual serve). Because the interface runs in terminal console, Zodiac can also be run completely headless.
 
-This unity completes the scope of <a href="https://github.com/darkshapes/>darkshapes</a> projects. Discussion topics, issue requests, reviews, and code updates are encouraged. Talk to us in our <A href="https://discord.gg/RYaJw9mPPe">Discord</a> to catch up-to-date information.
+The system unites <a href="https://github.com/darkshapes/">darkshapes</a> projects. Discussion topics, issue requests, reviews, and code updates are encouraged. Talk to us in our <A href="https://discord.gg/RYaJw9mPPe">Discord</a> to catch up-to-date information.
 
 ### Development Reference
 ```
