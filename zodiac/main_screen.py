@@ -54,7 +54,8 @@ class Fold(Screen[bool]):
     def compose(self) -> ComposeResult:
         """Textual API widget constructor, build graph, apply custom widget classes"""
         from textual.containers import Horizontal
-        from textual.widgets import Footer
+
+        # from textual.widgets import Footer
         from zodiac.display_bar import DisplayBar
 
         from zodiac.response_panel import ResponsePanel
@@ -63,7 +64,7 @@ class Fold(Screen[bool]):
         self.int_proc = IntentProcessor()
         self.int_proc.calc_graph()
         self.ready_tx(mode_in="text", mode_out="text")
-        yield Footer(id="footer")
+        # yield Footer(id="footer")
         with Horizontal(id="app-grid", classes="app-grid-horizontal"):
             yield ResponsiveLeftTop(id="left-frame")
             with Container(id="centre-frame"):  # 3:1:3 ratio
