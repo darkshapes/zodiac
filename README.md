@@ -32,37 +32,6 @@ We currently support popular repositories like  and will support models from Hug
 
 ### [installation instructions link](https://github.com/darkshapes/sdbx/wiki/Develop)<br>
 
-## Using
-
-> [!IMPORTANT]
-> Please note Zodiac is in a very incomplete demonstration state. Generating from speech recording, image generation, and full support for clipboard copying are not yet implemented, only the process of evaluating paths for models, text generation, and pasting in and out of console. Please check in with us as we continue to grow, or read about <A href="http://Ccontributing">contributing</a>.
-
-<img alt="A screenshot of two grey text fields. At the top, someone has entered 'What is crystalline intelligence vs liquid intelligence?' The bottom shows a reply stating 'Crystalline intelligence refers to traditional, rule-based knowledge acquisition and application. It's like a well-structured database where information is stored in a rigid format, similar to a crystal lattice. This type of intelligence excels in well-defined tasks with clear rules, such as chess or trivia games.
-Liquid intelligence, on the other hand, represents adaptability and the ability to navigate uncertainty. It's dynamic and flexible, much like liquid, allowing individuals to thrive in novel situations requiring creativity, problem-solving, and social skills. This form of intelligence is increasingly valuable in our rapidly changing world where many tasks don't have straightforward solutions. Both forms of intelligence are important and serve different purposes, reflecting the evolving nature of human cognition and the diverse demands of modern life.'" src="img_src/screenshot.png">
-
-To use Zodiac, type into the top field, then adjust top and bottom input and output settings on the left. Left click or press tab key to focus out of top field, then tap **\`** (grave accent) to send your message along. To clear the log or any received input, hold shift and tap `backspace`. If you want to pick specific models, the box on the right lists available models that convert selected input to output. You can choose a model to add or remove it in the preferred list, indicated by the `*`.
-
-### Keyboard Reference:
-```
-        Tab          : Switch Focus
-Up/Down Arrow        : Change option
-        Enter        : Begin recording audio
-        Space        : Playback audio
-        Ctrl-Z       : Undo
-        Ctrl-Shift-Z : Redo
-        ALT-Backspace: Clear input
-        ESC          : Cancel Generation
-        ESC/Ctrl-Qx2 : Quit
-        Ctrl-C       : Copy (only in console mode)
-        Ctrl-V/⌘-V   : Paste (only in console mode)
-        Ctrl-X       : Cut (only in console mode)
-```
-
-<div align='center'>
-
-![Image of the darkshapes 'neuron' logo, the letters DS with a superimposed illustration of a brain cell-type structure on top](https://cdn-avatars.huggingface.co/v1/production/uploads/65ff1816871b36bf84fc3c37/JZLA1RQXQ7NanLF5G9c6Q.png)
-
- darkshapes [ <A href="https://github.com/darkshapes">GitHub</a> ] [ <A href="https://discord.gg/RYaJw9mPPe">Discord</a> ] [ <A href="https://huggingface.co/darkshapes">HuggingFace</a> ] [ <A href="https://github.com/maxtretikov">MaxTretikov</a> ] [ <A href="https://github.com/exdysa">EXDYSA</a> ]
 </div>
 
 

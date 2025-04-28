@@ -20,6 +20,7 @@ dependencies = [
     "textual-plotext>=1.0.1",
     "sympy>=1.13.3",
     "litellm==1.67.1",
+    "textual-dev>=1.7.0",
 ]
 [project.scripts]
 zodiac = "zodiac.__init__:main"
