@@ -239,14 +239,17 @@ class Fold(Screen[bool]):
         self.ui["rp"].on_text_area_changed()
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
-        if last_hop:
-            nfo(ckpt)
-            async for chunk in chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, max_workers=8):
-                if chunk is not None:
-                    self.ui["rp"].insert(chunk)
-            self.ui["sl"].set_classes(["selectah"])
-        else:
-            self.tx_data = chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, max_workers=8)
+        try:
+            if last_hop:
+                nfo(ckpt)
+                async for chunk in chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, max_workers=8):
+                    if chunk is not None:
+                        self.ui["rp"].insert(chunk)
+                self.ui["sl"].set_classes(["selectah"])
+            else:
+                self.tx_data = chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, max_workers=8)
+        except ExceptionGroup as error_log:
+            dbug(error_log)
 
     @work(exclusive=True)
     async def stop_gen(self) -> None:
