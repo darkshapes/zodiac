@@ -17,9 +17,6 @@ from zodiac.main_screen import Fold  # pylint: disable=import-error
 class Combo(App):
     SCREENS = {"fold": Fold}
     CSS_PATH = "combo.tcss"
-    BINDINGS = [Binding("escape", "safe_exit", "◼︎ / ⏏︎")]  # Cancel response
-
-    safety: reactive[int] = reactive(2)
 
     def on_mount(self) -> None:
         """Draw screen"""
@@ -27,16 +24,3 @@ class Combo(App):
         self.scroll_sensitivity_y = 1
         self.supports_smooth_scrolling = True
         self.theme = "flexoki"
-
-    @work(exit_on_error=True)
-    @on(events.Key)
-    async def _on_key(self, event: events.Key) -> None:
-        """Window for triggering key bindings"""
-        if event.key not in ["escape", "ctrl+left_square_brace"]:
-            self.safety += 1
-        else:
-            self.notify("Press ESC again to quit")
-            self.safety = max(0, self.safety - 1)
-            if self.safety == 0:
-                event.prevent_default()
-                await self.app.action_quit()
