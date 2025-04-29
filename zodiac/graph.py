@@ -15,7 +15,7 @@ import networkx as nx
 from nnll_01 import debug_monitor, info_message as nfo, debug_message as dbug
 
 # from nnll_15.constants import ModeType
-from nnll_15 import RegistryEntry
+from nnll_15 import RegistryEntry, LibType
 
 
 class IntentProcessor:
@@ -40,6 +40,7 @@ class IntentProcessor:
 
         self.intent_graph = nx.MultiDiGraph()
         self.intent_graph.add_nodes_from(VALID_CONVERSIONS)
+        nfo("running_graph")
         registry_entries = from_cache()
         if registry_entries:
             for model in registry_entries:

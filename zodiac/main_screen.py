@@ -32,19 +32,20 @@ class Fold(Screen[bool]):
     DEFAULT_CSS = """Screen { min-height: 5; }"""
 
     BINDINGS = [
+        Binding("ent", "send_tx", "✉︎", priority=True),  # Start audio prompt
+        Binding("escape", "cancel_generation", "◼︎ / ⏏︎"),  # Cancel response/Safe
         Binding("bk", "alternate_panel('text',0)", "⌨️"),  # Return to text input panel
         Binding("alt+bk", "clear_input", "del"),  # Empty focused prompt panel
-        Binding("ent", "start_recording", "◉", priority=True),  # Start audio prompt
         Binding("space", "play", "▶︎", priority=True),  # Listen to prompt audio
-        Binding("escape", "cancel_generation", "◼︎ / ⏏︎"),  # Cancel response
-        Binding("`", "loop_sender", "✎", priority=True),  # Send to LLM
+        Binding("`", "start_recording", "◉", priority=True),  # Send to LLM
+        Binding("ctrl+c", "copy", "⧉", priority=True),
     ]
     id: str = "fold_screen"
     ui: dict = defaultdict(dict)
     int_proc: reactive[Callable] = reactive(None)
     tx_data: dict = {}
-    counter = 0
     hover_name: reactive[str] = reactive("")
+    safety: reactive[int] = reactive(1)
     input_map: dict = {
         "text": "message_panel",
         "image": "message_panel",
@@ -64,7 +65,6 @@ class Fold(Screen[bool]):
         self.int_proc = IntentProcessor()
         self.int_proc.calc_graph()
         self.ready_tx(mode_in="text", mode_out="text")
-        # yield Footer(id="footer")
         with Horizontal(id="app-grid", classes="app-grid-horizontal"):
             yield ResponsiveLeftTop(id="left-frame")
             with Container(id="centre-frame"):  # 3:1:3 ratio
@@ -137,15 +137,19 @@ class Fold(Screen[bool]):
     @work(exclusive=True)
     async def _on_key(self, event: events.Key) -> None:
         """Textual API event trigger, Suppress/augment default key actions to trigger keybindings"""
-        if (hasattr(event, "character") and event.character == "`") or event.key == "grave_accent":
+        if (hasattr(event, "character") and event.character == "\r") or event.key == "enter":
             event.prevent_default()
             self.ready_tx(io_only=False)
             if self.int_proc.has_graph() and self.int_proc.has_path():
                 self.walk_intent(send=True)
         elif event.key == "escape" and "active" in self.ui["sl"].classes:
-            Message.stop(True)
+            event.prevent_default()
             self.stop_gen()
-        elif (hasattr(event, "character") and event.character == "\r") or event.key == "enter":
+        elif event.key in ["escape", "ctrl+left_square_brace"]:
+            self.safety += 1
+            event.prevent_default()
+            self.safe_exit()
+        elif (hasattr(event, "character") and event.character == "`") or event.key == "grave_accent":
             self.flip_panel("voice_panel", 1)
             self.ui["vp"].record_audio()
             self.audio_to_token()
@@ -157,47 +161,15 @@ class Fold(Screen[bool]):
         elif not self.ui["rp"].has_focus and ((hasattr(event, "character") and event.character == "\x7f") or event.key == "backspace"):
             self.flip_panel("message_panel", 0)
 
-    @debug_monitor
-    def _on_mouse_scroll_down(self, event: events.MouseScrollUp) -> None:
-        """Textual API event trigger, Translate scroll events into datatable cursor movement
-        Trigger scroll at 1/10th intensity when menu has focus
-        :param event: Event data for the trigger"""
-
-        scroll_delta = [self.ui["it"].current_cell, self.ui["ot"].current_cell]
-        if self.ui["rd"].has_focus_within != self.ui["rp"].has_focus and not self.ui["sl"].has_focus:
-            event.prevent_default()
-            self.ui["ot"].emulate_scroll(direction=1)
-        elif self.ui["it"].has_focus:
-            event.prevent_default()
-            mode_in_name = self.ui["it"].emulate_scroll(direction=1)
-            self.ui["ps"].current = self.input_map.get(mode_in_name)
-        if scroll_delta != [self.ui["it"].current_cell, self.ui["ot"].current_cell]:
-            self.ready_tx()
-            self.walk_intent()
-            self.ui["sl"].mode_in = self.ui["it"].current_cell
-            self.ui["sl"].mode_out = self.ui["ot"].current_cell
-            self.ui["sl"].prompt = next(iter(self.int_proc.models))[0]
-
-    @debug_monitor
-    def _on_mouse_scroll_up(self, event: events.MouseScrollUp) -> None:
-        """Textual API event trigger,Translate scroll events into datatable cursor movement
-        Trigger scroll at 1/10th intensity when menu has focus
-        :param event: Event data for the trigger"""
-
-        scroll_delta = [self.ui["it"].current_cell, self.ui["ot"].current_cell]
-        if self.ui["rd"].has_focus_within != self.ui["rp"].has_focus and not self.ui["sl"].has_focus:
-            event.prevent_default()
-            self.ui["ot"].emulate_scroll(direction=-1)
-        elif self.ui["it"].has_focus:
-            event.prevent_default()
-            mode_name = self.ui["it"].emulate_scroll(direction=-1)
-            self.ui["ps"].current = self.input_map.get(mode_name)
-        if scroll_delta != [self.ui["it"].current_cell, self.ui["ot"].current_cell]:
-            self.ready_tx()
-            self.walk_intent()
-            self.ui["sl"].mode_in = self.ui["it"].current_cell
-            self.ui["sl"].mode_out = self.ui["ot"].current_cell
-            self.ui["sl"].prompt = next(iter(self.int_proc.models))[0]
+    @work(exit_on_error=True)
+    async def safe_exit(self) -> None:
+        """trigger exit on second press"""
+        self.safety = max(0, self.safety - 1)
+        if self.safety == 0:
+            await self.app.action_quit()
+        else:
+            self.safety -= 1
+            self.notify("Press ESC again to quit")
 
     # @work(exclusive=True)
     @on(MessagePanel.Changed, "#message_panel")

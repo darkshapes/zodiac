@@ -26,6 +26,7 @@ class DisplayBar(DataTable):
         self.show_header = False
         self.show_row_labels = False
         self.cursor_type = None
+        self.can_focus = False
 
     @work(exclusive=True)
     async def show_tokens(self, tokenizer_model: str, message: str) -> None:

@@ -9,6 +9,13 @@ textual-plotext>=1.0.1
 sympy>=1.13.3
 litellm==1.67.1
 textual-dev>=1.7.0
+ollama>=0.4.8
+lmstudio>=1.2.0
+huggingface-hub>=0.30.2
+openai>=1.75.0
+
+[:platform_system == "linux" or platform_system == "windows"]
+vllm
 
 [hub]
 huggingface-hub>=0.30.2
