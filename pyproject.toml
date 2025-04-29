@@ -12,7 +12,7 @@ requires-python = ">=3.11"
 dependencies = [
     "dspy>=2.6.13",
     "networkx>=3.4.2",
-    "nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15] @ git+https://github.com/darkshapes/nnll@x/dev",
+    "nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15] @ git+https://github.com/darkshapes/nnll@main",
     "numpy>=2.2.5",
     "sounddevice>=0.5.1",
     "textual[syntax]>=3.1.1",
