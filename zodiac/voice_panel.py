@@ -9,7 +9,7 @@ from textual.reactive import reactive
 
 from textual_plotext import PlotextPlot
 
-from nnll_01 import info_message as nfo  # , debug_monitor
+from nnll_01 import nfo  # , debug_monitor
 
 
 class VoicePanel(PlotextPlot):  # (PlotWidget)

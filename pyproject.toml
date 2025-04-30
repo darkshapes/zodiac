@@ -12,7 +12,7 @@ requires-python = ">=3.11"
 dependencies = [
     "dspy>=2.6.13",
     "networkx>=3.4.2",
-    "nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15] @ git+https://github.com/darkshapes/nnll@main",
+    "nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15] @ git+https://github.com/darkshapes/nnll@x/dev",
     "numpy>=2.2.5",
     "sounddevice>=0.5.1",
     "textual[syntax]>=3.1.1",
@@ -46,7 +46,13 @@ full = [
 dev = ["matplotlib>=3.10.1", "pytest>=8.3.5", "ruff>=0.11.6", "tiktoken>=0.9.0"]
 
 [dependency-groups]
-dev = ["matplotlib>=3.10.1", "pytest>=8.3.5", "ruff>=0.11.6", "tiktoken>=0.9.0"]
+dev = [
+    "matplotlib>=3.10.1",
+    "pytest-asyncio>=0.26.0",
+    "pytest>=8.3.5",
+    "ruff>=0.11.6",
+    "tiktoken>=0.9.0",
+]
 
 [tool.setuptools]
 packages = ["zodiac"]
@@ -55,6 +61,9 @@ packages = ["zodiac"]
 line-length    = 140
 include        = ["*.py"]
 extend-exclude = ["^tests/.*$", "test.*$"]
+
+[tool.ruff.format]
+exclude = ["*.py"]
 
 [tool.pylint]
 max-line-length = 140

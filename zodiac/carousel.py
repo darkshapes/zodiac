@@ -9,7 +9,7 @@ from textual.widgets import DataTable
 from textual.screen import Screen
 from textual.reactive import reactive
 
-from nnll_01 import debug_monitor, info_message as nfo  # debug_message as dbug,
+from nnll_01 import debug_monitor, nfo  # dbug,
 
 
 class Carousel(DataTable):

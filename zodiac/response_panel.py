@@ -7,7 +7,7 @@ from textual import work
 from textual.widgets import TextArea
 
 
-# from nnll_01 import debug_message as dbug
+# from nnll_01 import dbug
 # from nnll_11 import chat_machine
 
 

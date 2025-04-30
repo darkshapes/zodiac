@@ -1,4 +1,4 @@
-#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3) */ -->
+#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 """Auto-Orienting Split screen"""
@@ -10,14 +10,14 @@ from textual import events, on, work
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Container
-from textual.message import Message
 from textual.reactive import reactive
 from textual.screen import Screen
+from dspy import Module as dspy_Module
 
 # from textual.widget import Widget
 from textual.widgets import Static, ContentSwitcher  # , DataTable
 
-from nnll_01 import debug_monitor, info_message as nfo, debug_message as dbug
+from nnll_01 import debug_monitor, nfo, dbug
 from zodiac.message_panel import MessagePanel
 from zodiac.graph import IntentProcessor
 from zodiac.input_tag import InputTag
@@ -46,6 +46,7 @@ class Fold(Screen[bool]):
     tx_data: dict = {}
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
+    chat: dspy_Module = None
     input_map: dict = {
         "text": "message_panel",
         "image": "message_panel",
@@ -99,6 +100,9 @@ class Fold(Screen[bool]):
         self.ui["rp"] = self.query_one("#response_panel")
         self.ui["vp"] = self.query_one("#voice_panel")
         self.ui["sl"] = self.query_one("#selectah")
+        from nnll_11 import ChatMachineWithMemory, QASignature  # modularize later
+
+        self.chat = ChatMachineWithMemory(sig=QASignature, max_workers=8)
         if self.int_proc.models is not None:
             self.ready_tx()
             self.walk_intent()
@@ -145,6 +149,7 @@ class Fold(Screen[bool]):
         elif event.key == "escape" and "active" in self.ui["sl"].classes:
             event.prevent_default()
             self.stop_gen()
+            self.ui["sl"].set_classes(["selectah"])
         elif event.key in ["escape", "ctrl+left_square_brace"]:
             self.safety += 1
             event.prevent_default()
@@ -230,26 +235,28 @@ class Fold(Screen[bool]):
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
 
-        from nnll_11 import ChatMachineWithMemory, QASignature
-
         ckpt = self.ui["sl"].selection
         if ckpt is None:
             ckpt = next(iter(self.int_proc.ckpts)).get("entry")
-        chat = ChatMachineWithMemory(sig=QASignature)
         self.ui["rp"].on_text_area_changed()
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
         try:
-            if last_hop:
-                nfo(ckpt)
-                async for chunk in chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, max_workers=8):
+            nfo(ckpt)
+            if last_hop and self.ui["ot"].current_cell != "text":
+                response = self.chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, streaming=False)
+                self.ui["rp"].insert(response)
+                self.ui["sl"].set_classes(["selectah"])
+            elif last_hop:
+                async for chunk in self.chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, streaming=True):
                     if chunk is not None:
                         self.ui["rp"].insert(chunk)
                 self.ui["sl"].set_classes(["selectah"])
             else:
-                self.tx_data = chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, max_workers=8)
+                self.tx_data = self.chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, streaming=False)
         except ExceptionGroup as error_log:
             dbug(error_log)
+            self.ui["sl"].set_classes(["selectah"])
 
     @work(exclusive=True)
     async def stop_gen(self) -> None:

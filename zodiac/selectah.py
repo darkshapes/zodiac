@@ -1,4 +1,4 @@
-#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3) */ -->
+#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 # pylint: disable=import-outside-toplevel
@@ -10,7 +10,7 @@ from textual.screen import Screen
 from textual.widgets import Select
 from textual.widgets._select import SelectCurrent, SelectOverlay
 
-from nnll_01 import debug_message as dbug, debug_monitor, info_message as nfo
+from nnll_01 import dbug, debug_monitor, nfo
 
 
 class Selectah(Select):

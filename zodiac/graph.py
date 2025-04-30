@@ -1,4 +1,4 @@
-#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3) */ -->
+#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 # pylint: disable=import-outside-toplevel
@@ -12,7 +12,7 @@ import os
 sys.path.append(os.getcwd())
 
 import networkx as nx
-from nnll_01 import debug_monitor, info_message as nfo, debug_message as dbug
+from nnll_01 import debug_monitor, nfo, dbug
 
 # from nnll_15.constants import ModeType
 from nnll_15 import RegistryEntry, LibType
