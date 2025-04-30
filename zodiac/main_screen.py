@@ -33,7 +33,7 @@ class Fold(Screen[bool]):
 
     BINDINGS = [
         Binding("ent", "send_tx", "✉︎", priority=True),  # Start audio prompt
-        Binding("escape", "cancel_generation", "◼︎ / ⏏︎"),  # Cancel response/Safe
+        Binding("escape", "stop_gen", "◼︎ / ⏏︎"),  # Cancel response/Safe
         Binding("bk", "alternate_panel('text',0)", "⌨️"),  # Return to text input panel
         Binding("alt+bk", "clear_input", "del"),  # Empty focused prompt panel
         Binding("space", "play", "▶︎", priority=True),  # Listen to prompt audio
@@ -141,19 +141,15 @@ class Fold(Screen[bool]):
     @work(exclusive=True)
     async def _on_key(self, event: events.Key) -> None:
         """Textual API event trigger, Suppress/augment default key actions to trigger keybindings"""
+        if event.key not in ["escape", "ctrl+left_square_brace"]:
+            self.safety = min(1, self.safety +1)
+        else:
+            self.safe_exit()
         if (hasattr(event, "character") and event.character == "\r") or event.key == "enter":
             event.prevent_default()
             self.ready_tx(io_only=False)
             if self.int_proc.has_graph() and self.int_proc.has_path():
                 self.walk_intent(send=True)
-        elif event.key == "escape" and "active" in self.ui["sl"].classes:
-            event.prevent_default()
-            self.stop_gen()
-            self.ui["sl"].set_classes(["selectah"])
-        elif event.key in ["escape", "ctrl+left_square_brace"]:
-            self.safety += 1
-            event.prevent_default()
-            self.safe_exit()
         elif (hasattr(event, "character") and event.character == "`") or event.key == "grave_accent":
             self.flip_panel("voice_panel", 1)
             self.ui["vp"].record_audio()
@@ -169,12 +165,17 @@ class Fold(Screen[bool]):
     @work(exit_on_error=True)
     async def safe_exit(self) -> None:
         """trigger exit on second press"""
-        self.safety = max(0, self.safety - 1)
-        if self.safety == 0:
-            await self.app.action_quit()
+        if "active" in self.ui["sl"].classes:
+            self.stop_gen()
+            self.ui["sl"].set_classes(["selectah"])
         else:
+            self.safety = max(0, self.safety)
+            if self.safety == 0:
+                await self.app.action_quit()
             self.safety -= 1
             self.notify("Press ESC again to quit")
+
+
 
     # @work(exclusive=True)
     @on(MessagePanel.Changed, "#message_panel")

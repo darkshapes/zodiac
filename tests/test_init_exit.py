@@ -10,6 +10,8 @@ import pytest_asyncio
 
 from zodiac.main_screen import Fold
 
+from test_graph import mock_ollama_data, mock_hub_data, test_mocked_hub, test_mocked_ollama,test_create_graph
+
 from zodiac.__main__ import Combo
 
 
@@ -18,12 +20,12 @@ async def test_initial_state(app=Combo()):
     """Test that the initial state of the app is correct."""
 
     async with app.run_test() as pilot:
-        ui_elements = list(pilot.app.query("*"))
-        assert isinstance(ui_elements[0], Fold)  # root
+        # ui_elements = list(pilot.app.query("*"))
+        assert isinstance(pilot.app._nodes._get_by_id('fold_screen'), Fold)  # root
 
 
 @pytest_asyncio.fixture(loop_scope="session")
-async def mock_app():
+async def mock_app(mock_ollama_data, mock_hub_data):
     """Create an instance of the app"""
     app = Combo()
     yield app
@@ -38,17 +40,38 @@ async def mock_exit(mock_app):
 
 
 @pytest.mark.asyncio(loop_scope="session")
-async def test_exit(mock_app, mock_exit):
+async def test_no_exit(mock_app, mock_exit):
     """Test that the app exits correctly."""
 
+
     async with mock_app.run_test() as pilot:
-        # ensure no accidental triggers
-        await pilot.press("escape", "tab", "escape")
+        ui_elements = pilot.app._nodes._get_by_id('fold_screen')
+        await pilot.press("tab")
+        await pilot.press("escape")
+        assert ui_elements.safety == 0
+        await pilot.press("k")
+        assert ui_elements.safety == 1
+        await pilot.press("escape")
+        assert ui_elements.safety == 0
         mock_exit.assert_not_called()
 
-        await pilot.press("escape", "k", "escape", "k", "k", "escape")
-        mock_exit.assert_not_called()
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_exits(mock_app, mock_exit):
+    """Test that the app exits correctly."""
+    from nnll_01 import nfo
+    async with mock_app.run_test() as pilot:
+        ui_elements = pilot.app._nodes._get_by_id('fold_screen')
+        nfo("safety", ui_elements.safety)
 
         # ensure exit
-        await pilot.press("escape", "escape")
+        await pilot.press(",")
+        assert ui_elements.safety == 1
+        await pilot.press("escape")
+        assert ui_elements.safety == 0
+        nfo("safety", ui_elements.safety)
+
+        await pilot.press("escape")
+        assert ui_elements.safety == -1
+        nfo("safety", ui_elements.safety)
         mock_exit.assert_called_once()
