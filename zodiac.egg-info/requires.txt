@@ -16,6 +16,7 @@ openai>=1.75.0
 [dev]
 matplotlib>=3.10.1
 pytest>=8.3.5
+pytest-asyncio>=0.26.0
 ruff>=0.11.6
 tiktoken>=0.9.0
 

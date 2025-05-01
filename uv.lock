@@ -3295,6 +3295,7 @@ cortex = [
 dev = [
     { name = "matplotlib" },
     { name = "pytest" },
+    { name = "pytest-asyncio" },
     { name = "ruff" },
     { name = "tiktoken" },
 ]
@@ -3344,6 +3345,7 @@ requires-dist = [
     { name = "openai", marker = "extra == 'cortex'", specifier = ">=1.75.0" },
     { name = "openai", marker = "extra == 'llamafile'", specifier = ">=1.75.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.5" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.26.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.11.6" },
     { name = "sounddevice", specifier = ">=0.5.1" },
     { name = "sympy", specifier = ">=1.13.3" },

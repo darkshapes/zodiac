@@ -144,6 +144,9 @@ class Fold(Screen[bool]):
         if event.key not in ["escape", "ctrl+left_square_brace"]:
             self.safety = min(1, self.safety +1)
         else:
+            if "active" in self.ui["sl"].classes:
+                self.stop_gen()
+                self.ui["sl"].set_classes(["selectah"])
             self.safe_exit()
         if (hasattr(event, "character") and event.character == "\r") or event.key == "enter":
             event.prevent_default()
@@ -165,17 +168,11 @@ class Fold(Screen[bool]):
     @work(exit_on_error=True)
     async def safe_exit(self) -> None:
         """trigger exit on second press"""
-        if "active" in self.ui["sl"].classes:
-            self.stop_gen()
-            self.ui["sl"].set_classes(["selectah"])
-        else:
-            self.safety = max(0, self.safety)
-            if self.safety == 0:
-                await self.app.action_quit()
-            self.safety -= 1
-            self.notify("Press ESC again to quit")
-
-
+        self.safety = max(0, self.safety)
+        if self.safety == 0:
+            await self.app.action_quit()
+        self.safety -= 1
+        self.notify("Press ESC again to quit")
 
     # @work(exclusive=True)
     @on(MessagePanel.Changed, "#message_panel")
@@ -235,27 +232,15 @@ class Fold(Screen[bool]):
     async def send_tx(self, last_hop=True) -> None:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
-
-        ckpt = self.ui["sl"].selection
-        if ckpt is None:
-            ckpt = next(iter(self.int_proc.ckpts)).get("entry")
         self.ui["rp"].on_text_area_changed()
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
+        ckpt = self.ui["sl"].selection
+        if ckpt is None:
+            ckpt = next(iter(self.int_proc.ckpts)).get("entry")
         try:
-            nfo(ckpt)
-            if last_hop and self.ui["ot"].current_cell != "text":
-                response = self.chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, streaming=False)
-                self.ui["rp"].insert(response)
-                self.ui["sl"].set_classes(["selectah"])
-            elif last_hop:
-                async for chunk in self.chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, streaming=True):
-                    if chunk is not None:
-                        self.ui["rp"].insert(chunk)
-                self.ui["sl"].set_classes(["selectah"])
-            else:
-                self.tx_data = self.chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, streaming=False)
-        except ExceptionGroup as error_log:
+            self.ui['rp'].synthesis(chat=self.chat, tx_data=self.tx_data, ckpt=ckpt, output=self.ui["ot"].current_cell)
+        except (GeneratorExit, RuntimeError,ExceptionGroup) as error_log:
             dbug(error_log)
             self.ui["sl"].set_classes(["selectah"])
 
