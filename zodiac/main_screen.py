@@ -1,4 +1,4 @@
-#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3) */ -->
+#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 """Auto-Orienting Split screen"""
@@ -10,14 +10,14 @@ from textual import events, on, work
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Container
-from textual.message import Message
 from textual.reactive import reactive
 from textual.screen import Screen
+from dspy import Module as dspy_Module
 
 # from textual.widget import Widget
 from textual.widgets import Static, ContentSwitcher  # , DataTable
 
-from nnll_01 import debug_monitor, info_message as nfo, debug_message as dbug
+from nnll_01 import debug_monitor, nfo, dbug
 from zodiac.message_panel import MessagePanel
 from zodiac.graph import IntentProcessor
 from zodiac.input_tag import InputTag
@@ -33,7 +33,7 @@ class Fold(Screen[bool]):
 
     BINDINGS = [
         Binding("ent", "send_tx", "✉︎", priority=True),  # Start audio prompt
-        Binding("escape", "cancel_generation", "◼︎ / ⏏︎"),  # Cancel response/Safe
+        Binding("escape", "stop_gen", "◼︎ / ⏏︎"),  # Cancel response/Safe
         Binding("bk", "alternate_panel('text',0)", "⌨️"),  # Return to text input panel
         Binding("alt+bk", "clear_input", "del"),  # Empty focused prompt panel
         Binding("space", "play", "▶︎", priority=True),  # Listen to prompt audio
@@ -46,6 +46,7 @@ class Fold(Screen[bool]):
     tx_data: dict = {}
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
+    chat: dspy_Module = None
     input_map: dict = {
         "text": "message_panel",
         "image": "message_panel",
@@ -99,6 +100,9 @@ class Fold(Screen[bool]):
         self.ui["rp"] = self.query_one("#response_panel")
         self.ui["vp"] = self.query_one("#voice_panel")
         self.ui["sl"] = self.query_one("#selectah")
+        from nnll_11 import ChatMachineWithMemory, QASignature  # modularize later
+
+        self.chat = ChatMachineWithMemory(sig=QASignature, max_workers=8)
         if self.int_proc.models is not None:
             self.ready_tx()
             self.walk_intent()
@@ -137,18 +141,18 @@ class Fold(Screen[bool]):
     @work(exclusive=True)
     async def _on_key(self, event: events.Key) -> None:
         """Textual API event trigger, Suppress/augment default key actions to trigger keybindings"""
+        if event.key not in ["escape", "ctrl+left_square_brace"]:
+            self.safety = min(1, self.safety +1)
+        else:
+            if "active" in self.ui["sl"].classes:
+                self.stop_gen()
+                self.ui["sl"].set_classes(["selectah"])
+            self.safe_exit()
         if (hasattr(event, "character") and event.character == "\r") or event.key == "enter":
             event.prevent_default()
             self.ready_tx(io_only=False)
             if self.int_proc.has_graph() and self.int_proc.has_path():
                 self.walk_intent(send=True)
-        elif event.key == "escape" and "active" in self.ui["sl"].classes:
-            event.prevent_default()
-            self.stop_gen()
-        elif event.key in ["escape", "ctrl+left_square_brace"]:
-            self.safety += 1
-            event.prevent_default()
-            self.safe_exit()
         elif (hasattr(event, "character") and event.character == "`") or event.key == "grave_accent":
             self.flip_panel("voice_panel", 1)
             self.ui["vp"].record_audio()
@@ -164,12 +168,11 @@ class Fold(Screen[bool]):
     @work(exit_on_error=True)
     async def safe_exit(self) -> None:
         """trigger exit on second press"""
-        self.safety = max(0, self.safety - 1)
+        self.safety = max(0, self.safety)
         if self.safety == 0:
             await self.app.action_quit()
-        else:
-            self.safety -= 1
-            self.notify("Press ESC again to quit")
+        self.safety -= 1
+        self.notify("Press ESC again to quit")
 
     # @work(exclusive=True)
     @on(MessagePanel.Changed, "#message_panel")
@@ -229,27 +232,17 @@ class Fold(Screen[bool]):
     async def send_tx(self, last_hop=True) -> None:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
-
-        from nnll_11 import ChatMachineWithMemory, QASignature
-
-        ckpt = self.ui["sl"].selection
-        if ckpt is None:
-            ckpt = next(iter(self.int_proc.ckpts)).get("entry")
-        chat = ChatMachineWithMemory(sig=QASignature)
         self.ui["rp"].on_text_area_changed()
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
+        ckpt = self.ui["sl"].selection
+        if ckpt is None:
+            ckpt = next(iter(self.int_proc.ckpts)).get("entry")
         try:
-            if last_hop:
-                nfo(ckpt)
-                async for chunk in chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, max_workers=8):
-                    if chunk is not None:
-                        self.ui["rp"].insert(chunk)
-                self.ui["sl"].set_classes(["selectah"])
-            else:
-                self.tx_data = chat.forward(tx_data=self.tx_data, model=ckpt.model, library=ckpt.library, max_workers=8)
-        except ExceptionGroup as error_log:
+            self.ui['rp'].synthesis(chat=self.chat, tx_data=self.tx_data, ckpt=ckpt, output=self.ui["ot"].current_cell)
+        except (GeneratorExit, RuntimeError,ExceptionGroup) as error_log:
             dbug(error_log)
+            self.ui["sl"].set_classes(["selectah"])
 
     @work(exclusive=True)
     async def stop_gen(self) -> None:

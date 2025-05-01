@@ -8,7 +8,7 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: dspy>=2.6.13
 Requires-Dist: networkx>=3.4.2
-Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15]@ git+https://github.com/darkshapes/nnll@main
+Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15]@ git+https://github.com/darkshapes/nnll@x/dev
 Requires-Dist: numpy>=2.2.5
 Requires-Dist: sounddevice>=0.5.1
 Requires-Dist: textual[syntax]>=3.1.1
@@ -17,17 +17,30 @@ Requires-Dist: textual-plotext>=1.0.1
 Requires-Dist: sympy>=1.13.3
 Requires-Dist: litellm==1.67.1
 Requires-Dist: textual-dev>=1.7.0
-Requires-Dist: ollama>=0.4.8
-Requires-Dist: lmstudio>=1.2.0
-Requires-Dist: huggingface-hub>=0.30.2
-Requires-Dist: openai>=1.75.0
-Requires-Dist: vllm; platform_system == "linux" or platform_system == "windows"
 Provides-Extra: ollama
 Requires-Dist: ollama>=0.4.8; extra == "ollama"
 Provides-Extra: lmstudio
 Requires-Dist: lmstudio>=1.2.0; extra == "lmstudio"
 Provides-Extra: hub
 Requires-Dist: huggingface-hub>=0.30.2; extra == "hub"
+Provides-Extra: vllm
+Requires-Dist: vllm; (platform_system == "linux" or platform_system == "windows") and extra == "vllm"
+Provides-Extra: cortex
+Requires-Dist: openai>=1.75.0; extra == "cortex"
+Provides-Extra: llamafile
+Requires-Dist: openai>=1.75.0; extra == "llamafile"
+Provides-Extra: full
+Requires-Dist: zodiac[ollama]; extra == "full"
+Requires-Dist: zodiac[lmstudio]; extra == "full"
+Requires-Dist: zodiac[hub]; extra == "full"
+Requires-Dist: zodiac[vllm]; extra == "full"
+Requires-Dist: zodiac[cortex]; extra == "full"
+Provides-Extra: dev
+Requires-Dist: matplotlib>=3.10.1; extra == "dev"
+Requires-Dist: pytest>=8.3.5; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.26.0; extra == "dev"
+Requires-Dist: ruff>=0.11.6; extra == "dev"
+Requires-Dist: tiktoken>=0.9.0; extra == "dev"
 Dynamic: license-file
 
 
@@ -40,7 +53,7 @@ Dynamic: license-file
 # zodiac <br><sub>multimodal generative media sequencer</sub>
 <div align="center">
 
-### [ [Windows](#installing) | [MacOS](#installing) | [Linux](#installing) ]
+### [ [Windows](https://github.com/darkshapes/sdbx/wiki/Develop) | [MacOS](https://github.com/darkshapes/sdbx/wiki/Develop) | [Linux](https://github.com/darkshapes/sdbx/wiki/Develop) ]
 
  <hr>
  </div>

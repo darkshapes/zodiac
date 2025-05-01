@@ -9,16 +9,16 @@ def set_env(args: bool) -> None:
     try:
         import huggingface_hub
 
-        huggingface_hub.constants.HF_HUB_DISABLE_PROGRESS_BARS = True
-        huggingface_hub.constants.HF_HUB_DISABLE_TELEMETRY = True
-        huggingface_hub.constants.HF_XET_HIGH_PERFORMANCE = True
-        huggingface_hub.constants.HF_HUB_ENABLE_HF_TRANSFER = True
+        huggingface_hub.constants.HF_HUB_DISABLE_PROGRESS_BARS  = True
+        huggingface_hub.constants.HF_HUB_DISABLE_TELEMETRY      = True
+        huggingface_hub.constants.HF_XET_HIGH_PERFORMANCE       = True
+        huggingface_hub.constants.HF_HUB_ENABLE_HF_TRANSFER     = True
         huggingface_hub.constants.HF_HUB_DISABLE_IMPLICIT_TOKEN = True
 
         import litellm
 
-        litellm.disable_hf_tokenizer_download = not args.net
-        huggingface_hub.constants.HF_HUB_OFFLINE = not args.net
+        litellm.disable_hf_tokenizer_download    = not args.net  # net True = disable False
+        huggingface_hub.constants.HF_HUB_OFFLINE = not args.net  # net True = OFFLINE False
 
     except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
         pass
@@ -28,7 +28,7 @@ def main() -> None:
     """Launch textual UI"""
     import argparse
     from zodiac.__main__ import Combo
-    from nnll_01 import info_message as nfo
+    from nnll_01 import nfo
 
     parser = argparse.ArgumentParser(description="Multimodal generative media sequencer")
     parser.add_argument("-n", "--net", action="store_true", help="Allow network access (for downloading requirements)")

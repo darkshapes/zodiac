@@ -43,10 +43,22 @@ full = [
     "zodiac[vllm]",
     "zodiac[cortex]",
 ]
-dev = ["matplotlib>=3.10.1", "pytest>=8.3.5", "ruff>=0.11.6", "tiktoken>=0.9.0"]
+dev = [
+    "matplotlib>=3.10.1",
+    "pytest>=8.3.5",
+    "pytest-asyncio>=0.26.0",
+    "ruff>=0.11.6",
+    "tiktoken>=0.9.0",
+]
 
 [dependency-groups]
-dev = ["matplotlib>=3.10.1", "pytest>=8.3.5", "ruff>=0.11.6", "tiktoken>=0.9.0"]
+dev = [
+    "matplotlib>=3.10.1",
+    "pytest-asyncio>=0.26.0",
+    "pytest>=8.3.5",
+    "ruff>=0.11.6",
+    "tiktoken>=0.9.0",
+]
 
 [tool.setuptools]
 packages = ["zodiac"]
@@ -55,6 +67,9 @@ packages = ["zodiac"]
 line-length    = 140
 include        = ["*.py"]
 extend-exclude = ["^tests/.*$", "test.*$"]
+
+[tool.ruff.format]
+exclude = ["*.py"]
 
 [tool.pylint]
 max-line-length = 140

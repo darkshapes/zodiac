@@ -1452,8 +1452,8 @@ sdist = { url = "https://files.pythonhosted.org/packages/95/d4/6b0324541018561c5
 
 [[package]]
 name = "nnll"
-version = "0.1.dev326+g7488281.d20250429"
-source = { git = "https://github.com/darkshapes/nnll?rev=x%2Fdev#74882817876342d8f942addae6ccef7c687c175b" }
+version = "0.1.dev344+gece7c83.d20250430"
+source = { git = "https://github.com/darkshapes/nnll?rev=x%2Fdev#ece7c837b1cdfe4d323a540b94cde1b138f2f32e" }
 
 [package.optional-dependencies]
 nnll-01 = [
@@ -2043,6 +2043,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ae/3c/c9d525a414d506893f0cd8a8d0de7706446213181570cdbd766691164e40/pytest-8.3.5.tar.gz", hash = "sha256:f4efe70cc14e511565ac476b57c279e12a855b11f48f212af1080ef2263d3845", size = 1450891 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/30/3d/64ad57c803f1fa1e963a7946b6e0fea4a70df53c1a7fed304586539c2bac/pytest-8.3.5-py3-none-any.whl", hash = "sha256:c69214aa47deac29fad6c2a4f590b9c4a9fdb16a403176fe154b79c0b4d4d820", size = 343634 },
+]
+
+[[package]]
+name = "pytest-asyncio"
+version = "0.26.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8e/c4/453c52c659521066969523e87d85d54139bbd17b78f09532fb8eb8cdb58e/pytest_asyncio-0.26.0.tar.gz", hash = "sha256:c4df2a697648241ff39e7f0e4a73050b03f123f760673956cf0d72a4990e312f", size = 54156 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/20/7f/338843f449ace853647ace35870874f69a764d251872ed1b4de9f234822c/pytest_asyncio-0.26.0-py3-none-any.whl", hash = "sha256:7b51ed894f4fbea1340262bdae5135797ebbe21d8638978e35d31c6d19f72fb0", size = 19694 },
 ]
 
 [[package]]
@@ -3264,26 +3276,41 @@ version = "0.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "dspy" },
-    { name = "huggingface-hub" },
     { name = "litellm" },
-    { name = "lmstudio" },
     { name = "networkx" },
     { name = "nnll", extra = ["nnll-01", "nnll-05", "nnll-06", "nnll-11", "nnll-15"] },
     { name = "numpy" },
-    { name = "ollama" },
-    { name = "openai" },
     { name = "sounddevice" },
     { name = "sympy" },
     { name = "textual", extra = ["syntax"] },
     { name = "textual-dev" },
     { name = "textual-plotext" },
     { name = "tree-sitter" },
-    { name = "vllm", marker = "platform_system == 'linux' or platform_system == 'windows'" },
 ]
 
 [package.optional-dependencies]
+cortex = [
+    { name = "openai" },
+]
+dev = [
+    { name = "matplotlib" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "ruff" },
+    { name = "tiktoken" },
+]
+full = [
+    { name = "huggingface-hub" },
+    { name = "lmstudio" },
+    { name = "ollama" },
+    { name = "openai" },
+    { name = "vllm", marker = "platform_system == 'linux' or platform_system == 'windows'" },
+]
 hub = [
     { name = "huggingface-hub" },
+]
+llamafile = [
+    { name = "openai" },
 ]
 lmstudio = [
     { name = "lmstudio" },
@@ -3291,11 +3318,15 @@ lmstudio = [
 ollama = [
     { name = "ollama" },
 ]
+vllm = [
+    { name = "vllm", marker = "platform_system == 'linux' or platform_system == 'windows'" },
+]
 
 [package.dev-dependencies]
 dev = [
     { name = "matplotlib" },
     { name = "pytest" },
+    { name = "pytest-asyncio" },
     { name = "ruff" },
     { name = "tiktoken" },
 ]
@@ -3303,30 +3334,39 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "dspy", specifier = ">=2.6.13" },
-    { name = "huggingface-hub", specifier = ">=0.30.2" },
     { name = "huggingface-hub", marker = "extra == 'hub'", specifier = ">=0.30.2" },
     { name = "litellm", specifier = "==1.67.1" },
-    { name = "lmstudio", specifier = ">=1.2.0" },
     { name = "lmstudio", marker = "extra == 'lmstudio'", specifier = ">=1.2.0" },
+    { name = "matplotlib", marker = "extra == 'dev'", specifier = ">=3.10.1" },
     { name = "networkx", specifier = ">=3.4.2" },
     { name = "nnll", extras = ["nnll-01", "nnll-05", "nnll-06", "nnll-11", "nnll-15"], git = "https://github.com/darkshapes/nnll?rev=x%2Fdev" },
     { name = "numpy", specifier = ">=2.2.5" },
-    { name = "ollama", specifier = ">=0.4.8" },
     { name = "ollama", marker = "extra == 'ollama'", specifier = ">=0.4.8" },
-    { name = "openai", specifier = ">=1.75.0" },
+    { name = "openai", marker = "extra == 'cortex'", specifier = ">=1.75.0" },
+    { name = "openai", marker = "extra == 'llamafile'", specifier = ">=1.75.0" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.5" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.26.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.11.6" },
     { name = "sounddevice", specifier = ">=0.5.1" },
     { name = "sympy", specifier = ">=1.13.3" },
     { name = "textual", extras = ["syntax"], specifier = ">=3.1.1" },
     { name = "textual-dev", specifier = ">=1.7.0" },
     { name = "textual-plotext", specifier = ">=1.0.1" },
+    { name = "tiktoken", marker = "extra == 'dev'", specifier = ">=0.9.0" },
     { name = "tree-sitter", specifier = ">=0.24.0" },
-    { name = "vllm", marker = "platform_system == 'linux' or platform_system == 'windows'" },
+    { name = "vllm", marker = "(platform_system == 'linux' and extra == 'vllm') or (platform_system == 'windows' and extra == 'vllm')" },
+    { name = "zodiac", extras = ["cortex"], marker = "extra == 'full'" },
+    { name = "zodiac", extras = ["hub"], marker = "extra == 'full'" },
+    { name = "zodiac", extras = ["lmstudio"], marker = "extra == 'full'" },
+    { name = "zodiac", extras = ["ollama"], marker = "extra == 'full'" },
+    { name = "zodiac", extras = ["vllm"], marker = "extra == 'full'" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "matplotlib", specifier = ">=3.10.1" },
     { name = "pytest", specifier = ">=8.3.5" },
+    { name = "pytest-asyncio", specifier = ">=0.26.0" },
     { name = "ruff", specifier = ">=0.11.6" },
     { name = "tiktoken", specifier = ">=0.9.0" },
 ]
