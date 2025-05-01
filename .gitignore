@@ -18,7 +18,6 @@ build/lib/zodiac/voice_panel.py
 textual.log
 .DS_Store
 textual.log
-.DS_Store
-.DS_Store
-.DS_Store
-.DS_Store
+img_src/.DS_Store
+tests/.DS_Store
+zodiac/.DS_Store

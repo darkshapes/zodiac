@@ -216,9 +216,9 @@ class Fold(Screen[bool]):
         for i in range(hops):
             if i + 1 < hops:
                 if send:
-                    self.tx_data = self.send_tx(last_hop=False)
+                    self.send_tx()
                     self.ready_tx(mode_in=coords[i + 1], mode_out=coords[i + 2])
-                else:
+                else: # This allows us to predict the models required for a pass
                     old_models = self.int_proc.models if self.int_proc.models else []
                     dbug(old_models, "walk_intent")
                     self.ready_tx(mode_in=coords[i + 1], mode_out=coords[i + 2])
@@ -229,7 +229,7 @@ class Fold(Screen[bool]):
                 self.send_tx()
 
     @work(exclusive=True)
-    async def send_tx(self, last_hop=True) -> None:
+    async def send_tx(self) -> None:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
         self.ui["rp"].on_text_area_changed()
@@ -239,7 +239,7 @@ class Fold(Screen[bool]):
         if ckpt is None:
             ckpt = next(iter(self.int_proc.ckpts)).get("entry")
         try:
-            self.ui['rp'].synthesis(chat=self.chat, tx_data=self.tx_data, ckpt=ckpt, output=self.ui["ot"].current_cell)
+            self.tx_data = self.ui['rp'].synthesis(chat=self.chat, tx_data=self.tx_data, ckpt=ckpt, output=self.ui["ot"].current_cell)
         except (GeneratorExit, RuntimeError,ExceptionGroup) as error_log:
             dbug(error_log)
             self.ui["sl"].set_classes(["selectah"])
