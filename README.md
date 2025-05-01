@@ -8,7 +8,7 @@
 # zodiac <br><sub>multimodal generative media sequencer</sub>
 <div align="center">
 
-### [ [Windows](#installing) | [MacOS](#installing) | [Linux](#installing) ]
+### [ [Windows](https://github.com/darkshapes/sdbx/wiki/Develop) | [MacOS](https://github.com/darkshapes/sdbx/wiki/Develop) | [Linux](https://github.com/darkshapes/sdbx/wiki/Develop) ]
 
  <hr>
  </div>

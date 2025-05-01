@@ -51,7 +51,7 @@ def mock_ollama_data():
         data = ListResponse(
             models=[
                 Model(
-                    model="hf.co/unsloth/gemma-3-27b-it-GGUF:Q8_0",
+                    model="hf.co/unsloth/🤡:Q8_0",
                     modified_at=datetime.datetime(2025, 3, 19, 12, 21, 19, 112890, tzinfo=None),
                     digest="965289b1e3e63c66bfc018051b6a907b2f0b18620d5721dd1cdfad759b679a2c",
                     size=29565711760,
@@ -143,7 +143,7 @@ def test_mocked_ollama(mock_ollama_data):
 
     assert len(result.models) == 3
     next_model = next(iter(result.models))
-    assert next_model.model == "hf.co/unsloth/gemma-3-27b-it-GGUF:Q8_0"
+    assert next_model.model == "hf.co/unsloth/🤡:Q8_0"
     assert next_model.size == 29565711760
 
 

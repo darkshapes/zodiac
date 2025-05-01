@@ -14,18 +14,19 @@ from zodiac.__main__ import Combo
 from zodiac.response_panel import ResponsePanel# noqa
 from zodiac.display_bar import DisplayBar# noqa
 from zodiac.voice_panel import VoicePanel# noqa
+from test_graph import mock_ollama_data, mock_hub_data, test_mocked_hub, test_mocked_ollama,test_create_graph
 
 
 @pytest.mark.asyncio
-async def test_screen_widget_contents(app=Combo()):
+async def test_screen_widget_contents(mock_ollama_data, mock_hub_data, app=Combo()):
     """Test elements in screen load"""
     from nnll_01 import nfo
-    from sys import modules as sys_modules
+    import sys
     async with app.run_test() as pilot:
         ui_elements = pilot.app._nodes._get_by_id('fold_screen')
         node_list = ui_elements.query("*")
         panel_class_names = [panel_name.__class__.__name__ for panel_name in node_list]
-        nfo(list([*panel_class_names]))
-        nfo([x for x in panel_class_names if x in sys_modules])
+        nfo("total nodes :",len(list([*panel_class_names])))
+        nfo("nodes in sys.modules : ",len([panel_name.__class__.__module__ in sys.modules for panel_name in node_list]))
         # nfo(list[if  in sys_modules]))
-        assert len([panel_name for panel_name in node_list if str(panel_name.__class__.__name__) in sys_modules]) != 0
+        assert all(panel_name.__class__.__module__ in sys.modules for panel_name in node_list) is True

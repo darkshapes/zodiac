@@ -4,13 +4,15 @@
 LICENSE
 README.md
 pyproject.toml
+pytest.ini
 uv.lock
+.github/workflows/python-app.yml
 img_src/screenshot.png
 img_src/zodiac_dark_bg.png
 img_src/zodiac_dark_stealth.png
 img_src/zodiac_light_stealth.png
 tests/test_14_draw_graph.py
-tests/test_14_graph.py
+tests/test_graph.py
 tests/test_init_exit.py
 tests/test_model_register.py
 tests/test_orientation.py
