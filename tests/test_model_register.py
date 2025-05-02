@@ -50,12 +50,12 @@ async def test_status_color_changes(mock_generate_response, app=Combo()):
         ui_elements = pilot.app._nodes._get_by_id('fold_screen')
         ui_elements.query_one("#message_panel").insert(text_insert)
         ui_elements.focus()
-        await pilot.press("tab", "enter")
+        await pilot.press("k","tab", "enter")
         expected = frozenset({"selectah"})
         assert ui_elements.query_one('#selectah').classes == expected
 
         # print(pilot.app.query_one("#selectah").classes)
-        mock_generate_response.assert_called_once()
+    mock_generate_response.assert_called_once()
         # last_model = next(iter(ui_elements.int_proc.models))
         # nfo(last_model)
         # pilot.app.exit()

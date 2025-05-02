@@ -12,6 +12,7 @@ class MessagePanel(TextArea):
 
     def on_mount(self):
         self.cursor_blink = True
+        self.focus()
 
     @work(exclusive=True)
     async def erase_message(self):

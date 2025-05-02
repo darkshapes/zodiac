@@ -6,24 +6,26 @@
 import os
 from collections import defaultdict
 from typing import Callable  # , Any
+
+from dspy import Module as dspy_Module
+from nnll_01 import dbug, debug_monitor #, nfo
 from textual import events, on, work
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Container
 from textual.reactive import reactive
 from textual.screen import Screen
-from dspy import Module as dspy_Module
+from textual.widgets import ContentSwitcher, Static
+from textual.containers import Horizontal
 
-# from textual.widget import Widget
-from textual.widgets import Static, ContentSwitcher  # , DataTable
-
-from nnll_01 import debug_monitor, nfo, dbug
 from zodiac.message_panel import MessagePanel
+from zodiac.display_bar import DisplayBar
 from zodiac.graph import IntentProcessor
 from zodiac.input_tag import InputTag
 from zodiac.output_tag import OutputTag
+from zodiac.response_panel import ResponsePanel
 from zodiac.selectah import Selectah
-
+from zodiac.voice_panel import VoicePanel
 
 class Fold(Screen[bool]):
     """Orienting display Horizontal
@@ -47,22 +49,10 @@ class Fold(Screen[bool]):
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
     chat: dspy_Module = None
-    input_map: dict = {
-        "text": "message_panel",
-        "image": "message_panel",
-        "speech": "voice_panel",
-    }
 
     def compose(self) -> ComposeResult:
         """Textual API widget constructor, build graph, apply custom widget classes"""
-        from textual.containers import Horizontal
-
         # from textual.widgets import Footer
-        from zodiac.display_bar import DisplayBar
-
-        from zodiac.response_panel import ResponsePanel
-        from zodiac.voice_panel import VoicePanel
-
         self.int_proc = IntentProcessor()
         self.int_proc.calc_graph()
         self.ready_tx(mode_in="text", mode_out="text")
@@ -70,9 +60,9 @@ class Fold(Screen[bool]):
             yield ResponsiveLeftTop(id="left-frame")
             with Container(id="centre-frame"):  # 3:1:3 ratio
                 with Container(id="responsive_input"):  # 3:
-                    with ContentSwitcher(id="panel_swap", initial="message_panel"):
-                        yield MessagePanel("""""", id="message_panel", max_checkpoints=100)
-                        yield VoicePanel(id="voice_panel")
+                    with ContentSwitcher(initial="message_panel", name="message_swap", id="message_swap"):
+                        yield MessagePanel("""""", id="message_panel", max_checkpoints=100).focus()
+                        yield VoicePanel(name="voice_message", id="voice_message", classes="voice_message")
                     yield InputTag(id="input_tag", classes="input_tag")
                 with Horizontal(id="seam"):
                     yield DisplayBar(id="display_bar")  # 1:
@@ -83,8 +73,10 @@ class Fold(Screen[bool]):
                         options=self.int_proc.models if self.int_proc.models is not None else [("No model", "No models")],
                         type_to_search=True,
                     )
-                with Container(id="responsive_display"):  #
-                    yield ResponsePanel("\n", id="response_panel", language="markdown")
+                with Container(id="responsive_display"):  # 3
+                    with ContentSwitcher(initial="response_panel", name="response_swap", id="response_swap"):
+                        yield ResponsePanel("\n", id="response_panel", language="markdown")
+                        yield VoicePanel(id="voice_response", name="voice_response", classes="voice_panel")
                     yield OutputTag(id="output_tag", classes="output_tag")
             yield ResponsiveRightBottom(id="right-frame")
 
@@ -92,15 +84,27 @@ class Fold(Screen[bool]):
     async def on_mount(self) -> None:
         """Textual API, Query all available widgets at once"""
         self.ui["db"] = self.query_one("#display_bar")
+        self.ui["sl"] = self.query_one("#selectah")
+        self.ui["ri"] = self.query_one("#responsive_input")
         self.ui["it"] = self.query_one("#input_tag")
         self.ui["mp"] = self.query_one("#message_panel")
+        self.ui["vm"] = self.query_one("#voice_message")
         self.ui["ot"] = self.query_one("#output_tag")  # type : ignore
-        self.ui["ps"] = self.query_one(ContentSwitcher)
         self.ui["rd"] = self.query_one("#responsive_display")
         self.ui["rp"] = self.query_one("#response_panel")
-        self.ui["vp"] = self.query_one("#voice_panel")
-        self.ui["sl"] = self.query_one("#selectah")
-        from nnll_11 import ChatMachineWithMemory, QASignature  # modularize later
+        self.ui["vr"] = self.query_one("#voice_response")
+
+        self.ui["ms"] = self.query_one("#message_swap")
+        self.ui["rs"] = self.query_one("#response_swap")
+        self.ui["mp"].focus()
+
+        self.init_graph()
+
+    @work(exclusive=True)
+    async def init_graph(self) -> None:
+        """Construct graph
+        """
+        from nnll_11 import ChatMachineWithMemory, QASignature  # modularize Signature
 
         self.chat = ChatMachineWithMemory(sig=QASignature, max_workers=8)
         if self.int_proc.models is not None:
@@ -148,22 +152,31 @@ class Fold(Screen[bool]):
                 self.stop_gen()
                 self.ui["sl"].set_classes(["selectah"])
             self.safe_exit()
-        if (hasattr(event, "character") and event.character == "\r") or event.key == "enter":
+        if (hasattr(event, "character") and event.character == "\r") or event.key == "enter" and not (self.ui['sl'].has_focus or self.ui['sl'].has_focus_within):
             event.prevent_default()
             self.ready_tx(io_only=False)
             if self.int_proc.has_graph() and self.int_proc.has_path():
                 self.walk_intent(send=True)
-        elif (hasattr(event, "character") and event.character == "`") or event.key == "grave_accent":
-            self.flip_panel("voice_panel", 1)
-            self.ui["vp"].record_audio()
-            self.audio_to_token()
         elif (hasattr(event, "character") and event.character == " ") or event.key == "space":
-            self.flip_panel("voice_panel", 1)
-            self.ui["vp"].play_audio()
+            if self.ui['rd'].has_focus_within:
+                self.flip_panel(id_name="voice_response", force=True)
+                self.ui["vr"].play_audio()
+            elif not self.ui['sl'].has_focus or self.ui['sl'].has_focus_within:
+                self.flip_panel(id_name="voice_message", force=True)
+                self.ui["vm"].play_audio()
+        if (hasattr(event, "character") and event.character == "`") or event.key == "grave_accent":
+            if self.ui['rd'].has_focus_within:
+                self.flip_panel(id_name="voice_response", force=True)
+                self.ui["vr"].record_audio()
+                self.audio_to_token(top=False)
+            elif not self.ui['sl'].has_focus or self.ui['sl'].has_focus_within:
+                self.flip_panel(id_name="voice_message", force=True)
+                self.ui["vm"].record_audio()
+                self.audio_to_token()
         elif (event.name) == "ctrl_w" or event.key == "ctrl+w":
             self.clear_input()
         elif not self.ui["rp"].has_focus and ((hasattr(event, "character") and event.character == "\x7f") or event.key == "backspace"):
-            self.flip_panel("message_panel", 0)
+            self.flip_panel(id_name="message_panel", force=True)
 
     @work(exit_on_error=True)
     async def safe_exit(self) -> None:
@@ -184,9 +197,12 @@ class Fold(Screen[bool]):
             self.ui["db"].show_tokens(next_model, message=message)
 
     @work(exclusive=True)
-    async def audio_to_token(self) -> None:
-        """Transmit audio to sample length"""
-        duration = self.ui["vp"].time_audio()
+    async def audio_to_token(self, top: bool = True) -> None:
+        """Transmit audio to sample length
+        :param top: Selector for audio panel top or bottom
+        """
+        panel = "vm" if top else "vr"
+        duration = self.ui[panel].time_audio()
         self.ui["db"].show_time(duration)
 
     # @work(exclusive=True)
@@ -201,7 +217,7 @@ class Fold(Screen[bool]):
         if not io_only:
             self.tx_data = {
                 "text": self.ui["mp"].text,
-                "audio": self.ui["vp"].audio,
+                "speech": self.ui["vm"].audio,
                 # "attachment": self.message_panel.file # drag and drop from external window
                 # "image": self.image_panel.image #  active video feed / screenshot / import file
             }
@@ -216,9 +232,9 @@ class Fold(Screen[bool]):
         for i in range(hops):
             if i + 1 < hops:
                 if send:
-                    self.tx_data = self.send_tx(last_hop=False)
+                    self.send_tx()
                     self.ready_tx(mode_in=coords[i + 1], mode_out=coords[i + 2])
-                else:
+                else: # This allows us to predict the models required for a pass
                     old_models = self.int_proc.models if self.int_proc.models else []
                     dbug(old_models, "walk_intent")
                     self.ready_tx(mode_in=coords[i + 1], mode_out=coords[i + 2])
@@ -229,7 +245,7 @@ class Fold(Screen[bool]):
                 self.send_tx()
 
     @work(exclusive=True)
-    async def send_tx(self, last_hop=True) -> None:
+    async def send_tx(self) -> None:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
         self.ui["rp"].on_text_area_changed()
@@ -239,7 +255,7 @@ class Fold(Screen[bool]):
         if ckpt is None:
             ckpt = next(iter(self.int_proc.ckpts)).get("entry")
         try:
-            self.ui['rp'].synthesis(chat=self.chat, tx_data=self.tx_data, ckpt=ckpt, output=self.ui["ot"].current_cell)
+            self.tx_data = self.ui['rp'].pass_req(chat=self.chat, tx_data=self.tx_data, ckpt=ckpt, out_type=self.ui["ot"].current_cell)
         except (GeneratorExit, RuntimeError,ExceptionGroup) as error_log:
             dbug(error_log)
             self.ui["sl"].set_classes(["selectah"])
@@ -253,20 +269,36 @@ class Fold(Screen[bool]):
     @work(exclusive=True)
     async def clear_input(self) -> None:
         """Clear the input on the focused panel"""
-        if self.ui["vp"].has_focus:
-            self.ui["vp"].erase_audio()
+        if self.ui["ri"].has_focus_within:
+            self.ui["vm"].erase_audio()
             self.audio_to_token()
+        elif self.ui["rd"].has_focus_within:
+            self.ui["vr"].erase_audio()
+            self.audio_to_token(top=False)
         elif self.ui["mp"].has_focus:
             self.ui["mp"].erase_message()
 
-    @work(exclusive=True)
-    async def flip_panel(self, id_name: str, y_coord: int) -> None:
-        """Switch between text input and audio input
-        :param id_name: The panel to switch to
-        :param y_coordinate: _description_
+    # @work(exclusive=True)
+    async def flip_panel(self, id_name: str, force: bool=True) -> None:
+        """Switch between text and audio panels\n
+        :param top: Whether to rotate top panel or bottom
+        :param id: Panel name to flip to
+        :param force: Skip to the tag corresponding to the panel
         """
-        self.ui["it"].scroll_to(x=1, y=y_coord, force=True, immediate=True, on_complete=self.ui["it"].refresh)
-        self.ui["ps"].current = id_name
+        # self.ui["it"].scroll_to(x=1, y=2, force=True, immediate=True, on_complete=self.ui["it"].refresh)
+        # self.ui["ps"].current = id_name
+        if id_name in ["message_panel","voice_message"]:
+            self.ui["ms"].current = id_name
+            if force:
+                # get the position of speech and move to it
+                self.ui["it"].skip_to(top=True)
+
+        elif id_name in ["response_panel","voice_response"]:
+            self.ui["rs"].current = id_name
+            if force:
+                # get the position of speech and move to it
+                self.ui["ot"].skip_to(top=False)
+
 
 
 class ResponsiveLeftTop(Container):

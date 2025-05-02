@@ -247,9 +247,9 @@ SidebarLeft, SidebarRight {
 }
 
 #response_panel {
-    width: 100%;
+    # width: 100%;
     margin: 0 0;
-    height: 100%;
+    # height: 100%;
     border: round $main-background;
     hatch: $hatch-align $main-background;
     &:focus-within {

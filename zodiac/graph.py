@@ -81,11 +81,9 @@ class IntentProcessor:
 
     @debug_monitor
     def set_path(self, mode_in: str, mode_out: str) -> None:
-        """
-        Find a valid path from current state (mode_in) to designated state (mode_out)\n
+        """Find a valid path from current state (mode_in) to designated state (mode_out)\n
         :param mode_in: Input prompt type or starting state/states
         :param mode_out: The user-selected ending-state
-        :return: An iterator for the edges forming a way towards the mode out, or Note
         """
 
         self.has_graph()
@@ -102,6 +100,8 @@ class IntentProcessor:
 
     @debug_monitor
     def set_ckpts(self) -> None:
+        """Populate models list for text fields and sort by weight\n
+        """
         from nnll_05 import pull_path_entries
 
         self.has_graph()
@@ -129,18 +129,28 @@ class IntentProcessor:
 
     @debug_monitor
     def edit_weight(self, selection: str, mode_in: str, mode_out: str) -> None:
-        """Determine entry edge, determine index, then adjust weight"""
+        """Determine entry edge, determine index, then adjust weight\n
+        :param selection: A value to adjust from this class's `models` attribute
+        :param mode_in: The conversion type, representing a source graph node
+        :param mode_out: The target type, , representing a source graph node
+        :raises ValueError: No models fit the request
+        """
         reg_entries = [nbrdict for n, nbrdict in self.intent_graph.adjacency()]
-        if not reg_entries[0].get(mode_out):
-            raise ValueError("No models available.")
-        index = [x for x in reg_entries[0][mode_out] if selection in reg_entries[0][mode_out][x].get("entry").model]
-        model = reg_entries[0][mode_out][index[0]].get("entry").model
-        weight = reg_entries[0][mode_out][index[0]].get("weight")
-        nfo(model, index, weight)
-        if weight < 1.0:
-            self.intent_graph[mode_in][mode_out][index[0]]["weight"] = weight + 0.1
+        try:
+            if not reg_entries[0].get(mode_out):
+                raise ValueError("No models available.")
+        except IndexError as error_log:
+            dbug(error_log)
+            self.set_ckpts()
         else:
-            self.intent_graph[mode_in][mode_out][index[0]]["weight"] = weight - 0.1
-        nfo("Weight changed for: ", self.intent_graph[mode_in][mode_out][index[0]]["entry"].model, f"model # {index[0]}")
+            index = [x for x in reg_entries[0][mode_out] if selection in reg_entries[0][mode_out][x].get("entry").model]
+            model = reg_entries[0][mode_out][index[0]].get("entry").model
+            weight = reg_entries[0][mode_out][index[0]].get("weight")
+            nfo(model, index, weight)
+            if weight < 1.0:
+                self.intent_graph[mode_in][mode_out][index[0]]["weight"] = round(weight + 0.1,1)
+            else:
+                self.intent_graph[mode_in][mode_out][index[0]]["weight"] = round(weight - 0.1,1)
+            nfo("Weight changed for: ", self.intent_graph[mode_in][mode_out][index[0]]["entry"].model, f"model # {index[0]}")
         self.set_ckpts()
         dbug("Confirm :", self.intent_graph[mode_in][mode_out])

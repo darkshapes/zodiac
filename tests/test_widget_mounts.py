@@ -6,14 +6,8 @@
 # type: ignore
 import pytest
 from textual.containers import Container, Horizontal# noqa
-from textual.widgets import DataTable, Footer, TextArea, ContentSwitcher# noqa
-from textual.widgets._select import SelectCurrent, SelectOverlay# noqa
 
-from zodiac.main_screen import (Fold,MessagePanel, InputTag, ResponsiveLeftTop, ResponsiveRightBottom, OutputTag,Static,Selectah) # noqa
 from zodiac.__main__ import Combo
-from zodiac.response_panel import ResponsePanel# noqa
-from zodiac.display_bar import DisplayBar# noqa
-from zodiac.voice_panel import VoicePanel# noqa
 from test_graph import mock_ollama_data, mock_hub_data, test_mocked_hub, test_mocked_ollama,test_create_graph
 
 

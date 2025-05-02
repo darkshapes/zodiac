@@ -2,9 +2,12 @@
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 # import array
+
 import sounddevice as sd
 
 from textual import work
+# from textual.app import ComposeResult
+# from textual.widgets import Static
 from textual.reactive import reactive
 
 from textual_plotext import PlotextPlot
@@ -23,6 +26,7 @@ class VoicePanel(PlotextPlot):  # (PlotWidget)
 
     def on_mount(self) -> None:
         self.can_focus = True
+        self.blur()
         # self.theme = "flexoki"
 
     @work(exclusive=True)
@@ -76,3 +80,4 @@ class VoicePanel(PlotextPlot):  # (PlotWidget)
     # self.scatter([i for i in range(0, len(self.audio))], self.audio[:, 0], hires_mode=HiResMode.BRAILLE, marker_style="purple")
 
     # self.clear()
+
