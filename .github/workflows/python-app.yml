@@ -35,4 +35,4 @@ jobs:
           python3 -m pip install meson
           pip install ".[dev]"
           cd tests
-          pytest -v *.py
+          pytest -vv tests/*.py

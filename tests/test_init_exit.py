@@ -1,7 +1,7 @@
 #  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
-# pylint: disable=redefined-outer-name
+# pylint: disable=redefined-outer-name, protected-access
 
 from unittest import mock
 
@@ -46,10 +46,12 @@ async def test_no_exit(mock_app, mock_exit):
 
     async with mock_app.run_test() as pilot:
         ui_elements = pilot.app._nodes._get_by_id('fold_screen')
-        await pilot.press("tab")
+        assert ui_elements.safety == 1
+        await pilot.press("tab","k")
+        assert ui_elements.safety == 1
         await pilot.press("escape")
         assert ui_elements.safety == 0
-        await pilot.press("k")
+        await pilot.press("ctrl")
         assert ui_elements.safety == 1
         await pilot.press("escape")
         assert ui_elements.safety == 0

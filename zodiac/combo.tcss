@@ -231,7 +231,6 @@ SidebarLeft, SidebarRight {
     border-subtitle-align: $title-align;
     border-subtitle-color: $background-lighten-3;
     scrollbar-size: $invisible-scrollbar;
-    layer: below;
     .text-area--selection {
         background: $selection-bg;
         color: $selection-fg;
@@ -351,7 +350,6 @@ SidebarLeft, SidebarRight {
     color: $accent;
     outline: round $background; # round $top-surface;
     # border: none;
-    layer: above;
     &:focus {
         outline: round $focus-surface;
     }

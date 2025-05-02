@@ -26,6 +26,7 @@ class VoicePanel(PlotextPlot):  # (PlotWidget)
 
     def on_mount(self) -> None:
         self.can_focus = True
+        self.blur()
         # self.theme = "flexoki"
 
     @work(exclusive=True)
