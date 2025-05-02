@@ -1,7 +1,7 @@
 #  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
-from typing import Callable
+# from typing import Callable
 from textual import work
 from textual.screen import Screen
 from textual.widgets import TextArea
@@ -40,7 +40,7 @@ class ResponsePanel(TextArea):
                 async for c in chunk:
                     if isinstance(c, Prediction) and streaming:
                         if hasattr(c,"answer"):
-                            if c.answer not in self.document.text:
+                            if c.answer not in self.text:
                                 self.insert(c.answer)
                         self.query_ancestor(Screen).ui["sl"].set_classes(["selectah"])
                     elif not streaming:

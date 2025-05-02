@@ -231,6 +231,7 @@ SidebarLeft, SidebarRight {
     border-subtitle-align: $title-align;
     border-subtitle-color: $background-lighten-3;
     scrollbar-size: $invisible-scrollbar;
+    layer: below;
     .text-area--selection {
         background: $selection-bg;
         color: $selection-fg;
@@ -247,9 +248,9 @@ SidebarLeft, SidebarRight {
 }
 
 #response_panel {
-    width: 100%;
+    # width: 100%;
     margin: 0 0;
-    height: 100%;
+    # height: 100%;
     border: round $main-background;
     hatch: $hatch-align $main-background;
     &:focus-within {
@@ -350,6 +351,7 @@ SidebarLeft, SidebarRight {
     color: $accent;
     outline: round $background; # round $top-surface;
     # border: none;
+    layer: above;
     &:focus {
         outline: round $focus-surface;
     }

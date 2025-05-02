@@ -12,19 +12,17 @@
 
  <hr>
  </div>
-Zodiac is a creative tool for DIY Generative AI. Guided by text, audio, or copied/pasted files, Zodiac easily chains sophisticated model systems together so that you can concentrate on making the art you want to make, the story you want to tell, and the tools you want to build, rather than build the tool to start making.
+Zodiac is a creative research tool for Generative AI. Guided by text, audio, or copied/pasted files, Zodiac builds generative AI workflows, bootstrapping sophisticated model systems so that you can concentrate on making the art you want to make, the story you want to tell, and the tools you want to build, rather than the tool to make with.
 
 > [!NOTE]
-> Zodiac runs **locally** and **only** on your device. Outside connections are not opened. Read the code & see for yourself.
+> Zodiac runs **locally** and **only** on your devices. Outside connections are not opened. Read the code & see for yourself.
 
-We currently support popular repositories like  and will support models from HuggingFace, CivitAI, and ModelScope, and standards like llamafile and MLX through [sdbx](https://github.com/darkshapes/sdbx).
-
-* Zodiac generates sophisticated multimodal, multi-model workflows
-* Supports [Ollama](https://ollama.com/), [LMStudio](http://lmstudio.ai/), [Cortex](http://cortex.so), [Llamafile](http://github.com/Mozilla-Ocho/llamafile)
-* Minimal and versatile operation in terminal console or browser
-* Designed for consumer-grade hardware
-* Local-first, privacy-oriented
-* Sequences of specialized models lowers compute/emissions, increases adaptability/modularity. <br><br>
+* Sequence an infinite variety of generative workflows with ease
+* Minimal, lightweight and versatile: Designed for smartphone, CLI terminal and browser use
+* Local-first, privacy-oriented isolation: no data siphoning, remote telemetry or analytics
+* Anyone with any device can use it: no web browser or programming necessary, compatible with legacy consumer computer/CPU/TPU/GPU devices,
+* Bring your own models - Supports [Ollama](https://ollama.com/), [Llamafile](http://github.com/Mozilla-Ocho/llamafile), [Cortex/Jan](http://cortex.so), [VLLM](https://github.com/vllm-project/vllm), [LMStudio](http://lmstudio.ai/)
+* Planned support for HuggingFace, CivitAI, ModelScope & AIO (all-in-one) local caches through [sdbx](https://github.com/darkshapes/sdbx).<br><br>
 
 [![Python application](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml/badge.svg)](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml)<br>
 ![commits per month](https://img.shields.io/github/commit-activity/m/darkshapes/zodiac?color=indigo)<br>
