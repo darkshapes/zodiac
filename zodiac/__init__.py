@@ -57,6 +57,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    # import asyncio
-    main()
-    # asyncio.run(main())
+    import asyncio
+    # main()
+    asyncio.run(main())

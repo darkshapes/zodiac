@@ -1,2 +1,3 @@
 [console_scripts]
+astra = astra:__main__
 zodiac = zodiac.__init__:main
