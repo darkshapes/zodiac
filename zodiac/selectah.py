@@ -10,7 +10,7 @@ from textual.screen import Screen
 from textual.widgets import Select
 from textual.widgets._select import SelectCurrent, SelectOverlay
 
-from nnll_01 import dbug, debug_monitor, nfo
+from nnll_01 import dbug, debug_monitor
 
 
 class Selectah(Select):
@@ -22,9 +22,8 @@ class Selectah(Select):
     hover = True
 
     def on_mount(self) -> None:
-        # self.options = self.graph.models
         self.graph = self.query_ancestor(Screen).int_proc
-        # self.prompt = os.path.basename(next(iter(self.graph.models))[0])
+        self.compact = True
 
     @on(Select.Changed)
     async def on_changed(self) -> None:  # event: Select.Changed) -> None:

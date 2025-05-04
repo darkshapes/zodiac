@@ -10,7 +10,7 @@ import pytest_asyncio
 
 from zodiac.main_screen import Fold
 
-from test_graph import mock_ollama_data, mock_hub_data, test_mocked_hub, test_mocked_ollama,test_create_graph
+from test_graph import mock_ollama_data, test_mocked_ollama, test_graph, test_mocked_hub, mock_hub_registry
 
 from zodiac.__main__ import Combo
 
@@ -21,11 +21,11 @@ async def test_initial_state(app=Combo()):
 
     async with app.run_test() as pilot:
         # ui_elements = list(pilot.app.query("*"))
-        assert isinstance(pilot.app._nodes._get_by_id('fold_screen'), Fold)  # root
+        assert isinstance(pilot.app._nodes._get_by_id("fold_screen"), Fold)  # root
 
 
 @pytest_asyncio.fixture(loop_scope="session")
-async def mock_app(mock_ollama_data, mock_hub_data):
+async def mock_app(mock_ollama_data, mock_hub_registry):
     """Create an instance of the app"""
     app = Combo()
     yield app
@@ -43,11 +43,10 @@ async def mock_exit(mock_app):
 async def test_no_exit(mock_app, mock_exit):
     """Test that the app exits correctly."""
 
-
     async with mock_app.run_test() as pilot:
-        ui_elements = pilot.app._nodes._get_by_id('fold_screen')
+        ui_elements = pilot.app._nodes._get_by_id("fold_screen")
         assert ui_elements.safety == 1
-        await pilot.press("tab","k")
+        await pilot.press("tab", "k")
         assert ui_elements.safety == 1
         await pilot.press("escape")
         assert ui_elements.safety == 0
@@ -62,8 +61,9 @@ async def test_no_exit(mock_app, mock_exit):
 async def test_exits(mock_app, mock_exit):
     """Test that the app exits correctly."""
     from nnll_01 import nfo
+
     async with mock_app.run_test() as pilot:
-        ui_elements = pilot.app._nodes._get_by_id('fold_screen')
+        ui_elements = pilot.app._nodes._get_by_id("fold_screen")
         nfo("safety", ui_elements.safety)
 
         # ensure exit

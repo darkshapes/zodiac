@@ -57,6 +57,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    import asyncio
-    # main()
-    asyncio.run(main())
+    # import asyncio
+    main()
+    # asyncio.run(main()) #ValueError: a coroutine was expected, got None
+     #RuntimeError: asyncio.run() cannot be called from a running event loop

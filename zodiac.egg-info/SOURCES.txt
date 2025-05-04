@@ -7,6 +7,9 @@ pyproject.toml
 pytest.ini
 uv.lock
 .github/workflows/python-app.yml
+astra/__init__.py
+astra/__main__.py
+astra/button.tcss
 img_src/screenshot.png
 img_src/zodiac_dark_bg.png
 img_src/zodiac_dark_stealth.png
