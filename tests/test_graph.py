@@ -17,13 +17,13 @@ from nnll_15.constants import VALID_CONVERSIONS
 from unittest import mock
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def has_api(name: str):
     # Mock implementation that always returns True
     return True
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def mock_has_api():
     with mock.patch("nnll_15.constants.has_api", return_value=True) as mocked:
         yield mocked
@@ -82,7 +82,7 @@ class ListResponse:
         self.models = models
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def mock_ollama_data():
     """Mock ollama response"""
     with mock.patch("ollama.list", new_callable=mock.MagicMock()) as mock_data:
@@ -139,7 +139,7 @@ class CachedRepoInfo:
         self.last_modified = last_modified
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def mock_hub_registry():
     """Mock hub data"""
     with mock.patch("huggingface_hub.scan_cache_dir", new_callable=mock.MagicMock()) as mock_get_registry:

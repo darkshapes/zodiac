@@ -12,14 +12,14 @@ from zodiac.__main__ import Combo
 from nnll_01 import nfo
 
 
-@pytest_asyncio.fixture(loop_scope="session")
+@pytest_asyncio.fixture(loop_scope="module")
 def mock_generate_response():
     """Create a decoy chat machine"""
     with mock.patch("zodiac.main_screen.Fold.send_tx", mock.MagicMock()) as mocked:
         yield mocked
 
 
-@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.asyncio(loop_scope="module")
 async def test_status_color_remains(app=Combo()):
     """Control test for status color reflected in text line"""
     from nnll_01 import nfo
@@ -32,7 +32,7 @@ async def test_status_color_remains(app=Combo()):
         assert ui_elements.query_one("#selectah").classes == expected
 
 
-@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.asyncio(loop_scope="module")
 async def test_status_color_continues_to_remain(mock_generate_response, app=Combo()):
     """Ensure cannot accidentally trigger"""
     async with app.run_test() as pilot:
@@ -44,7 +44,7 @@ async def test_status_color_continues_to_remain(mock_generate_response, app=Comb
         mock_generate_response.assert_not_called()
 
 
-@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.asyncio(loop_scope="module")
 async def test_status_color_changes(mock_generate_response, app=Combo()):
     """Ensure color changes when activated"""
     async with app.run_test() as pilot:

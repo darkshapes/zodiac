@@ -10,12 +10,12 @@ import pytest_asyncio
 
 from zodiac.main_screen import Fold
 
-from test_graph import mock_ollama_data, test_mocked_ollama, test_graph, test_mocked_hub, mock_hub_registry
+from test_graph import mock_ollama_data, mock_hub_registry, test_mocked_hub, test_mocked_ollama, test_graph
 
 from zodiac.__main__ import Combo
 
 
-@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.asyncio(loop_scope="module")
 async def test_initial_state(app=Combo()):
     """Test that the initial state of the app is correct."""
 
@@ -24,14 +24,14 @@ async def test_initial_state(app=Combo()):
         assert isinstance(pilot.app._nodes._get_by_id("fold_screen"), Fold)  # root
 
 
-@pytest_asyncio.fixture(loop_scope="session")
+@pytest_asyncio.fixture(loop_scope="module")
 async def mock_app(mock_ollama_data, mock_hub_registry):
     """Create an instance of the app"""
     app = Combo()
     yield app
 
 
-@pytest_asyncio.fixture(loop_scope="session")
+@pytest_asyncio.fixture(loop_scope="module")
 async def mock_exit(mock_app):
     """Create a decoy app exit"""
 
@@ -39,7 +39,7 @@ async def mock_exit(mock_app):
         yield mocked
 
 
-@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.asyncio(loop_scope="module")
 async def test_no_exit(mock_app, mock_exit):
     """Test that the app exits correctly."""
 
@@ -57,7 +57,7 @@ async def test_no_exit(mock_app, mock_exit):
         mock_exit.assert_not_called()
 
 
-@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.asyncio(loop_scope="module")
 async def test_exits(mock_app, mock_exit):
     """Test that the app exits correctly."""
     from nnll_01 import nfo
