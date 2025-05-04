@@ -39,17 +39,16 @@ class Carousel(DataTable):
         self.show_header = False
         self.cursor_type = "cell"
 
-
     @debug_monitor
     async def repop(self) -> None:
         """Recompute the model path and list models
         !!!This is a compute-heavy operation, use sparingly!!!
         """
         from_query = self.query_ancestor(Screen)
-        if self.id == "input_tag": # switch message panel based on cell type
-            await from_query.flip_panel(self.input_map[self.current_cell])
-        if self.id == "output_tag": # switch response panel based on cell type
-            await from_query.flip_panel(self.output_map[self.current_cell])
+        if self.id == "input_tag":  # switch message panel based on cell type
+            from_query.flip_panel(self.input_map[self.current_cell])
+        if self.id == "output_tag":  # switch response panel based on cell type
+            from_query.flip_panel(self.output_map[self.current_cell])
         from_query.ui["sl"].mode_in = from_query.ui["it"].current_cell
         from_query.ui["sl"].mode_out = from_query.ui["ot"].current_cell
         from_query.ready_tx(io_only=True)
@@ -86,14 +85,13 @@ class Carousel(DataTable):
 
     @debug_monitor
     async def _on_key(self, event: events.Key) -> None:
-        """Textual API event trigger, Translate arrow events into datatable cursor movement
-        """
-        if event.key == "up": # shrinking towards zero
+        """Textual API event trigger, Translate arrow events into datatable cursor movement"""
+        if event.key == "up":  # shrinking towards zero
             event.prevent_default()
             self.scroll_counter += self.scroll_max / 2
             await self.emulate_scroll(-1)
 
-        elif event.key == "down": # gromwing from zero
+        elif event.key == "down":  # gromwing from zero
             event.prevent_default()
             self.scroll_counter += self.scroll_max / 2  # positive integer indicates scroll is ready
             await self.emulate_scroll(1)
@@ -131,7 +129,6 @@ class Carousel(DataTable):
                         self.scroll_to(x=1, y=index, force=True, immediate=True, on_complete=self.refresh)
                         await self.repop()
                         return
-
 
                 # self.ui["it"].scroll_to(x=1, y=, force=True, immediate=True, on_complete=self.ui["it"].refresh)
                 # self.ui["ot"].scroll_to(x=1, y=y_coord, force=True, immediate=True, on_complete=self.ui["ot"].refresh)
