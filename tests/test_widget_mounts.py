@@ -8,7 +8,7 @@ import pytest
 from textual.containers import Container, Horizontal  # noqa
 
 from zodiac.__main__ import Combo
-from test_graph import mock_ollama_data, mock_hub_registry, test_mocked_hub, test_mocked_ollama, test_graph
+from test_graph import mock_ollama_data, mock_hub_registry, test_mocked_ollama, test_graph
 
 
 @pytest.mark.asyncio(loop_scope="module")

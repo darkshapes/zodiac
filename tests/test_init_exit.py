@@ -10,7 +10,7 @@ import pytest_asyncio
 
 from zodiac.main_screen import Fold
 
-from test_graph import mock_ollama_data, mock_hub_registry, test_mocked_hub, test_mocked_ollama, test_graph
+from test_graph import mock_ollama_data, mock_hub_registry, test_mocked_ollama, test_graph
 
 from zodiac.__main__ import Combo
 

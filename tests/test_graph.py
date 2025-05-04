@@ -182,14 +182,14 @@ def test_mocked_hub(mock_hub_registry):
     """Check if mocking hub correctly.
     `frozenset` is converted to a sorted list
     Otherwise hashed return becomes unordered"""
-    # import huggingface_hub
+    import huggingface_hub
 
-    # huggingface_hub.constants.HF_HUB_DISABLE_PROGRESS_BARS = True
-    # huggingface_hub.constants.HF_HUB_DISABLE_TELEMETRY = True
-    # huggingface_hub.constants.HF_XET_HIGH_PERFORMANCE = True
-    # huggingface_hub.constants.HF_HUB_ENABLE_HF_TRANSFER = True
-    # huggingface_hub.constants.HF_HUB_DISABLE_IMPLICIT_TOKEN = True
-    # huggingface_hub.constants.HF_HUB_OFFLINE = True  # net True = OFFLINE False
+    huggingface_hub.constants.HF_HUB_DISABLE_PROGRESS_BARS = True
+    huggingface_hub.constants.HF_HUB_DISABLE_TELEMETRY = True
+    huggingface_hub.constants.HF_XET_HIGH_PERFORMANCE = True
+    huggingface_hub.constants.HF_HUB_ENABLE_HF_TRANSFER = True
+    huggingface_hub.constants.HF_HUB_DISABLE_IMPLICIT_TOKEN = True
+    huggingface_hub.constants.HF_HUB_OFFLINE = True  # net True = OFFLINE False
 
     result = mock_hub_registry()
     new_list = []
