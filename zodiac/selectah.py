@@ -23,7 +23,7 @@ class Selectah(Select):
 
     def on_mount(self) -> None:
         self.graph = self.query_ancestor(Screen).int_proc
-        self.compact = True
+        # self.compact = True
 
     @on(Select.Changed)
     async def on_changed(self) -> None:  # event: Select.Changed) -> None:
