@@ -172,7 +172,7 @@ class Fold(Screen[bool]):
                 self.flip_panel(id_name="voice_message", force=True)
                 self.ui["vm"].record_audio()
                 self.audio_to_token()
-        elif (event.name) == "ctrl_w" or event.key == "ctrl+w":
+        if (event.name in ["ctrl_u", "ctrl_w"]) or (event.key in ["ctrl_u", "ctrl+w"]):
             self.clear_input()
         elif not self.ui["rp"].has_focus and ((hasattr(event, "character") and event.character == "\x7f") or event.key == "backspace"):
             self.flip_panel(id_name="message_panel", force=True)
@@ -269,33 +269,31 @@ class Fold(Screen[bool]):
     async def clear_input(self) -> None:
         """Clear the input on the focused panel"""
         if self.ui["ri"].has_focus_within:
+            if self.ui["mp"].has_focus:
+                self.ui["mp"].erase_message()
             self.ui["vm"].erase_audio()
             self.audio_to_token()
         elif self.ui["rd"].has_focus_within:
             self.ui["vr"].erase_audio()
             self.audio_to_token(top=False)
-        elif self.ui["mp"].has_focus:
-            self.ui["mp"].erase_message()
 
-    # @work(exclusive=True)
+    @work(exclusive=True)
     async def flip_panel(self, id_name: str, force: bool = True) -> None:
         """Switch between text and audio panels\n
         :param top: Whether to rotate top panel or bottom
         :param id: Panel name to flip to
         :param force: Skip to the tag corresponding to the panel
         """
-        # self.ui["it"].scroll_to(x=1, y=2, force=True, immediate=True, on_complete=self.ui["it"].refresh)
-        # self.ui["ps"].current = id_name
         if id_name in ["message_panel", "voice_message"]:
             self.ui["ms"].current = id_name
             if force:
-                # get the position of speech and move to it
+                # Swap panel to voice
                 self.ui["it"].skip_to(top=True)
 
         elif id_name in ["response_panel", "voice_response"]:
             self.ui["rs"].current = id_name
             if force:
-                # get the position of speech and move to it
+                # Swap panel to voice
                 self.ui["ot"].skip_to(top=False)
 
 
