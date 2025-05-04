@@ -8,11 +8,11 @@ import pytest
 from textual.containers import Container, Horizontal  # noqa
 
 from zodiac.__main__ import Combo
-from test_graph import mock_ollama_data, mock_hub_registry, test_mocked_ollama, test_graph
+from test_graph import mock_ollama_data, mock_hub_data, test_mocked_hub, test_mocked_ollama, test_create_graph
 
 
 @pytest.mark.asyncio(loop_scope="module")
-async def test_screen_widget_contents(mock_ollama_data, mock_hub_registry, app=Combo()):
+async def test_screen_widget_contents(mock_ollama_data, mock_hub_data, app=Combo()):
     """Test elements in screen load"""
     from nnll_01 import nfo
     import sys

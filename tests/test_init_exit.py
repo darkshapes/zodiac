@@ -10,7 +10,7 @@ import pytest_asyncio
 
 from zodiac.main_screen import Fold
 
-from test_graph import mock_ollama_data, mock_hub_registry, test_mocked_ollama, test_graph
+from test_graph import mock_ollama_data, mock_hub_data, test_mocked_hub, test_mocked_ollama, test_create_graph
 
 from zodiac.__main__ import Combo
 
@@ -25,7 +25,7 @@ async def test_initial_state(app=Combo()):
 
 
 @pytest_asyncio.fixture(loop_scope="module")
-async def mock_app(mock_ollama_data, mock_hub_registry):
+async def mock_app(mock_ollama_data, mock_hub_data):
     """Create an instance of the app"""
     app = Combo()
     yield app
