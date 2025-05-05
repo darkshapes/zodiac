@@ -14,6 +14,7 @@ from zodiac.graph import IntentProcessor
 from nnll_15.constants import VALID_CONVERSIONS
 from nnll_01 import nfo
 
+
 class Model:
     """Mock ollama Model class"""
 

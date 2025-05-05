@@ -25,7 +25,7 @@ dependencies = [
 
 [project.scripts]
 zodiac = "zodiac.__init__:main"
-
+astra  = "astra:__main__"
 [project.urls]
 Homepage = "https://github.com/darkshapes/zodiac"
 
@@ -69,7 +69,7 @@ include        = ["*.py"]
 extend-exclude = ["^tests/.*$", "test.*$"]
 
 [tool.ruff.format]
-exclude = ["*.py"]
+# exclude = ["*.py"]
 
 [tool.pylint]
 max-line-length = 140

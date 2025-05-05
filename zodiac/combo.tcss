@@ -97,7 +97,9 @@ $selection-fg: $background;
     width: 100%;
     layer: above;
     text-overflow: ellipsis;
-    &.input-selection-background {background: $negative-space 7%;}
+    &.input-selection-background {
+        background: $negative-space 7%;
+    }
     &:focus {
         background: white 10%;
     }
@@ -118,15 +120,14 @@ $selection-fg: $background;
         }
     }
     &.-expanded {
-
         color: $raised-text;
         text-align: end;
         content-align: right top;
         background:$negative-space 7%;
         overflow-x: hidden;
         &.-selected {
+            color: $negative-space 7%;
             background: $selection-bg;
-
         }
     }
     Static#label {
@@ -148,16 +149,14 @@ $selection-fg: $background;
         }
     }
 
-
     SelectCurrent {
         background:$negative-space 7%;
         border: vkey $focus-surface;
-        color: $raised-text;
+        color: $focus-surface;
         overflow: hidden;
         text-overflow: ellipsis;
         border: vkey $surface;
-
-        &:blur {
+        &.blur {
             border: vkey $surface;
         }
         &:hover {
@@ -176,7 +175,7 @@ $selection-fg: $background;
         overflow-x: hidden;
         overflow-y: scroll;
         text-align: end;
-        color: $sunken-text;
+        color: $negative-space 7%;
         overlay: screen;
         scrollbar-size: 0 1;
         scrollbar-background: $negative-space 7%;
@@ -185,15 +184,17 @@ $selection-fg: $background;
         scrollbar-color-active: $focus-surface;
         scrollbar-color-hover: $background-lighten-3;
         background: $negative-space 7%;
+        &:focus {
+            color: silver;
+        }
         &.-selected {
             overflow: hidden;
-            background: $selection-bg;
-            border: vkey $background-lighten-3;
+            background: $negative-space 7%;
         }
         & > .option-list--option-selected {
             overflow: hidden;
-                background: $selection-bg;
-                color: $selection-fg;
+            background: $selection-bg;
+            color: $negative-space 7%;
         }
         & > .option-list--option {
             overflow: hidden;

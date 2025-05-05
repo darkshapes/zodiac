@@ -7,12 +7,12 @@ from textual.containers import Horizontal
 
 
 @pytest.mark.filterwarnings("ignore::pytest.PytestUnraisableExceptionWarning")
-@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.asyncio(loop_scope="module")
 async def test_responsive_layout(app=Combo()):
     """Screen rotation function"""
     async with app.run_test() as pilot:
         await pilot.resize_terminal(40, 20)
-        fold_scr = pilot.app._nodes._get_by_id('fold_screen')
+        fold_scr = pilot.app._nodes._get_by_id("fold_screen")
         expected = "app-grid-horizontal"
         nfo(fold_scr.query_one(Horizontal).classes)
         assert fold_scr.query_one(Horizontal).classes == frozenset({expected})
