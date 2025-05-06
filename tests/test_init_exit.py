@@ -7,12 +7,10 @@ from unittest import mock
 
 import pytest
 import pytest_asyncio
-
-from zodiac.main_screen import Fold
-
-from test_graph import mock_ollama_data, mock_hub_data, test_mocked_hub, test_mocked_ollama, test_create_graph
+from test_graph import mock_hub_data, mock_ollama_data, test_create_graph, test_mocked_hub, test_mocked_ollama
 
 from zodiac.__main__ import Combo
+from zodiac.main_screen import Fold
 
 
 @pytest.mark.asyncio(loop_scope="module")

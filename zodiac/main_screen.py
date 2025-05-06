@@ -8,18 +8,19 @@ from collections import defaultdict
 from typing import Callable  # , Any
 
 from dspy import Module as dspy_Module
-from nnll_01 import dbug, debug_monitor  # , nfo
+from nnll_01 import dbug, debug_monitor, nfo
 from textual import events, on, work
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Container
 from textual.reactive import reactive
 from textual.screen import Screen
-from textual.widgets import ContentSwitcher, Static
+from textual.widgets import Static
 from textual.containers import Horizontal
 
 from zodiac.message_panel import MessagePanel
 from zodiac.display_bar import DisplayBar
+from zodiac.flip import Flip
 from zodiac.graph import IntentProcessor
 from zodiac.input_tag import InputTag
 from zodiac.output_tag import OutputTag
@@ -50,18 +51,22 @@ class Fold(Screen[bool]):
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
     chat: dspy_Module = None
+    mode_in: reactive[str] = reactive("text")
+    mode_out: reactive[str] = reactive("text")
+    models: reactive[list[tuple[str, str]]] = reactive([("", "")])
 
     def compose(self) -> ComposeResult:
         """Textual API widget constructor, build graph, apply custom widget classes"""
         # from textual.widgets import Footer
         self.int_proc = IntentProcessor()
         self.int_proc.calc_graph()
-        self.ready_tx(mode_in="text", mode_out="text")
+        nfo("test")
+        self.next_intent()
         with Horizontal(id="app-grid", classes="app-grid-horizontal"):
             yield ResponsiveLeftTop(id="left-frame")
             with Container(id="centre-frame"):  # 3:1:3 ratio
                 with Container(id="responsive_input"):  # 3:
-                    with ContentSwitcher(initial="message_panel", name="message_swap", id="message_swap"):
+                    with Flip(initial="message_panel", name="message_swap", id="message_swap").data_bind(mode_in=Fold.mode_in):
                         yield MessagePanel("""""", id="message_panel", max_checkpoints=100).focus()
                         yield VoicePanel(name="voice_message", id="voice_message", classes="voice_message")
                     yield InputTag(id="input_tag", classes="input_tag")
@@ -74,9 +79,10 @@ class Fold(Screen[bool]):
                         # value=next(iter(self.int_proc.models))[1], # this forces the first option to be weighted immediately
                         options=self.int_proc.models if self.int_proc.models is not None else [("No model", "No models")],
                         type_to_search=True,
-                    )
+                        # allow_blank=False,
+                    ).data_bind(mode_in=Fold.mode_in, mode_out=Fold.mode_out)
                 with Container(id="responsive_display"):  # 3
-                    with ContentSwitcher(initial="response_panel", name="response_swap", id="response_swap"):
+                    with Flip(initial="response_panel", name="response_swap", id="response_swap").data_bind(mode_out=Fold.mode_out):
                         yield ResponsePanel("\n", id="response_panel", language="markdown")
                         yield VoicePanel(id="voice_response", name="voice_response", classes="voice_panel")
                     yield OutputTag(id="output_tag", classes="output_tag")
@@ -107,8 +113,7 @@ class Fold(Screen[bool]):
 
         self.chat = ChatMachineWithMemory(sig=QASignature, max_workers=8)
         if self.int_proc.models is not None:
-            self.ready_tx()
-            self.walk_intent()
+            self.next_intent()
             # id_name = self.input_tag.highlight_link_id
 
     @work(exit_on_error=False)
@@ -137,11 +142,9 @@ class Fold(Screen[bool]):
     async def on_focus(self, event=events.Focus) -> None:
         """Recalculate path when models are shown"""
         if event.control.id == "selectah":
-            self.ready_tx()
-            self.walk_intent()
-            self.ui["sl"].prompt = next(iter(self.int_proc.models))[0]
+            self.next_intent()
 
-    @work(exclusive=True)
+    # @work(exclusive=True)
     async def _on_key(self, event: events.Key) -> None:
         """Textual API event trigger, Suppress/augment default key actions to trigger keybindings"""
         if event.key not in ["escape", "ctrl+left_square_brace"]:
@@ -158,24 +161,20 @@ class Fold(Screen[bool]):
                 self.walk_intent(send=True)
         elif (hasattr(event, "character") and event.character == " ") or event.key == "space":
             if self.ui["rd"].has_focus_within:
-                self.flip_panel(id_name="voice_response", force=True)
+                self.mode_in = "speech"
                 self.ui["vr"].play_audio()
             elif not self.ui["sl"].has_focus or self.ui["sl"].has_focus_within:
-                self.flip_panel(id_name="voice_message", force=True)
+                self.mode_in = "speech"
                 self.ui["vm"].play_audio()
         if (hasattr(event, "character") and event.character == "`") or event.key == "grave_accent":
-            if self.ui["rd"].has_focus_within:
-                self.flip_panel(id_name="voice_response", force=True)
-                self.ui["vr"].record_audio()
-                self.audio_to_token(top=False)
-            elif not self.ui["sl"].has_focus or self.ui["sl"].has_focus_within:
-                self.flip_panel(id_name="voice_message", force=True)
+            if not self.ui["sl"].has_focus or self.ui["sl"].has_focus_within:
+                self.mode_in = "speech"
                 self.ui["vm"].record_audio()
                 self.audio_to_token()
         if (event.name in ["ctrl_u", "ctrl_w"]) or (event.key in ["ctrl_u", "ctrl+w"]):
             self.clear_input()
         elif not self.ui["rp"].has_focus and ((hasattr(event, "character") and event.character == "\x7f") or event.key == "backspace"):
-            self.flip_panel(id_name="message_panel", force=True)
+            self.mode_in = "text"
 
     @work(exit_on_error=True)
     async def safe_exit(self) -> None:
@@ -205,12 +204,14 @@ class Fold(Screen[bool]):
         self.ui["db"].show_time(duration)
 
     # @work(exclusive=True)
-    def ready_tx(self, io_only: bool = True, mode_in: str = None, mode_out: str = None) -> None:
+    def ready_tx(
+        self,
+        io_only: bool = True,
+        mode_in: reactive[str] = mode_in._default,  # pylint: disable=protected-access
+        mode_out: reactive[str] = mode_out._default,  # pylint: disable=protected-access
+    ) -> None:
         """Retrieve graph data, prepare to send"""
-        if not mode_in:
-            mode_in = self.ui["it"].get_cell_at((self.ui["it"].current_row, 1))
-        if not mode_out:
-            mode_out = self.ui["ot"].get_cell_at((self.ui["ot"].current_row, 1))
+
         self.int_proc.set_path(mode_in=mode_in, mode_out=mode_out)
         self.int_proc.set_ckpts()
         if not io_only:
@@ -225,8 +226,8 @@ class Fold(Screen[bool]):
     def walk_intent(self, send=False) -> None:
         """Provided the coordinates in the intent processor, follow the list of in and out methods"""
         coords = self.int_proc.coord_path
-        if not coords:
-            coords = ["text", "text"]
+        # if not coords:
+        #     coords = ["text", "text"]
         hops = len(coords) - 1
         for i in range(hops):
             if i + 1 < hops:
@@ -277,24 +278,26 @@ class Fold(Screen[bool]):
             self.ui["vr"].erase_audio()
             self.audio_to_token(top=False)
 
-    @work(exclusive=True)
-    async def flip_panel(self, id_name: str, force: bool = True) -> None:
-        """Switch between text and audio panels\n
-        :param top: Whether to rotate top panel or bottom
-        :param id: Panel name to flip to
-        :param force: Skip to the tag corresponding to the panel
-        """
-        if id_name in ["message_panel", "voice_message"]:
-            self.ui["ms"].current = id_name
-            if force:
-                # Swap panel to voice
-                self.ui["it"].skip_to(top=True)
+    async def watch_mode_in(self, mode_in: str) -> None:
+        if self.is_ui_ready():
+            self.next_intent()
 
-        elif id_name in ["response_panel", "voice_response"]:
-            self.ui["rs"].current = id_name
-            if force:
-                # Swap panel to voice
-                self.ui["ot"].skip_to(top=False)
+    async def watch_mode_out(self, mode_out: str) -> None:
+        if self.is_ui_ready():
+            self.next_intent()
+
+    @work(exclusive=True)
+    async def next_intent(self):
+        # nfo(f"mode_in {self.mode_in}")
+        self.ready_tx(io_only=True, mode_in=self.mode_in, mode_out=self.mode_out)
+        self.walk_intent()
+        if not hasattr(self.ui["sl"], "prompt") or self.int_proc.models is None:
+            pass
+        elif self.int_proc.models is None:
+            self.ui["sl"].set_options = [("No models", "No Models.")]
+        else:
+            self.ui["sl"].set_options(self.int_proc.models)
+            self.ui["sl"].prompt = next(iter(self.int_proc.models))[0]
 
 
 class ResponsiveLeftTop(Container):

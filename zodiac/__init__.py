@@ -9,15 +9,15 @@ def set_env(args: bool) -> None:
     try:
         import huggingface_hub
 
-        huggingface_hub.constants.HF_HUB_DISABLE_PROGRESS_BARS  = True
-        huggingface_hub.constants.HF_HUB_DISABLE_TELEMETRY      = True
-        huggingface_hub.constants.HF_XET_HIGH_PERFORMANCE       = True
-        huggingface_hub.constants.HF_HUB_ENABLE_HF_TRANSFER     = True
+        huggingface_hub.constants.HF_HUB_DISABLE_PROGRESS_BARS = False
+        huggingface_hub.constants.HF_HUB_DISABLE_TELEMETRY = True
+        huggingface_hub.constants.HF_XET_HIGH_PERFORMANCE = True
+        huggingface_hub.constants.HF_HUB_ENABLE_HF_TRANSFER = True
         huggingface_hub.constants.HF_HUB_DISABLE_IMPLICIT_TOKEN = True
 
         import litellm
 
-        litellm.disable_hf_tokenizer_download    = not args.net  # net True = disable False
+        litellm.disable_hf_tokenizer_download = not args.net  # net True = disable False
         huggingface_hub.constants.HF_HUB_OFFLINE = not args.net  # net True = OFFLINE False
 
     except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
@@ -60,4 +60,4 @@ if __name__ == "__main__":
     # import asyncio
     main()
     # asyncio.run(main()) #ValueError: a coroutine was expected, got None
-     #RuntimeError: asyncio.run() cannot be called from a running event loop
+    # RuntimeError: asyncio.run() cannot be called from a running event loop

@@ -19,6 +19,7 @@ tests/test_graph.py
 tests/test_init_exit.py
 tests/test_model_register.py
 tests/test_orientation.py
+tests/test_swap_panel.py
 tests/test_vizualizer.py
 tests/test_weight.py
 tests/test_widget_mounts.py

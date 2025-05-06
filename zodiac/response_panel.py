@@ -9,6 +9,7 @@ from nnll_01 import dbug, nfo
 from nnll_15 import RegistryEntry
 from dspy import Module as dspy_Module
 
+
 class ResponsePanel(TextArea):
     """Machine response field"""
 
@@ -35,11 +36,12 @@ class ResponsePanel(TextArea):
         """
         from litellm import ModelResponseStream
         from dspy import Prediction
+
         async for chunk in chat.forward(streaming=streaming, **chat_args):
             try:
                 async for c in chunk:
                     if isinstance(c, Prediction) and streaming:
-                        if hasattr(c,"answer"):
+                        if hasattr(c, "answer"):
                             if c.answer not in self.text:
                                 self.insert(c.answer)
                         self.query_ancestor(Screen).ui["sl"].set_classes(["selectah"])
@@ -52,7 +54,7 @@ class ResponsePanel(TextArea):
                 dbug(error_log)
 
     @work(group="chat")
-    async def pass_req(self, chat: dspy_Module, tx_data: dict, ckpt:RegistryEntry , out_type: str="text") -> dict | None:
+    async def pass_req(self, chat: dspy_Module, tx_data: dict, ckpt: RegistryEntry, out_type: str = "text") -> dict | None:
         """Pack arguments and prepare final stage before generation\n\n
         ```
         name    [ medium : data ]
@@ -69,9 +71,14 @@ class ResponsePanel(TextArea):
         """
         nfo(ckpt)
         last_hop = True
-        chat_args = {"tx_data":tx_data, "model":ckpt.model, "library":ckpt.library,}
+        chat_args = {
+            "tx_data": tx_data,
+            "model": ckpt.model,
+            "library": ckpt.library,
+        }
         if out_type != "text" or not last_hop:
-            tx_data = self.synthesize(chat=chat, chat_args=chat_args, streaming=False)
+            tx_data = chat.forward(streaming=False, **chat_args)
             return tx_data
-        self.synthesize(chat=chat, chat_args=chat_args, streaming=True)
+        else:
+            self.synthesize(chat=chat, chat_args=chat_args, streaming=True)
         return None
