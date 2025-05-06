@@ -161,20 +161,24 @@ class Fold(Screen[bool]):
                 self.walk_intent(send=True)
         elif (hasattr(event, "character") and event.character == " ") or event.key == "space":
             if self.ui["rd"].has_focus_within:
-                self.mode_in = "speech"
+                self.mode_out = "speech"
+                self.ui["ot"].skip_to(self.mode_out)
                 self.ui["vr"].play_audio()
             elif not self.ui["sl"].has_focus or self.ui["sl"].has_focus_within:
                 self.mode_in = "speech"
+                self.ui["it"].skip_to(self.mode_in)
                 self.ui["vm"].play_audio()
         if (hasattr(event, "character") and event.character == "`") or event.key == "grave_accent":
             if not self.ui["sl"].has_focus or self.ui["sl"].has_focus_within:
                 self.mode_in = "speech"
+                self.ui["it"].skip_to(self.mode_in)
                 self.ui["vm"].record_audio()
                 self.audio_to_token()
         if (event.name in ["ctrl_u", "ctrl_w"]) or (event.key in ["ctrl_u", "ctrl+w"]):
             self.clear_input()
         elif not self.ui["rp"].has_focus and ((hasattr(event, "character") and event.character == "\x7f") or event.key == "backspace"):
             self.mode_in = "text"
+            self.ui["it"].skip_to(self.mode_in)
 
     @work(exit_on_error=True)
     async def safe_exit(self) -> None:

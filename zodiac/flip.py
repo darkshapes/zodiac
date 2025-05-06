@@ -1,7 +1,10 @@
+#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
+#  # # <!-- // /*  d a r k s h a p e s */ -->
+
 from textual.screen import Screen
 from textual.reactive import reactive
 from textual.widgets import ContentSwitcher
-from nnll_01 import nfo
+# from nnll_01 import nfo
 
 
 class Flip(ContentSwitcher):
@@ -15,7 +18,7 @@ class Flip(ContentSwitcher):
         :param mode_in: The value of the incoming intent type
         """
         if self.query_ancestor(Screen).is_ui_ready():
-            if self.mode_in == "speech":
+            if mode_in == "speech":
                 self.current = self.speech_opt[0]
             else:
                 self.current = self.text_opt[0]
