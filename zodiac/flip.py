@@ -17,18 +17,20 @@ class Flip(ContentSwitcher):
         """Textual API watch for variable changes\n
         :param mode_in: The value of the incoming intent type
         """
-        if self.query_ancestor(Screen).is_ui_ready():
+        fold_screen = self.query_ancestor(Screen)
+        if fold_screen.is_ui_ready():
             if mode_in == "speech":
-                self.current = self.speech_opt[0]
+                fold_screen.ui["ms"].current = self.speech_opt[0]
             else:
-                self.current = self.text_opt[0]
+                fold_screen.ui["ms"].current = self.text_opt[0]
 
     def watch_mode_out(self, mode_out: str) -> None:
         """Textual API watch for variable changes\n
         :param mode_out: The value of the outgoing intent type
         """
-        if self.query_ancestor(Screen).is_ui_ready():
+        fold_screen = self.query_ancestor(Screen)
+        if fold_screen.is_ui_ready():
             if mode_out == "speech":
-                self.current = self.speech_opt[1]
+                fold_screen.ui["rs"].current = self.speech_opt[1]
             else:
-                self.current = self.text_opt[1]
+                fold_screen.ui["rs"].current = self.text_opt[1]
