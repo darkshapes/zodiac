@@ -122,9 +122,11 @@ class ButtonsApp(App[str]):
             self.intent_processor.set_path(mode_in=start_type, mode_out=end_type)
             results_panel.write(f"path request : {self.intent_processor.coord_path}")
             self.intent_processor.set_ckpts()
+
             self.tokenizer = next(iter(self.intent_processor.models)) if self.intent_processor.models is not None else ""
             # nfo(self.intent_processor.intent_graph.nodes(data=True))
             # nfo([*self.intent_processor.intent_graph.edges(data=True)])
+
 
             self.query_one("#response_panel").insert(f"{str(self.tokenizer)}\n")
             results_panel.write(f"model :\n {[x['entry'].model for x in list(self.intent_processor.ckpts)]}\n")
@@ -169,3 +171,4 @@ class ButtonsApp(App[str]):
 if __name__ == "__main__":
     app = ButtonsApp()
     app.run()
+

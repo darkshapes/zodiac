@@ -1455,6 +1455,7 @@ name = "nnll"
 version = "0.1.dev364+gc68a907.d20250505"
 source = { git = "https://github.com/darkshapes/nnll?rev=x%2Fdev#c68a9075678ce95ec34e04d8808e536a14d79ad0" }
 
+
 [package.optional-dependencies]
 nnll-01 = [
     { name = "structlog" },

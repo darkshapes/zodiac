@@ -161,6 +161,7 @@ class Fold(Screen[bool]):
                 self.walk_intent(send=True)
         elif (hasattr(event, "character") and event.character == " ") or event.key == "space":
             if self.ui["rd"].has_focus_within:
+
                 self.mode_out = "speech"
                 self.ui["ot"].skip_to(self.mode_out)
                 self.ui["vr"].play_audio()
@@ -282,6 +283,7 @@ class Fold(Screen[bool]):
             self.ui["vr"].erase_audio()
             self.audio_to_token(top=False)
 
+
     async def watch_mode_in(self, mode_in: str) -> None:
         if self.is_ui_ready():
             self.next_intent()
@@ -289,6 +291,7 @@ class Fold(Screen[bool]):
     async def watch_mode_out(self, mode_out: str) -> None:
         if self.is_ui_ready():
             self.next_intent()
+
 
     @work(exclusive=True)
     async def next_intent(self):
@@ -302,7 +305,6 @@ class Fold(Screen[bool]):
         else:
             self.ui["sl"].set_options(self.int_proc.models)
             self.ui["sl"].prompt = next(iter(self.int_proc.models))[0]
-
 
 class ResponsiveLeftTop(Container):
     """Sidebar Left/Top"""

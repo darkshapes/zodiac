@@ -28,6 +28,7 @@ class Carousel(DataTable):
         self.cursor_type = "cell"
         self.cursor_coordinate = (0, 1)
 
+
     @debug_monitor
     async def emulate_scroll(self, direction: int = 1) -> str:
         """Trigger datatable cursor movement by fraction of normal sensitivity\n
@@ -103,3 +104,4 @@ class Carousel(DataTable):
         coord = [x for x in range(self.row_count) if self.get_cell_at((1, x)) == name]
         nfo(coord)
         self.scroll_to(x=1, y=coord, force=True, immediate=True, on_complete=self.refresh)
+
