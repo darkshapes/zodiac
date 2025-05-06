@@ -3,6 +3,8 @@
 
 """Auto-Orienting Split screen"""
 
+# pylint: disable=protected-access
+
 import os
 from collections import defaultdict
 from typing import Callable  # , Any
@@ -38,10 +40,10 @@ class Fold(Screen[bool]):
     BINDINGS = [
         Binding("ent", "send_tx", "✉︎", priority=True),  # Start audio prompt
         Binding("escape", "stop_gen", "◼︎ / ⏏︎"),  # Cancel response/Safe
-        Binding("bk", "alternate_panel('text',0)", "⌨️"),  # Return to text input panel
-        Binding("alt+bk", "clear_input", "del"),  # Empty focused prompt panel
-        Binding("space", "play", "▶︎", priority=True),  # Listen to prompt audio
-        Binding("`", "start_recording", "◉", priority=True),  # Send to LLM
+        Binding("bk", "ui['ot'].skip_to(text)", "⌨️"),  # Return to text input panel
+        Binding("alt+backspace", "clear_input()", "del"),  # Empty focused prompt panel
+        Binding("space", "alternate_panel", "▶︎", priority=True),  # Listen to prompt audio
+        Binding("`", "key_space", "◉", priority=True),  # Send to LLM
         Binding("ctrl+c", "copy", "⧉", priority=True),
     ]
     id: str = "fold_screen"
@@ -111,7 +113,7 @@ class Fold(Screen[bool]):
         """Construct graph"""
         from nnll_11 import ChatMachineWithMemory, QASignature  # modularize Signature
 
-        self.chat = ChatMachineWithMemory(sig=QASignature, max_workers=8)
+        self.chat = ChatMachineWithMemory(sig=QASignature, max_workers=8)  # and this
         if self.int_proc.models is not None:
             self.next_intent()
             # id_name = self.input_tag.highlight_link_id
@@ -144,42 +146,58 @@ class Fold(Screen[bool]):
         if event.control.id == "selectah":
             self.next_intent()
 
-    # @work(exclusive=True)
+    @work(exclusive=True)
+    async def focus_on_sel(self) -> bool:
+        return self.ui["sl"].has_focus  # or self.ui["sl"].has_focus_within
+
     async def _on_key(self, event: events.Key) -> None:
         """Textual API event trigger, Suppress/augment default key actions to trigger keybindings"""
-        if event.key not in ["escape", "ctrl+left_square_brace"]:
-            self.safety = min(1, self.safety + 1)
-        else:
-            if "active" in self.ui["sl"].classes:
+
+        def is_key(key: str) -> bool:
+            return event.key == key
+
+        def is_char(char: str, key: str) -> bool:
+            if is_key(key):
+                return hasattr(event, "character") and event.character == char
+            return False
+
+        if event.name == "ctrl_w" or is_key("ctrl+w"):
+            self.clear_input()
+
+        elif not self.ui["rp"].has_focus and is_char("\x7f", "backspace"):
+            self.mode_in = "text"
+            self.ui["it"].skip_to(self.mode_in)
+
+        if is_key("escape") or is_key("ctrl+left_square_brace"):
+            if "active" in self.ui["sl"].classes or self.ui["sl"].expanded:
                 self.stop_gen()
                 self.ui["sl"].set_classes(["selectah"])
-            self.safe_exit()
-        if (hasattr(event, "character") and event.character == "\r") or event.key == "enter" and not (self.ui["sl"].has_focus or self.ui["sl"].has_focus_within):
+            else:
+                nfo(f" exit focus {self.focus_on_sel()}")
+                self.safe_exit()
+        else:
+            self.safety = min(1, self.safety + 1)
+
+        if is_char("\r", "enter"):
             event.prevent_default()
-            self.ready_tx(io_only=False)
-            if self.int_proc.has_graph() and self.int_proc.has_path():
-                self.walk_intent(send=True)
-        elif (hasattr(event, "character") and event.character == " ") or event.key == "space":
+            self.next_intent(io_only=False, bypass_send=False)
+
+        elif is_char(" ", "space"):
             if self.ui["rd"].has_focus_within:
 
                 self.mode_out = "speech"
                 self.ui["ot"].skip_to(self.mode_out)
                 self.ui["vr"].play_audio()
-            elif not self.ui["sl"].has_focus or self.ui["sl"].has_focus_within:
+            else:
                 self.mode_in = "speech"
                 self.ui["it"].skip_to(self.mode_in)
                 self.ui["vm"].play_audio()
-        if (hasattr(event, "character") and event.character == "`") or event.key == "grave_accent":
-            if not self.ui["sl"].has_focus or self.ui["sl"].has_focus_within:
-                self.mode_in = "speech"
-                self.ui["it"].skip_to(self.mode_in)
-                self.ui["vm"].record_audio()
-                self.audio_to_token()
-        if (event.name in ["ctrl_u", "ctrl_w"]) or (event.key in ["ctrl_u", "ctrl+w"]):
-            self.clear_input()
-        elif not self.ui["rp"].has_focus and ((hasattr(event, "character") and event.character == "\x7f") or event.key == "backspace"):
-            self.mode_in = "text"
+
+        if is_char("`", "grave_accent"):
+            self.mode_in = "speech"
             self.ui["it"].skip_to(self.mode_in)
+            self.ui["vm"].record_audio()
+            self.audio_to_token()
 
     @work(exit_on_error=True)
     async def safe_exit(self) -> None:
@@ -212,8 +230,8 @@ class Fold(Screen[bool]):
     def ready_tx(
         self,
         io_only: bool = True,
-        mode_in: reactive[str] = mode_in._default,  # pylint: disable=protected-access
-        mode_out: reactive[str] = mode_out._default,  # pylint: disable=protected-access
+        mode_in: reactive[str] = mode_in._default,
+        mode_out: reactive[str] = mode_out._default,
     ) -> None:
         """Retrieve graph data, prepare to send"""
 
@@ -228,25 +246,25 @@ class Fold(Screen[bool]):
             }
 
     # @work(exclusive=True)
-    def walk_intent(self, send=False) -> None:
-        """Provided the coordinates in the intent processor, follow the list of in and out methods"""
+    def walk_intent(self, bypass_send=True) -> None:
+        """Provided the coordinates in the intent processor, follow the list of in and out methods\n
+        :param bypass_send: Find intent path, but do not process, defaults to True
+        """
         coords = self.int_proc.coord_path
-        # if not coords:
-        #     coords = ["text", "text"]
         hops = len(coords) - 1
         for i in range(hops):
             if i + 1 < hops:
-                if send:
+                if not bypass_send:
                     self.send_tx()
                     self.ready_tx(mode_in=coords[i + 1], mode_out=coords[i + 2])
                 else:  # This allows us to predict the models required for a pass
                     old_models = self.int_proc.models if self.int_proc.models else []
-                    dbug(old_models, "walk_intent")
+                    dbug("walk_intent", old_models)
                     self.ready_tx(mode_in=coords[i + 1], mode_out=coords[i + 2])
                     self.int_proc.models.extend(old_models)
                     dbug(self.int_proc.models)
 
-            elif send:
+            elif not bypass_send:
                 self.send_tx()
 
     @work(exclusive=True)
@@ -294,10 +312,11 @@ class Fold(Screen[bool]):
 
 
     @work(exclusive=True)
-    async def next_intent(self):
+    async def next_intent(self, io_only: bool = True, bypass_send: bool = True) -> None:
         # nfo(f"mode_in {self.mode_in}")
-        self.ready_tx(io_only=True, mode_in=self.mode_in, mode_out=self.mode_out)
-        self.walk_intent()
+        self.ready_tx(io_only=io_only, mode_in=self.mode_in, mode_out=self.mode_out)
+        if self.int_proc.has_graph() and self.int_proc.has_path():
+            self.walk_intent(bypass_send=bypass_send)
         if not hasattr(self.ui["sl"], "prompt") or self.int_proc.models is None:
             pass
         elif self.int_proc.models is None:

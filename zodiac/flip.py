@@ -8,6 +8,8 @@ from textual.widgets import ContentSwitcher
 
 
 class Flip(ContentSwitcher):
+    """Swap panel top/bottom content"""
+
     mode_in: reactive[str] = reactive("text")
     mode_out: reactive[str] = reactive("text")
     text_opt = ["message_panel", "response_panel"]

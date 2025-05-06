@@ -25,10 +25,10 @@ tests/test_weight.py
 tests/test_widget_mounts.py
 zodiac/__init__.py
 zodiac/__main__.py
-zodiac/audio.py
 zodiac/carousel.py
 zodiac/combo.tcss
 zodiac/display_bar.py
+zodiac/flip.py
 zodiac/graph.py
 zodiac/input_tag.py
 zodiac/main_screen.py

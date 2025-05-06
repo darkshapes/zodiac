@@ -69,14 +69,15 @@ class ResponsePanel(TextArea):
         :param ckpt: Model entry to fulfill request
         :param out_type: Media type for this pass, defaults to 'text'
         """
-        nfo(ckpt)
         last_hop = True
         chat_args = {
             "tx_data": tx_data,
             "model": ckpt.model,
             "library": ckpt.library,
         }
+        nfo(ckpt)
         if out_type != "text" or not last_hop:
+            nfo("not text submitted, streaming disabled")
             tx_data = chat.forward(streaming=False, **chat_args)
             return tx_data
         else:

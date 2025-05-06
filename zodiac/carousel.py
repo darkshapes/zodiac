@@ -28,7 +28,6 @@ class Carousel(DataTable):
         self.cursor_type = "cell"
         self.cursor_coordinate = (0, 1)
 
-
     @debug_monitor
     async def emulate_scroll(self, direction: int = 1) -> str:
         """Trigger datatable cursor movement by fraction of normal sensitivity\n
@@ -94,14 +93,3 @@ class Carousel(DataTable):
         :param event: Event data for the trigger
         """
         await self.emulate_scroll(1)
-
-    @debug_monitor
-    async def skip_to(self, name="text") -> None:
-        """Jump current tag to an index # and change panel context if required\n
-        :param id_name: Name of the panel to switch to
-        :param top: Whether or not the request comes from in or out tag
-        """
-        coord = [x for x in range(self.row_count) if self.get_cell_at((1, x)) == name]
-        nfo(coord)
-        self.scroll_to(x=1, y=coord, force=True, immediate=True, on_complete=self.refresh)
-

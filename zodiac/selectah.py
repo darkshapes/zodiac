@@ -3,7 +3,7 @@
 
 # pylint: disable=import-outside-toplevel
 
-import networkx as nx
+# import networkx as nx
 from textual import on, events, work
 from textual.reactive import reactive
 from textual.screen import Screen
