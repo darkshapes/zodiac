@@ -3,7 +3,6 @@
 
 """Selection Function"""
 
-from huggingface_hub import repo_type_and_id_from_hf_id
 from textual import events, work
 from textual.widgets import DataTable
 from textual.screen import Screen
@@ -20,56 +19,41 @@ class Carousel(DataTable):
 
     up = "[@click='scroll_button(1)']▲[/]"
     dwn = "[@click='scroll_button()']▼[/]"
-    current_cell = "text"
-    current_row = 0
+    current_cell: reactive[str] = reactive("text")
     scroll_counter = 10
     scroll_max = 10
-    input_map: dict = {
-        "text": "message_panel",
-        "image": "message_panel",
-        "speech": "voice_message",
-    }
-    output_map: dict = {
-        "text": "response_panel",
-        "image": "response_panel",
-        "speech": "voice_response",
-    }
 
     def on_mount(self) -> None:
         self.show_header = False
         self.cursor_type = "cell"
+        self.cursor_coordinate = (0, 1)
 
-    @debug_monitor
-    async def repop(self) -> None:
-        """Recompute the model path and list models
-        !!!This is a compute-heavy operation, use sparingly!!!
-        """
-        from_query = self.query_ancestor(Screen)
-        if self.id == "input_tag":  # switch message panel based on cell type
-            from_query.flip_panel(self.input_map[self.current_cell])
-        if self.id == "output_tag":  # switch response panel based on cell type
-            from_query.flip_panel(self.output_map[self.current_cell])
-        from_query.ui["sl"].mode_in = from_query.ui["it"].current_cell
-        from_query.ui["sl"].mode_out = from_query.ui["ot"].current_cell
-        from_query.ready_tx(io_only=True)
-        from_query.walk_intent()
-        from_query.ui["sl"].prompt = next(iter(from_query.int_proc.models))[0]
 
     @debug_monitor
     async def emulate_scroll(self, direction: int = 1) -> str:
-        """Trigger datatable cursor movement using fractional sensitivity\n
+        """Trigger datatable cursor movement by fraction of normal sensitivity\n
         :param direction: Positive integer for up, negative integer for down
         :return: The datata in the table *row*
+
+        #### ASSUMING\n
+        A: User has the choice to select TAG OR select direction ARROW
+        B: We do not know without an operation what the content of the selection is
+        Therefore: We cannot use textual's `coordinate_to_cell_key` without incuring computational cost
+
+        We are also assuming there is no way for user to change BOTH INPUT and OUTPUT tags at the same time
         """
         self.scroll_counter += abs(direction)
         if self.scroll_counter < self.scroll_max:
-            self.current_cell = self.get_cell_at((self.current_row, 1))
+            self.current_cell = self.get_cell_at((self.cursor_row, 1))
         else:
-            self.current_row = max(0, min(self.row_count - 1, self.current_row + direction))
-            self.move_cursor(row=self.current_row, column=1)
+            current_row = max(0, min(self.row_count - 1, self.cursor_row + direction))
+            self.move_cursor(row=current_row, column=1)
             self.scroll_counter = 0
-            self.current_cell = self.get_cell_at((self.current_row, 1))
-            await self.repop()
+            self.current_cell = self.get_cell_at((self.cursor_row, 1))
+        if self.id == "input_tag":
+            self.query_ancestor(Screen).mode_in = self.current_cell
+        elif self.id == "output_tag":
+            self.query_ancestor(Screen).mode_out = self.current_cell
 
     @debug_monitor
     async def action_scroll_button(self, up: bool = False) -> None:
@@ -112,23 +96,12 @@ class Carousel(DataTable):
         await self.emulate_scroll(1)
 
     @debug_monitor
-    async def skip_to(self, top: bool) -> None:
+    async def skip_to(self, name="text") -> None:
         """Jump current tag to an index # and change panel context if required\n
         :param id_name: Name of the panel to switch to
         :param top: Whether or not the request comes from in or out tag
         """
-        tags = self.get_column_at(1)
-        if top:
-            panel_map = self.input_map
-        else:
-            panel_map = self.output_map
-        for key, value in panel_map.items():
-            if value == self.id:
-                for index, tag in enumerate(tags):
-                    if tag == key:
-                        self.scroll_to(x=1, y=index, force=True, immediate=True, on_complete=self.refresh)
-                        await self.repop()
-                        return
+        coord = [x for x in range(self.row_count) if self.get_cell_at((1, x)) == name]
+        nfo(coord)
+        self.scroll_to(x=1, y=coord, force=True, immediate=True, on_complete=self.refresh)
 
-                # self.ui["it"].scroll_to(x=1, y=, force=True, immediate=True, on_complete=self.ui["it"].refresh)
-                # self.ui["ot"].scroll_to(x=1, y=y_coord, force=True, immediate=True, on_complete=self.ui["ot"].refresh)

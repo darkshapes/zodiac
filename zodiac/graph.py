@@ -14,7 +14,10 @@ from nnll_01 import debug_monitor, nfo, dbug
 
 
 class IntentProcessor:
+
+    intent_graph: dict = None
     coord_path: list[str] = None
+    ckpts: list[dict[dict]] = None
     models: list[tuple[str]] = None
     # additional_model_names: dict = None
 
@@ -40,7 +43,8 @@ class IntentProcessor:
         self.intent_graph.add_nodes_from(VALID_CONVERSIONS)
 
     @debug_monitor
-    def calc_graph(self, reg_data: dict = None) -> None:
+
+    def calc_graph(self, nx_graph: dict = None, reg_data: dict = None) -> None:
         """Generate graph of coordinate pairs from valid conversions\n
         Model libraries are auto-detected from cache loading\n
         :param registry_data: Registry function or method of calling registry, defaults to from_cache()
@@ -55,6 +59,14 @@ class IntentProcessor:
         """
 
         from nnll_15 import from_cache
+
+        import networkx as nx
+        from nnll_15 import RegistryEntry, VALID_CONVERSIONS
+
+        self.intent_graph: nx.Graph = None
+        self.ckpts: list[dict[RegistryEntry]] = None
+        self.intent_graph = nx_graph if nx_graph is not None else nx.MultiDiGraph()
+        self.intent_graph.add_nodes_from(VALID_CONVERSIONS)
 
         nfo("Building graph...")
         registry_entries = reg_data if reg_data is not None else from_cache()
@@ -134,9 +146,10 @@ class IntentProcessor:
             return ["", ""]
         if len(self.ckpts) != 0:
             self.models = []
-            nfo("Graph status: ", self.ckpts)
+            # nfo("Graph status: ", self.ckpts)
             self.ckpts = sorted(self.ckpts, key=lambda x: x["weight"])
-            nfo("Model weight status: ", [x["weight"] for x in self.ckpts])
+            # nfo("Model weight status: ", [x["weight"] for x in self.ckpts])
+
             for registry in self.ckpts:
                 model = registry["entry"].model
                 weight = registry.get("weight")

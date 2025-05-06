@@ -8,7 +8,7 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: dspy>=2.6.13
 Requires-Dist: networkx>=3.4.2
-Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15]@ git+https://github.com/darkshapes/nnll@main
+Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15]@ git+https://github.com/darkshapes/nnll@x/dev
 Requires-Dist: numpy>=2.2.5
 Requires-Dist: sounddevice>=0.5.1
 Requires-Dist: textual[syntax]>=3.1.1
