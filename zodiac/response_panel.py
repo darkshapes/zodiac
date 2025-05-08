@@ -7,7 +7,7 @@ from textual.screen import Screen
 from textual.widgets import TextArea
 from nnll_01 import dbug, nfo
 from nnll_15 import RegistryEntry
-from dspy import Module as dspy_Module
+from dspy import Signature, Module as dspy_Module
 
 
 class ResponsePanel(TextArea):
@@ -19,14 +19,14 @@ class ResponsePanel(TextArea):
         self.read_only = True
         self.soft_wrap = True
 
-    @work(group="chat")
+    @work(exclusive=True)
     async def on_text_area_changed(self) -> None:
         """Send cursor to end of document and animate scroll"""
         self.move_cursor(self.document.end)
         self.scroll_cursor_visible(center=True, animate=True)
         self.scroll_end(animate=True)
 
-    @work(group="chat")
+    @work(group="chat", exclusive=True)
     async def synthesize(self, chat: dspy_Module, chat_args: dict, streaming=True) -> dict | None:
         """Generate media \n
         :param chat: Processing module for request
@@ -45,16 +45,13 @@ class ResponsePanel(TextArea):
                             if c.answer not in self.text:
                                 self.insert(c.answer)
                         self.query_ancestor(Screen).ui["sl"].set_classes(["selectah"])
-                    elif not streaming:
-                        tx_data = chat.forward(streaming=streaming, **chat_args)
-                        return tx_data
                     elif isinstance(c, ModelResponseStream):
                         self.insert(c["choices"][0]["delta"]["content"] if c["choices"][0]["delta"]["content"] is not None else " ")
             except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
                 dbug(error_log)
 
     @work(group="chat")
-    async def pass_req(self, chat: dspy_Module, tx_data: dict, ckpt: RegistryEntry, out_type: str = "text") -> dict | None:
+    async def pass_req(self, sig: Signature, tx_data: dict, ckpt: RegistryEntry, out_type: str = "text", last_hop=True) -> dict | None:
         """Pack arguments and prepare final stage before generation\n\n
         ```
         name    [ medium : data ]
@@ -69,17 +66,13 @@ class ResponsePanel(TextArea):
         :param ckpt: Model entry to fulfill request
         :param out_type: Media type for this pass, defaults to 'text'
         """
-        last_hop = True
+        from nnll_11 import ChatMachineWithMemory
+
         chat_args = {
             "tx_data": tx_data,
             "model": ckpt.model,
             "library": ckpt.library,
         }
-        nfo(ckpt)
-        if out_type != "text" or not last_hop:
-            nfo("not text submitted, streaming disabled")
-            tx_data = chat.forward(streaming=False, **chat_args)
-            return tx_data
-        else:
-            self.synthesize(chat=chat, chat_args=chat_args, streaming=True)
-        return None
+        stream = out_type == "text" and last_hop
+        chat = ChatMachineWithMemory(sig=sig, max_workers=8, stream=stream)  # and this
+        self.synthesize(chat=chat, chat_args=chat_args, streaming=stream)

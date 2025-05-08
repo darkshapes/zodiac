@@ -1452,9 +1452,8 @@ sdist = { url = "https://files.pythonhosted.org/packages/95/d4/6b0324541018561c5
 
 [[package]]
 name = "nnll"
-version = "0.1.dev364+gc68a907.d20250505"
-source = { git = "https://github.com/darkshapes/nnll?rev=x%2Fdev#c68a9075678ce95ec34e04d8808e536a14d79ad0" }
-
+version = "0.1.dev380+g5104fd3.d20250506"
+source = { git = "https://github.com/darkshapes/nnll?rev=main#5104fd3d462e17d421f995f3d42bf7440d6f4624" }
 
 [package.optional-dependencies]
 nnll-01 = [
@@ -3340,7 +3339,7 @@ requires-dist = [
     { name = "lmstudio", marker = "extra == 'lmstudio'", specifier = ">=1.2.0" },
     { name = "matplotlib", marker = "extra == 'dev'", specifier = ">=3.10.1" },
     { name = "networkx", specifier = ">=3.4.2" },
-    { name = "nnll", extras = ["nnll-01", "nnll-05", "nnll-06", "nnll-11", "nnll-15"], git = "https://github.com/darkshapes/nnll?rev=x%2Fdev" },
+    { name = "nnll", extras = ["nnll-01", "nnll-05", "nnll-06", "nnll-11", "nnll-15"], git = "https://github.com/darkshapes/nnll?rev=main" },
     { name = "numpy", specifier = ">=2.2.5" },
     { name = "ollama", marker = "extra == 'ollama'", specifier = ">=0.4.8" },
     { name = "openai", marker = "extra == 'cortex'", specifier = ">=1.75.0" },

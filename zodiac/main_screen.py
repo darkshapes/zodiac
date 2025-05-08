@@ -7,7 +7,7 @@
 
 import os
 from collections import defaultdict
-from typing import Callable  # , Any
+from typing import Any, Callable  # , Any
 
 from dspy import Module as dspy_Module
 from nnll_01 import dbug, debug_monitor, nfo
@@ -62,7 +62,7 @@ class Fold(Screen[bool]):
         # from textual.widgets import Footer
         self.int_proc = IntentProcessor()
         self.int_proc.calc_graph()
-        nfo("test")
+        nfo("Graph calculated.")
         self.next_intent()
         with Horizontal(id="app-grid", classes="app-grid-horizontal"):
             yield ResponsiveLeftTop(id="left-frame")
@@ -90,7 +90,7 @@ class Fold(Screen[bool]):
                     yield OutputTag(id="output_tag", classes="output_tag")
             yield ResponsiveRightBottom(id="right-frame")
 
-    @work(exclusive=True)
+    # @work(exclusive=True)
     async def on_mount(self) -> None:
         """Textual API, Query all available widgets at once"""
         self.ui["db"] = self.query_one("#display_bar")
@@ -106,14 +106,11 @@ class Fold(Screen[bool]):
         self.ui["ms"] = self.query_one("#message_swap")
         self.ui["rs"] = self.query_one("#response_swap")
         self.ui["mp"].focus()
-        self.init_graph()
+        await self.init_graph()
 
-    @work(exclusive=True)
+    # @work(exclusive=True)
     async def init_graph(self) -> None:
         """Construct graph"""
-        from nnll_11 import ChatMachineWithMemory, QASignature  # modularize Signature
-
-        self.chat = ChatMachineWithMemory(sig=QASignature, max_workers=8)  # and this
         if self.int_proc.models is not None:
             self.next_intent()
             # id_name = self.input_tag.highlight_link_id
@@ -142,12 +139,13 @@ class Fold(Screen[bool]):
 
     @on(events.Focus)
     async def on_focus(self, event=events.Focus) -> None:
-        """Recalculate path when models are shown"""
+        """Textual API event trigger, Recalculate path when models are shown"""
         if event.control.id == "selectah":
             self.next_intent()
 
     @work(exclusive=True)
     async def focus_on_sel(self) -> bool:
+        """Textual API event trigger, Check selectah focus"""
         return self.ui["sl"].has_focus  # or self.ui["sl"].has_focus_within
 
     async def _on_key(self, event: events.Key) -> None:
@@ -184,7 +182,6 @@ class Fold(Screen[bool]):
 
         elif is_char(" ", "space"):
             if self.ui["rd"].has_focus_within:
-
                 self.mode_out = "speech"
                 self.ui["ot"].skip_to(self.mode_out)
                 self.ui["vr"].play_audio()
@@ -201,7 +198,7 @@ class Fold(Screen[bool]):
 
     @work(exit_on_error=True)
     async def safe_exit(self) -> None:
-        """trigger exit on second press"""
+        """Notify first press, trigger exit on second press"""
         self.safety = max(0, self.safety)
         if self.safety == 0:
             await self.app.action_quit()
@@ -245,8 +242,8 @@ class Fold(Screen[bool]):
                 # "image": self.image_panel.image #  active video feed / screenshot / import file
             }
 
-    # @work(exclusive=True)
-    def walk_intent(self, bypass_send=True) -> None:
+    @work(exclusive=True)
+    async def walk_intent(self, bypass_send=True) -> None:
         """Provided the coordinates in the intent processor, follow the list of in and out methods\n
         :param bypass_send: Find intent path, but do not process, defaults to True
         """
@@ -266,9 +263,10 @@ class Fold(Screen[bool]):
 
             elif not bypass_send:
                 self.send_tx()
+                self.ui["sl"].set_classes(["selectah"])
 
-    @work(exclusive=True)
-    async def send_tx(self) -> None:
+    @work(group="chat", exclusive=True)
+    async def send_tx(self) -> Any:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
         self.ui["rp"].on_text_area_changed()
@@ -277,11 +275,27 @@ class Fold(Screen[bool]):
         ckpt = self.ui["sl"].selection
         if ckpt is None:
             ckpt = next(iter(self.int_proc.ckpts)).get("entry")
-        try:
-            self.tx_data = self.ui["rp"].pass_req(chat=self.chat, tx_data=self.tx_data, ckpt=ckpt, out_type=self.ui["ot"].current_cell)
-        except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
-            dbug(error_log)
-            self.ui["sl"].set_classes(["selectah"])
+
+        from nnll_11 import QASignature, BasicImageSignature
+
+        nfo(f"Graph extraction : {ckpt}")
+        sig = QASignature
+        if self.mode_out == "image":
+            sig = BasicImageSignature
+
+            from nnll_05 import lookup_function_for
+            from nnll_64 import multiproc
+
+            constructor, mir_arch = lookup_function_for(ckpt.model)
+            dbug(constructor, mir_arch)
+            multiproc(mir_arch)
+        else:  # lora is arg 2
+            try:
+                self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
+                self.ui["rp"].on_text_area_changed()
+            except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
+                dbug(error_log)
+                self.ui["sl"].set_classes(["selectah"])
 
     @work(exclusive=True)
     async def stop_gen(self) -> None:
@@ -301,19 +315,22 @@ class Fold(Screen[bool]):
             self.ui["vr"].erase_audio()
             self.audio_to_token(top=False)
 
-
-    async def watch_mode_in(self, mode_in: str) -> None:
+    async def watch_mode_in(self, mode_in: str) -> None:  # pylint: disable=unused-argument
+        """Textual API event trigger, Recalculate path when input is changed"""
         if self.is_ui_ready():
             self.next_intent()
 
-    async def watch_mode_out(self, mode_out: str) -> None:
+    async def watch_mode_out(self, mode_out: str) -> None:  # pylint: disable=unused-argument
+        """Textual API event trigger, Recalculate path when output is changed"""
         if self.is_ui_ready():
             self.next_intent()
-
 
     @work(exclusive=True)
     async def next_intent(self, io_only: bool = True, bypass_send: bool = True) -> None:
-        # nfo(f"mode_in {self.mode_in}")
+        """Store user input, calculate path data, repopulate fields and prepare execution/n
+        :param io_only: Ignore user prompt and gather input types only, defaults to True
+        :param bypass_send: Make a dry run that plots the generation path only, defaults to True
+        """
         self.ready_tx(io_only=io_only, mode_in=self.mode_in, mode_out=self.mode_out)
         if self.int_proc.has_graph() and self.int_proc.has_path():
             self.walk_intent(bypass_send=bypass_send)
@@ -324,6 +341,7 @@ class Fold(Screen[bool]):
         else:
             self.ui["sl"].set_options(self.int_proc.models)
             self.ui["sl"].prompt = next(iter(self.int_proc.models))[0]
+
 
 class ResponsiveLeftTop(Container):
     """Sidebar Left/Top"""
