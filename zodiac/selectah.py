@@ -1,9 +1,9 @@
-#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
+#  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 # pylint: disable=import-outside-toplevel
 
-import networkx as nx
+# import networkx as nx
 from textual import on, events, work
 from textual.reactive import reactive
 from textual.screen import Screen

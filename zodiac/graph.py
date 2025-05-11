@@ -1,4 +1,4 @@
-#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
+#  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 # pylint: disable=import-outside-toplevel
@@ -14,7 +14,6 @@ from nnll_01 import debug_monitor, nfo, dbug
 
 
 class IntentProcessor:
-
     intent_graph: dict = None
     coord_path: list[str] = None
     ckpts: list[dict[dict]] = None
@@ -43,7 +42,6 @@ class IntentProcessor:
         self.intent_graph.add_nodes_from(VALID_CONVERSIONS)
 
     @debug_monitor
-
     def calc_graph(self, nx_graph: dict = None, reg_data: dict = None) -> None:
         """Generate graph of coordinate pairs from valid conversions\n
         Model libraries are auto-detected from cache loading\n

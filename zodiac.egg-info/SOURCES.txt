@@ -16,6 +16,7 @@ img_src/zodiac_dark_stealth.png
 img_src/zodiac_light_stealth.png
 tests/test_edges.py
 tests/test_graph.py
+tests/test_inference.py
 tests/test_init_exit.py
 tests/test_model_register.py
 tests/test_orientation.py
@@ -25,10 +26,11 @@ tests/test_weight.py
 tests/test_widget_mounts.py
 zodiac/__init__.py
 zodiac/__main__.py
-zodiac/audio.py
 zodiac/carousel.py
 zodiac/combo.tcss
 zodiac/display_bar.py
+zodiac/flip.py
+zodiac/flow.py
 zodiac/graph.py
 zodiac/input_tag.py
 zodiac/main_screen.py

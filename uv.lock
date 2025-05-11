@@ -1452,9 +1452,8 @@ sdist = { url = "https://files.pythonhosted.org/packages/95/d4/6b0324541018561c5
 
 [[package]]
 name = "nnll"
-version = "0.1.dev364+gc68a907.d20250505"
-source = { git = "https://github.com/darkshapes/nnll?rev=x%2Fdev#c68a9075678ce95ec34e04d8808e536a14d79ad0" }
-
+version = "0.1.dev441+g7ee6ae9.d20250511"
+source = { git = "https://github.com/darkshapes/nnll?rev=main#7ee6ae9b9df74c88c7c2fa33f302f220508eea3b" }
 
 [package.optional-dependencies]
 nnll-01 = [
@@ -3294,11 +3293,16 @@ cortex = [
     { name = "openai" },
 ]
 dev = [
+    { name = "huggingface-hub" },
+    { name = "lmstudio" },
     { name = "matplotlib" },
+    { name = "ollama" },
+    { name = "openai" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "ruff" },
     { name = "tiktoken" },
+    { name = "vllm", marker = "platform_system == 'linux' or platform_system == 'windows'" },
 ]
 full = [
     { name = "huggingface-hub" },
@@ -3356,11 +3360,8 @@ requires-dist = [
     { name = "tiktoken", marker = "extra == 'dev'", specifier = ">=0.9.0" },
     { name = "tree-sitter", specifier = ">=0.24.0" },
     { name = "vllm", marker = "(platform_system == 'linux' and extra == 'vllm') or (platform_system == 'windows' and extra == 'vllm')" },
-    { name = "zodiac", extras = ["cortex"], marker = "extra == 'full'" },
-    { name = "zodiac", extras = ["hub"], marker = "extra == 'full'" },
-    { name = "zodiac", extras = ["lmstudio"], marker = "extra == 'full'" },
-    { name = "zodiac", extras = ["ollama"], marker = "extra == 'full'" },
-    { name = "zodiac", extras = ["vllm"], marker = "extra == 'full'" },
+    { name = "zodiac", extras = ["full"], marker = "extra == 'dev'" },
+    { name = "zodiac", extras = ["ollama", "lmstudio", "hub", "vllm", "cortex"], marker = "extra == 'full'" },
 ]
 
 [package.metadata.requires-dev]

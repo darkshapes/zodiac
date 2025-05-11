@@ -1,9 +1,9 @@
-#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
+#  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 from textual.reactive import reactive
 from textual.screen import Screen
-
+from nnll_01 import debug_monitor
 from zodiac.carousel import Carousel
 
 
@@ -22,3 +22,12 @@ class OutputTag(Carousel):
             self.add_rows([self.up.strip(), row.strip(), self.dwn.strip()] for row in self.target_options)
             self.cursor_foreground_priority = "css"
             self.cursor_background_priority = "css"
+
+    @debug_monitor
+    def skip_to(self, name="text") -> None:
+        """Jump current tag to an index # and change panel context if required\n
+        :param id_name: Name of the panel to switch to
+        :param top: Whether or not the request comes from in or out tag
+        """
+
+        self.scroll_to(x=1, y=self.target_options.index(name), force=True, immediate=True, on_complete=self.refresh)

@@ -1,12 +1,12 @@
-#  # # <!-- // /*  SPDX-License-Identifier: LAL-1.3 */ -->
+#  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 # pylint:disable=not-an-iterable, wrong-import-position, unsupported-membership-test
 
-import os
-import sys
+# import os
+# import sys
 
-sys.path.append(os.getcwd())
+# sys.path.append(os.getcwd())
 
 import networkx as nx
 from textual import events, work
@@ -127,7 +127,6 @@ class ButtonsApp(App[str]):
             # nfo(self.intent_processor.intent_graph.nodes(data=True))
             # nfo([*self.intent_processor.intent_graph.edges(data=True)])
 
-
             self.query_one("#response_panel").insert(f"{str(self.tokenizer)}\n")
             results_panel.write(f"model :\n {[x['entry'].model for x in list(self.intent_processor.ckpts)]}\n")
             convert_type = self.query_one("#convert_type")
@@ -168,7 +167,11 @@ class ButtonsApp(App[str]):
             self.query_one("#message_panel").erase_message()
 
 
-if __name__ == "__main__":
+def main():
     app = ButtonsApp()
     app.run()
 
+
+if __name__ == "__main__":
+    app = ButtonsApp()
+    app.run()

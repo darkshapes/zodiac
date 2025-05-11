@@ -10,6 +10,7 @@
 
 ### [ [Windows](https://github.com/darkshapes/sdbx/wiki/Develop) | [MacOS](https://github.com/darkshapes/sdbx/wiki/Develop) | [Linux](https://github.com/darkshapes/sdbx/wiki/Develop) ]
 
+https://github.com/user-attachments/assets/1b3a231a-8d79-4502-8447-c394eca13afb
  <hr>
  </div>
 Zodiac is a creative research platform for Generative AI. Guided by text, audio, or files, it identifies your models (text, image, speech, video, anything) and constructs generative AI workflows, eliminating the need for technical expertise in building action chains. It empowers users to focus on creating art, storytelling, research, and tool development, rather than the mechanics of creation, enabling exploration of emerging technology on virtually any system immediately, rather than after months of study.
