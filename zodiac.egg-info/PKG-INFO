@@ -30,11 +30,7 @@ Requires-Dist: openai>=1.75.0; extra == "cortex"
 Provides-Extra: llamafile
 Requires-Dist: openai>=1.75.0; extra == "llamafile"
 Provides-Extra: full
-Requires-Dist: zodiac[ollama]; extra == "full"
-Requires-Dist: zodiac[lmstudio]; extra == "full"
-Requires-Dist: zodiac[hub]; extra == "full"
-Requires-Dist: zodiac[vllm]; extra == "full"
-Requires-Dist: zodiac[cortex]; extra == "full"
+Requires-Dist: zodiac[cortex,hub,lmstudio,ollama,vllm]; extra == "full"
 Provides-Extra: dev
 Requires-Dist: matplotlib>=3.10.1; extra == "dev"
 Requires-Dist: pytest>=8.3.5; extra == "dev"

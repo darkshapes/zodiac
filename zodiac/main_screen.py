@@ -286,7 +286,7 @@ class Fold(Screen[bool]):
             # sig = BasicImageSignature
 
             from nnll_05 import lookup_function_for
-            from nnll_64 import multiproc
+            # from nnll_64 import run_inference
 
             constructor, mir_arch = lookup_function_for(ckpt.model)
             dbug(constructor, mir_arch)
