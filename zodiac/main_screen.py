@@ -63,7 +63,6 @@ class Fold(Screen[bool]):
         self.int_proc = IntentProcessor()
         self.int_proc.calc_graph()
         nfo("Graph calculated.")
-        self.next_intent()
         with Horizontal(id="app-grid", classes="app-grid-horizontal"):
             yield ResponsiveLeftTop(id="left-frame")
             with Container(id="centre-frame"):  # 3:1:3 ratio
@@ -106,14 +105,14 @@ class Fold(Screen[bool]):
         self.ui["ms"] = self.query_one("#message_swap")
         self.ui["rs"] = self.query_one("#response_swap")
         self.ui["mp"].focus()
-        await self.init_graph()
+        self.next_intent()
 
-    # @work(exclusive=True)
-    async def init_graph(self) -> None:
-        """Construct graph"""
-        if self.int_proc.models is not None:
-            self.next_intent()
-            # id_name = self.input_tag.highlight_link_id
+    # # @work(exclusive=True)
+    # async def init_graph(self) -> None:
+    #     """Construct graph"""
+    #     if self.int_proc.models is not None:
+    #         self.next_intent()
+    #         # id_name = self.input_tag.highlight_link_id
 
     @work(exit_on_error=False)
     async def on_resize(self, event=events.Resize) -> None:
@@ -148,6 +147,7 @@ class Fold(Screen[bool]):
         """Textual API event trigger, Check selectah focus"""
         return self.ui["sl"].has_focus  # or self.ui["sl"].has_focus_within
 
+    @work(exclusive=True)
     async def _on_key(self, event: events.Key) -> None:
         """Textual API event trigger, Suppress/augment default key actions to trigger keybindings"""
 
@@ -175,10 +175,13 @@ class Fold(Screen[bool]):
                 self.safe_exit()
         else:
             self.safety = min(1, self.safety + 1)
-
-        if is_char("\r", "enter"):
+        if (hasattr(event, "character") and event.character == "\r") or event.key == "enter":
             event.prevent_default()
             self.next_intent(io_only=False, bypass_send=False)
+
+        # if is_char("\r", "enter"):
+        #     event.prevent_default()
+        #     self.next_intent(io_only=False, bypass_send=False)
 
         elif is_char(" ", "space"):
             if self.ui["rd"].has_focus_within:
@@ -263,7 +266,6 @@ class Fold(Screen[bool]):
 
             elif not bypass_send:
                 self.send_tx()
-                self.ui["sl"].set_classes(["selectah"])
 
     @work(group="chat", exclusive=True)
     async def send_tx(self) -> Any:
@@ -276,12 +278,12 @@ class Fold(Screen[bool]):
         if ckpt is None:
             ckpt = next(iter(self.int_proc.ckpts)).get("entry")
 
-        from nnll_11 import QASignature, BasicImageSignature
+        from nnll_11 import QASignature  # , BasicImageSignature
 
         nfo(f"Graph extraction : {ckpt}")
         sig = QASignature
         if self.mode_out == "image":
-            sig = BasicImageSignature
+            # sig = BasicImageSignature
 
             from nnll_05 import lookup_function_for
             from nnll_64 import multiproc
@@ -289,6 +291,7 @@ class Fold(Screen[bool]):
             constructor, mir_arch = lookup_function_for(ckpt.model)
             dbug(constructor, mir_arch)
             multiproc(mir_arch)
+            self.ui["sl"].set_classes(["selectah"])
         else:  # lora is arg 2
             try:
                 self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
@@ -336,9 +339,9 @@ class Fold(Screen[bool]):
             self.walk_intent(bypass_send=bypass_send)
         if not hasattr(self.ui["sl"], "prompt") or self.int_proc.models is None:
             pass
-        elif self.int_proc.models is None:
+        elif self.int_proc.models is None and hasattr(self.ui.get("sl"), "prompt"):
             self.ui["sl"].set_options = [("No models", "No Models.")]
-        else:
+        elif hasattr(self.ui["sl"], "prompt"):
             self.ui["sl"].set_options(self.int_proc.models)
             self.ui["sl"].prompt = next(iter(self.int_proc.models))[0]
 
