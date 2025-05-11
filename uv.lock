@@ -3344,7 +3344,7 @@ requires-dist = [
     { name = "lmstudio", marker = "extra == 'lmstudio'", specifier = ">=1.2.0" },
     { name = "matplotlib", marker = "extra == 'dev'", specifier = ">=3.10.1" },
     { name = "networkx", specifier = ">=3.4.2" },
-    { name = "nnll", extras = ["nnll-01", "nnll-05", "nnll-06", "nnll-11", "nnll-15"], git = "https://github.com/darkshapes/nnll?rev=main" },
+    { name = "nnll", extras = ["nnll-01", "nnll-05", "nnll-06", "nnll-11", "nnll-15"], git = "https://github.com/darkshapes/nnll?rev=x%2Fdev" },
     { name = "numpy", specifier = ">=2.2.5" },
     { name = "ollama", marker = "extra == 'ollama'", specifier = ">=0.4.8" },
     { name = "openai", marker = "extra == 'cortex'", specifier = ">=1.75.0" },

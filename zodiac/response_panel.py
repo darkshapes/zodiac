@@ -37,18 +37,21 @@ class ResponsePanel(TextArea):
         from litellm import ModelResponseStream
         from dspy import Prediction
 
-        async for chunk in chat.forward(streaming=streaming, **chat_args):
-            try:
-                async for c in chunk:
-                    if isinstance(c, Prediction) and streaming:
-                        if hasattr(c, "answer"):
-                            if c.answer not in self.text:
-                                self.insert(c.answer)
-                        self.query_ancestor(Screen).ui["sl"].set_classes(["selectah"])
-                    elif isinstance(c, ModelResponseStream):
-                        self.insert(c["choices"][0]["delta"]["content"] if c["choices"][0]["delta"]["content"] is not None else " ")
-            except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
-                dbug(error_log)
+        if not streaming:
+            chat.forward(streaming=streaming, **chat_args)
+        else:
+            async for chunk in chat.forward(streaming=streaming, **chat_args):
+                try:
+                    async for c in chunk:
+                        if isinstance(c, Prediction) and streaming:
+                            if hasattr(c, "answer"):
+                                if c.answer not in self.text:
+                                    self.insert(c.answer)
+                            self.query_ancestor(Screen).ui["sl"].set_classes(["selectah"])
+                        elif isinstance(c, ModelResponseStream):
+                            self.insert(c["choices"][0]["delta"]["content"] if c["choices"][0]["delta"]["content"] is not None else " ")
+                except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
+                    dbug(error_log)
 
     @work(group="chat")
     async def pass_req(self, sig: Signature, tx_data: dict, ckpt: RegistryEntry, out_type: str = "text", last_hop=True) -> dict | None:

@@ -277,28 +277,17 @@ class Fold(Screen[bool]):
         ckpt = self.ui["sl"].selection
         if ckpt is None:
             ckpt = next(iter(self.int_proc.ckpts)).get("entry")
+        dbug(f"Graph extraction : {ckpt}")
+        from nnll_11 import QASignature, BasicImageSignature
 
-        from nnll_11 import QASignature  # , BasicImageSignature
-
-        nfo(f"Graph extraction : {ckpt}")
-        sig = QASignature
-        if self.mode_out == "image":
-            # sig = BasicImageSignature
-
-            from nnll_05 import lookup_function_for
-            # from nnll_64 import run_inference
-
-            constructor, mir_arch = lookup_function_for(ckpt.model)
-            dbug(constructor, mir_arch)
-            multiproc(mir_arch)
+        sig = QASignature if self.mode_out != "image" else BasicImageSignature
+        # lora is arg 2
+        try:
+            self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
+            self.ui["rp"].on_text_area_changed()
+        except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
+            dbug(error_log)
             self.ui["sl"].set_classes(["selectah"])
-        else:  # lora is arg 2
-            try:
-                self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
-                self.ui["rp"].on_text_area_changed()
-            except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
-                dbug(error_log)
-                self.ui["sl"].set_classes(["selectah"])
 
     @work(exclusive=True)
     async def stop_gen(self) -> None:
