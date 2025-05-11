@@ -21,6 +21,12 @@ dependencies = [
     "sympy>=1.13.3",
     "litellm==1.67.1",
     "textual-dev>=1.7.0",
+    "accelerate>=1.6.0",
+    "diffusers>=0.33.1",
+    "peft>=0.15.2",
+    "sentencepiece>=0.2.0",
+    "transformers>=4.51.3",
+    "torch>=2.6",
 ]
 
 [project.scripts]
