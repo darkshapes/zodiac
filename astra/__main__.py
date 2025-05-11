@@ -74,8 +74,10 @@ class ButtonsApp(App[str]):
         build_button = self.query_one("#build")
         if self.hover_name == "build":
             # event.stop()
+            from nnll_15 import from_cache
+
             self.intent_processor = IntentProcessor()
-            self.intent_processor.calc_graph()
+            self.intent_processor.calc_graph(from_cache())
             results_panel.write(f"Created {self.intent_processor.intent_graph}")
             start_points = self.query_one("#start_points")
             end_points = self.query_one("#end_points")

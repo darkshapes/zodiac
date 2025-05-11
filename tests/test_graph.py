@@ -165,8 +165,10 @@ def test_mocked_hub(mock_hub_data):
 
 def test_create_graph(mock_ollama_data, mock_hub_data, session=IntentProcessor):
     """Run test of graph creation"""
+    from nnll_15 import from_cache
+
     int_proc = session()
-    nx_graph = int_proc.calc_graph()
+    nx_graph = int_proc.calc_graph(from_cache())
     nfo(list(nx_graph))
     nfo(list(VALID_CONVERSIONS))
     assert list(nx_graph) == VALID_CONVERSIONS

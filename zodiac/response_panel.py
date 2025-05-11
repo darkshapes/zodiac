@@ -5,7 +5,7 @@
 from textual import work
 from textual.screen import Screen
 from textual.widgets import TextArea
-from nnll_01 import dbug, nfo
+from nnll_01 import dbug  # , nfo
 from nnll_15 import RegistryEntry
 from dspy import Signature, Module as dspy_Module
 
