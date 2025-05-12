@@ -45,7 +45,7 @@ class ListResponse:
         self.models = models
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def mock_ollama_data():
     """Mock ollama response"""
     with mock.patch("ollama.list", new_callable=mock.MagicMock()) as mock_get_registry_data:
@@ -101,7 +101,7 @@ class CachedRepoInfo:
         self.last_modified = last_modified
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def mock_hub_data():
     """Mock hub data"""
     with mock.patch("huggingface_hub.scan_cache_dir", new_callable=mock.MagicMock()) as mock_get_registry_data:
@@ -163,11 +163,11 @@ def test_mocked_hub(mock_hub_data):
     assert new_list[0][1] == 9335526346
 
 
-def test_create_graph(mock_ollama_data, mock_hub_data, session=IntentProcessor):
+def test_create_graph(mock_ollama_data, mock_hub_data):
     """Run test of graph creation"""
     from nnll_15 import from_cache
 
-    int_proc = session()
+    int_proc = IntentProcessor()
     nx_graph = int_proc.calc_graph(from_cache())
     nfo(list(nx_graph))
     nfo(list(VALID_CONVERSIONS))
@@ -185,3 +185,8 @@ def test_create_graph(mock_ollama_data, mock_hub_data, session=IntentProcessor):
             assert isinstance(edge[2], int)
         else:
             assert isinstance(edge[1], str)
+
+    int_proc = None
+    import gc
+
+    gc.collect
