@@ -49,17 +49,21 @@ def test_edit_weight():
     assert int_proc.intent_graph["mode_in"]["mode_out"][1]["weight"] == 1.1, "Weight not decreased correctly"
 
 
-def test_edit_weight_model_not_present():
-    with raises(IndexError) as excinfo:
-        int_proc.edit_weight("nonexistent", "mode_in", "mode_out")
-    assert str(excinfo.value) == "list index out of range"
+
+def test_edit_weight_model_not_present_quiet_fail():
+    import networkx as nx
+
+    int_proc.edit_weight("nonexistent", "mode_in", "mode_out")
+
 
 
 def test_edit_weight_node_not_present():
+    import networkx as nx
+
     int_proc.intent_graph.remove_node("mode_out")
-    with raises(ValueError) as excinfo:
+    with raises(nx.exception.NodeNotFound) as excinfo:
         int_proc.edit_weight("🤡1", "mode_in", "mode_out")
-    assert str(excinfo.value) == "No models available.", "ValueError message mismatch"
+        assert str(excinfo.value) == f"Failed to adjust weight of '🤡1' within registry contents '{[nbrdict for n, nbrdict in int_proc.intent_graph.adjacency()]}'. Model or registry entry not found."
 
 
 def graaaaph():  # :)

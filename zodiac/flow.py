@@ -13,13 +13,31 @@
 # # from nnll_05 import lookup_function_for
 # # from nnll_64 import run_inference
 
+
+
+# from click import prompt
+
+
+# def flow_builder_test(mode_in: str = "text", mode_out: str = "text"):
+# from nnll_01 import nfo
+# from nnll_15.constants import VALID_CONVERSIONS
 # from zodiac.graph import IntentProcessor
 
-# graph = IntentProcessor()
-# graph.calc_graph()
 # graph.set_path(mode_in=mode_in, mode_out=mode_out)
+# graph.coord_path
 # graph.set_ckpts()
 # graph.ckpts
+# graph.models
+# graph.edit_weight("flux", "text", "image")
+
+
+# source -> target
+# mode_in, mode_out
+# tx_data = prompt
+
+
+# should i define VALID_CONVERSIONS and the available MODEL NAME LIST as constants/named tuples/immutable data structures of some sort?
+
 
 # class FlowBuilder:
 #     def __init__(self, graph: nx.Graph, first_in: str = "text", last_out: str = "text", initial_tx: dict = None) -> None:
@@ -28,13 +46,10 @@
 #         self.last_out = last_out
 #         self.tx_data: dict = None
 
-#     def ready_tx(
-#         self,
-#         mode_in: str,
-#         mode_out: str,
-#     ) -> dict:
 
-#     def walk_intent(self, bypass_send=True) -> None:
+
+#     def walk_intent(self, mode_in:str , mode_out: str, bypass_send=True) -> None:
+
 #         """Provided the coordinates in the intent processor, follow the list of in and out methods\n
 #         :param bypass_send: Find intent path, but do not process, defaults to True
 #         """
