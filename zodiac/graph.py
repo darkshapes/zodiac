@@ -14,11 +14,10 @@ from nnll_15 import from_cache
 
 sys.path.append(os.getcwd())
 
-
 class IntentProcessor:
-    intent_graph = None
+    intent_graph: dict = None
     coord_path: list[str] | None = None
-    ckpts: list = None
+    ckpts: list[dict[dict]] = None
     models: list[tuple[str]] | None = None
     # additional_model_names: dict = None
 

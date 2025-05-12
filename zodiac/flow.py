@@ -14,6 +14,7 @@
 # # from nnll_64 import run_inference
 
 
+
 # from click import prompt
 
 
@@ -37,6 +38,7 @@
 
 # should i define VALID_CONVERSIONS and the available MODEL NAME LIST as constants/named tuples/immutable data structures of some sort?
 
+
 # class FlowBuilder:
 #     def __init__(self, graph: nx.Graph, first_in: str = "text", last_out: str = "text", initial_tx: dict = None) -> None:
 #         self.graph = graph
@@ -45,7 +47,9 @@
 #         self.tx_data: dict = None
 
 
+
 #     def walk_intent(self, mode_in:str , mode_out: str, bypass_send=True) -> None:
+
 #         """Provided the coordinates in the intent processor, follow the list of in and out methods\n
 #         :param bypass_send: Find intent path, but do not process, defaults to True
 #         """

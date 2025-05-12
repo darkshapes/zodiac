@@ -63,6 +63,7 @@ class Fold(Screen[bool]):
         from nnll_15 import from_cache
 
         self.int_proc = IntentProcessor()
+
         self.int_proc.calc_graph(from_cache())
         nfo("Graph calculated.")
         with Horizontal(id="app-grid", classes="app-grid-horizontal"):

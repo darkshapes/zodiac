@@ -49,10 +49,12 @@ def test_edit_weight():
     assert int_proc.intent_graph["mode_in"]["mode_out"][1]["weight"] == 1.1, "Weight not decreased correctly"
 
 
+
 def test_edit_weight_model_not_present_quiet_fail():
     import networkx as nx
 
     int_proc.edit_weight("nonexistent", "mode_in", "mode_out")
+
 
 
 def test_edit_weight_node_not_present():
