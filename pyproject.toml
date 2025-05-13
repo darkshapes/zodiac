@@ -10,23 +10,10 @@ readme      = "README.md"
 
 requires-python = ">=3.11"
 dependencies = [
-    "dspy>=2.6.13",
-    "networkx>=3.4.2",
-    "nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15] @ git+https://github.com/darkshapes/nnll@main",
+    "nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-13,nnll-14,nnll-15,nnll-62] @ git+https://github.com/darkshapes/nnll@main",
     "numpy>=2.2.5",
-    "sounddevice>=0.5.1",
-    "textual[syntax]>=3.1.1",
-    "tree-sitter>=0.24.0",
-    "textual-plotext>=1.0.1",
     "sympy>=1.13.3",
-    "litellm==1.67.1",
     "textual-dev>=1.7.0",
-    "accelerate>=1.6.0",
-    "diffusers>=0.33.1",
-    "peft>=0.15.2",
-    "sentencepiece>=0.2.0",
-    "transformers>=4.51.3",
-    "torch>=2.6",
 ]
 
 [project.scripts]
@@ -37,12 +24,12 @@ astra  = "astra.__init__:main"
 Homepage = "https://github.com/darkshapes/zodiac"
 
 [project.optional-dependencies]
-ollama = ["ollama>=0.4.8"]
 lmstudio = ["lmstudio>=1.2.0"]
 hub = ["huggingface-hub>=0.30.2"]
 vllm = ["vllm ; platform_system== 'linux' or platform_system == 'windows'"]
 cortex = ["openai>=1.75.0"]
 llamafile = ["openai>=1.75.0"]
+torch-cpu = ["torch>=2.7.0", "torchvision", "torchaudio"]
 full = ["zodiac[ollama,lmstudio,hub,vllm,cortex]"]
 dev = [
     "matplotlib>=3.10.1",

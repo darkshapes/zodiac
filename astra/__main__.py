@@ -9,20 +9,19 @@
 # sys.path.append(os.getcwd())
 
 import networkx as nx
+from nnll_01 import dbug, debug_monitor, nfo
+from nnll_15.constants import GenTypeC, GenTypeCText
 from textual import events, work
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, VerticalGroup, VerticalScroll
 from textual.reactive import reactive
 from textual.widgets import Button, Label, ListItem, ListView, RichLog, Static
 
-from nnll_01 import dbug, nfo
-from nnll_01 import debug_monitor
 from zodiac.graph import IntentProcessor
+from zodiac.message_panel import MessagePanel
 from zodiac.response_panel import ResponsePanel
 from zodiac.token_counters import tk_count
-from nnll_13 import VoicePanel
-from nnll_15.constants import GenTypeC, GenTypeCText
-from nnll_19 import MessagePanel
+from zodiac.voice_panel import VoicePanel
 
 # from nnll_20 import ResponsePanel
 
