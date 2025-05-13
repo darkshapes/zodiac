@@ -9,8 +9,8 @@ sys.path.append(os.getcwd())
 
 
 def set_env(args: bool) -> None:
-    """Parse launch arguments\n
-    :param args: Flags from argparse
+    """Parse launch arguments (mostly turning down/disconnecting loud dependency packages)\n
+    :param args: Launch arguments from command line
     """
 
     os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = str(args.highwater)  #
@@ -40,6 +40,13 @@ def set_env(args: bool) -> None:
     try:
         import litellm
 
+        litellm.disable_streaming_logging = True
+        litellm.turn_off_message_logging = True
+        litellm.suppress_debug_info = True
+        litellm.json_logs = True  # type: ignore
+
+        litellm.disable_end_user_cost_tracking = True
+        litellm.telemetry = False
         litellm.disable_hf_tokenizer_download = not args.net  # -net = True -> disable download = False/0
     except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
         pass
