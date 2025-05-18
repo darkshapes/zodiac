@@ -15,7 +15,7 @@ Requires-Dist: ollama>=0.4.8; extra == "ollama"
 Provides-Extra: lmstudio
 Requires-Dist: lmstudio>=1.2.0; extra == "lmstudio"
 Provides-Extra: hub
-Requires-Dist: huggingface-hub>=0.30.2; extra == "hub"
+Requires-Dist: huggingface-hub[hf-transfer,hf_xet]>=0.30.2; extra == "hub"
 Provides-Extra: vllm
 Requires-Dist: vllm; (platform_system == "linux" or platform_system == "windows") and extra == "vllm"
 Provides-Extra: cortex
