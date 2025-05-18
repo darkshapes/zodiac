@@ -5,7 +5,7 @@
 from textual import work
 from textual.screen import Screen
 from textual.widgets import TextArea
-from nnll_01 import dbug  # , nfo
+from nnll_01 import dbug, nfo
 from nnll_15 import RegistryEntry
 from dspy import Signature, Module as dspy_Module
 
@@ -34,24 +34,22 @@ class ResponsePanel(TextArea):
         :param streaming: _description_, defaults to True
         :return: Next response for the chain
         """
+
         from litellm import ModelResponseStream
         from dspy import Prediction
 
-        if not streaming:
-            chat.forward(streaming=streaming, **chat_args)
-        else:
-            async for chunk in chat.forward(streaming=streaming, **chat_args):
-                try:
-                    async for c in chunk:
-                        if isinstance(c, Prediction) and streaming:
-                            if hasattr(c, "answer"):
-                                if c.answer not in self.text:
-                                    self.insert(c.answer)
-                            self.query_ancestor(Screen).ui["sl"].set_classes(["selectah"])
-                        elif isinstance(c, ModelResponseStream):
-                            self.insert(c["choices"][0]["delta"]["content"] if c["choices"][0]["delta"]["content"] is not None else " ")
-                except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
-                    dbug(error_log)
+        async for chunk in chat.forward(streaming=streaming, **chat_args):
+            if not streaming:
+                dbug("non_stream chunk return :")
+                return chunk
+            async for c in chunk:
+                if isinstance(c, Prediction) and streaming:
+                    if hasattr(c, "answer"):
+                        if c.answer not in self.text:
+                            self.insert(c.answer)
+                    self.query_ancestor(Screen).ui["sl"].set_classes(["selectah"])
+                elif isinstance(c, ModelResponseStream):
+                    self.insert(c["choices"][0]["delta"]["content"] if c["choices"][0]["delta"]["content"] is not None else " ")
 
     @work(group="chat")
     async def pass_req(self, sig: Signature, tx_data: dict, ckpt: RegistryEntry, out_type: str = "text", last_hop=True) -> dict | None:
@@ -77,5 +75,7 @@ class ResponsePanel(TextArea):
             "library": ckpt.library,
         }
         stream = out_type == "text" and last_hop
+        nfo(f"stream_type: {stream} for {ckpt.model} in {ckpt.library}")
         chat = ChatMachineWithMemory(sig=sig, max_workers=8, stream=stream)  # and this
         self.synthesize(chat=chat, chat_args=chat_args, streaming=stream)
+        # self.workers.wait_for_complete()

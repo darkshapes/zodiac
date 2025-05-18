@@ -15,6 +15,8 @@ img_src/zodiac_dark_bg.png
 img_src/zodiac_dark_stealth.png
 img_src/zodiac_light_stealth.png
 tests/test_edges.py
+tests/test_flow.py
+tests/test_flow_second.py
 tests/test_graph.py
 tests/test_inference.py
 tests/test_init_exit.py

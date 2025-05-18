@@ -10,7 +10,7 @@ readme      = "README.md"
 
 requires-python = ">=3.11"
 dependencies = [
-    "nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-13,nnll-14,nnll-15,nnll-62] @ git+https://github.com/darkshapes/nnll@main",
+    "nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-12,nnll-13,nnll-14,nnll-15,nnll-62] @ git+https://github.com/darkshapes/nnll@x/dev",
     "numpy>=2.2.5",
     "sympy>=1.13.3",
     "textual-dev>=1.7.0",
@@ -24,12 +24,13 @@ astra  = "astra.__init__:main"
 Homepage = "https://github.com/darkshapes/zodiac"
 
 [project.optional-dependencies]
+ollama = ["ollama>=0.4.8"]
 lmstudio = ["lmstudio>=1.2.0"]
 hub = ["huggingface-hub>=0.30.2"]
 vllm = ["vllm ; platform_system== 'linux' or platform_system == 'windows'"]
 cortex = ["openai>=1.75.0"]
 llamafile = ["openai>=1.75.0"]
-torch-cpu = ["torch>=2.7.0", "torchvision", "torchaudio"]
+torch-cpu = ["torch>=2.7.0", "torchvision>=0.22.0", "torchaudio"]
 full = ["zodiac[ollama,lmstudio,hub,vllm,cortex]"]
 dev = [
     "matplotlib>=3.10.1",
@@ -39,6 +40,7 @@ dev = [
     "tiktoken>=0.9.0",
     "zodiac[full]",
 ]
+
 
 [dependency-groups]
 dev = [
