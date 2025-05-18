@@ -4,6 +4,12 @@
 """Auto-Orienting Split screen"""
 
 # pylint: disable=protected-access
+# import platform
+
+# if platform.system().lower() == "darwin":
+#     import multiprocessing as mp
+
+#     mp.set_start_method("fork", force=True)
 
 import os
 from collections import defaultdict
@@ -29,19 +35,6 @@ from zodiac.output_tag import OutputTag
 from zodiac.response_panel import ResponsePanel
 from zodiac.selectah import Selectah
 from zodiac.voice_panel import VoicePanel
-import multiprocessing as mp
-import asyncio
-import os
-import psutil
-
-lock = asyncio.Lock()
-
-fds = psutil.Process(os.getpid()).open_files()
-for item in fds:
-    num = item[1]
-    os.set_inheritable(num, False)
-
-mp.set_start_method("spawn", force=True)
 
 
 class Fold(Screen[bool]):
@@ -103,7 +96,7 @@ class Fold(Screen[bool]):
             yield ResponsiveRightBottom(id="right-frame")
 
     # @work(exclusive=True)
-    async def on_mount(self) -> None:
+    def on_mount(self) -> None:
         """Textual API, Query all available widgets at once"""
         self.ui["db"] = self.query_one("#display_bar")
         self.ui["sl"] = self.query_one("#selectah")
@@ -160,7 +153,7 @@ class Fold(Screen[bool]):
         """Textual API event trigger, Check selectah focus"""
         return self.ui["sl"].has_focus  # or self.ui["sl"].has_focus_within
 
-    @work(exclusive=True)
+    @work(group="key_events", exclusive=True)
     async def _on_key(self, event: events.Key) -> None:
         """Textual API event trigger, Suppress/augment default key actions to trigger keybindings"""
 
@@ -284,6 +277,8 @@ class Fold(Screen[bool]):
     async def send_tx(self) -> Any:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
+        # self.app.workers.cancel_all()
+
         self.ui["rp"].on_text_area_changed()
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
@@ -297,7 +292,7 @@ class Fold(Screen[bool]):
         # lora is arg 2
         # try:
         self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
-        self.ui["rp"].on_text_area_changed()
+        # self.ui["rp"].on_text_area_changed()
         # except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
         #     dbug(error_log)
         #     self.ui["sl"].set_classes(["selectah"])
