@@ -6,23 +6,10 @@ Project-URL: Homepage, https://github.com/darkshapes/zodiac
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: dspy>=2.6.13
-Requires-Dist: networkx>=3.4.2
-Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-15]@ git+https://github.com/darkshapes/nnll@main
+Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-12,nnll-13,nnll-14,nnll-15,nnll-62]@ git+https://github.com/darkshapes/nnll@x/dev
 Requires-Dist: numpy>=2.2.5
-Requires-Dist: sounddevice>=0.5.1
-Requires-Dist: textual[syntax]>=3.1.1
-Requires-Dist: tree-sitter>=0.24.0
-Requires-Dist: textual-plotext>=1.0.1
 Requires-Dist: sympy>=1.13.3
-Requires-Dist: litellm==1.67.1
 Requires-Dist: textual-dev>=1.7.0
-Requires-Dist: accelerate>=1.6.0
-Requires-Dist: diffusers>=0.33.1
-Requires-Dist: peft>=0.15.2
-Requires-Dist: sentencepiece>=0.2.0
-Requires-Dist: transformers>=4.51.3
-Requires-Dist: torch>=2.6
 Provides-Extra: ollama
 Requires-Dist: ollama>=0.4.8; extra == "ollama"
 Provides-Extra: lmstudio
@@ -35,6 +22,10 @@ Provides-Extra: cortex
 Requires-Dist: openai>=1.75.0; extra == "cortex"
 Provides-Extra: llamafile
 Requires-Dist: openai>=1.75.0; extra == "llamafile"
+Provides-Extra: torch-cpu
+Requires-Dist: torch>=2.7.0; extra == "torch-cpu"
+Requires-Dist: torchvision>=0.22.0; extra == "torch-cpu"
+Requires-Dist: torchaudio; extra == "torch-cpu"
 Provides-Extra: full
 Requires-Dist: zodiac[cortex,hub,lmstudio,ollama,vllm]; extra == "full"
 Provides-Extra: dev
@@ -53,7 +44,7 @@ Dynamic: license-file
   <img alt="Futuristic, slanted wireframe block type spelling the word 'ZODIAC' using overlapping and interweaving shapes and triangles for the 'O' and 'A'." src="img_src/zodiac_dark_bg.png">
 </picture><br><br>
 
-# zodiac <br><sub>AI workflow builder for artists and researchers</sub>
+# zodiac <br><sub>Shadowbox : A modern no-code generative AI instrument. Workflow automator.</sub>
 <div align="center">
 
 ### [ [Windows](https://github.com/darkshapes/sdbx/wiki/Develop) | [MacOS](https://github.com/darkshapes/sdbx/wiki/Develop) | [Linux](https://github.com/darkshapes/sdbx/wiki/Develop) ]
