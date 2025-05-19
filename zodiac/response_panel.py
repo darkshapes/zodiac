@@ -5,7 +5,7 @@
 from textual import work
 from textual.screen import Screen
 from textual.widgets import TextArea
-from nnll_01 import dbug, nfo
+from nnll_01 import nfo  # dbug,
 from nnll_15 import RegistryEntry
 from dspy import Signature, Module as dspy_Module
 
@@ -76,21 +76,6 @@ class ResponsePanel(TextArea):
         nfo(f"stream_type: {stream} for {ckpt.model} in {ckpt.library}")
         chat = ChatMachineWithMemory(sig=sig, max_workers=8, stream=stream)  # and this
         if not stream:
-            chat.forward_hub(streaming=stream, **chat_args)
+            chat.forward_hub(**chat_args)
         else:
             self.synthesize(chat=chat, chat_args=chat_args, streaming=stream)
-        # import asyncio
-        # task = asyncio.tasks.create_task(self.synthesize(chat=chat, chat_args=chat_args, streaming=stream))
-        # task.add_done_callback(self.future_callback_error_logger(task))
-
-    #     except Exception as error_log:
-    #         dbug(error_log)
-    #     # asyncio.tasks.wait(task)
-    #     # self.workers.wait_for_complete()
-
-    # def future_callback_error_logger(self, future):
-    #     try:
-    #         future.result()
-    #     except Exception as error_log:
-    #         nfo(f"Executor Exception {error_log}")
-    #         dbug(error_log)

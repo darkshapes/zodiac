@@ -4,12 +4,6 @@
 """Auto-Orienting Split screen"""
 
 # pylint: disable=protected-access
-# import platform
-
-# if platform.system().lower() == "darwin":
-#     import multiprocessing as mp
-
-#     mp.set_start_method("fork", force=True)
 
 import os
 from collections import defaultdict
@@ -277,7 +271,6 @@ class Fold(Screen[bool]):
     async def send_tx(self) -> Any:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
-        # self.app.workers.cancel_all()
         self.ui["rp"].on_text_area_changed()
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
@@ -288,18 +281,13 @@ class Fold(Screen[bool]):
         from nnll_11 import QASignature, BasicImageSignature
 
         sig = QASignature if self.mode_out != "image" else BasicImageSignature
-        # lora is arg 2
-        # try:
         self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
-        # self.ui["rp"].on_text_area_changed()
-        # except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
-        #     dbug(error_log)
 
-    def stop_gen(self) -> None:
+    @work(exclusive=True)
+    async def stop_gen(self) -> None:
         """Cancel the inference processing of a model"""
         self.ui["rp"].workers.cancel_all()
         self.ui["sl"].set_classes("selectah")
-        # self.ui["ot"].set_classes("output_tag")
 
     @work(exclusive=True)
     async def clear_input(self) -> None:
