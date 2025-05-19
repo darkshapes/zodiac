@@ -29,6 +29,19 @@ from zodiac.output_tag import OutputTag
 from zodiac.response_panel import ResponsePanel
 from zodiac.selectah import Selectah
 from zodiac.voice_panel import VoicePanel
+import multiprocessing as mp
+import asyncio
+import os
+import psutil
+
+lock = asyncio.Lock()
+
+fds = psutil.Process(os.getpid()).open_files()
+for item in fds:
+    num = item[1]
+    os.set_inheritable(num, False)
+
+mp.set_start_method("spawn", force=True)
 
 
 class Fold(Screen[bool]):
@@ -60,8 +73,11 @@ class Fold(Screen[bool]):
     def compose(self) -> ComposeResult:
         """Textual API widget constructor, build graph, apply custom widget classes"""
         # from textual.widgets import Footer
+        from nnll_15 import from_cache
+
         self.int_proc = IntentProcessor()
-        self.int_proc.calc_graph()
+
+        self.int_proc.calc_graph(from_cache())
         nfo("Graph calculated.")
         with Horizontal(id="app-grid", classes="app-grid-horizontal"):
             yield ResponsiveLeftTop(id="left-frame")
@@ -283,8 +299,8 @@ class Fold(Screen[bool]):
         sig = QASignature if self.mode_out != "image" else BasicImageSignature
         self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
 
-    @work(exclusive=True)
-    async def stop_gen(self) -> None:
+
+    def stop_gen(self) -> None:
         """Cancel the inference processing of a model"""
         self.ui["rp"].workers.cancel_all()
         self.ui["sl"].set_classes("selectah")

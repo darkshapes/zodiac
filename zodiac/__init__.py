@@ -1,8 +1,10 @@
 #  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0  */ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
+
 import multiprocessing as mp
 
 mp.set_start_method("spawn", force=True)
+
 
 import sys
 import os
@@ -21,6 +23,7 @@ def set_env(args: bool) -> None:
         import multiprocessing as mp
 
         mp.set_start_method("fork", force=True)
+
     os.environ["TELEMETRY"] = "False"
 
     try:
