@@ -31,7 +31,7 @@ class Selectah(Select):
             from_fold.next_intent()
 
     @debug_monitor
-    @work(exclusive=True)
+    @work(group="mouse_events", exclusive=True)
     @on(events.Enter)
     async def on_enter(self, event: events.Enter) -> None:
         """Force terminal mouse event monitoring"""
@@ -39,14 +39,14 @@ class Selectah(Select):
             self.hover = True
 
     @debug_monitor
-    @work(exclusive=True)
+    @work(group="mouse_events", exclusive=True)
     @on(events.Leave)
     async def on_leave(self, event: events.Leave) -> None:
         """Force terminal mouse event monitoring"""
         if event.node == SelectOverlay or event.node == self:
             self.hover = True
 
-    @work(exclusive=True)
+    @work(group="mouse_events", exclusive=True)
     @on(events.MouseDown)
     async def on_mouse_down(self, event: events.MouseDown) -> None:
         """Expand panel immediately when clicked in terminal"""
@@ -55,7 +55,7 @@ class Selectah(Select):
         elif (SelectOverlay.has_focus or self.has_focus) and self.expanded:
             self.blur()
 
-    @work(exclusive=True)
+    @work(group="mouse_events", exclusive=True)
     @on(events.MouseUp)
     async def on_mouse_up(self, event: events.MouseUp) -> None:
         """Expand panel immediately when clicked in terminal"""

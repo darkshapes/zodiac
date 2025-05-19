@@ -51,7 +51,7 @@ class Fold(Screen[bool]):
     DEFAULT_CSS = """Screen { min-height: 5; }"""
 
     BINDINGS = [
-        Binding("ent", "send_tx", "✉︎", priority=True),  # Start audio prompt
+        # Binding("ent", "next_intent(io_only=False, bypass_send=False)", "✉︎", priority=True),  # Start audio prompt
         Binding("escape", "stop_gen", "◼︎ / ⏏︎"),  # Cancel response/Safe
         Binding("bk", "ui['ot'].skip_to(text)", "⌨️"),  # Return to text input panel
         Binding("alt+backspace", "clear_input()", "del"),  # Empty focused prompt panel
@@ -106,7 +106,7 @@ class Fold(Screen[bool]):
             yield ResponsiveRightBottom(id="right-frame")
 
     # @work(exclusive=True)
-    async def on_mount(self) -> None:
+    def on_mount(self) -> None:
         """Textual API, Query all available widgets at once"""
         self.ui["db"] = self.query_one("#display_bar")
         self.ui["sl"] = self.query_one("#selectah")
@@ -163,7 +163,7 @@ class Fold(Screen[bool]):
         """Textual API event trigger, Check selectah focus"""
         return self.ui["sl"].has_focus  # or self.ui["sl"].has_focus_within
 
-    @work(exclusive=True)
+    @work(group="key_events", exclusive=True)
     async def _on_key(self, event: events.Key) -> None:
         """Textual API event trigger, Suppress/augment default key actions to trigger keybindings"""
 
@@ -185,7 +185,6 @@ class Fold(Screen[bool]):
         if is_key("escape") or is_key("ctrl+left_square_brace"):
             if "active" in self.ui["sl"].classes or self.ui["sl"].expanded:
                 self.stop_gen()
-                self.ui["sl"].set_classes(["selectah"])
             else:
                 nfo(f" exit focus {self.focus_on_sel()}")
                 self.safe_exit()
@@ -195,9 +194,10 @@ class Fold(Screen[bool]):
             event.prevent_default()
             self.next_intent(io_only=False, bypass_send=False)
 
-        # if is_char("\r", "enter"):
-        #     event.prevent_default()
-        #     self.next_intent(io_only=False, bypass_send=False)
+        if is_char("\r", "enter"):
+            event.prevent_default()
+            self.ui["sl"].add_class("active")
+            self.next_intent(io_only=False, bypass_send=False)
 
         elif is_char(" ", "space"):
             if self.ui["rd"].has_focus_within:
@@ -297,18 +297,13 @@ class Fold(Screen[bool]):
         from nnll_11 import QASignature, BasicImageSignature
 
         sig = QASignature if self.mode_out != "image" else BasicImageSignature
-        # lora is arg 2
-        # try:
         self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
-        self.ui["rp"].on_text_area_changed()
-        # except (GeneratorExit, RuntimeError, ExceptionGroup) as error_log:
-        #     dbug(error_log)
-        #     self.ui["sl"].set_classes(["selectah"])
+
 
     def stop_gen(self) -> None:
         """Cancel the inference processing of a model"""
         self.ui["rp"].workers.cancel_all()
-        self.ui["ot"].set_classes("output_tag")
+        self.ui["sl"].set_classes("selectah")
 
     @work(exclusive=True)
     async def clear_input(self) -> None:

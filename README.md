@@ -5,7 +5,8 @@
   <img alt="Futuristic, slanted wireframe block type spelling the word 'ZODIAC' using overlapping and interweaving shapes and triangles for the 'O' and 'A'." src="img_src/zodiac_dark_bg.png">
 </picture><br><br>
 
-# zodiac <br><sub>Shadowbox : A modern no-code generative AI instrument. Workflow automator.</sub>
+# zodiac <br><sub>Workflow automator</sub>
+
 <div align="center">
 
 ### [ [Windows](https://github.com/darkshapes/sdbx/wiki/Develop) | [MacOS](https://github.com/darkshapes/sdbx/wiki/Develop) | [Linux](https://github.com/darkshapes/sdbx/wiki/Develop) ]
@@ -23,8 +24,8 @@ Zodiac is a creative research platform for Generative AI. Guided by text, audio,
 * Minimal, lightweight and versatile: Designed for smartphone, CLI terminal and browser use
 * Local-first, privacy-oriented isolation: no data siphoning, remote telemetry or analytics
 * Compatible with legacy consumer computer/CPU/TPU/GPU devices,
-* Bring your own models - Supports [Ollama](https://ollama.com/), [Llamafile](http://github.com/Mozilla-Ocho/llamafile), [Cortex/Jan](http://cortex.so), [VLLM](https://github.com/vllm-project/vllm), [LMStudio](http://lmstudio.ai/)
-* Support expanding to include: HuggingFace, CivitAI, ModelScope & AIO (all-in-one) local caches through [sdbx](https://github.com/darkshapes/sdbx).<br><br>
+* Bring your own models - Supports [Ollama](https://ollama.com/), [Llamafile](http://github.com/Mozilla-Ocho/llamafile), [Cortex/Jan](http://cortex.so), [VLLM](https://github.com/vllm-project/vllm), [LMStudio](http://lmstudio.ai/), [HuggingFace](https://huggingface.co/)
+* Support expanding to include: , CivitAI, ModelScope & AIO (all-in-one) local caches through [sdbx](https://github.com/darkshapes/sdbx).<br><br>
 
 [![Python application](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml/badge.svg)](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml)<br>
 ![commits per month](https://img.shields.io/github/commit-activity/m/darkshapes/zodiac?color=indigo)<br>

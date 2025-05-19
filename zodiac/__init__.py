@@ -1,6 +1,11 @@
 #  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0  */ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
+import multiprocessing as mp
+
+mp.set_start_method("spawn", force=True)
+
+
 import sys
 import os
 
@@ -14,8 +19,11 @@ def set_env(args: bool) -> None:
     """
     import platform
 
-    if platform.system() == "darwin":
-        os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = str(args.highwater)  # disable pytorch memory upper limit
+    if platform.system().lower() == "darwin":
+        import multiprocessing as mp
+
+        mp.set_start_method("fork", force=True)
+
     os.environ["TELEMETRY"] = "False"
 
     try:
@@ -58,14 +66,22 @@ def set_env(args: bool) -> None:
 
 def main() -> None:
     """Launch textual UI"""
+    # import platform
+
+    # if platform.system == "darwin":
+    #     import multiprocessing as mp
+
+    #     mp.set_start_method("fork", force=True)
+
     import argparse
     from zodiac.__main__ import Combo
     from nnll_01 import nfo
 
     parser = argparse.ArgumentParser(description="Multimodal generative media sequencer")
     parser.add_argument("-n", "--net", action="store_true", help="Allow network access (for downloading requirements)")
-    parser.add_argument("-t", "--trace", action="store_true", help="Enable trace logs (generated in log folder)")
-    parser.add_argument("-w", "--highwater", type=float, default=0.0, help="Pytorch High Watermark Ratio for MPS devices")
+    parser.add_argument("-t", "--trace", action="store_true", help="Enable trace logs (generated in log folder)")  # os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = str(args.highwater)  # disable pytorch memory upper limit
+
+    # parser.add_argument("-w", "--highwater", type=float, default=0.0, help="Pytorch High Watermark Ratio for MPS devices")
     parser.add_argument("-d", "--diag", action="store_true", help="Process using diagnostic settings")
 
     args = parser.parse_args()
