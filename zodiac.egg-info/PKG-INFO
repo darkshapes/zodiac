@@ -6,7 +6,7 @@ Project-URL: Homepage, https://github.com/darkshapes/zodiac
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-12,nnll-13,nnll-14,nnll-15,nnll-62]@ git+https://github.com/darkshapes/nnll@x/dev
+Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-12,nnll-13,nnll-14,nnll-15,nnll-62]@ git+https://github.com/darkshapes/nnll@main
 Requires-Dist: numpy>=2.2.5
 Requires-Dist: sympy>=1.13.3
 Requires-Dist: textual-dev>=1.7.0
@@ -44,7 +44,7 @@ Dynamic: license-file
   <img alt="Futuristic, slanted wireframe block type spelling the word 'ZODIAC' using overlapping and interweaving shapes and triangles for the 'O' and 'A'." src="img_src/zodiac_dark_bg.png">
 </picture><br><br>
 
-# zodiac <br><sub>Shadowbox : A modern no-code generative AI instrument. Workflow automator.</sub>
+# zodiac <br><sub>Self-assembling workflow automator</sub>
 <div align="center">
 
 ### [ [Windows](https://github.com/darkshapes/sdbx/wiki/Develop) | [MacOS](https://github.com/darkshapes/sdbx/wiki/Develop) | [Linux](https://github.com/darkshapes/sdbx/wiki/Develop) ]
@@ -62,13 +62,40 @@ Zodiac is a creative research platform for Generative AI. Guided by text, audio,
 * Minimal, lightweight and versatile: Designed for smartphone, CLI terminal and browser use
 * Local-first, privacy-oriented isolation: no data siphoning, remote telemetry or analytics
 * Compatible with legacy consumer computer/CPU/TPU/GPU devices,
-* Bring your own models - Supports [Ollama](https://ollama.com/), [Llamafile](http://github.com/Mozilla-Ocho/llamafile), [Cortex/Jan](http://cortex.so), [VLLM](https://github.com/vllm-project/vllm), [LMStudio](http://lmstudio.ai/)
-* Support expanding to include: HuggingFace, CivitAI, ModelScope & AIO (all-in-one) local caches through [sdbx](https://github.com/darkshapes/sdbx).<br><br>
+* Bring your own models - Supports [Ollama](https://ollama.com/), [Llamafile](http://github.com/Mozilla-Ocho/llamafile), [Cortex/Jan](http://cortex.so), [VLLM](https://github.com/vllm-project/vllm), [LMStudio](http://lmstudio.ai/), [HuggingFace](https://huggingface.co/)
+* Support expanding to include: , CivitAI, ModelScope & AIO (all-in-one) local caches through [sdbx](https://github.com/darkshapes/sdbx).<br><br>
 
 [![Python application](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml/badge.svg)](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml)<br>
 ![commits per month](https://img.shields.io/github/commit-activity/m/darkshapes/zodiac?color=indigo)<br>
 ![code size](https://img.shields.io/github/languages/code-size/darkshapes/zodiac?color=navy)<br>
 ![Discord](https://img.shields.io/discord/1266757128249675867?color=black)<br><br>
+
+
+<details><summary>
+
+Supported HuggingFace Models list </summary>
+
+- Alpha-VLLM/Lumina-Image-2.0
+- black-forest-labs/FLUX.1-dev
+- black-forest-labs/FLUX.1-schnell
+- fal/AuraFlow-v0.3
+- Freepik/flux.1-lite-8B
+- Kwai-Kolors/Kolors-diffusers
+- PixArt-alpha/PixArt-Sigma-XL-2-1024-MS
+- playgroundai/playground-v2.5-1024px-aesthetic
+- shuttleai/shuttle-3-diffusion
+- shuttleai/shuttle-3.1-aesthetic
+- stabilityai/stable-diffusion-3.5-large
+- stabilityai/stable-diffusion-3.5-medium
+- stabilityai/stable-diffusion-xl-base-1.0
+- stabilityai/stable-diffusion-xl-refiner-1.0
+- THUDM/CogView3-Plus-3B
+- THUDM/CogView4-6B
+
+More soon..
+
+
+</details>
 
 ### [installation instructions link](https://github.com/darkshapes/sdbx/wiki/Develop)<br>
 
