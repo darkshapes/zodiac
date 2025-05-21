@@ -5,7 +5,8 @@
   <img alt="Futuristic, slanted wireframe block type spelling the word 'ZODIAC' using overlapping and interweaving shapes and triangles for the 'O' and 'A'." src="img_src/zodiac_dark_bg.png">
 </picture><br><br>
 
-# zodiac <br><sub>Workflow automator</sub>
+
+# zodiac <br><sub>Self-assembling workflow automator</sub>
 
 <div align="center">
 
@@ -31,6 +32,33 @@ Zodiac is a creative research platform for Generative AI. Guided by text, audio,
 ![commits per month](https://img.shields.io/github/commit-activity/m/darkshapes/zodiac?color=indigo)<br>
 ![code size](https://img.shields.io/github/languages/code-size/darkshapes/zodiac?color=navy)<br>
 ![Discord](https://img.shields.io/discord/1266757128249675867?color=black)<br><br>
+
+
+<details><summary>
+
+Supported HuggingFace Models list </summary>
+
+- Alpha-VLLM/Lumina-Image-2.0
+- black-forest-labs/FLUX.1-dev
+- black-forest-labs/FLUX.1-schnell
+- fal/AuraFlow-v0.3
+- Freepik/flux.1-lite-8B
+- Kwai-Kolors/Kolors-diffusers
+- PixArt-alpha/PixArt-Sigma-XL-2-1024-MS
+- playgroundai/playground-v2.5-1024px-aesthetic
+- shuttleai/shuttle-3-diffusion
+- shuttleai/shuttle-3.1-aesthetic
+- stabilityai/stable-diffusion-3.5-large
+- stabilityai/stable-diffusion-3.5-medium
+- stabilityai/stable-diffusion-xl-base-1.0
+- stabilityai/stable-diffusion-xl-refiner-1.0
+- THUDM/CogView3-Plus-3B
+- THUDM/CogView4-6B
+
+More soon..
+
+
+</details>
 
 ### [installation instructions link](https://github.com/darkshapes/sdbx/wiki/Develop)<br>
 

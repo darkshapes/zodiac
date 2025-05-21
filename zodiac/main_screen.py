@@ -51,13 +51,13 @@ class Fold(Screen[bool]):
     DEFAULT_CSS = """Screen { min-height: 5; }"""
 
     BINDINGS = [
-        # Binding("ent", "next_intent(io_only=False, bypass_send=False)", "✉︎", priority=True),  # Start audio prompt
+        # Binding("ent", "", "✉︎", priority=True),
         Binding("escape", "stop_gen", "◼︎ / ⏏︎"),  # Cancel response/Safe
         Binding("bk", "ui['ot'].skip_to(text)", "⌨️"),  # Return to text input panel
         Binding("alt+backspace", "clear_input()", "del"),  # Empty focused prompt panel
         Binding("space", "alternate_panel", "▶︎", priority=True),  # Listen to prompt audio
-        Binding("`", "key_space", "◉", priority=True),  # Send to LLM
-        Binding("ctrl+c", "copy", "⧉", priority=True),
+        Binding("`", "key_space", "◉", priority=True),  # Rec audio prompt
+        Binding("meta+c", "copy", "⧉", priority=True),
     ]
     id: str = "fold_screen"
     ui: dict = defaultdict(dict)
@@ -222,7 +222,7 @@ class Fold(Screen[bool]):
         if self.safety == 0:
             await self.app.action_quit()
         self.safety -= 1
-        self.notify("Press ESC again to quit")
+        self.notify("Press ESCAPE again to quit", severity="warning")
 
     # @work(exclusive=True)
     @on(MessagePanel.Changed, "#message_panel")
@@ -287,6 +287,7 @@ class Fold(Screen[bool]):
     async def send_tx(self) -> Any:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
+        self.ui["rp"].move_cursor(self.ui["rp"].document.end)
         self.ui["rp"].on_text_area_changed()
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
@@ -303,6 +304,7 @@ class Fold(Screen[bool]):
     def stop_gen(self) -> None:
         """Cancel the inference processing of a model"""
         self.ui["rp"].workers.cancel_all()
+        self.notify("Processing Cancelled!", severity="error")
         self.ui["sl"].set_classes("selectah")
 
     @work(exclusive=True)
