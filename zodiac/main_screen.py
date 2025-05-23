@@ -53,10 +53,10 @@ class Fold(Screen[bool]):
     BINDINGS = [
         # Binding("ent", "next_intent(io_only=False, bypass_send=False)", "✉︎", priority=True),  # Start audio prompt
         Binding("escape", "stop_gen", "◼︎ / ⏏︎"),  # Cancel response/Safe
-        Binding("bk", "ui['ot'].skip_to(text)", "⌨️"),  # Return to text input panel
+        Binding("bk", "ui['it'].skip_to('text')", "⌨️"),  # Return to text input panel
         Binding("alt+backspace", "clear_input()", "del"),  # Empty focused prompt panel
-        Binding("space", "alternate_panel", "▶︎", priority=True),  # Listen to prompt audio
-        Binding("`", "key_space", "◉", priority=True),  # Send to LLM
+        Binding("space", "ui['it'].skip_to('speech')", "▶︎", priority=True),  # Listen to prompt audio
+        Binding("`", "", "◉", priority=True),  # Record Audio
         Binding("ctrl+c", "copy", "⧉", priority=True),
     ]
     id: str = "fold_screen"
@@ -196,20 +196,26 @@ class Fold(Screen[bool]):
 
         if is_char("\r", "enter"):
             event.prevent_default()
+            self.ui["rp"].workers.cancel_all()
+            self.ui["sl"].set_classes("selectah")
+            self.notify("Prompt submitted, waiting for reply...", severity="information")
             self.ui["sl"].add_class("active")
             self.next_intent(io_only=False, bypass_send=False)
 
         elif is_char(" ", "space"):
             if self.ui["rd"].has_focus_within:
+                self.notify("Playing prompt audio...", severity="information")
                 self.mode_out = "speech"
                 self.ui["ot"].skip_to(self.mode_out)
                 self.ui["vr"].play_audio()
             else:
+                self.notify("Playing response audio...", severity="information")
                 self.mode_in = "speech"
                 self.ui["it"].skip_to(self.mode_in)
                 self.ui["vm"].play_audio()
 
         if is_char("`", "grave_accent"):
+            self.notify("Recording audio...", severity="information")
             self.mode_in = "speech"
             self.ui["it"].skip_to(self.mode_in)
             self.ui["vm"].record_audio()
@@ -222,7 +228,7 @@ class Fold(Screen[bool]):
         if self.safety == 0:
             await self.app.action_quit()
         self.safety -= 1
-        self.notify("Press ESC again to quit")
+        self.notify("Press ESC again to quit", severity="warning")
 
     # @work(exclusive=True)
     @on(MessagePanel.Changed, "#message_panel")
@@ -287,7 +293,7 @@ class Fold(Screen[bool]):
     async def send_tx(self) -> Any:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
-        self.ui["rp"].on_text_area_changed()
+        self.ui["rp"].move_cursor(self.ui["rp"].document.end)
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
         ckpt = self.ui["sl"].selection
@@ -299,11 +305,15 @@ class Fold(Screen[bool]):
         sig = QASignature if self.mode_out != "image" else BasicImageSignature
         self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
 
-
     def stop_gen(self) -> None:
         """Cancel the inference processing of a model"""
         self.ui["rp"].workers.cancel_all()
+        self.notify("Cancelled processing!", severity="error")
         self.ui["sl"].set_classes("selectah")
+
+    # async def action_undo_clear(self) -> None:
+    #     self.ui["mp"].undo()
+    #     self.ui["mp"].undo()
 
     @work(exclusive=True)
     async def clear_input(self) -> None:
@@ -311,10 +321,12 @@ class Fold(Screen[bool]):
         if self.ui["ri"].has_focus_within:
             if self.ui["mp"].has_focus:
                 self.ui["mp"].erase_message()
+                self.notify("Text prompt emptied.", severity="error", markup=True)  # [@click="undo_clear()"]UNDO[/]""", )
             self.ui["vm"].erase_audio()
             self.audio_to_token()
         elif self.ui["rd"].has_focus_within:
             self.ui["vr"].erase_audio()
+            self.notify("Audio prompt emptied.", severity="error")
             self.audio_to_token(top=False)
 
     async def watch_mode_in(self, mode_in: str) -> None:  # pylint: disable=unused-argument
