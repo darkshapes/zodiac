@@ -1,4 +1,4 @@
-nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-12,nnll-13,nnll-14,nnll-15,nnll-62]@ git+https://github.com/darkshapes/nnll@main
+nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-12,nnll-13,nnll-14,nnll-15,nnll-62]@ git+https://github.com/darkshapes/nnll@x.dev
 numpy>=2.2.5
 sympy>=1.13.3
 textual-dev>=1.7.0

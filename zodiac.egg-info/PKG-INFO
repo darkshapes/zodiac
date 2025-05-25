@@ -6,7 +6,7 @@ Project-URL: Homepage, https://github.com/darkshapes/zodiac
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-12,nnll-13,nnll-14,nnll-15,nnll-62]@ git+https://github.com/darkshapes/nnll@main
+Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-12,nnll-13,nnll-14,nnll-15,nnll-62]@ git+https://github.com/darkshapes/nnll@x.dev
 Requires-Dist: numpy>=2.2.5
 Requires-Dist: sympy>=1.13.3
 Requires-Dist: textual-dev>=1.7.0
