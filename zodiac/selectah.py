@@ -10,7 +10,8 @@ from textual.screen import Screen
 from textual.widgets import Select
 from textual.widgets._select import SelectOverlay  # , SelectCurrent,
 
-from nnll_01 import dbug, debug_monitor
+from nnll_01 import dbug, debug_monitor, nfo
+import os
 
 
 class Selectah(Select):
@@ -27,6 +28,9 @@ class Selectah(Select):
                 from_fold.int_proc.edit_weight(selection=self.value, mode_in=self.mode_in, mode_out=self.mode_out)
             except ValueError as error_log:
                 dbug(error_log)
+            value_changed = next(iter(x for x in from_fold.int_proc.models if self.value in x))
+            polarity = "+ priority" if "*" in value_changed[0] else "- priority"
+            self.notify(message=f"{polarity} {value_changed[0]}", severity="information")
             self.expanded = False
             from_fold.next_intent()
 

@@ -51,13 +51,15 @@ class Fold(Screen[bool]):
     DEFAULT_CSS = """Screen { min-height: 5; }"""
 
     BINDINGS = [
-        # Binding("ent", "next_intent(io_only=False, bypass_send=False)", "✉︎", priority=True),  # Start audio prompt
+        # Binding("ent", "", "✉︎", priority=True),
         Binding("escape", "stop_gen", "◼︎ / ⏏︎"),  # Cancel response/Safe
         Binding("bk", "ui['it'].skip_to('text')", "⌨️"),  # Return to text input panel
         Binding("alt+backspace", "clear_input()", "del"),  # Empty focused prompt panel
+
         Binding("space", "ui['it'].skip_to('speech')", "▶︎", priority=True),  # Listen to prompt audio
         Binding("`", "", "◉", priority=True),  # Record Audio
         Binding("ctrl+c", "copy", "⧉", priority=True),
+
     ]
     id: str = "fold_screen"
     ui: dict = defaultdict(dict)
@@ -229,6 +231,7 @@ class Fold(Screen[bool]):
             await self.app.action_quit()
         self.safety -= 1
         self.notify("Press ESC again to quit", severity="warning")
+
 
     # @work(exclusive=True)
     @on(MessagePanel.Changed, "#message_panel")
