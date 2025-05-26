@@ -23,14 +23,15 @@ astra  = "astra.__init__:main"
 Homepage = "https://github.com/darkshapes/zodiac"
 
 [project.optional-dependencies]
-ollama = ["ollama>=0.4.8"]
-lmstudio = ["lmstudio>=1.2.0"]
-hub = ["huggingface-hub[hf-transfer,hf_xet]>=0.30.2"]
-vllm = ["vllm ; platform_system== 'linux' or platform_system == 'windows'"]
-cortex = ["openai>=1.75.0"]
+ollama    = ["ollama>=0.4.8"]
+lmstudio  = ["lmstudio>=1.2.0"]
+hub       = ["huggingface-hub[hf-transfer,hf_xet]>=0.30.2"]
+vllm      = ["vllm ; platform_system== 'linux' or platform_system == 'windows'"]
+cortex    = ["openai>=1.75.0"]
 llamafile = ["openai>=1.75.0"]
 torch-cpu = ["torch>=2.7.0", "torchvision>=0.22.0", "torchaudio"]
-full = ["zodiac[ollama,lmstudio,hub,vllm,cortex]"]
+full      = ["zodiac[ollama,lmstudio,hub,vllm,cortex]"]
+
 dev = [
     "matplotlib>=3.10.1",
     "pytest>=8.3.5",
