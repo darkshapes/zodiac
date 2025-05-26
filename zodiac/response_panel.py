@@ -70,9 +70,8 @@ class ResponsePanel(TextArea):
         stream = out_type == "text" and last_hop
         nfo(f"stream_type: {stream} for {ckpt.model} in {ckpt.library}")
         chat = ChatMachineWithMemory(sig=sig, max_workers=8, stream=stream)  # and this
-        self.notify("Processing request...", severity="information")
+        # self.notify("Processing request...", severity="information")
         if not stream:
             chat.forward_hub(out_type=out_type, **chat_args)
         else:
             self.synthesize(chat=chat, chat_args=chat_args, streaming=stream)
-

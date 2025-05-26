@@ -55,11 +55,9 @@ class Fold(Screen[bool]):
         Binding("escape", "stop_gen", "◼︎ / ⏏︎"),  # Cancel response/Safe
         Binding("bk", "ui['it'].skip_to('text')", "⌨️"),  # Return to text input panel
         Binding("alt+backspace", "clear_input()", "del"),  # Empty focused prompt panel
-
         Binding("space", "ui['it'].skip_to('speech')", "▶︎", priority=True),  # Listen to prompt audio
         Binding("`", "", "◉", priority=True),  # Record Audio
         Binding("ctrl+c", "copy", "⧉", priority=True),
-
     ]
     id: str = "fold_screen"
     ui: dict = defaultdict(dict)
@@ -198,9 +196,9 @@ class Fold(Screen[bool]):
 
         if is_char("\r", "enter"):
             event.prevent_default()
-            self.ui["rp"].workers.cancel_all()
+            self.ui["rp"].workers.cancel_group("chat")
             self.ui["sl"].set_classes("selectah")
-            self.notify("Prompt submitted, waiting for reply...", severity="information")
+            self.notify(message="Awaiting reply...", title="Active", severity="information")
             self.ui["sl"].add_class("active")
             self.next_intent(io_only=False, bypass_send=False)
 
@@ -231,7 +229,6 @@ class Fold(Screen[bool]):
             await self.app.action_quit()
         self.safety -= 1
         self.notify("Press ESC again to quit", severity="warning")
-
 
     # @work(exclusive=True)
     @on(MessagePanel.Changed, "#message_panel")
