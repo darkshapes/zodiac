@@ -7,12 +7,14 @@
 import sys
 import os
 import networkx as nx
+from typing import Union, Any
 # pylint:disable=import-outside-toplevel
 
 from nnll_01 import debug_monitor, nfo, dbug
 from nnll_15 import from_cache
 
 sys.path.append(os.getcwd())
+
 
 class IntentProcessor:
     intent_graph: dict = None
@@ -162,29 +164,57 @@ class IntentProcessor:
         :param mode_out: The target type, , representing a source graph node
         :raises ValueError: No models fit the request
         """
-        reg_entries = [nbrdict for n, nbrdict in self.intent_graph.adjacency()]
+        reg_entries = [nbrhood for _, nbrhood in self.intent_graph.adjacency()]
         try:
-            if not reg_entries[0].get(mode_out):  # if there is no model to get to `mode_out`
-                raise ValueError("No models available.")
+            if not reg_entries[0].get(mode_out):  # if there is no path to get to `mode_out`
+                raise ValueError("No models available for path.")
         except (IndexError, ValueError, nx.exception.NodeNotFound) as error_log:  # if there is no edge towards `mode_out`
             dbug(error_log)
             nfo(f"Failed to adjust weight of '{selection}' within registry contents '{reg_entries}'. Model or registry entry not found. ")
         else:
-            index = [x for x in reg_entries[0][mode_out] if selection in reg_entries[0][mode_out][x].get("entry").model]
+            entries = []
+            for i in reg_entries[0][mode_out]:
+                entries.append(reg_entries[0][mode_out][i].get("entry").model)
+            index = self.grade_char_match(selection, entries)
+            if index is None:
+                self.set_ckpts()
+                return
             try:
-                model = reg_entries[0][mode_out][index[0]].get("entry").model
+                model = reg_entries[0][mode_out][index].get("entry").model
             except IndexError as error_log:
                 dbug(error_log)
                 nfo(f"Failed to locate index for '{selection}' within registry contents '{reg_entries}'.")
             else:
-                weight = reg_entries[0][mode_out][index[0]].get("weight")
+                weight = reg_entries[0][mode_out][index].get("weight")
                 nfo("Model pre-adjustment : ", model, index, weight)
                 if weight < 1.0:
-                    self.intent_graph[mode_in][mode_out][index[0]]["weight"] = round(weight + 0.1, 1)
+                    self.intent_graph[mode_in][mode_out][index]["weight"] = round(weight + 0.1, 1)
                 else:
-                    self.intent_graph[mode_in][mode_out][index[0]]["weight"] = round(weight - 0.1, 1)
-                nfo("Weight changed for: ", self.intent_graph[mode_in][mode_out][index[0]]["entry"].model, f"model # {index[0]}")
+                    self.intent_graph[mode_in][mode_out][index]["weight"] = round(weight - 0.1, 1)
+                nfo("Weight changed for: ", self.intent_graph[mode_in][mode_out][index]["entry"].model, f"model # {index}")
                 dbug("Confirm :", self.intent_graph[mode_in][mode_out])
 
         finally:
             self.set_ckpts()
+
+    def grade_char_match(self, target: str, options: Union[list[str] | dict[str:Any]]) -> str | None:
+        """Compare text to a sequence of texts and pick the closest match between them\n
+        :param target: The ideal text
+        :param options: The possible text matches
+        :return: The closest match as a string, or `None`
+        """
+        closest_match = None
+        min_difference = float("inf")
+        for idx, opt in enumerate(options):
+            entry = opt.lower()
+            target_lower = target.lower()
+            if target_lower in entry:
+                if idx == target:
+                    closest_match = idx
+                    break
+                common_prefix_length = len(os.path.commonprefix([entry, target_lower]))
+                difference = abs(len(entry) - len(target_lower)) + (len(entry) - common_prefix_length)
+                if difference < min_difference:
+                    min_difference = difference
+                    closest_match = idx
+        return closest_match
