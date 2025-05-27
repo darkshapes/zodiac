@@ -39,25 +39,30 @@ Zodiac is a creative research platform for Generative AI. Guided by text, audio,
 Supported HuggingFace Models list </summary>
 
 - Alpha-VLLM/Lumina-Image-2.0
-- black-forest-labs/FLUX.1-dev
-- black-forest-labs/FLUX.1-schnell
+- black-forest-labs/FLUX.1-dev | schnell
 - fal/AuraFlow-v0.3
 - Freepik/flux.1-lite-8B
 - Kwai-Kolors/Kolors-diffusers
 - PixArt-alpha/PixArt-Sigma-XL-2-1024-MS
-- playgroundai/playground-v2.5-1024px-aesthetic
-- shuttleai/shuttle-3-diffusion
-- shuttleai/shuttle-3.1-aesthetic
-- stabilityai/stable-diffusion-3.5-large
-- stabilityai/stable-diffusion-3.5-medium
-- stabilityai/stable-diffusion-xl-base-1.0
-- stabilityai/stable-diffusion-xl-refiner-1.0
+- playgroundai/playground-v2.5-1024px | aesthetic
+- shuttleai/shuttle-3.1-diffusion/aesthetic
+- stabilityai/stable-diffusion-3.5-large | medium
+- stabilityai/stable-diffusion-xl-base | refiner-1.0
+- stabilityai/stable-cascade
 - THUDM/CogView3-Plus-3B
 - THUDM/CogView4-6B
 
-More soon..
-
-
+More soon..<br>
+- [ ] facebook/audiogen-medium
+- [ ] microsoft/Phi-4-multimodal-instruct
+- [ ] Alpha-VLLM/Lumina-mGPT-768
+- [ ] parler-tts/parler-tts-large-v1
+- [ ] ooutlierr/fuse-dit
+- [ ] yandex/stable-diffusion-3.5-alchemist
+- [ ] lodestones/Chroma
+- [ ] HiDream
+- [ ] TencentARC/flux-mini
+- [ ] Bytedance-Seed/Bagel
 </details>
 
 ### [installation instructions link](https://github.com/darkshapes/sdbx/wiki/Develop)<br>

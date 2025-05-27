@@ -196,7 +196,7 @@ class Fold(Screen[bool]):
 
         if is_char("\r", "enter"):
             event.prevent_default()
-            self.ui["rp"].workers.cancel_group("chat")
+            self.ui["rp"].workers.cancel_group(self.ui["rp"], "chat")
             self.ui["sl"].set_classes("selectah")
             self.notify(message="Awaiting reply...", title="Active", severity="information")
             self.ui["sl"].add_class("active")
@@ -228,7 +228,7 @@ class Fold(Screen[bool]):
         if self.safety == 0:
             await self.app.action_quit()
         self.safety -= 1
-        self.notify("Press ESC again to quit", severity="warning")
+        self.notify("Press ESC again to quit", severity="error")
 
     # @work(exclusive=True)
     @on(MessagePanel.Changed, "#message_panel")
