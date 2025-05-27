@@ -10,7 +10,7 @@ from textual.screen import Screen
 from textual.widgets import Select
 from textual.widgets._select import SelectOverlay  # , SelectCurrent,
 
-from nnll_01 import dbug, debug_monitor  # , nfo
+from nnll_01 import dbug, debug_monitor, nfo
 import os
 
 
@@ -25,6 +25,7 @@ class Selectah(Select):
         from_fold = self.query_ancestor(Screen)
         if self.value != Select.BLANK and self.value != "No Models.":
             try:
+                nfo(self.value)
                 from_fold.int_proc.edit_weight(selection=self.value, mode_in=self.mode_in, mode_out=self.mode_out)
             except ValueError as error_log:
                 dbug(error_log)

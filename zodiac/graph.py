@@ -21,6 +21,7 @@ class IntentProcessor:
     coord_path: list[str] | None = None
     ckpts: list[dict[dict]] = None
     models: list[tuple[str]] | None = None
+    weight_idx: list[str] | None = []
     # additional_model_names: dict = None
 
     def __init__(self, intent_graph: nx.MultiDiGraph = nx.MultiDiGraph()) -> None:
@@ -111,7 +112,7 @@ class IntentProcessor:
         """
 
         self.has_graph()
-
+        self.weight_idx = []
         if nx.has_path(self.intent_graph, mode_in, mode_out):  # Ensure path exists (otherwise 'bidirectional' may loop infinitely)
             # Self loops in the multidirected graph complete themselves
             # In practice, this means often the same model can be used to compute prompt input and response output
@@ -134,7 +135,6 @@ class IntentProcessor:
 
         self.has_graph()
         self.has_path()
-        model_proxy = []
         try:
             self.ckpts = pull_path_entries(self.intent_graph, self.coord_path)
         except KeyError as error_log:
@@ -142,23 +142,32 @@ class IntentProcessor:
             return ["", ""]
 
         if len(self.ckpts) != 0:
-            model_to_index = None
-            weighted_models = []
-            if self.models is not None:
-                sorted_ckpts = enumerate(model for model in self.models if "*" in model[0])
-                model_to_index = {model: index for index, model in sorted_ckpts}
+            norm_model = []
             self.models = []
             for registry in self.ckpts:
                 model = registry["entry"].model
                 weight = registry.get("weight")
+                self.ckpts = sorted(self.ckpts, key=lambda x: x["weight"])
                 if weight != 1.0:
-                    self.models.insert(0, (f"*{os.path.basename(model)}", model))
+                    adj_model = (f"*{os.path.basename(model)}", model)
+                    if adj_model not in self.weight_idx:
+                        self.weight_idx.append(adj_model)
+                    nfo(f"adjusted {self.weight_idx}")
+                    self.models.insert(self.weight_idx.index(adj_model), adj_model)
                     nfo("Adjusted model :", f"*{os.path.basename(model)}", weight)
                 else:
-                    model_proxy.append((os.path.basename(model), model))
-            if model_to_index:
-                self.models = sorted(self.models, key=lambda x: model_to_index.get(x, float("inf")))
-            self.models.extend(model_proxy)
+                    norm_model = (os.path.basename(model), model)
+                    self.models.append(norm_model)
+                    if self.weight_idx and self.weight_idx.count(norm_model) > 0:
+                        self.weight_idx.remove(norm_model)
+
+            # if self.weight_idx is None:
+            #     self.models.extend(norm_model)
+
+            # if isinstance(norm_model[0], tuple):
+            #     self.models.extend(norm_model)
+            # else:
+            #     self.models.append(norm_model)
 
     @debug_monitor
     def edit_weight(self, selection: str, mode_in: str, mode_out: str) -> None:
@@ -196,12 +205,9 @@ class IntentProcessor:
                 graph_edge = self.intent_graph[mode_in][mode_out]
                 if weight < 1.0:
                     graph_edge[index]["weight"] = round(weight + 0.1, 1)
-                    proxy = self.models
                     self.models = [((f"*{os.path.basename(model)}", model))]
-                    self.models.extend(proxy)
                 else:
                     graph_edge[index]["weight"] = round(weight - 0.1, 1)
-                    self.models.append((f"{os.path.basename(model)}", model))
                 nfo("Weight changed for: ", graph_edge[index]["entry"].model, f"model # {index}")
                 dbug("Confirm :", graph_edge)
 
