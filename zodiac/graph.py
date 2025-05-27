@@ -129,22 +129,25 @@ class IntentProcessor:
 
     @debug_monitor
     def set_ckpts(self) -> None:
-        """Populate models list for text fields and sort by weight\n"""
+        """Populate models list for text fields and sort by weight"""
         from nnll_05 import pull_path_entries
 
         self.has_graph()
         self.has_path()
+        model_proxy = []
         try:
             self.ckpts = pull_path_entries(self.intent_graph, self.coord_path)
         except KeyError as error_log:
             dbug(error_log)
             return ["", ""]
-        if len(self.ckpts) != 0:
-            self.models = []
-            # nfo("Graph status: ", self.ckpts)
-            self.ckpts = sorted(self.ckpts, key=lambda x: x["weight"])
-            # nfo("Model weight status: ", [x["weight"] for x in self.ckpts])
 
+        if len(self.ckpts) != 0:
+            model_to_index = None
+            weighted_models = []
+            if self.models is not None:
+                sorted_ckpts = enumerate(model for model in self.models if "*" in model[0])
+                model_to_index = {model: index for index, model in sorted_ckpts}
+            self.models = []
             for registry in self.ckpts:
                 model = registry["entry"].model
                 weight = registry.get("weight")
@@ -152,9 +155,10 @@ class IntentProcessor:
                     self.models.insert(0, (f"*{os.path.basename(model)}", model))
                     nfo("Adjusted model :", f"*{os.path.basename(model)}", weight)
                 else:
-                    self.models.append((os.path.basename(model), model))
-                    # nfo("model : ", model, weight)
-            self.models = sorted(self.models, key=lambda x: "*" in x)
+                    model_proxy.append((os.path.basename(model), model))
+            if model_to_index:
+                self.models = sorted(self.models, key=lambda x: model_to_index.get(x, float("inf")))
+            self.models.extend(model_proxy)
 
     @debug_monitor
     def edit_weight(self, selection: str, mode_in: str, mode_out: str) -> None:
@@ -164,6 +168,8 @@ class IntentProcessor:
         :param mode_out: The target type, , representing a source graph node
         :raises ValueError: No models fit the request
         """
+        from nnll_60.mir_maid import MIRDatabase
+
         reg_entries = [nbrhood for _, nbrhood in self.intent_graph.adjacency()]
         try:
             if not reg_entries[0].get(mode_out):  # if there is no path to get to `mode_out`
@@ -175,7 +181,7 @@ class IntentProcessor:
             entries = []
             for i in reg_entries[0][mode_out]:
                 entries.append(reg_entries[0][mode_out][i].get("entry").model)
-            index = self.grade_char_match(selection, entries)
+            index, _ = MIRDatabase.grade_char_match(selection, entries)
             if index is None:
                 self.set_ckpts()
                 return
@@ -187,34 +193,17 @@ class IntentProcessor:
             else:
                 weight = reg_entries[0][mode_out][index].get("weight")
                 nfo("Model pre-adjustment : ", model, index, weight)
+                graph_edge = self.intent_graph[mode_in][mode_out]
                 if weight < 1.0:
-                    self.intent_graph[mode_in][mode_out][index]["weight"] = round(weight + 0.1, 1)
+                    graph_edge[index]["weight"] = round(weight + 0.1, 1)
+                    proxy = self.models
+                    self.models = [((f"*{os.path.basename(model)}", model))]
+                    self.models.extend(proxy)
                 else:
-                    self.intent_graph[mode_in][mode_out][index]["weight"] = round(weight - 0.1, 1)
-                nfo("Weight changed for: ", self.intent_graph[mode_in][mode_out][index]["entry"].model, f"model # {index}")
-                dbug("Confirm :", self.intent_graph[mode_in][mode_out])
+                    graph_edge[index]["weight"] = round(weight - 0.1, 1)
+                    self.models.append((f"{os.path.basename(model)}", model))
+                nfo("Weight changed for: ", graph_edge[index]["entry"].model, f"model # {index}")
+                dbug("Confirm :", graph_edge)
 
         finally:
             self.set_ckpts()
-
-    def grade_char_match(self, target: str, options: Union[list[str] | dict[str:Any]]) -> str | None:
-        """Compare text to a sequence of texts and pick the closest match between them\n
-        :param target: The ideal text
-        :param options: The possible text matches
-        :return: The closest match as a string, or `None`
-        """
-        closest_match = None
-        min_difference = float("inf")
-        for idx, opt in enumerate(options):
-            entry = opt.lower()
-            target_lower = target.lower()
-            if target_lower in entry:
-                if idx == target:
-                    closest_match = idx
-                    break
-                common_prefix_length = len(os.path.commonprefix([entry, target_lower]))
-                difference = abs(len(entry) - len(target_lower)) + (len(entry) - common_prefix_length)
-                if difference < min_difference:
-                    min_difference = difference
-                    closest_match = idx
-        return closest_match

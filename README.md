@@ -52,9 +52,17 @@ Supported HuggingFace Models list </summary>
 - THUDM/CogView3-Plus-3B
 - THUDM/CogView4-6B
 
-More soon..
-
-
+More soon..<br>
+- [ ] facebook/audiogen-medium
+- [ ] microsoft/Phi-4-multimodal-instruct
+- [ ] Alpha-VLLM/Lumina-mGPT-768
+- [ ] parler-tts/parler-tts-large-v1
+- [ ] ooutlierr/fuse-dit
+- [ ] yandex/stable-diffusion-3.5-alchemist
+- [ ] lodestones/Chroma
+- [ ] HiDream
+- [ ] TencentARC/flux-mini
+- [ ] Bytedance-Seed/Bagel
 </details>
 
 ### [installation instructions link](https://github.com/darkshapes/sdbx/wiki/Develop)<br>

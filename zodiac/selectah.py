@@ -11,6 +11,7 @@ from textual.widgets import Select
 from textual.widgets._select import SelectOverlay  # , SelectCurrent,
 
 from nnll_01 import dbug, debug_monitor  # , nfo
+import os
 
 
 class Selectah(Select):
@@ -28,7 +29,7 @@ class Selectah(Select):
             except ValueError as error_log:
                 dbug(error_log)
             value_changed = next(iter(x for x in from_fold.int_proc.models if self.value in x))
-            toast = [("- priority", "warning"), ("+ priority", "information")]
+            toast = [("- priority", "error"), ("+ priority", "information")]
             incr = "*" in value_changed[0]
             self.notify(message=f"{toast[incr][0]} {value_changed[0]}", severity=toast[incr][1])
             self.expanded = False
