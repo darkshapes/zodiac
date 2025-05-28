@@ -131,12 +131,10 @@ class IntentProcessor:
     @debug_monitor
     def set_ckpts(self) -> None:
         """Populate models list for text fields and sort by weight"""
-        from nnll_05 import pull_path_entries
-
         self.has_graph()
         self.has_path()
         try:
-            self.ckpts = pull_path_entries(self.intent_graph, self.coord_path)
+            self.ckpts = self.pull_path_entries(self.intent_graph, self.coord_path)
         except KeyError as error_log:
             dbug(error_log)
             return ["", ""]
@@ -213,3 +211,18 @@ class IntentProcessor:
 
         finally:
             self.set_ckpts()
+
+    @debug_monitor
+    def pull_path_entries(self, nx_graph: nx.Graph, traced_path: list[tuple]) -> None:
+        """Create operating instructions from user input
+        Trace the next hop along the path, collect all compatible models
+        Set current model based on weight and next available"""
+
+        registry_entries = []
+        if traced_path is not None and nx.has_path(nx_graph, traced_path[0], traced_path[1]):
+            registry_entries = [  # ruff : noqa
+                nx_graph[traced_path[i]][traced_path[i + 1]][hop]  #
+                for i in range(len(traced_path) - 1)  #
+                for hop in nx_graph[traced_path[i]][traced_path[i + 1]]  #
+            ]
+        return registry_entries

@@ -33,6 +33,7 @@ import multiprocessing as mp
 import asyncio
 import os
 import psutil
+from nnll_11 import ChatMachineWithMemory
 
 lock = asyncio.Lock()
 
@@ -65,7 +66,8 @@ class Fold(Screen[bool]):
     tx_data: dict = {}
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
-    chat: dspy_Module = None
+    chat: dspy_Module = ChatMachineWithMemory(max_workers=8)  # and this
+
     mode_in: reactive[str] = reactive("text")
     mode_out: reactive[str] = reactive("text")
     models: reactive[list[tuple[str, str]]] = reactive([("", "")])
@@ -300,10 +302,11 @@ class Fold(Screen[bool]):
         if ckpt is None:
             ckpt = next(iter(self.int_proc.ckpts)).get("entry")
         dbug(f"Graph extraction : {ckpt}")
-        from nnll_11 import QASignature, BasicImageSignature
 
-        sig = QASignature if self.mode_out != "image" else BasicImageSignature
-        self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
+        self.chat.streaming = self.mode_out == "text"
+        self.chat.library = ckpt.library
+        self.chat.model = ckpt.model
+        self.ui["rp"].synthesize(chat=self.chat, tx_data=self.tx_data, out_type=self.mode_out)
 
     def stop_gen(self) -> None:
         """Cancel the inference processing of a model"""
