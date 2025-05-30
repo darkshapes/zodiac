@@ -32,8 +32,8 @@ class TestFlow:
         assert f"{self.graph.intent_graph}" == f"MultiDiGraph with {len(VALID_CONVERSIONS)} nodes and {model_data_len} edges"
         self.graph.set_path(mode_in=mode_in, mode_out=mode_out)
         assert self.graph.has_path() is True
-        self.graph.set_ckpts()
-        assert self.graph.has_ckpt() is True
+        self.graph.set_reg_entries()
+        assert self.graph.has_reg_entries() is True
         assert self.graph.models == [
             (
                 "parler-tts-large-v1",
@@ -46,16 +46,16 @@ class TestFlow:
         expected_true = expected
         expected.setdefault("weight", 1.0)
         self.graph.edit_weight("par ler", "text", "speech")
-        assert next(iter(self.graph.ckpts)) == expected_true
+        assert next(iter(self.graph.reg_entries)) == expected_true
         expected_true["weight"] = 0.9
         expected_false = expected
         expected_false.setdefault("weight", 0.8)
         self.graph.edit_weight("parler", "text", "speech")
-        assert next(iter(self.graph.ckpts)) == expected_true
+        assert next(iter(self.graph.reg_entries)) == expected_true
         # with raises(AssertionError) as excinfo:
         self.graph.edit_weight("parler", "text", "speech")
         expected_true["weight"] = 1.0
-        assert next(iter(self.graph.ckpts)) == expected_true
+        assert next(iter(self.graph.reg_entries)) == expected_true
         # import re
 
         # nfo(f"{expected_true} == {expected_false}")
@@ -89,11 +89,11 @@ class TestGraphSetup2(TestCase):
         self.graph.set_path(mode_in=mode_in, mode_out=mode_out)
         nfo(f"coord_path {self.graph.coord_path}")
         assert self.graph.has_path() is True
-        nfo(f"ckpts : {self.graph.ckpts}")
-        assert self.graph.has_ckpt() is False
-        self.graph.set_ckpts()
-        nfo(self.graph.ckpts)
-        assert self.graph.has_ckpt() is True
+        nfo(f"ckpts : {self.graph.reg_entries}")
+        assert self.graph.has_reg_entries() is False
+        self.graph.set_reg_entries()
+        nfo(self.graph.reg_entries)
+        assert self.graph.has_reg_entries() is True
         nfo(self.graph.models)
         assert self.graph.models == [("CogView3-Plus-3B", "THUDM/CogView3-Plus-3B")]
         self.graph = None

@@ -12,9 +12,9 @@ def setUp(lookit_this):
     proc_name.intent_graph = nx.Graph(lookit_this)
     assert proc_name.has_graph() is True
     proc_name.set_path("mode_in", "mode_out")
-    proc_name.set_ckpts()
+    proc_name.set_reg_entries()
     assert proc_name.has_path() is True
-    assert proc_name.has_ckpt() is True
+    assert proc_name.has_reg_entries() is True
     return proc_name
 
 
@@ -49,12 +49,10 @@ def test_edit_weight():
     assert int_proc.intent_graph["mode_in"]["mode_out"][1]["weight"] == 1.1, "Weight not decreased correctly"
 
 
-
 def test_edit_weight_model_not_present_quiet_fail():
     import networkx as nx
 
     int_proc.edit_weight("nonexistent", "mode_in", "mode_out")
-
 
 
 def test_edit_weight_node_not_present():

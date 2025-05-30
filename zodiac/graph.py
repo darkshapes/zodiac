@@ -19,7 +19,7 @@ sys.path.append(os.getcwd())
 class IntentProcessor:
     intent_graph: dict = None
     coord_path: list[str] | None = None
-    ckpts: list[dict[dict]] = None
+    reg_entries: list[dict[dict]] = None
     models: list[tuple[str]] | None = None
     weight_idx: list[str] | None = []
     # additional_model_names: dict = None
@@ -72,7 +72,7 @@ class IntentProcessor:
         return self.intent_graph
 
     @debug_monitor
-    def has_graph(self) -> None:
+    def has_graph(self) -> bool:
         """A check to verify the graph has been created"""
         try:
             assert self.intent_graph is not None
@@ -82,7 +82,7 @@ class IntentProcessor:
         return True
 
     @debug_monitor
-    def has_path(self) -> None:
+    def has_path(self) -> bool:
         """A check to verify the path has been created"""
         try:
             assert self.coord_path is not None
@@ -92,11 +92,11 @@ class IntentProcessor:
         return True
 
     @debug_monitor
-    def has_ckpt(self) -> None:
+    def has_reg_entries(self) -> bool:
         """A check to verify model checkpoints are available"""
         try:
-            assert self.ckpts is not None
-            assert len(self.ckpts) >= 1
+            assert self.reg_entries is not None
+            assert len(self.reg_entries) >= 1
         except AssertionError as error_log:
             dbug(error_log)
             return False
@@ -129,23 +129,23 @@ class IntentProcessor:
                     self.coord_path.append(mode_out)  # this behaviour likely to change in future
 
     @debug_monitor
-    def set_ckpts(self) -> None:
+    def set_reg_entries(self) -> None:
         """Populate models list for text fields and sort by weight"""
         self.has_graph()
         self.has_path()
         try:
-            self.ckpts = self.pull_path_entries(self.intent_graph, self.coord_path)
+            self.reg_entries = self.pull_path_entries(self.intent_graph, self.coord_path)
         except KeyError as error_log:
             dbug(error_log)
             return ["", ""]
 
-        if len(self.ckpts) != 0:
+        if len(self.reg_entries) != 0:
             norm_model = []
             self.models = []
-            for registry in self.ckpts:
+            for registry in self.reg_entries:
                 model = registry["entry"].model
                 weight = registry.get("weight")
-                self.ckpts = sorted(self.ckpts, key=lambda x: x["weight"])
+                self.reg_entries = sorted(self.reg_entries, key=lambda x: x["weight"])
                 if weight != 1.0:
                     adj_model = (f"*{os.path.basename(model)}", model)
                     if adj_model not in self.weight_idx:
@@ -190,7 +190,7 @@ class IntentProcessor:
                 entries.append(reg_entries[0][mode_out][i].get("entry").model)
             index, _ = MIRDatabase.grade_char_match(selection, entries)
             if index is None:
-                self.set_ckpts()
+                self.set_reg_entries()
                 return
             try:
                 model = reg_entries[0][mode_out][index].get("entry").model
@@ -210,7 +210,7 @@ class IntentProcessor:
                 dbug("Confirm :", graph_edge)
 
         finally:
-            self.set_ckpts()
+            self.set_reg_entries()
 
     @debug_monitor
     def pull_path_entries(self, nx_graph: nx.Graph, traced_path: list[tuple]) -> None:

@@ -44,7 +44,6 @@ class ResponsePanel(TextArea):
         ```
         :param chat: Processing module for request
         :param tx_data: Prompt request
-        :param ckpt: Model entry to fulfill request
         :param out_type: Media type for this pass, defaults to 'text'
         """
 

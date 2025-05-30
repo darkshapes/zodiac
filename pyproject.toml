@@ -59,7 +59,7 @@ line-length    = 140
 include        = ["*.py"]
 extend-exclude = ["^tests/.*$", "test.*$"]
 
-[tool.ruff.format]
+# [tool.ruff.format]
 # exclude = ["*.py"]
 
 [tool.pylint]

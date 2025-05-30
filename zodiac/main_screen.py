@@ -260,7 +260,7 @@ class Fold(Screen[bool]):
         """Retrieve graph data, prepare to send"""
 
         self.int_proc.set_path(mode_in=mode_in, mode_out=mode_out)
-        self.int_proc.set_ckpts()
+        self.int_proc.set_reg_entries()
         if not io_only:
             self.tx_data = {
                 "text": self.ui["mp"].text,
@@ -295,17 +295,18 @@ class Fold(Screen[bool]):
     async def send_tx(self) -> Any:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
+        from nnll_11 import BasicImageSignature, QASignature
+
         self.ui["rp"].move_cursor(self.ui["rp"].document.end)
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
-        ckpt = self.ui["sl"].selection
-        if ckpt is None:
-            ckpt = next(iter(self.int_proc.ckpts)).get("entry")
-        dbug(f"Graph extraction : {ckpt}")
-
-        self.chat.streaming = self.mode_out == "text"
-        self.chat.library = ckpt.library
-        self.chat.model = ckpt.model
+        reg_entries = self.ui["sl"].selection
+        streaming = self.mode_out == "text"
+        if reg_entries != self.chat.reg_entries or self.chat.streaming != streaming:
+            if reg_entries is None:
+                reg_entries = next(iter(self.int_proc.reg_entries)).get("entry")
+            dbug(f"Graph extraction : {reg_entries}")
+            self.chat.ready_model(reg_entry=reg_entries, sig=QASignature, streaming=streaming)
         self.ui["rp"].synthesize(chat=self.chat, tx_data=self.tx_data, out_type=self.mode_out)
 
     def stop_gen(self) -> None:
