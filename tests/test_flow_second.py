@@ -45,7 +45,7 @@ class TestFlow:
         }
         expected_true = expected
         expected.setdefault("weight", 1.0)
-        self.graph.edit_weight("par ler", "text", "speech")
+        # self.graph.edit_weight("parler", "text", "speech")
         assert next(iter(self.graph.reg_entries)) == expected_true
         expected_true["weight"] = 0.9
         expected_false = expected

@@ -186,9 +186,9 @@ class IntentProcessor:
             nfo(f"Failed to adjust weight of '{selection}' within registry contents '{reg_entries}'. Model or registry entry not found. ")
         else:
             entries = []
-            for i in reg_entries[0][mode_out]:
-                entries.append(reg_entries[0][mode_out][i].get("entry").model)
-            index, _ = MIRDatabase.grade_char_match(selection, entries)
+            # for i in reg_entries[0][mode_out]:
+            entries = [[reg_entries[0][mode_out][i].get("entry").model, i, "", ""] for i in reg_entries[0][mode_out]]
+            index, _ = MIRDatabase.grade_char_match(entries, selection)
             if index is None:
                 self.set_reg_entries()
                 return
@@ -199,6 +199,7 @@ class IntentProcessor:
                 nfo(f"Failed to locate index for '{selection}' within registry contents '{reg_entries}'.")
             else:
                 weight = reg_entries[0][mode_out][index].get("weight")
+                nfo(weight)
                 nfo("Model pre-adjustment : ", model, index, weight)
                 graph_edge = self.intent_graph[mode_in][mode_out]
                 if weight < 1.0:
