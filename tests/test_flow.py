@@ -56,9 +56,9 @@ class TestGraph_2(TestCase):
         self.graph.set_reg_entries()
         nfo(self.graph.reg_entries)
         assert self.graph.has_reg_entries() is False
-        assert self.graph.reg_entries == []
+        assert not self.graph.reg_entries
         nfo(self.graph.models)
-        assert self.graph.models is None
+        assert not self.graph.models
         self.graph.edit_weight("flux", "text", "image")
         self.graph = None
         import gc

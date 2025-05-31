@@ -37,11 +37,20 @@ class TestFlow:
         assert self.graph.models == [
             (
                 "parler-tts-large-v1",
-                "parler-tts/parler-tts-large-v1",
+                0,
             )
         ]
         expected = {
-            "entry": RegistryEntry(model="parler-tts/parler-tts-large-v1", size=9335526346, tags=["text-to-speech", "annotation", "text-to-speech"], library=LibType.HUB, timestamp=1741908821, available_tasks=[("text", "speech")]),
+            "entry": RegistryEntry(
+                model="parler-tts/parler-tts-large-v1",
+                size=9335526346,
+                tags=["text-to-speech", "annotation", "text-to-speech"],
+                library=LibType.HUB,
+                mir=["info.art.parler-tts", "large-v1"],
+                api_kwargs=None,
+                timestamp=1741908821,
+                available_tasks=[("text", "speech")],
+            ),
         }
         expected_true = expected
         expected.setdefault("weight", 1.0)
@@ -50,10 +59,10 @@ class TestFlow:
         expected_true["weight"] = 0.9
         expected_false = expected
         expected_false.setdefault("weight", 0.8)
-        self.graph.edit_weight("parler", "text", "speech")
+        self.graph.edit_weight(0, "text", "speech")
         assert next(iter(self.graph.reg_entries)) == expected_true
         # with raises(AssertionError) as excinfo:
-        self.graph.edit_weight("parler", "text", "speech")
+        self.graph.edit_weight(0, "text", "speech")
         expected_true["weight"] = 1.0
         assert next(iter(self.graph.reg_entries)) == expected_true
         # import re
@@ -95,7 +104,7 @@ class TestGraphSetup2(TestCase):
         nfo(self.graph.reg_entries)
         assert self.graph.has_reg_entries() is True
         nfo(self.graph.models)
-        assert self.graph.models == [("CogView3-Plus-3B", "THUDM/CogView3-Plus-3B")]
+        assert self.graph.models == [("CogView3-Plus-3B", 0)]
         self.graph = None
         import gc
 

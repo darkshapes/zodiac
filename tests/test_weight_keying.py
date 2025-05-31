@@ -25,7 +25,7 @@ def test_weight_key_error():
     nfo(faux_int.intent_graph.nodes)
     nfo(faux_int.intent_graph.edges.data())
 
-    faux_int.edit_weight(selection="shuttle", mode_in="image", mode_out="text")
+    faux_int.edit_weight(selection=2, mode_in="image", mode_out="text")
 
 
 # graph_edge[index]["weight"] = round(weight - 0.1, 1)

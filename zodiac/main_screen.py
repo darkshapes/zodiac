@@ -7,7 +7,7 @@
 
 import os
 from collections import defaultdict
-from typing import Any, Callable  # , Any
+from typing import Any, Callable, Union  # , Any
 
 from dspy import Module as dspy_Module
 from nnll_01 import dbug, debug_monitor, nfo
@@ -29,6 +29,7 @@ from zodiac.output_tag import OutputTag
 from zodiac.response_panel import ResponsePanel
 from zodiac.selectah import Selectah
 from zodiac.voice_panel import VoicePanel
+from nnll_15 import RegistryEntry
 import multiprocessing as mp
 import asyncio
 import os
@@ -200,7 +201,8 @@ class Fold(Screen[bool]):
             event.prevent_default()
             self.ui["rp"].workers.cancel_group(self.ui["rp"], "chat")
             self.ui["sl"].set_classes("selectah")
-            self.notify(message="Awaiting reply...", title="Active", severity="information")
+            model_name = await self.pull_registry_entry(model=True)
+            self.notify(message=f"Awaiting reply from {os.path.basename(model_name)}...", title="Active", severity="information")
             self.ui["sl"].add_class("active")
             self.next_intent(io_only=False, bypass_send=False)
 
@@ -238,8 +240,8 @@ class Fold(Screen[bool]):
         """Transmit info to token calculation"""
         message = self.ui["mp"].text
         if self.int_proc.models:
-            next_model = next(iter(self.int_proc.models))[1]
-            self.ui["db"].show_tokens(next_model, message=message)
+            token_model = await self.pull_registry_entry(model=True)
+            self.ui["db"].show_tokens(token_model, message=message)
 
     @work(exclusive=True)
     async def audio_to_token(self, top: bool = True) -> None:
@@ -301,14 +303,12 @@ class Fold(Screen[bool]):
         self.ui["rp"].move_cursor(self.ui["rp"].document.end)
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
-        reg_entries = self.ui["sl"].selection
-        nfo("reg_entries", reg_entries)
         streaming = self.mode_out == "text"
-        if reg_entries is None:
-            reg_entries = next(iter(self.int_proc.reg_entries)).get("entry")
-        if reg_entries != self.chat.reg_entries or self.chat.streaming != streaming:
-            dbug(f"Graph extraction : {reg_entries}")
-        self.chat(reg_entries=reg_entries, sig=QASignature, streaming=streaming)
+        edge_data = await self.pull_registry_entry()
+        registry_entries = edge_data["entry"]
+        if registry_entries != self.chat.reg_entries or self.chat.streaming != streaming:
+            dbug(f"Graph extraction : {registry_entries}")
+        self.chat(reg_entries=registry_entries, sig=QASignature, streaming=streaming)
         self.ui["rp"].synthesize(chat=self.chat, tx_data=self.tx_data, mode_out=self.mode_out)
 
     def stop_gen(self) -> None:
@@ -361,6 +361,18 @@ class Fold(Screen[bool]):
         elif hasattr(self.ui["sl"], "prompt"):
             self.ui["sl"].set_options(self.int_proc.models)
             self.ui["sl"].prompt = next(iter(self.int_proc.models))[0]
+
+    async def pull_registry_entry(self, model: bool = False) -> Union[RegistryEntry, dict]:
+        """Determine the RegistryEntry\n
+        :param model: Provide only model attribute of RegistryEntry, defaults to False
+        :return: _description_
+        """
+
+        edge = next(iter(self.int_proc.models))[1]
+        registry_entry = self.int_proc.intent_graph[self.mode_in][self.mode_out][edge]
+        if not model:
+            return registry_entry
+        return registry_entry["entry"].model
 
 
 class ResponsiveLeftTop(Container):

@@ -21,7 +21,7 @@ class IntentProcessor:
     coord_path: Optional[list[str]] = None
     reg_entries: Optional[list[dict[dict]]] = None
     models: Optional[list[tuple[str]]] = None
-    weight_idx: Optional[list[str]] = []
+    weight_idx: Optional[list[str]] = None
     # additional_model_names: dict = None
 
     def __init__(self, intent_graph: nx.MultiDiGraph = nx.MultiDiGraph()) -> None:
@@ -146,10 +146,12 @@ class IntentProcessor:
         idx = 0
         self.models = []
         if self.reg_entries:
-            for registry in self.reg_entries:
+            for edge, registry in enumerate(self.reg_entries):
                 model = registry["entry"].model
-                adj_model = (os.path.basename(model), model)
+                nfo(f"node {edge}")
+                adj_model = (os.path.basename(model), edge)
                 self.models.append(adj_model)
+            self.weight_idx = self.weight_idx or []
             for model in self.weight_idx:
                 if model in self.models:
                     self.models.remove(model)
@@ -167,33 +169,39 @@ class IntentProcessor:
         """
         from nnll_60.mir_maid import MIRDatabase
 
-        if not nx.has_path(self.intent_graph, mode_in, mode_out):
+        self.weight_idx = self.weight_idx or []
+        try:
+            if not nx.has_path(self.intent_graph, mode_in, mode_out):
+                raise KeyError()
+            target = os.path.basename(self.intent_graph[mode_in][mode_out][selection]["entry"].model)
+        except KeyError as error_log:
             nfo(f"Failed to adjust weight of '{selection}' within registry contents '{self.intent_graph} {mode_in} {mode_out}'. Model or registry entry not found. ")
-            return self.set_reg_entries
-        else:
-            entries = []
-            for index, reg in self.intent_graph[mode_in][mode_out].items():
-                entries.append([reg["entry"].model, index, "", ""])
-            nfo(f"graph weight : {entries} {mode_in} {mode_out} {selection} \n")
-            node, _ = MIRDatabase.grade_char_match(entries, selection)
-            nfo(node)
-            entries = []
-            if node is None:
-                self.set_reg_entries()
-                return
-            model = self.intent_graph[mode_in][mode_out][node]["entry"].model
-            weight = self.intent_graph[mode_in][mode_out][node]["weight"]
-            nfo(f" model : {model}  weight: {weight} ")
-            if weight < 1.0:
-                self.intent_graph[mode_in][mode_out][node]["weight"] = round(weight + 0.1, 1)
-                self.models = [((f"*{os.path.basename(model)}", model))]
-                if (os.path.basename(model), model) in self.weight_idx:
-                    self.weight_idx.remove((os.path.basename(model), model))
-            else:
-                self.intent_graph[mode_in][mode_out][node]["weight"] = round(weight - 0.1, 1)
-                self.weight_idx.append((os.path.basename(model), model))
-            # nfo(self.intent_graph[mode_in][mode_out][node])
+            dbug(error_log)
+            return self.set_reg_entries()
+        entries = []
+        for index, reg in self.intent_graph[mode_in][mode_out].items():
+            entries.append([reg["entry"].model, index, "", ""])
+        nfo(f"graph weight : {entries} {mode_in} {mode_out} {target} \n")
+        edge, _ = MIRDatabase.grade_char_match(entries, target)
+        nfo(edge)
+        entries = []
+        if edge is None:
             self.set_reg_entries()
+            return
+        model = self.intent_graph[mode_in][mode_out][edge]["entry"].model
+        weight = self.intent_graph[mode_in][mode_out][edge]["weight"]
+        item = (os.path.basename(model), edge)
+        nfo(f" model : {model}  weight: {weight} ")
+        if weight < 1.0:
+            self.intent_graph[mode_in][mode_out][edge]["weight"] = round(weight + 0.1, 1)
+            self.models = [((f"*{os.path.basename(model)}", edge))]
+            if item in self.weight_idx:
+                self.weight_idx.remove(item)
+        else:
+            self.intent_graph[mode_in][mode_out][edge]["weight"] = round(weight - 0.1, 1)
+            self.weight_idx.append(item)
+        nfo(self.intent_graph[mode_in][mode_out][edge])
+        self.set_reg_entries()
 
     @debug_monitor
     def pull_path_entries(self, nx_graph: nx.Graph, traced_path: list[tuple]) -> None:
