@@ -25,7 +25,7 @@ class Selectah(Select):
         from_fold = self.query_ancestor(Screen)
         if self.value != Select.BLANK and self.value != "No Models.":
             try:
-                nfo(self.value)
+                nfo(f"selected : {self.value}")
                 from_fold.int_proc.edit_weight(selection=self.value, mode_in=self.mode_in, mode_out=self.mode_out)
             except ValueError as error_log:
                 dbug(error_log)

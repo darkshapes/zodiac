@@ -28,7 +28,7 @@ class ResponsePanel(TextArea):
         self.scroll_end(animate=True)
 
     @work(group="chat", exclusive=True)
-    async def synthesize(self, chat: dspy_Module, mode_out: str, tx_data: dict) -> dict | None:
+    async def synthesize(self, chat: dspy_Module, tx_data: dict, mode_out: str) -> dict | None:
         """Generate media \n
         :param chat: Processing module for request
         :param chat_args: _description_
@@ -52,9 +52,9 @@ class ResponsePanel(TextArea):
 
         streaming = mode_out == "text"
         if not streaming:
-            chat.forward(tx_data, out_type=mode_out)
+            chat.forward(tx_data, mode_out=mode_out)
         else:
-            async for chunk in chat.forward(tx_data, out_type=mode_out):
+            async for chunk in chat.forward(tx_data, mode_out=mode_out):
                 async for c in chunk:
                     if isinstance(c, Prediction) and streaming:
                         if hasattr(c, "answer"):

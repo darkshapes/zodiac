@@ -261,6 +261,7 @@ class Fold(Screen[bool]):
 
         self.int_proc.set_path(mode_in=mode_in, mode_out=mode_out)
         self.int_proc.set_reg_entries()
+        nfo(f"triggered recalculation : {self.int_proc.coord_path} {self.int_proc.reg_entries}")
         if not io_only:
             self.tx_data = {
                 "text": self.ui["mp"].text,
@@ -301,13 +302,14 @@ class Fold(Screen[bool]):
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
         reg_entries = self.ui["sl"].selection
+        nfo("reg_entries", reg_entries)
         streaming = self.mode_out == "text"
+        if reg_entries is None:
+            reg_entries = next(iter(self.int_proc.reg_entries)).get("entry")
         if reg_entries != self.chat.reg_entries or self.chat.streaming != streaming:
-            if reg_entries is None:
-                reg_entries = next(iter(self.int_proc.reg_entries)).get("entry")
             dbug(f"Graph extraction : {reg_entries}")
-            self.chat.ready_model(reg_entry=reg_entries, sig=QASignature, streaming=streaming)
-        self.ui["rp"].synthesize(chat=self.chat, tx_data=self.tx_data, out_type=self.mode_out)
+        self.chat(reg_entries=reg_entries, sig=QASignature, streaming=streaming)
+        self.ui["rp"].synthesize(chat=self.chat, tx_data=self.tx_data, mode_out=self.mode_out)
 
     def stop_gen(self) -> None:
         """Cancel the inference processing of a model"""
@@ -353,7 +355,7 @@ class Fold(Screen[bool]):
         if self.int_proc.has_graph() and self.int_proc.has_path():
             self.walk_intent(bypass_send=bypass_send)
         if not hasattr(self.ui["sl"], "prompt") or self.int_proc.models is None:
-            pass
+            nfo("intent processor models not available")
         elif self.int_proc.models is None and hasattr(self.ui.get("sl"), "prompt"):
             self.ui["sl"].set_options = [("No models", "No Models.")]
         elif hasattr(self.ui["sl"], "prompt"):
