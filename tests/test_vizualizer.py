@@ -1,9 +1,9 @@
 # import networkx as nx
-# from nnll_14 import calculate_graph
+# from zodiac.graph import calculate_graph
 # import matplotlib.pyplot as plt
 # import numpy as np
 
-# from nnll_15.constants import LibType
+# from mir.constants import LibType
 
 
 # def draw_matplot_labeled(nx_graph: nx.Graph) -> None:
@@ -106,7 +106,6 @@
 # # # # plot.set_xlabel("")
 # # # # plot.set_ylabel("")
 # # # # plot.set_styles("background: #1f1f1f;")
-
 
 
 # # when user presses trigger :

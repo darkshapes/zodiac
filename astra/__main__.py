@@ -9,8 +9,8 @@
 # sys.path.append(os.getcwd())
 
 import networkx as nx
-from nnll_01 import dbug, debug_monitor, nfo
-from nnll_15.constants import GenTypeC, GenTypeCText
+from nnll.monitor.file import dbug, debug_monitor, nfo
+from mir.constants import GenTypeC, GenTypeCText
 from textual import events, work
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, VerticalGroup, VerticalScroll
@@ -23,7 +23,7 @@ from zodiac.response_panel import ResponsePanel
 from zodiac.token_counters import tk_count
 from zodiac.voice_panel import VoicePanel
 
-# from nnll_20 import ResponsePanel
+# from zodiac.response_panel import ResponsePanel
 
 
 class ButtonsApp(App[str]):
@@ -73,7 +73,7 @@ class ButtonsApp(App[str]):
         build_button = self.query_one("#build")
         if self.hover_name == "build":
             # event.stop()
-            from nnll_15 import from_cache
+            from mir.registry_entry import from_cache
 
             self.intent_processor = IntentProcessor()
             self.intent_processor.calc_graph(from_cache())
@@ -122,14 +122,14 @@ class ButtonsApp(App[str]):
         if start_type is not None and end_type is not None:
             self.intent_processor.set_path(mode_in=start_type, mode_out=end_type)
             results_panel.write(f"path request : {self.intent_processor.coord_path}")
-            self.intent_processor.set_ckpts()
+            self.intent_processor.set_reg_entries()
 
             self.tokenizer = next(iter(self.intent_processor.models)) if self.intent_processor.models is not None else ""
             # nfo(self.intent_processor.intent_graph.nodes(data=True))
             # nfo([*self.intent_processor.intent_graph.edges(data=True)])
 
             self.query_one("#response_panel").insert(f"{str(self.tokenizer)}\n")
-            results_panel.write(f"model :\n {[x['entry'].model for x in list(self.intent_processor.ckpts)]}\n")
+            results_panel.write(f"model :\n {[x['entry'].model for x in list(self.intent_processor.reg_entries)]}\n")
             convert_type = self.query_one("#convert_type")
             all_fields = GenTypeCText.model_fields | GenTypeC.model_fields
             convert_type.remove_children(ListItem)

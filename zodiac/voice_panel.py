@@ -7,14 +7,11 @@ import sounddevice as sd
 
 from textual import work
 
-# from textual.app import ComposeResult
-# from textual.widgets import Static
 from textual.reactive import reactive
-# from textual.screen import Screen
 
 from textual_plotext import PlotextPlot
 
-from nnll_01 import nfo  # , debug_monitor
+from nnll.monitor.file import nfo  # , debug_monitor
 
 
 class VoicePanel(PlotextPlot):  # (PlotWidget)
@@ -24,16 +21,17 @@ class VoicePanel(PlotextPlot):  # (PlotWidget)
     audio = [0]
     sample_freq: int = 16000
     duration: float = 3.0
-    sample_len: reactive[float] = reactive(0.0, recompose=True)
+    sample_len: reactive[str] = reactive(str(float(len(audio) / sample_freq) if len(audio) > 1 else 0.0), recompose=True)
 
     def on_mount(self) -> None:
         self.can_focus = True
         self.blur()
         # self.theme = "flexoki"
 
-    @work(exclusive=True)
+    # @work(exclusive=True)
     async def record_audio(self) -> None:
         """Get audio from mic"""
+        self.sample_freq = 16000
         self.plt.clear_data()
         precision = self.duration * self.sample_freq
         self.audio = [0]
@@ -60,16 +58,17 @@ class VoicePanel(PlotextPlot):  # (PlotWidget)
         except TypeError as error_log:
             nfo(error_log)
 
-    @work(exclusive=True)
     async def erase_audio(self) -> None:
         """Clear audio graph and recording"""
         self.plt.clear_data()
         self.audio = [0]
+        self.sample_freq = 0.0
 
-    def time_audio(self) -> float:
-        sample_length = len(self.audio)
-        duration = float(sample_length / self.sample_freq) if sample_length > 1 else 0.0
-        return duration
+    # @work(exclusive=True)
+    # async def time_audio(self) -> float:
+    #     sample_length = len(self.audio)
+    #     duration = float(sample_length / self.sample_freq) if sample_length > 1 else 0.0
+    #     return self.duration
 
     # from textual_plot import PlotWidget, HiResMode
     # to use PlotWidget

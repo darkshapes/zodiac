@@ -5,34 +5,34 @@
 
 # pylint: disable=protected-access
 
+import asyncio
+import multiprocessing as mp
 import os
 from collections import defaultdict
-from typing import Any, Callable  # , Any
+from typing import Any, Callable, Union  # , Any
 
+import psutil
 from dspy import Module as dspy_Module
-from nnll_01 import dbug, debug_monitor, nfo
+from mir.registry_entry import RegistryEntry
+from nnll.monitor.file import dbug, debug_monitor, nfo
 from textual import events, on, work
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.containers import Container
+from textual.containers import Container, Horizontal
 from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Static
-from textual.containers import Horizontal
 
-from zodiac.message_panel import MessagePanel
+from zodiac.chat_machine import BasicImageSignature, ChatMachineWithMemory, QASignature
 from zodiac.display_bar import DisplayBar
 from zodiac.flip import Flip
 from zodiac.graph import IntentProcessor
 from zodiac.input_tag import InputTag
+from zodiac.message_panel import MessagePanel
 from zodiac.output_tag import OutputTag
 from zodiac.response_panel import ResponsePanel
 from zodiac.selectah import Selectah
 from zodiac.voice_panel import VoicePanel
-import multiprocessing as mp
-import asyncio
-import os
-import psutil
 
 lock = asyncio.Lock()
 
@@ -65,7 +65,8 @@ class Fold(Screen[bool]):
     tx_data: dict = {}
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
-    chat: dspy_Module = None
+    chat: dspy_Module = ChatMachineWithMemory(max_workers=8)  # and this
+
     mode_in: reactive[str] = reactive("text")
     mode_out: reactive[str] = reactive("text")
     models: reactive[list[tuple[str, str]]] = reactive([("", "")])
@@ -73,7 +74,7 @@ class Fold(Screen[bool]):
     def compose(self) -> ComposeResult:
         """Textual API widget constructor, build graph, apply custom widget classes"""
         # from textual.widgets import Footer
-        from nnll_15 import from_cache
+        from mir.registry_entry import from_cache
 
         self.int_proc = IntentProcessor()
 
@@ -122,13 +123,6 @@ class Fold(Screen[bool]):
         self.ui["rs"] = self.query_one("#response_swap")
         self.ui["mp"].focus()
         self.next_intent()
-
-    # # @work(exclusive=True)
-    # async def init_graph(self) -> None:
-    #     """Construct graph"""
-    #     if self.int_proc.models is not None:
-    #         self.next_intent()
-    #         # id_name = self.input_tag.highlight_link_id
 
     @work(exit_on_error=False)
     async def on_resize(self, event=events.Resize) -> None:
@@ -198,7 +192,8 @@ class Fold(Screen[bool]):
             event.prevent_default()
             self.ui["rp"].workers.cancel_group(self.ui["rp"], "chat")
             self.ui["sl"].set_classes("selectah")
-            self.notify(message="Awaiting reply...", title="Active", severity="information")
+            model_name = await self.pull_registry_entry(model=True)
+            self.notify(message=f"Awaiting reply from {os.path.basename(model_name)}...", title="Active", severity="information")
             self.ui["sl"].add_class("active")
             self.next_intent(io_only=False, bypass_send=False)
 
@@ -215,11 +210,15 @@ class Fold(Screen[bool]):
                 self.ui["vm"].play_audio()
 
         if is_char("`", "grave_accent"):
-            self.notify("Recording audio...", severity="information")
+            await self.notify_recording()
             self.mode_in = "speech"
             self.ui["it"].skip_to(self.mode_in)
-            self.ui["vm"].record_audio()
-            self.audio_to_token()
+            await self.ui["vm"].record_audio()
+            await self.audio_to_token()
+
+    async def notify_recording(self):
+        self.notify("Recording audio...", severity="information")
+        return None
 
     @work(exit_on_error=True)
     async def safe_exit(self) -> None:
@@ -236,17 +235,20 @@ class Fold(Screen[bool]):
         """Transmit info to token calculation"""
         message = self.ui["mp"].text
         if self.int_proc.models:
-            next_model = next(iter(self.int_proc.models))[1]
-            self.ui["db"].show_tokens(next_model, message=message)
+            token_model = await self.pull_registry_entry(model=True)
+            self.ui["db"].show_tokens(token_model, message=message)
 
-    @work(exclusive=True)
     async def audio_to_token(self, top: bool = True) -> None:
         """Transmit audio to sample length
         :param top: Selector for audio panel top or bottom
         """
         panel = "vm" if top else "vr"
-        duration = self.ui[panel].time_audio()
-        self.ui["db"].show_time(duration)
+        if self.ui[panel].sample_freq > 1:
+            duration = len(self.ui[panel].audio) / self.ui[panel].sample_freq
+        else:
+            duration = 0.0
+        duration = self.ui["db"].show_time(duration)
+        return duration
 
     # @work(exclusive=True)
     def ready_tx(
@@ -258,7 +260,8 @@ class Fold(Screen[bool]):
         """Retrieve graph data, prepare to send"""
 
         self.int_proc.set_path(mode_in=mode_in, mode_out=mode_out)
-        self.int_proc.set_ckpts()
+        self.int_proc.set_reg_entries()
+        nfo(f"triggered recalculation : {self.int_proc.coord_path} {self.int_proc.reg_entries}")
         if not io_only:
             self.tx_data = {
                 "text": self.ui["mp"].text,
@@ -267,7 +270,7 @@ class Fold(Screen[bool]):
                 # "image": self.image_panel.image #  active video feed / screenshot / import file
             }
 
-    @work(exclusive=True)
+    # @work(exclusive=True)
     async def walk_intent(self, bypass_send=True) -> None:
         """Provided the coordinates in the intent processor, follow the list of in and out methods\n
         :param bypass_send: Find intent path, but do not process, defaults to True
@@ -293,27 +296,27 @@ class Fold(Screen[bool]):
     async def send_tx(self) -> Any:
         """Transfer path and promptmedia to generative processing endpoint
         :param last_hop: Whether this is the user-determined objective or not"""
+
         self.ui["rp"].move_cursor(self.ui["rp"].document.end)
         self.ui["rp"].insert("\n---\n")
         self.ui["sl"].add_class("active")
-        ckpt = self.ui["sl"].selection
-        if ckpt is None:
-            ckpt = next(iter(self.int_proc.ckpts)).get("entry")
-        dbug(f"Graph extraction : {ckpt}")
-        from nnll_11 import QASignature, BasicImageSignature
-
-        sig = QASignature if self.mode_out != "image" else BasicImageSignature
-        self.ui["rp"].pass_req(sig=sig, tx_data=self.tx_data, ckpt=ckpt, out_type=self.mode_out)
+        streaming = self.mode_out == "text"
+        edge_data = await self.pull_registry_entry()
+        registry_entries = edge_data["entry"]
+        if self.mode_out == "image":
+            sig = BasicImageSignature
+        else:
+            sig = QASignature
+        if registry_entries != self.chat.reg_entries or self.chat.streaming != streaming or sig != self.chat.sig:
+            dbug(f"Graph extraction : {registry_entries}")
+            self.chat(reg_entries=registry_entries, sig=sig, streaming=streaming)
+        self.ui["rp"].synthesize(chat=self.chat, tx_data=self.tx_data, mode_out=self.mode_out)
 
     def stop_gen(self) -> None:
         """Cancel the inference processing of a model"""
         self.ui["rp"].workers.cancel_all()
         self.notify("Cancelled processing!", severity="error")
         self.ui["sl"].set_classes("selectah")
-
-    # async def action_undo_clear(self) -> None:
-    #     self.ui["mp"].undo()
-    #     self.ui["mp"].undo()
 
     @work(exclusive=True)
     async def clear_input(self) -> None:
@@ -322,12 +325,16 @@ class Fold(Screen[bool]):
             if self.ui["mp"].has_focus:
                 self.ui["mp"].erase_message()
                 self.notify("Text prompt emptied.", severity="error", markup=True)  # [@click="undo_clear()"]UNDO[/]""", )
-            self.ui["vm"].erase_audio()
-            self.audio_to_token()
+            else:
+                await self.ui["vm"].erase_audio()
+                await self.audio_to_token()
+                self.notify("Audio prompt emptied.", severity="error")
+                return None
         elif self.ui["rd"].has_focus_within:
-            self.ui["vr"].erase_audio()
+            await self.ui["vr"].erase_audio()
             self.notify("Audio prompt emptied.", severity="error")
-            self.audio_to_token(top=False)
+            await self.audio_to_token(top=False)
+            return None
 
     async def watch_mode_in(self, mode_in: str) -> None:  # pylint: disable=unused-argument
         """Textual API event trigger, Recalculate path when input is changed"""
@@ -347,14 +354,26 @@ class Fold(Screen[bool]):
         """
         self.ready_tx(io_only=io_only, mode_in=self.mode_in, mode_out=self.mode_out)
         if self.int_proc.has_graph() and self.int_proc.has_path():
-            self.walk_intent(bypass_send=bypass_send)
+            await self.walk_intent(bypass_send=bypass_send)
         if not hasattr(self.ui["sl"], "prompt") or self.int_proc.models is None:
-            pass
+            nfo("intent processor models not available")
         elif self.int_proc.models is None and hasattr(self.ui.get("sl"), "prompt"):
             self.ui["sl"].set_options = [("No models", "No Models.")]
         elif hasattr(self.ui["sl"], "prompt"):
             self.ui["sl"].set_options(self.int_proc.models)
             self.ui["sl"].prompt = next(iter(self.int_proc.models))[0]
+
+    async def pull_registry_entry(self, model: bool = False) -> Union[RegistryEntry, dict]:
+        """Determine the RegistryEntry\n
+        :param model: Provide only model attribute of RegistryEntry, defaults to False
+        :return: _description_
+        """
+
+        edge = next(iter(self.int_proc.models))[1]
+        registry_entry = self.int_proc.intent_graph[self.mode_in][self.mode_out][edge]
+        if not model:
+            return registry_entry
+        return registry_entry["entry"].model
 
 
 class ResponsiveLeftTop(Container):

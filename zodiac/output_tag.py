@@ -3,7 +3,7 @@
 
 from textual.reactive import reactive
 from textual.screen import Screen
-from nnll_01 import debug_monitor
+from nnll.monitor.file import debug_monitor
 from zodiac.carousel import Carousel
 
 

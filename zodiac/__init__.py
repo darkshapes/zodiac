@@ -8,6 +8,7 @@ mp.set_start_method("spawn", force=True)
 
 import sys
 import os
+from nnll.configure import HOME_FOLDER_PATH
 
 # pylint:disable=import-outside-toplevel
 sys.path.append(os.getcwd())
@@ -20,7 +21,7 @@ def set_env(args: bool) -> None:
     import platform
 
     if platform.system().lower() == "darwin":
-        import multiprocessing as mp
+        # patches async issues with torch and MacOS
 
         mp.set_start_method("fork", force=True)
 
@@ -60,8 +61,12 @@ def set_env(args: bool) -> None:
         litellm.disable_hf_tokenizer_download = not args.net  # -net = True -> disable download = False/0
         os.environ["DISABLE_END_USER_COST_TRACKING"] = "True"
 
+        # huggingface_hub.constants.HF_HUB_VERBOSITY
+
     except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
         pass
+
+    USER_PATH_NAMED = os.path.join(HOME_FOLDER_PATH, "config.toml")
 
 
 def main() -> None:
@@ -75,7 +80,7 @@ def main() -> None:
 
     import argparse
     from zodiac.__main__ import Combo
-    from nnll_01 import nfo
+    from nnll.monitor.file import nfo
 
     parser = argparse.ArgumentParser(description="Multimodal generative media sequencer")
     parser.add_argument("-n", "--net", action="store_true", help="Allow network access (for downloading requirements)")

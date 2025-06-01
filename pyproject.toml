@@ -9,11 +9,23 @@ readme      = "README.md"
 
 requires-python = ">=3.11"
 dependencies = [
-    "nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-12,nnll-13,nnll-14,nnll-15,nnll-62] @ git+https://github.com/darkshapes/nnll@main",
-    "numpy>=2.2.5",
-    "sympy>=1.13.3",
+    "dspy>=2.6.13",
+    "huggingface-hub[hf-transfer,hf-xet]>=0.32.3",
+    "litellm>=1.67.1",
+    "matplotlib>=3.10.1",
+    "networkx>=3.4.2",
+    "numpy>=2.2.6",
+    "sounddevice>=0.5.1",
     "textual-dev>=1.7.0",
+    "textual-plotext>=1.0.1",
+    "textual[syntax]>=3.1.1",
+    "tiktoken>=0.9.0",
+    "viztracer>=1.0.3",
+    "mir @ git+https://github.com/darkshapes/mir@main",
+    "nnll @ git+https://github.com/darkshapes/nnll@main",
+    "soundfile>=0.13.1",
 ]
+
 
 [project.scripts]
 zodiac = "zodiac.__init__:main"
@@ -23,23 +35,15 @@ astra  = "astra.__init__:main"
 Homepage = "https://github.com/darkshapes/zodiac"
 
 [project.optional-dependencies]
-ollama    = ["ollama>=0.4.8"]
-lmstudio  = ["lmstudio>=1.2.0"]
-hub       = ["huggingface-hub[hf-transfer,hf_xet]>=0.30.2"]
-vllm      = ["vllm ; platform_system== 'linux' or platform_system == 'windows'"]
-cortex    = ["openai>=1.75.0"]
-llamafile = ["openai>=1.75.0"]
-torch-cpu = ["torch>=2.7.0", "torchvision>=0.22.0", "torchaudio"]
-full      = ["zodiac[ollama,lmstudio,hub,vllm,cortex]"]
-
-dev = [
-    "matplotlib>=3.10.1",
-    "pytest>=8.3.5",
-    "pytest-asyncio>=0.26.0",
-    "ruff>=0.11.6",
-    "tiktoken>=0.9.0",
-    "zodiac[full]",
+dev = ["pytest>=8.3.5", "pytest-asyncio>=0.26.0", "ruff>=0.11.6"]
+ollama = ["ollama>=0.5.1"]
+lmstudio = ["lmstudio>=1.3.1"]
+vllm = [
+    "vllm>=0.9.0.1 ; platform_system == 'linux' or platform_system == 'windows'",
 ]
+cortex = ["openai>=1.82.1"]
+llamafile = ["openai>=1.82.1"]
+full = ["zodiac[ollama,lmstudio,hub,vllm,cortex,llamafile]"]
 
 
 [dependency-groups]
@@ -49,6 +53,7 @@ dev = [
     "pytest>=8.3.5",
     "ruff>=0.11.6",
     "tiktoken>=0.9.0",
+    "zodiac[full]",
 ]
 
 [tool.setuptools]
@@ -59,7 +64,7 @@ line-length    = 140
 include        = ["*.py"]
 extend-exclude = ["^tests/.*$", "test.*$"]
 
-[tool.ruff.format]
+# [tool.ruff.format]
 # exclude = ["*.py"]
 
 [tool.pylint]
@@ -75,5 +80,6 @@ ignore-overlong-task-comments = true
 files.extend-exclude = ["^tests/.*$", "test.*$"]
 default.extend-words = { "ot" = "ot" }
 
-# [tool.uv]
-# nnll = { git = "https://github.com/darkshapes/nnll/" }
+[tool.uv.sources]
+nnll = { git = "https://github.com/darkshapes/nnll", rev = "main" }
+mir  = { git = "https://github.com/darkshapes/mir", rev = "main" }

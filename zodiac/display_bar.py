@@ -37,8 +37,9 @@ class DisplayBar(DataTable):
         self.update_cell_at((0, 1), f"{token_count}{self.unit_labels[1]}")
         self.update_cell_at((0, 2), f"{self.duration}{self.unit_labels[2]}")
 
-    @work(exclusive=True)
-    async def show_time(self, duration: float) -> None:
+    # @work(exclusive=True)
+    def show_time(self, duration: float) -> None:
         """Live display of sound recording length"""
-        self.duration = duration if duration > 0.0 else 0.0
+        self.duration = duration if duration != 0 else 0.0
         self.update_cell_at((0, 2), f"{self.duration}{self.unit_labels[2]}", update_width=True)
+        return self.duration

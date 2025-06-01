@@ -3,12 +3,10 @@
 
 # pylint: disable=missing-module-docstring, disable=missing-class-docstring
 
-from textual import work, events, on
+from textual import events, on
 from textual.app import App
-from textual.binding import Binding
-from textual.reactive import reactive
 
-# from nnll_01 import nfo
+# from nnll.monitor.file import nfo
 from zodiac.main_screen import Fold  # pylint: disable=import-error
 
 # from theme import fluoresce_theme

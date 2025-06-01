@@ -7,21 +7,21 @@
 import sys
 import os
 import networkx as nx
-from typing import Union, Any
+from typing import Optional, Any
 # pylint:disable=import-outside-toplevel
 
-from nnll_01 import debug_monitor, nfo, dbug
-from nnll_15 import from_cache
+from nnll.monitor.file import debug_monitor, nfo, dbug
+from mir.registry_entry import from_cache
 
 sys.path.append(os.getcwd())
 
 
 class IntentProcessor:
-    intent_graph: dict = None
-    coord_path: list[str] | None = None
-    ckpts: list[dict[dict]] = None
-    models: list[tuple[str]] | None = None
-    weight_idx: list[str] | None = []
+    intent_graph: Optional[dict[nx.Graph]] = None
+    coord_path: Optional[list[str]] = None
+    reg_entries: Optional[list[dict[dict]]] = None
+    models: Optional[list[tuple[str]]] = None
+    weight_idx: Optional[list[str]] = None
     # additional_model_names: dict = None
 
     def __init__(self, intent_graph: nx.MultiDiGraph = nx.MultiDiGraph()) -> None:
@@ -36,13 +36,13 @@ class IntentProcessor:
         Thus: All possible node start and end points listed in A are included in graph B.\n
         Therefore : It is impossible to call a node that does not exist.\n
         """
-        from nnll_15 import VALID_CONVERSIONS  # , RegistryEntry,
+        from mir.constants import VALID_CONVERSIONS  # , RegistryEntry,
 
         self.intent_graph = intent_graph
         self.intent_graph.add_nodes_from(VALID_CONVERSIONS)
 
     @debug_monitor
-    def calc_graph(self, registry_entries: list = from_cache()) -> None:
+    def calc_graph(self, registry_entries: Optional[list] = None) -> None:
         """Generate graph of coordinate pairs from valid conversions\n
         Model libraries are auto-detected from cache loading\n
         :param registry_data: Registry function or method of calling registry, defaults to
@@ -55,6 +55,8 @@ class IntentProcessor:
         Thus: Because of the randomness of B, the set P is unlikely to construct a complete graph attached all available points.\n
         Therefore : While we can trust a node exists, we **CANNOT** trust the system has an edge to reach it\n
         """
+        if not registry_entries:
+            registry_entries = from_cache()
         nfo("Building graph...")
         if registry_entries is None:
             nfo("Registry error, graph attributes not applied.")
@@ -68,11 +70,11 @@ class IntentProcessor:
                 except AttributeError as error_log:
                     dbug(error_log)
                     nfo("Error: Registry initialized but not populated with data. Graph could not create edges.")
-        nfo("Complete {self.intent_graph}")
+        nfo(f"Complete {self.intent_graph}")
         return self.intent_graph
 
     @debug_monitor
-    def has_graph(self) -> None:
+    def has_graph(self) -> bool:
         """A check to verify the graph has been created"""
         try:
             assert self.intent_graph is not None
@@ -82,7 +84,7 @@ class IntentProcessor:
         return True
 
     @debug_monitor
-    def has_path(self) -> None:
+    def has_path(self) -> bool:
         """A check to verify the path has been created"""
         try:
             assert self.coord_path is not None
@@ -92,11 +94,11 @@ class IntentProcessor:
         return True
 
     @debug_monitor
-    def has_ckpt(self) -> None:
+    def has_reg_entries(self) -> bool:
         """A check to verify model checkpoints are available"""
         try:
-            assert self.ckpts is not None
-            assert len(self.ckpts) >= 1
+            assert self.reg_entries is not None
+            assert len(self.reg_entries) >= 1
         except AssertionError as error_log:
             dbug(error_log)
             return False
@@ -112,7 +114,6 @@ class IntentProcessor:
         """
 
         self.has_graph()
-        self.weight_idx = []
         if nx.has_path(self.intent_graph, mode_in, mode_out):  # Ensure path exists (otherwise 'bidirectional' may loop infinitely)
             # Self loops in the multidirected graph complete themselves
             # In practice, this means often the same model can be used to compute prompt input and response output
@@ -127,47 +128,36 @@ class IntentProcessor:
                 self.coord_path = nx.bidirectional_shortest_path(self.intent_graph, mode_in, mode_out)
                 if len(self.coord_path) == 1:
                     self.coord_path.append(mode_out)  # this behaviour likely to change in future
+        else:
+            nfo("No Path available...")
 
     @debug_monitor
-    def set_ckpts(self) -> None:
-        """Populate models list for text fields and sort by weight"""
-        from nnll_05 import pull_path_entries
-
+    def set_reg_entries(self) -> None:
+        """Populate models list for text fields
+        Check if model has been adjusted, if so adjust list
+        1.0 weight bottom, <1.0 weight top"""
         self.has_graph()
         self.has_path()
         try:
-            self.ckpts = pull_path_entries(self.intent_graph, self.coord_path)
+            self.reg_entries = self.pull_path_entries(self.intent_graph, self.coord_path)
         except KeyError as error_log:
             dbug(error_log)
             return ["", ""]
-
-        if len(self.ckpts) != 0:
-            norm_model = []
-            self.models = []
-            for registry in self.ckpts:
+        idx = 0
+        self.models = []
+        if self.reg_entries:
+            for edge, registry in enumerate(self.reg_entries):
                 model = registry["entry"].model
-                weight = registry.get("weight")
-                self.ckpts = sorted(self.ckpts, key=lambda x: x["weight"])
-                if weight != 1.0:
-                    adj_model = (f"*{os.path.basename(model)}", model)
-                    if adj_model not in self.weight_idx:
-                        self.weight_idx.append(adj_model)
-                    nfo(f"adjusted {self.weight_idx}")
-                    self.models.insert(self.weight_idx.index(adj_model), adj_model)
-                    nfo("Adjusted model :", f"*{os.path.basename(model)}", weight)
-                else:
-                    norm_model = (os.path.basename(model), model)
-                    self.models.append(norm_model)
-                    if self.weight_idx and self.weight_idx.count(norm_model) > 0:
-                        self.weight_idx.remove(norm_model)
-
-            # if self.weight_idx is None:
-            #     self.models.extend(norm_model)
-
-            # if isinstance(norm_model[0], tuple):
-            #     self.models.extend(norm_model)
-            # else:
-            #     self.models.append(norm_model)
+                nfo(f"node {edge}")
+                adj_model = (os.path.basename(model), edge)
+                self.models.append(adj_model)
+            self.weight_idx = self.weight_idx or []
+            for model in self.weight_idx:
+                if model in self.models:
+                    self.models.remove(model)
+                    adj_model = (f"*{model[0]}", model[1])
+                    self.models.insert(idx, adj_model)
+                    idx += 1
 
     @debug_monitor
     def edit_weight(self, selection: str, mode_in: str, mode_out: str) -> None:
@@ -177,39 +167,53 @@ class IntentProcessor:
         :param mode_out: The target type, , representing a source graph node
         :raises ValueError: No models fit the request
         """
-        from nnll_60.mir_maid import MIRDatabase
+        from mir.mir_maid import MIRDatabase
 
-        reg_entries = [nbrhood for _, nbrhood in self.intent_graph.adjacency()]
+        self.weight_idx = self.weight_idx or []
         try:
-            if not reg_entries[0].get(mode_out):  # if there is no path to get to `mode_out`
-                raise ValueError("No models available for path.")
-        except (IndexError, ValueError, nx.exception.NodeNotFound) as error_log:  # if there is no edge towards `mode_out`
+            if not nx.has_path(self.intent_graph, mode_in, mode_out):
+                raise KeyError()
+            target = os.path.basename(self.intent_graph[mode_in][mode_out][selection]["entry"].model)
+        except KeyError as error_log:
+            nfo(f"Failed to adjust weight of '{selection}' within registry contents '{self.intent_graph} {mode_in} {mode_out}'. Model or registry entry not found. ")
             dbug(error_log)
-            nfo(f"Failed to adjust weight of '{selection}' within registry contents '{reg_entries}'. Model or registry entry not found. ")
+            return self.set_reg_entries()
+        entries = []
+        for index, reg in self.intent_graph[mode_in][mode_out].items():
+            entries.append([reg["entry"].model, index, "", ""])
+        nfo(f"graph weight : {entries} {mode_in} {mode_out} {target} \n")
+        edge, _ = MIRDatabase.grade_char_match(entries, target)
+        nfo(edge)
+        entries = []
+        if edge is None:
+            self.set_reg_entries()
+            return
+        model = self.intent_graph[mode_in][mode_out][edge]["entry"].model
+        weight = self.intent_graph[mode_in][mode_out][edge]["weight"]
+        item = (os.path.basename(model), edge)
+        nfo(f" model : {model}  weight: {weight} ")
+        if weight < 1.0:
+            self.intent_graph[mode_in][mode_out][edge]["weight"] = round(weight + 0.1, 1)
+            self.models = [((f"*{os.path.basename(model)}", edge))]
+            if item in self.weight_idx:
+                self.weight_idx.remove(item)
         else:
-            entries = []
-            for i in reg_entries[0][mode_out]:
-                entries.append(reg_entries[0][mode_out][i].get("entry").model)
-            index, _ = MIRDatabase.grade_char_match(selection, entries)
-            if index is None:
-                self.set_ckpts()
-                return
-            try:
-                model = reg_entries[0][mode_out][index].get("entry").model
-            except IndexError as error_log:
-                dbug(error_log)
-                nfo(f"Failed to locate index for '{selection}' within registry contents '{reg_entries}'.")
-            else:
-                weight = reg_entries[0][mode_out][index].get("weight")
-                nfo("Model pre-adjustment : ", model, index, weight)
-                graph_edge = self.intent_graph[mode_in][mode_out]
-                if weight < 1.0:
-                    graph_edge[index]["weight"] = round(weight + 0.1, 1)
-                    self.models = [((f"*{os.path.basename(model)}", model))]
-                else:
-                    graph_edge[index]["weight"] = round(weight - 0.1, 1)
-                nfo("Weight changed for: ", graph_edge[index]["entry"].model, f"model # {index}")
-                dbug("Confirm :", graph_edge)
+            self.intent_graph[mode_in][mode_out][edge]["weight"] = round(weight - 0.1, 1)
+            self.weight_idx.append(item)
+        nfo(self.intent_graph[mode_in][mode_out][edge])
+        self.set_reg_entries()
 
-        finally:
-            self.set_ckpts()
+    @debug_monitor
+    def pull_path_entries(self, nx_graph: nx.Graph, traced_path: list[tuple]) -> None:
+        """Create operating instructions from user input
+        Trace the next hop along the path, collect all compatible models
+        Set current model based on weight and next available"""
+
+        registry_entries = []
+        if traced_path is not None and nx.has_path(nx_graph, traced_path[0], traced_path[1]):
+            registry_entries = [  # ruff : noqa
+                nx_graph[traced_path[i]][traced_path[i + 1]][hop]  #
+                for i in range(len(traced_path) - 1)  #
+                for hop in nx_graph[traced_path[i]][traced_path[i + 1]]  #
+            ]
+        return registry_entries

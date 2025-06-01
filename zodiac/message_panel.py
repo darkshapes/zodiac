@@ -4,7 +4,7 @@ from textual import work
 from textual.widgets import TextArea
 
 
-# from nnll_01 import debug_monitor
+# from nnll.monitor.file import debug_monitor
 
 
 class MessagePanel(TextArea):
