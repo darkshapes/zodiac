@@ -4,7 +4,7 @@
 from textual.screen import Screen
 from textual.reactive import reactive
 from textual.widgets import ContentSwitcher
-# from nnll_01 import nfo
+# from nnll.monitor.file import nfo
 
 
 class Flip(ContentSwitcher):

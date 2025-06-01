@@ -15,6 +15,7 @@ img_src/screenshot.png
 img_src/zodiac_dark_bg.png
 img_src/zodiac_dark_stealth.png
 img_src/zodiac_light_stealth.png
+tests/test_chat_machine.py
 tests/test_edges.py
 tests/test_flow.py
 tests/test_flow_second.py
@@ -23,13 +24,16 @@ tests/test_inference.py
 tests/test_init_exit.py
 tests/test_model_register.py
 tests/test_orientation.py
+tests/test_prioritize.py
 tests/test_swap_panel.py
 tests/test_vizualizer.py
 tests/test_weight.py
+tests/test_weight_keying.py
 tests/test_widget_mounts.py
 zodiac/__init__.py
 zodiac/__main__.py
 zodiac/carousel.py
+zodiac/chat_machine.py
 zodiac/combo.tcss
 zodiac/display_bar.py
 zodiac/flip.py

@@ -1,26 +1,25 @@
-# from nnll_15 import RegistryEntry, from_cache
-# from nnll_01 import dbug
+# from mir.registry_entry import RegistryEntry, from_cache
+# from nnll.monitor.file import dbug
 
 # from dspy import Module as dspy_Module
 # import networkx as nx
 
 
-# # from nnll_11 import BasicImageSignature
-# # from nnll_15.constants import LibType
+# # from zodiac.chat_machine import BasicImageSignature
+# # from mir.constants import LibType
 # # import asyncio
-# # from nnll_01 import nfo, dbug
+# # from nnll.monitor.file import nfo, dbug
 # # from zodiac.__main__ import Combo
 # # from nnll_05 import lookup_function_for
 # # from nnll_64 import run_inference
-
 
 
 # from click import prompt
 
 
 # def flow_builder_test(mode_in: str = "text", mode_out: str = "text"):
-# from nnll_01 import nfo
-# from nnll_15.constants import VALID_CONVERSIONS
+# from nnll.monitor.file import nfo
+# from mir.constants import VALID_CONVERSIONS
 # from zodiac.graph import IntentProcessor
 
 # graph.set_path(mode_in=mode_in, mode_out=mode_out)
@@ -45,7 +44,6 @@
 #         self.first_in = first_in
 #         self.last_out = last_out
 #         self.tx_data: dict = None
-
 
 
 #     def walk_intent(self, mode_in:str , mode_out: str, bypass_send=True) -> None:
@@ -94,7 +92,7 @@
 #         from nnll_05 import lookup_function_for
 
 #         ckpt = next(iter(self.graph.ckpts)).get("entry") if ckpt is None else ckpt
-#         from nnll_11 import QASignature, BasicImageSignature
+#         from zodiac.chat_machine import QASignature, BasicImageSignature
 
 #         sig = QASignature
 #         if mode_out == "image":
@@ -102,7 +100,7 @@
 #             constructor, mir_arch = lookup_function_for(ckpt.model)
 #             constructor(mir_arch)
 #         else:
-#             from nnll_11 import ChatMachineWithMemory
+#             from zodiac.chat_machine import ChatMachineWithMemory
 
 #             chat_args = {
 #                 "tx_data": tx_data,

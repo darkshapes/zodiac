@@ -2,9 +2,9 @@
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 import pytest
 from unittest import TestCase
-from nnll_01 import nfo
-from nnll_15 import from_cache
-from nnll_15.constants import VALID_CONVERSIONS
+from nnll.monitor.file import nfo
+from mir.registry_entry import from_cache
+from mir.constants import VALID_CONVERSIONS
 from test_graph import mock_hub_data, mock_ollama_data
 
 

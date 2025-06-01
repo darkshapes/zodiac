@@ -2,9 +2,9 @@
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 from unittest import TestCase
 import pytest
-from nnll_01 import nfo
-from nnll_15 import from_cache
-from nnll_15.constants import VALID_CONVERSIONS
+from nnll.monitor.file import nfo
+from mir.registry_entry import from_cache
+from mir.constants import VALID_CONVERSIONS
 from test_graph import mock_hub_data, mock_ollama_data, test_mocked_hub, test_mocked_ollama, test_mocked_hub
 
 
@@ -18,8 +18,8 @@ class TestFlow:
 
     def test_flow_builder_edge_create_success(self, mock_ollama_data, mock_hub_data, mode_in: str = "text", mode_out: str = "speech"):
         from pytest import raises
-        from nnll_15 import RegistryEntry
-        from nnll_15.constants import LibType
+        from mir.registry_entry import RegistryEntry
+        from mir.constants import LibType
         from zodiac.graph import IntentProcessor
 
         self.graph = IntentProcessor()

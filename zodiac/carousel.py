@@ -3,12 +3,12 @@
 
 """Selection Function"""
 
-from textual import events, work
+from textual import events
 from textual.widgets import DataTable
 from textual.screen import Screen
 from textual.reactive import reactive
 
-from nnll_01 import debug_monitor, nfo  # dbug,
+from nnll.monitor.file import debug_monitor  # , nfo  # dbug,
 
 
 class Carousel(DataTable):
@@ -37,7 +37,7 @@ class Carousel(DataTable):
         #### ASSUMING\n
         A: User has the choice to select TAG OR select direction ARROW
         B: We do not know without an operation what the content of the selection is
-        Therefore: We cannot use textual's `coordinate_to_cell_key` without incuring computational cost
+        Therefore: We cannot use textual's `coordinate_to_cell_key` without incurring computational cost
 
         We are also assuming there is no way for user to change BOTH INPUT and OUTPUT tags at the same time
         """

@@ -6,35 +6,37 @@ Project-URL: Homepage, https://github.com/darkshapes/zodiac
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: nnll[nnll-01,nnll-05,nnll-06,nnll-11,nnll-12,nnll-13,nnll-14,nnll-15,nnll-62]@ git+https://github.com/darkshapes/nnll@main
-Requires-Dist: numpy>=2.2.5
-Requires-Dist: sympy>=1.13.3
+Requires-Dist: dspy>=2.6.13
+Requires-Dist: huggingface-hub[hf-transfer,hf-xet]>=0.32.3
+Requires-Dist: litellm>=1.67.1
+Requires-Dist: matplotlib>=3.10.1
+Requires-Dist: networkx>=3.4.2
+Requires-Dist: numpy>=2.2.6
+Requires-Dist: sounddevice>=0.5.1
 Requires-Dist: textual-dev>=1.7.0
-Provides-Extra: ollama
-Requires-Dist: ollama>=0.4.8; extra == "ollama"
-Provides-Extra: lmstudio
-Requires-Dist: lmstudio>=1.2.0; extra == "lmstudio"
-Provides-Extra: hub
-Requires-Dist: huggingface-hub[hf-transfer,hf_xet]>=0.30.2; extra == "hub"
-Provides-Extra: vllm
-Requires-Dist: vllm; (platform_system == "linux" or platform_system == "windows") and extra == "vllm"
-Provides-Extra: cortex
-Requires-Dist: openai>=1.75.0; extra == "cortex"
-Provides-Extra: llamafile
-Requires-Dist: openai>=1.75.0; extra == "llamafile"
-Provides-Extra: torch-cpu
-Requires-Dist: torch>=2.7.0; extra == "torch-cpu"
-Requires-Dist: torchvision>=0.22.0; extra == "torch-cpu"
-Requires-Dist: torchaudio; extra == "torch-cpu"
-Provides-Extra: full
-Requires-Dist: zodiac[cortex,hub,lmstudio,ollama,vllm]; extra == "full"
+Requires-Dist: textual-plotext>=1.0.1
+Requires-Dist: textual[syntax]>=3.1.1
+Requires-Dist: tiktoken>=0.9.0
+Requires-Dist: viztracer>=1.0.3
+Requires-Dist: mir@ git+https://github.com/darkshapes/mir@main
+Requires-Dist: nnll@ git+https://github.com/darkshapes/nnll@main
+Requires-Dist: soundfile>=0.13.1
 Provides-Extra: dev
-Requires-Dist: matplotlib>=3.10.1; extra == "dev"
 Requires-Dist: pytest>=8.3.5; extra == "dev"
 Requires-Dist: pytest-asyncio>=0.26.0; extra == "dev"
 Requires-Dist: ruff>=0.11.6; extra == "dev"
-Requires-Dist: tiktoken>=0.9.0; extra == "dev"
-Requires-Dist: zodiac[full]; extra == "dev"
+Provides-Extra: ollama
+Requires-Dist: ollama>=0.5.1; extra == "ollama"
+Provides-Extra: lmstudio
+Requires-Dist: lmstudio>=1.3.1; extra == "lmstudio"
+Provides-Extra: vllm
+Requires-Dist: vllm>=0.9.0.1; (platform_system == "linux" or platform_system == "windows") and extra == "vllm"
+Provides-Extra: cortex
+Requires-Dist: openai>=1.82.1; extra == "cortex"
+Provides-Extra: llamafile
+Requires-Dist: openai>=1.82.1; extra == "llamafile"
+Provides-Extra: full
+Requires-Dist: zodiac[cortex,hub,llamafile,lmstudio,ollama,vllm]; extra == "full"
 Dynamic: license-file
 
 
@@ -78,25 +80,30 @@ Zodiac is a creative research platform for Generative AI. Guided by text, audio,
 Supported HuggingFace Models list </summary>
 
 - Alpha-VLLM/Lumina-Image-2.0
-- black-forest-labs/FLUX.1-dev
-- black-forest-labs/FLUX.1-schnell
+- black-forest-labs/FLUX.1-dev | schnell
 - fal/AuraFlow-v0.3
 - Freepik/flux.1-lite-8B
 - Kwai-Kolors/Kolors-diffusers
 - PixArt-alpha/PixArt-Sigma-XL-2-1024-MS
-- playgroundai/playground-v2.5-1024px-aesthetic
-- shuttleai/shuttle-3-diffusion
-- shuttleai/shuttle-3.1-aesthetic
-- stabilityai/stable-diffusion-3.5-large
-- stabilityai/stable-diffusion-3.5-medium
-- stabilityai/stable-diffusion-xl-base-1.0
-- stabilityai/stable-diffusion-xl-refiner-1.0
+- playgroundai/playground-v2.5-1024px | aesthetic
+- shuttleai/shuttle-3.1-diffusion/aesthetic
+- stabilityai/stable-diffusion-3.5-large | medium
+- stabilityai/stable-diffusion-xl-base | refiner-1.0
+- stabilityai/stable-cascade
 - THUDM/CogView3-Plus-3B
 - THUDM/CogView4-6B
 
-More soon..
-
-
+More soon..<br>
+- [ ] facebook/audiogen-medium
+- [ ] microsoft/Phi-4-multimodal-instruct
+- [ ] Alpha-VLLM/Lumina-mGPT-768
+- [ ] parler-tts/parler-tts-large-v1
+- [ ] ooutlierr/fuse-dit
+- [ ] yandex/stable-diffusion-3.5-alchemist
+- [ ] lodestones/Chroma
+- [ ] HiDream
+- [ ] TencentARC/flux-mini
+- [ ] Bytedance-Seed/Bagel
 </details>
 
 ### [installation instructions link](https://github.com/darkshapes/sdbx/wiki/Develop)<br>

@@ -5,10 +5,8 @@
 from textual import work
 from textual.screen import Screen
 from textual.widgets import TextArea
-from nnll_01 import nfo  # dbug,
-from nnll_15 import RegistryEntry
-from dspy import Signature, Module as dspy_Module
-from typing import Callable
+from nnll.monitor.file import nfo  # dbug
+from dspy import Module as dspy_Module
 
 
 class ResponsePanel(TextArea):
@@ -49,7 +47,7 @@ class ResponsePanel(TextArea):
 
         from litellm import ModelResponseStream
         from dspy import Prediction
-        import nnll_59 as disk
+        from nnll.metadata import save_generation as disk
 
         nfo("sync")
         nfo(f"chat registry entries : {chat.reg_entries}")
@@ -63,7 +61,6 @@ class ResponsePanel(TextArea):
             metadata.update(gen_data.get("parameters"))
             nfo(f"content type output {content}, {type(content)}")
             disk.write_to_disk(content, metadata)
-            # chat.forward(tx_data=tx_data, mode_out=mode_out)
         else:  # history=history)
             async for chunk in chat.forward(tx_data=tx_data, mode_out=mode_out):
                 async for c in chunk:

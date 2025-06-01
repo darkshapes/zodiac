@@ -10,8 +10,7 @@ from textual.screen import Screen
 from textual.widgets import Select
 from textual.widgets._select import SelectOverlay  # , SelectCurrent,
 
-from nnll_01 import dbug, debug_monitor, nfo
-import os
+from nnll.monitor.file import dbug, debug_monitor, nfo
 
 
 class Selectah(Select):

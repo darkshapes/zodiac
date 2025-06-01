@@ -9,8 +9,8 @@
 # sys.path.append(os.getcwd())
 
 import networkx as nx
-from nnll_01 import dbug, debug_monitor, nfo
-from nnll_15.constants import GenTypeC, GenTypeCText
+from nnll.monitor.file import dbug, debug_monitor, nfo
+from mir.constants import GenTypeC, GenTypeCText
 from textual import events, work
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, VerticalGroup, VerticalScroll
@@ -23,7 +23,7 @@ from zodiac.response_panel import ResponsePanel
 from zodiac.token_counters import tk_count
 from zodiac.voice_panel import VoicePanel
 
-# from nnll_20 import ResponsePanel
+# from zodiac.response_panel import ResponsePanel
 
 
 class ButtonsApp(App[str]):
@@ -73,7 +73,7 @@ class ButtonsApp(App[str]):
         build_button = self.query_one("#build")
         if self.hover_name == "build":
             # event.stop()
-            from nnll_15 import from_cache
+            from mir.registry_entry import from_cache
 
             self.intent_processor = IntentProcessor()
             self.intent_processor.calc_graph(from_cache())

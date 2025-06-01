@@ -4,17 +4,17 @@
 
 # # import matplotlib.pyplot as plt
 # import pytest
-# from nnll_01 import nfo
-# from nnll_15.constants import VALID_CONVERSIONS
+# from nnll.monitor.file import nfo
+# from mir.constants import VALID_CONVERSIONS
 
-# # from nnll_15 import RegistryEntry
+# # from mir.registry_entry import RegistryEntry
 # from unittest import mock
 
 
 # def test_mock_edges(mock_has_api):
 #     from zodiac.graph import IntentProcessor
 #     from datetime import datetime
-#     from nnll_15 import from_cache, RegistryEntry
+#     from mir.registry_entry import from_cache, RegistryEntry
 
 #     int_proc = IntentProcessor()
 #     cache = [

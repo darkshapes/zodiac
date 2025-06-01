@@ -1,7 +1,7 @@
 import pytest
 
 from zodiac.__main__ import Combo
-from nnll_01 import nfo
+from nnll.monitor.file import nfo
 from textual.screen import Screen
 from textual.containers import Horizontal
 

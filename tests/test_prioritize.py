@@ -147,7 +147,7 @@
 # @pytest.mark.asyncio(loop_scope="module")
 # async def test_top_priority_single(mock_ollama_data, mock_hub_data, app=Combo()):
 #     # add star and move to top
-#     from nnll_01 import nfo
+#     from nnll.monitor.file import nfo
 #     import sys
 #     import os
 
@@ -172,7 +172,7 @@
 # @pytest.mark.asyncio(loop_scope="module")
 # async def test_top_priority_multiple_value_add_star(mock_ollama_data, mock_hub_data, app=Combo()):
 #     # add star and move to top
-#     from nnll_01 import nfo
+#     from nnll.monitor.file import nfo
 #     import sys
 #     import os
 

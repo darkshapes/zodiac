@@ -1,9 +1,9 @@
-# from nnll_15 import RegistryEntry
-# from nnll_11 import BasicImageSignature
-# from nnll_15 import from_cache
-# from nnll_15.constants import LibType
+# from mir.registry_entry import RegistryEntry
+# from zodiac.chat_machine import BasicImageSignature
+# from mir.registry_entry import from_cache
+# from mir.constants import LibType
 # import asyncio
-# from nnll_01 import nfo, dbug
+# from nnll.monitor.file import nfo, dbug
 # from zodiac.__main__ import Combo
 # from nnll_05 import lookup_function_for
 # from nnll_64 import run_inference

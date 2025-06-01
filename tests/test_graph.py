@@ -7,10 +7,10 @@
 
 # # import networkx as nx
 # import nnll_01
-# from nnll_01 import dbug, debug_monitor, nfo
+# from nnll.monitor.file import dbug, debug_monitor, nfo
 # # from nnll_05 import lookup_function_for, label_key_prompt  # , split_sequence_by, main
-# from nnll_10 import IntentProcessor
-# # from nnll_15.constants import LibType  # , loop_in_feature_processes
+# from zodiac.graph import IntentProcessor
+# # from mir.constants import LibType  # , loop_in_feature_processes
 # # from tests import test_14_draw_graph
 
 import datetime
@@ -20,8 +20,8 @@ from unittest import mock
 # import matplotlib.pyplot as plt
 import pytest
 from zodiac.graph import IntentProcessor
-from nnll_15.constants import VALID_CONVERSIONS
-from nnll_01 import nfo
+from mir.constants import VALID_CONVERSIONS
+from nnll.monitor.file import nfo
 
 
 class Model:
@@ -174,7 +174,7 @@ def test_mocked_hub(mock_hub_data):
 
 def test_create_graph(mock_ollama_data, mock_hub_data):
     """Run test of graph creation"""
-    from nnll_15 import from_cache
+    from mir.registry_entry import from_cache
 
     int_proc = IntentProcessor()
     nx_graph = int_proc.calc_graph(from_cache())
