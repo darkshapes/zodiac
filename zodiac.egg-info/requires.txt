@@ -1,32 +1,27 @@
-dspy>=2.6.13
-huggingface-hub[hf-transfer,hf-xet]>=0.32.3
-litellm>=1.67.1
-matplotlib>=3.10.1
-networkx>=3.4.2
+dspy>=2.6.27
+litellm>=1.72.0
+matplotlib>=3.10.3
+mir>=0.0.1
+networkx>=3.5
+nnll
 numpy>=2.2.6
-sounddevice>=0.5.1
+sounddevice>=0.5.2
+soundfile>=0.13.1
 textual-dev>=1.7.0
 textual-plotext>=1.0.1
-textual[syntax]>=3.1.1
+textual[syntax]>=3.3.0
 tiktoken>=0.9.0
-viztracer>=1.0.3
-mir@ git+https://github.com/darkshapes/mir@main
-nnll@ git+https://github.com/darkshapes/nnll@main
-soundfile>=0.13.1
-
-[cortex]
-openai>=1.82.1
+viztracer>=1.0.4
 
 [dev]
-pytest>=8.3.5
-pytest-asyncio>=0.26.0
-ruff>=0.11.6
+matplotlib>=3.10.3
+pytest>=8.4.0
+pytest-asyncio>=1.0.0
+ruff>=0.11.12
+zodiac[full]
 
 [full]
-zodiac[cortex,hub,llamafile,lmstudio,ollama,vllm]
-
-[llamafile]
-openai>=1.82.1
+zodiac[lmstudio,ollama,openai]
 
 [lmstudio]
 lmstudio>=1.3.1
@@ -34,7 +29,8 @@ lmstudio>=1.3.1
 [ollama]
 ollama>=0.5.1
 
-[vllm]
+[openai]
+openai>=1.84.0
 
-[vllm:platform_system == "linux" or platform_system == "windows"]
+[vllm]
 vllm>=0.9.0.1
