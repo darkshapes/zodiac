@@ -58,9 +58,9 @@ async def test_chat_instance(mock_signature, mock_predict):
 
     # Create an instance of ChatMachineWithMemory
     max_workers = 8
-    from zodiac.chat_machine import ChatMachineWithMemory
+    from zodiac.chat_machine import VectorMachine
 
-    return ChatMachineWithMemory(max_workers=max_workers)  # sig=mock_signature,
+    return VectorMachine(max_workers=max_workers)  # sig=mock_signature,
 
 
 @pytest.mark.filterwarnings("ignore:open_text")
@@ -91,7 +91,7 @@ async def test_chat_machine_generation(mock_signature, mock_predict, has_api):
     # chat_machine.pipe = None
 
     with patch("zodiac.chat_machine.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
-        chat_machine(reg_entries=PlaceholderClass, sig=mock_signature)
+        chat_machine.active_models(reg_entries=PlaceholderClass, sig=mock_signature)
 
         assert callable(chat_machine.pipe)
         assert chat_machine.pipe is not None

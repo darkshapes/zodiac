@@ -2,14 +2,14 @@
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 # pylint: disable=pointless-statement, unsubscriptable-object
-import array
+
 from typing import Any, Optional
 import dspy
 # from pydantic import BaseModel, Field
 
-from nnll.monitor.file import debug_monitor, dbug, nfo
+from nnll.monitor.file import nfo
 from mir.registry_entry import RegistryEntry
-from mir.constants import LibType, has_api, LIBTYPE_CONFIG
+from mir.constants import LibType
 
 
 ps_sysprompt = "Provide x for Y"
@@ -44,8 +44,8 @@ class QASignature(dspy.Signature):
 
 
 # Don't capture user prompts: AVOID logging this class as much as possible
-class ChatMachineWithMemory(dspy.Module):
-    """Base module for Q/A chats using async and `dspy.Predict` List-based memory
+class VectorMachine(dspy.Module):
+    """Base module for inference using async and `dspy.Predict` List-based memory\n
     Defaults to 5 question history, 4 max workers, and `HistorySignature` query"""
 
     def __init__(self, max_workers=4) -> None:
@@ -70,19 +70,19 @@ class ChatMachineWithMemory(dspy.Module):
         self.import_pkg = None
         self.streaming = True
         self.sig: dspy.Signature = QASignature
+        self.recycle = True
 
-    def __call__(self, reg_entries: RegistryEntry, sig: dspy.Signature, streaming: bool = True) -> Any:
-        """Load model in preparation of
+    def active_models(self, reg_entries: RegistryEntry, sig: dspy.Signature, streaming: bool = True) -> Any:
+        """Prepare model for iniference\n
         :param model: path to model
         :param library: LibType of model origin
         :param streaming: output type flag, defaults to True
         :yield: responses in chunks or response as a single block
         """
-        from httpx import ResponseNotRead
 
-        print("run run run")
         self.reg_entries = reg_entries
         self.sig = sig
+        self.streaming = streaming
         model = self.reg_entries.model
         library = self.reg_entries.library
         lora = None
@@ -97,11 +97,11 @@ class ChatMachineWithMemory(dspy.Module):
                 self.pipe = dspy.Predict(signature=self.sig)
             return self.pipe
         else:
+            from nnll.tensor_pipe import segments
+            from nnll.configure.init_gpu import soft_random, seed_planter, first_available
             # api_kwargs = await get_api(model=model, library=library)
             # generator = dspy.asyncify(constructor)
             # self.completion = dspy.streamify(generator)
-            from nnll.tensor_pipe import segments as techniques
-            from nnll.configure.init_gpu import soft_random, seed_planter
 
             mir_arch = self.reg_entries.mir
             series = mir_arch[0]
@@ -128,10 +128,11 @@ class ChatMachineWithMemory(dspy.Module):
                 "output_type": "pil",
             }
             self.pipe_kwargs.update(user_set)
+
             nfo(f"Pre-generator Model {model}  Pipe {self.pipe} Arguments {self.pipe_kwargs}")  # Lora {lora_opt}
             if "diffusers" in self.import_pkg:
                 self.pipe.to(self.device)
-                self.pipe = techniques.add_generator(pipe=self.pipe, noise_seed=noise_seed)
+                self.pipe = segments.add_generator(pipe=self.pipe, noise_seed=noise_seed)
             else:
                 self.pipe = self.pipe[0]
                 self.pipe.to(self.device)
@@ -139,7 +140,10 @@ class ChatMachineWithMemory(dspy.Module):
                 self.pipe_kwargs.update({"sample_rate": self.pipe.config.sampling_rate})
             elif "parler_tts" in self.import_pkg:
                 self.pipe_kwargs.update({"sampling_rate": self.pipe.config.sampling_rate})
+        self.recycle = True
 
+        if "mps" == first_available(assign=False):
+            self.pipe.enable_attention_slicing()
         return self.pipe, self.import_pkg, self.pipe_kwargs
 
     # Reminder: Don't capture user prompts - this is the crucial stage
@@ -150,32 +154,15 @@ class ChatMachineWithMemory(dspy.Module):
         :param mode_out: output type flag, defaults to "text"
         """
         yield self.pipe(message=tx_data["text"], stream=self.streaming)  # history=history)
-        # else:
-        #     if metadata is None:
-        #         metadata = {}
-        #     # memory threshold formula function returns boolean value here
-        #     prompt = tx_data.get("text", "")
-        #     content = None
-        #     nfo(f"content = {metadata}")
 
-        #     content = self.pipe(prompt=prompt, **self.pipe_kwargs).images[0]
-        #         # may also be video!!
-        #     elif self.import_pkg.get("audiogen", 0):
-        #         content = self.pipe.generate([prompt])
-        #         # metadata = self.pipe.sample_rate
-        #     elif self.import_pkg.get("parler_tts", 0):
-        #         input_ids = self.pipe[1](prompt).input_ids.to(self.device)
-        #         prompt_input_ids = self.pipe[1](prompt).input_ids.to(self.device)
-        #         generation = self.pipe.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
-        #         content = generation.cpu().numpy().squeeze()
-        #         # metadata = self.pipe.sampling_rate
-        #     gen_data = disk.add_to_metadata(pipe=self.pipe, model=self.reg_entries.model, prompt=[prompt], kwargs=self.pipe_kwargs)
-        #     if content:
-        #         nfo(f"content = {content}")
-        #         metadata.update(gen_data.get("parameters"))
-        #         nfo(f"content type output {content}, {type(content)}")
-        #     disk.write_to_disk(content, metadata)
-        #     # Uniqueness Tag
-        # from nnll_61 import HyperChain
-        # data_chain = HyperChain()
-        # data_chain.add_block(f"{pipe}{model}{kwargs}")
+    def destroy(self):
+        from nnll.configure.init_gpu import first_available
+        import gc
+
+        self.pipe.unload_lora_weights()
+        # del self.pipe.unet
+        self.pipe = None
+        del self.pipe
+        first_available(clean=True)
+        self.recycle = False
+        gc.collect()

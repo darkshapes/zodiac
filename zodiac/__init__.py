@@ -18,12 +18,6 @@ def set_env(args: bool) -> None:
     """Parse launch arguments (mostly turning down/disconnecting loud dependency packages)\n
     :param args: Launch arguments from command line
     """
-    import platform
-
-    if platform.system().lower() == "darwin":
-        # patches async issues with torch and MacOS
-
-        mp.set_start_method("fork", force=True)
 
     os.environ["TELEMETRY"] = "False"
 
@@ -84,9 +78,8 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="Multimodal generative media sequencer")
     parser.add_argument("-n", "--net", action="store_true", help="Allow network access (for downloading requirements)")
-    parser.add_argument("-t", "--trace", action="store_true", help="Enable trace logs (generated in log folder)")  # os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = str(args.highwater)  # disable pytorch memory upper limit
+    parser.add_argument("-t", "--trace", action="store_true", help="Enable trace logs (generated in log folder)")
 
-    # parser.add_argument("-w", "--highwater", type=float, default=0.0, help="Pytorch High Watermark Ratio for MPS devices")
     parser.add_argument("-d", "--diag", action="store_true", help="Process using diagnostic settings")
 
     args = parser.parse_args()

@@ -10,7 +10,7 @@ readme      = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "dspy>=2.6.13",
-    "huggingface-hub[hf-transfer,hf-xet]>=0.32.3",
+    "huggingface-hub[hf-transfer,hf-xet,cli]>=0.32.3",
     "litellm>=1.67.1",
     "matplotlib>=3.10.1",
     "networkx>=3.4.2",

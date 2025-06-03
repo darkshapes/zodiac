@@ -61,6 +61,7 @@ class ResponsePanel(TextArea):
             metadata.update(gen_data.get("parameters"))
             nfo(f"content type output {content}, {type(content)}")
             disk.write_to_disk(content, metadata)
+            chat.destroy()
         else:  # history=history)
             async for chunk in chat.forward(tx_data=tx_data, mode_out=mode_out):
                 async for c in chunk:

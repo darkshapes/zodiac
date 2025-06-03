@@ -6,7 +6,7 @@
 </picture><br><br>
 
 
-# zodiac <br><sub>Self-assembling workflow automator</sub>
+# zodiac <br><sub>self-assembling workflow automator</sub>
 
 <div align="center">
 

@@ -23,7 +23,7 @@ from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Static
 
-from zodiac.chat_machine import BasicImageSignature, ChatMachineWithMemory, QASignature
+from zodiac.chat_machine import BasicImageSignature, VectorMachine, QASignature
 from zodiac.display_bar import DisplayBar
 from zodiac.flip import Flip
 from zodiac.graph import IntentProcessor
@@ -65,7 +65,7 @@ class Fold(Screen[bool]):
     tx_data: dict = {}
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
-    chat: dspy_Module = ChatMachineWithMemory(max_workers=8)  # and this
+    chat: dspy_Module = VectorMachine(max_workers=8)  # and this
 
     mode_in: reactive[str] = reactive("text")
     mode_out: reactive[str] = reactive("text")
@@ -307,9 +307,9 @@ class Fold(Screen[bool]):
             sig = BasicImageSignature
         else:
             sig = QASignature
-        if registry_entries != self.chat.reg_entries or self.chat.streaming != streaming or sig != self.chat.sig:
+        if registry_entries != self.chat.reg_entries or self.chat.streaming != streaming or sig != self.chat.sig or not self.chat.recycle:
             dbug(f"Graph extraction : {registry_entries}")
-            self.chat(reg_entries=registry_entries, sig=sig, streaming=streaming)
+            self.chat.active_models(reg_entries=registry_entries, sig=sig, streaming=streaming)
         self.ui["rp"].synthesize(chat=self.chat, tx_data=self.tx_data, mode_out=self.mode_out)
 
     def stop_gen(self) -> None:
