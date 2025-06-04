@@ -44,9 +44,10 @@ class ResponsePanel(TextArea):
         :param tx_data: Prompt request
         :param out_type: Media type for this pass, defaults to 'text'
         """
-
+        from nnll.monitor.file import dbug
         from litellm import ModelResponseStream
         from dspy import Prediction
+        from dspy.utils.exceptions import AdapterParseError
         from nnll.metadata import save_generation as disk
 
         nfo("sync")
@@ -64,11 +65,14 @@ class ResponsePanel(TextArea):
             chat.destroy()
         else:  # history=history)
             async for chunk in chat.forward(tx_data=tx_data, mode_out=mode_out):
-                async for c in chunk:
-                    if isinstance(c, Prediction) and streaming:
-                        if hasattr(c, "answer"):
-                            if c.answer not in self.text:
-                                self.insert(c.answer)
-                        self.query_ancestor(Screen).ui["sl"].set_classes(["selectah"])
-                    elif isinstance(c, ModelResponseStream):
-                        self.insert(c["choices"][0]["delta"]["content"] if c["choices"][0]["delta"]["content"] is not None else " ")
+                try:
+                    async for c in chunk:
+                        if isinstance(c, Prediction) and streaming:
+                            if hasattr(c, "answer"):
+                                if c.answer not in self.text:
+                                    self.insert(c.answer)
+                            self.query_ancestor(Screen).ui["sl"].set_classes(["selectah"])
+                        elif isinstance(c, ModelResponseStream):
+                            self.insert(c["choices"][0]["delta"]["content"] if c["choices"][0]["delta"]["content"] is not None else " ")
+                except (AdapterParseError, TypeError) as error_log:
+                    dbug(f"LM parse error {error_log}")

@@ -20,7 +20,7 @@ def set_env(args: bool) -> None:
     """
 
     os.environ["TELEMETRY"] = "False"
-
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
     try:
         import huggingface_hub
 
