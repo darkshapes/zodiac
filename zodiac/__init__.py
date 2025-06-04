@@ -8,7 +8,7 @@ mp.set_start_method("spawn", force=True)
 
 import sys
 import os
-from nnll.configure import HOME_FOLDER_PATH
+from nnll.configure import USER_PATH_NAMED, HOME_FOLDER_PATH
 
 # pylint:disable=import-outside-toplevel
 sys.path.append(os.getcwd())
@@ -59,8 +59,6 @@ def set_env(args: bool) -> None:
 
     except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
         pass
-
-    USER_PATH_NAMED = os.path.join(HOME_FOLDER_PATH, "config.toml")
 
 
 def main() -> None:

@@ -6,37 +6,36 @@ Project-URL: Homepage, https://github.com/darkshapes/zodiac
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: dspy>=2.6.13
-Requires-Dist: huggingface-hub[hf-transfer,hf-xet]>=0.32.3
-Requires-Dist: litellm>=1.67.1
-Requires-Dist: matplotlib>=3.10.1
-Requires-Dist: networkx>=3.4.2
+Requires-Dist: dspy>=2.6.27
+Requires-Dist: litellm>=1.72.0
+Requires-Dist: matplotlib>=3.10.3
+Requires-Dist: mir>=0.0.1
+Requires-Dist: networkx>=3.5
+Requires-Dist: nnll
 Requires-Dist: numpy>=2.2.6
-Requires-Dist: sounddevice>=0.5.1
+Requires-Dist: sounddevice>=0.5.2
+Requires-Dist: soundfile>=0.13.1
 Requires-Dist: textual-dev>=1.7.0
 Requires-Dist: textual-plotext>=1.0.1
-Requires-Dist: textual[syntax]>=3.1.1
+Requires-Dist: textual[syntax]>=3.3.0
 Requires-Dist: tiktoken>=0.9.0
-Requires-Dist: viztracer>=1.0.3
-Requires-Dist: mir@ git+https://github.com/darkshapes/mir@main
-Requires-Dist: nnll@ git+https://github.com/darkshapes/nnll@main
-Requires-Dist: soundfile>=0.13.1
-Provides-Extra: dev
-Requires-Dist: pytest>=8.3.5; extra == "dev"
-Requires-Dist: pytest-asyncio>=0.26.0; extra == "dev"
-Requires-Dist: ruff>=0.11.6; extra == "dev"
-Provides-Extra: ollama
-Requires-Dist: ollama>=0.5.1; extra == "ollama"
+Requires-Dist: viztracer>=1.0.4
 Provides-Extra: lmstudio
 Requires-Dist: lmstudio>=1.3.1; extra == "lmstudio"
+Provides-Extra: ollama
+Requires-Dist: ollama>=0.5.1; extra == "ollama"
+Provides-Extra: openai
+Requires-Dist: openai>=1.84.0; extra == "openai"
 Provides-Extra: vllm
-Requires-Dist: vllm>=0.9.0.1; (platform_system == "linux" or platform_system == "windows") and extra == "vllm"
-Provides-Extra: cortex
-Requires-Dist: openai>=1.82.1; extra == "cortex"
-Provides-Extra: llamafile
-Requires-Dist: openai>=1.82.1; extra == "llamafile"
+Requires-Dist: vllm>=0.9.0.1; extra == "vllm"
 Provides-Extra: full
-Requires-Dist: zodiac[cortex,hub,llamafile,lmstudio,ollama,vllm]; extra == "full"
+Requires-Dist: zodiac[lmstudio,ollama,openai]; extra == "full"
+Provides-Extra: dev
+Requires-Dist: matplotlib>=3.10.3; extra == "dev"
+Requires-Dist: pytest>=8.4.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=1.0.0; extra == "dev"
+Requires-Dist: ruff>=0.11.12; extra == "dev"
+Requires-Dist: zodiac[full]; extra == "dev"
 Dynamic: license-file
 
 
@@ -47,7 +46,7 @@ Dynamic: license-file
 </picture><br><br>
 
 
-# zodiac <br><sub>Self-assembling workflow automator</sub>
+# zodiac <br><sub>self-assembling workflow automator</sub>
 
 <div align="center">
 

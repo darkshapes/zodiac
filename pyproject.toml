@@ -1,60 +1,95 @@
 [build-system]
 requires      = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
-[project]
-name        = "zodiac"
-version     = "0.0.1"
-description = "Multimodal generative media sequencer"
-readme      = "README.md"
 
+[project]
+
+authors = [
+    { name = "darkshapes", email = "91800957+exdysa@users.noreply.github.com" },
+]
+description = "Multimodal generative media sequencer"
+license = { file = "LICENSE" }
+name        = "zodiac"
+readme      = "README.md"
 requires-python = ">=3.11"
-dependencies = [
-    "dspy>=2.6.13",
-    "huggingface-hub[hf-transfer,hf-xet,cli]>=0.32.3",
-    "litellm>=1.67.1",
-    "matplotlib>=3.10.1",
-    "networkx>=3.4.2",
-    "numpy>=2.2.6",
-    "sounddevice>=0.5.1",
-    "textual-dev>=1.7.0",
-    "textual-plotext>=1.0.1",
-    "textual[syntax]>=3.1.1",
-    "tiktoken>=0.9.0",
-    "viztracer>=1.0.3",
-    "mir @ git+https://github.com/darkshapes/mir@main",
-    "nnll @ git+https://github.com/darkshapes/nnll@main",
-    "soundfile>=0.13.1",
+version     = "0.0.1"
+keywords = [
+    "ML",
+    "AI",
+    "TUI",
+    "no-code",
+    "diffusion",
+    "LLM",
+    "torch",
 ]
 
+dependencies    = [
+    "dspy>=2.6.27",
+    "litellm>=1.72.0",
+    "matplotlib>=3.10.3",
+    "mir @ git+https://github.com/darkshapes/mir@main",
+    "networkx>=3.5",
+    "nnll @ git+https://github.com/darkshapes/nnll@main",
+    "numpy>=2.2.6",
+    "sounddevice>=0.5.2",
+    "soundfile>=0.13.1",
+    "textual-dev>=1.7.0",
+    "textual-plotext>=1.0.1",
+    "textual[syntax]>=3.3.0",
+    "tiktoken>=0.9.0",
+    "viztracer>=1.0.4",
+]
 
-[project.scripts]
-zodiac = "zodiac.__init__:main"
-astra  = "astra.__init__:main"
+[dependency-groups]
+lmstudio = [
+    "lmstudio>=1.3.1",
+]
+ollama = [
+    "ollama>=0.5.1",
+]
+openai = [
+    "openai>=1.84.0",
+]
+vllm = [
+    "vllm>=0.9.0.1",
+]
+full = ["zodiac[lmstudio,ollama,openai]"]
+dev = [
+    "matplotlib>=3.10.3",
+    "pytest>=8.4.0",
+    "pytest-asyncio>=1.0.0",
+    "ruff>=0.11.12",
+    "zodiac[full]"
+]
+
+[project.optional-dependencies]
+lmstudio = [
+    "lmstudio>=1.3.1",
+]
+ollama = [
+    "ollama>=0.5.1",
+]
+openai = [
+    "openai>=1.84.0",
+]
+vllm = [
+    "vllm>=0.9.0.1",
+]
+full = ["zodiac[lmstudio,ollama,openai]"]
+dev = [
+    "matplotlib>=3.10.3",
+    "pytest>=8.4.0",
+    "pytest-asyncio>=1.0.0",
+    "ruff>=0.11.12",
+    "zodiac[full]"
+]
 
 [project.urls]
 Homepage = "https://github.com/darkshapes/zodiac"
 
-[project.optional-dependencies]
-dev = ["pytest>=8.3.5", "pytest-asyncio>=0.26.0", "ruff>=0.11.6"]
-ollama = ["ollama>=0.5.1"]
-lmstudio = ["lmstudio>=1.3.1"]
-vllm = [
-    "vllm>=0.9.0.1 ; platform_system == 'linux' or platform_system == 'windows'",
-]
-cortex = ["openai>=1.82.1"]
-llamafile = ["openai>=1.82.1"]
-full = ["zodiac[ollama,lmstudio,hub,vllm,cortex,llamafile]"]
-
-
-[dependency-groups]
-dev = [
-    "matplotlib>=3.10.1",
-    "pytest-asyncio>=0.26.0",
-    "pytest>=8.3.5",
-    "ruff>=0.11.6",
-    "tiktoken>=0.9.0",
-    "zodiac[full]",
-]
+[project.scripts]
+zodiac = "zodiac.__init__:main"
+astra  = "astra.__init__:main"
 
 [tool.setuptools]
 packages = ["zodiac"]
@@ -81,5 +116,5 @@ files.extend-exclude = ["^tests/.*$", "test.*$"]
 default.extend-words = { "ot" = "ot" }
 
 [tool.uv.sources]
+mir = { git = "https://github.com/darkshapes/mir", rev = "main" }
 nnll = { git = "https://github.com/darkshapes/nnll", rev = "main" }
-mir  = { git = "https://github.com/darkshapes/mir", rev = "main" }
