@@ -99,15 +99,12 @@ class VectorMachine(dspy.Module):
         else:
             from nnll.tensor_pipe import segments
             from nnll.configure.init_gpu import soft_random, seed_planter, first_available
-            # api_kwargs = await get_api(model=model, library=library)
-            # generator = dspy.asyncify(constructor)
-            # self.completion = dspy.streamify(generator)
 
             mir_arch = self.reg_entries.mir
             series = mir_arch[0]
             arch_data = self.mir_db.database[series][mir_arch[1]]
             init_modules = self.mir_db.database[series]["[init]"]
-            self.pipe, model, self.import_pkg, self.pipe_kwargs = self.factory.create_pipeline(arch_data, init_modules)
+            self.pipe, model, self.import_pkg, self.pipe_kwargs = self.factory.create_pipeline(arch_data=arch_data, init_modules=init_modules)
 
             # lora=lora_opt)
             if lora is not None:
@@ -123,12 +120,14 @@ class VectorMachine(dspy.Module):
                 if lora:
                     self.pipe = self.factory.add_lora(self.pipe, lora_repo=lora_repo, init_kwargs=init_kwargs, **kwargs)
 
-            noise_seed = seed_planter(soft_random())
+            noise_seed = seed_planter(device=self.device)
             user_set = {
                 "output_type": "pil",
             }
             self.pipe_kwargs.update(user_set)
 
+            if "mps" == first_available(assign=False):
+                self.pipe.enable_attention_slicing()
             nfo(f"Pre-generator Model {model}  Pipe {self.pipe} Arguments {self.pipe_kwargs}")  # Lora {lora_opt}
             if "diffusers" in self.import_pkg:
                 self.pipe.to(self.device)
@@ -142,8 +141,6 @@ class VectorMachine(dspy.Module):
                 self.pipe_kwargs.update({"sampling_rate": self.pipe.config.sampling_rate})
         self.recycle = True
 
-        if "mps" == first_available(assign=False):
-            self.pipe.enable_attention_slicing()
         return self.pipe, self.import_pkg, self.pipe_kwargs
 
     # Reminder: Don't capture user prompts - this is the crucial stage
@@ -155,7 +152,7 @@ class VectorMachine(dspy.Module):
         """
         yield self.pipe(message=tx_data["text"], stream=self.streaming)  # history=history)
 
-    def destroy(self):
+    def destroy(self, recycle: bool = True):
         from nnll.configure.init_gpu import first_available
         import gc
 
@@ -164,5 +161,5 @@ class VectorMachine(dspy.Module):
         self.pipe = None
         del self.pipe
         first_available(clean=True)
-        self.recycle = False
+        self.recycle = recycle
         gc.collect()

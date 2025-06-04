@@ -9,21 +9,23 @@ authors = [
 ]
 description = "Multimodal generative media sequencer"
 license = { file = "LICENSE" }
-name        = "zodiac"
-readme      = "README.md"
+name = "zodiac"
+readme = "README.md"
 requires-python = ">=3.11"
-version     = "0.0.1"
-keywords = [
-    "ML",
-    "AI",
-    "TUI",
-    "no-code",
-    "diffusion",
-    "LLM",
-    "torch",
-]
+version = "0.0.1"
+keywords = ["ML", "AI", "TUI", "no-code", "diffusion", "LLM", "torch"]
 
-dependencies    = [
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Other Audience",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+dependencies = [
     "dspy>=2.6.27",
     "litellm>=1.72.0",
     "matplotlib>=3.10.3",
@@ -31,6 +33,8 @@ dependencies    = [
     "networkx>=3.5",
     "nnll @ git+https://github.com/darkshapes/nnll@main",
     "numpy>=2.2.6",
+    "protobuf>=5.29.5",
+    "sentencepiece>=0.2.0",
     "sounddevice>=0.5.2",
     "soundfile>=0.13.1",
     "textual-dev>=1.7.0",
@@ -41,51 +45,36 @@ dependencies    = [
 ]
 
 [dependency-groups]
-lmstudio = [
-    "lmstudio>=1.3.1",
-]
-ollama = [
-    "ollama>=0.5.1",
-]
-openai = [
-    "openai>=1.84.0",
-]
-vllm = [
-    "vllm>=0.9.0.1",
-]
+lmstudio = ["lmstudio>=1.3.1"]
+ollama = ["ollama>=0.5.1"]
+openai = ["openai>=1.84.0"]
+vllm = ["vllm>=0.9.0.1"]
 full = ["zodiac[lmstudio,ollama,openai]"]
 dev = [
     "matplotlib>=3.10.3",
     "pytest>=8.4.0",
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
-    "zodiac[full]"
+    "zodiac[full]",
 ]
 
 [project.optional-dependencies]
-lmstudio = [
-    "lmstudio>=1.3.1",
-]
-ollama = [
-    "ollama>=0.5.1",
-]
-openai = [
-    "openai>=1.84.0",
-]
-vllm = [
-    "vllm>=0.9.0.1",
-]
+lmstudio = ["lmstudio>=1.3.1"]
+ollama = ["ollama>=0.5.1"]
+openai = ["openai>=1.84.0"]
+vllm = ["vllm>=0.9.0.1"]
 full = ["zodiac[lmstudio,ollama,openai]"]
 dev = [
     "matplotlib>=3.10.3",
     "pytest>=8.4.0",
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
-    "zodiac[full]"
+    "zodiac[full]",
 ]
 
 [project.urls]
-Homepage = "https://github.com/darkshapes/zodiac"
+Homepage      = "https://github.com/darkshapes/zodiac"
+Documentation = "https://github.com/darkshapes/sdbx/wiki"
 
 [project.scripts]
 zodiac = "zodiac.__init__:main"
@@ -116,5 +105,5 @@ files.extend-exclude = ["^tests/.*$", "test.*$"]
 default.extend-words = { "ot" = "ot" }
 
 [tool.uv.sources]
-mir = { git = "https://github.com/darkshapes/mir", rev = "main" }
+mir  = { git = "https://github.com/darkshapes/mir", rev = "main" }
 nnll = { git = "https://github.com/darkshapes/nnll", rev = "main" }

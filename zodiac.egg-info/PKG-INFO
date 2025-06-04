@@ -2,17 +2,36 @@ Metadata-Version: 2.4
 Name: zodiac
 Version: 0.0.1
 Summary: Multimodal generative media sequencer
+Author-email: darkshapes <91800957+exdysa@users.noreply.github.com>
+License: “Commons Clause” License Condition v1.0
+        
+        The Software is provided to you by the Licensor under the License, as defined below, subject to the following condition.
+        
+        Without limiting other conditions in the License, the grant of rights under the License will not include, and the License does not grant to you, the right to Sell the Software.
+        
+        For purposes of the foregoing, “Sell” means practicing any or all of the rights granted to you under the License to provide to third parties, for a fee or other consideration (including without limitation fees for hosting or consulting/ support services related to the Software), a product or service whose value derives, entirely or substantially, from the functionality of the Software. Any license notice or attribution required by the License must also include this Commons Clause License Condition notice.
+        
+        Software: zodiac
+        
+        License : Mozilla Public License v. 2.0
+        
+        Licensor: darkshapes github.com/darkshapes
+        
+        This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 Project-URL: Homepage, https://github.com/darkshapes/zodiac
+Keywords: ML,AI,TUI,no-code,diffusion,LLM,torch
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: dspy>=2.6.27
 Requires-Dist: litellm>=1.72.0
 Requires-Dist: matplotlib>=3.10.3
-Requires-Dist: mir>=0.0.1
+Requires-Dist: mir@ git+https://github.com/darkshapes/mir@main
 Requires-Dist: networkx>=3.5
-Requires-Dist: nnll
+Requires-Dist: nnll@ git+https://github.com/darkshapes/nnll@main
 Requires-Dist: numpy>=2.2.6
+Requires-Dist: protobuf>=5.29.5
+Requires-Dist: sentencepiece>=0.2.0
 Requires-Dist: sounddevice>=0.5.2
 Requires-Dist: soundfile>=0.13.1
 Requires-Dist: textual-dev>=1.7.0
