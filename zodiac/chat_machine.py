@@ -158,8 +158,9 @@ class VectorMachine(dspy.Module):
 
         self.pipe.unload_lora_weights()
         # del self.pipe.unet
+        if self.pipe:
+            del self.pipe
         self.pipe = None
-        del self.pipe
         first_available(clean=True)
         self.recycle = recycle
         gc.collect()

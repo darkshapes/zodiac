@@ -28,7 +28,7 @@ Zodiac is a creative research platform for Generative AI. Guided by text, audio,
 * Bring your own models - Supports [Ollama](https://ollama.com/), [Llamafile](http://github.com/Mozilla-Ocho/llamafile), [Cortex/Jan](http://cortex.so), [VLLM](https://github.com/vllm-project/vllm), [LMStudio](http://lmstudio.ai/), [HuggingFace](https://huggingface.co/)
 * Support expanding to include: , CivitAI, ModelScope & AIO (all-in-one) local caches through [sdbx](https://github.com/darkshapes/sdbx).<br><br>
 
-[![Python application](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml/badge.svg)](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml)<br>
+[![Python application](https://github.com/darkshapes/zodiac/actions/workflows/zodiac.yml/badge.svg)](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml)<br>
 ![commits per month](https://img.shields.io/github/commit-activity/m/darkshapes/zodiac?color=indigo)<br>
 ![code size](https://img.shields.io/github/languages/code-size/darkshapes/zodiac?color=navy)<br>
 ![Discord](https://img.shields.io/discord/1266757128249675867?color=black)<br><br>

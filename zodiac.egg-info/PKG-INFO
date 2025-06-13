@@ -19,19 +19,25 @@ License: “Commons Clause” License Condition v1.0
         
         This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 Project-URL: Homepage, https://github.com/darkshapes/zodiac
+Project-URL: Documentation, https://github.com/darkshapes/sdbx/wiki
 Keywords: ML,AI,TUI,no-code,diffusion,LLM,torch
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Other Audience
+Classifier: License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Scientific/Engineering :: Image Processing
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: dspy>=2.6.27
 Requires-Dist: litellm>=1.72.0
 Requires-Dist: matplotlib>=3.10.3
-Requires-Dist: mir@ git+https://github.com/darkshapes/mir@main
+Requires-Dist: mir[full]@ git+https://github.com/darkshapes/mir@main
 Requires-Dist: networkx>=3.5
-Requires-Dist: nnll@ git+https://github.com/darkshapes/nnll@main
 Requires-Dist: numpy>=2.2.6
-Requires-Dist: protobuf>=5.29.5
-Requires-Dist: sentencepiece>=0.2.0
 Requires-Dist: sounddevice>=0.5.2
 Requires-Dist: soundfile>=0.13.1
 Requires-Dist: textual-dev>=1.7.0
@@ -39,22 +45,12 @@ Requires-Dist: textual-plotext>=1.0.1
 Requires-Dist: textual[syntax]>=3.3.0
 Requires-Dist: tiktoken>=0.9.0
 Requires-Dist: viztracer>=1.0.4
-Provides-Extra: lmstudio
-Requires-Dist: lmstudio>=1.3.1; extra == "lmstudio"
-Provides-Extra: ollama
-Requires-Dist: ollama>=0.5.1; extra == "ollama"
-Provides-Extra: openai
-Requires-Dist: openai>=1.84.0; extra == "openai"
-Provides-Extra: vllm
-Requires-Dist: vllm>=0.9.0.1; extra == "vllm"
-Provides-Extra: full
-Requires-Dist: zodiac[lmstudio,ollama,openai]; extra == "full"
 Provides-Extra: dev
 Requires-Dist: matplotlib>=3.10.3; extra == "dev"
 Requires-Dist: pytest>=8.4.0; extra == "dev"
 Requires-Dist: pytest-asyncio>=1.0.0; extra == "dev"
 Requires-Dist: ruff>=0.11.12; extra == "dev"
-Requires-Dist: zodiac[full]; extra == "dev"
+Requires-Dist: mir[dev]@ git+https://github.com/darkshapes/mir@main ; extra == "dev"
 Dynamic: license-file
 
 
@@ -87,7 +83,7 @@ Zodiac is a creative research platform for Generative AI. Guided by text, audio,
 * Bring your own models - Supports [Ollama](https://ollama.com/), [Llamafile](http://github.com/Mozilla-Ocho/llamafile), [Cortex/Jan](http://cortex.so), [VLLM](https://github.com/vllm-project/vllm), [LMStudio](http://lmstudio.ai/), [HuggingFace](https://huggingface.co/)
 * Support expanding to include: , CivitAI, ModelScope & AIO (all-in-one) local caches through [sdbx](https://github.com/darkshapes/sdbx).<br><br>
 
-[![Python application](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml/badge.svg)](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml)<br>
+[![Python application](https://github.com/darkshapes/zodiac/actions/workflows/zodiac.yml/badge.svg)](https://github.com/darkshapes/zodiac/actions/workflows/python-app.yml)<br>
 ![commits per month](https://img.shields.io/github/commit-activity/m/darkshapes/zodiac?color=indigo)<br>
 ![code size](https://img.shields.io/github/languages/code-size/darkshapes/zodiac?color=navy)<br>
 ![Discord](https://img.shields.io/discord/1266757128249675867?color=black)<br><br>

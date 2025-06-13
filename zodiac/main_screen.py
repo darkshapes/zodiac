@@ -140,11 +140,15 @@ class Fold(Screen[bool]):
     def is_ui_ready(self) -> bool:
         """Confirm UI is active"""
         try:
-            assert hasattr(self.ui["sl"], "is_mounted")
-        except AssertionError as error_log:
+            selector = hasattr(self.ui["sl"], "is_mounted")
+            message = hasattr(self.ui["ms"], "is_mounted")
+            response = hasattr(self.ui["rs"], "is_mounted")
+        except AttributeError as error_log:
             dbug(error_log)
             return False
-        return True
+        else:
+            if selector and message and response:
+                return True
 
     @on(events.Focus)
     async def on_focus(self, event=events.Focus) -> None:

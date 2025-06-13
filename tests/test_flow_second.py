@@ -19,7 +19,7 @@ class TestFlow:
     def test_flow_builder_edge_create_success(self, mock_ollama_data, mock_hub_data, mode_in: str = "text", mode_out: str = "speech"):
         from pytest import raises
         from mir.registry_entry import RegistryEntry
-        from mir.constants import LibType
+        from mir.constants import LibType, PkgType
         from zodiac.graph import IntentProcessor
 
         self.graph = IntentProcessor()
@@ -46,9 +46,11 @@ class TestFlow:
                 size=9335526346,
                 tags=["text-to-speech", "annotation", "text-to-speech"],
                 library=LibType.HUB,
+                timestamp=1741908821,
                 mir=["info.art.parler-tts", "large-v1"],
                 api_kwargs=None,
-                timestamp=1741908821,
+                package=PkgType.TRANSFORMERS,
+                tokenizer=None,
                 available_tasks=[("text", "speech")],
             ),
         }
