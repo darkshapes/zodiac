@@ -7,6 +7,7 @@ README.md
 pyproject.toml
 pytest.ini
 uv.lock
+.github/workflows/zodiac.yml
 astra/__init__.py
 astra/__main__.py
 astra/button.tcss

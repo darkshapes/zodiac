@@ -264,8 +264,8 @@ class Fold(Screen[bool]):
         """Retrieve graph data, prepare to send"""
 
         self.int_proc.set_path(mode_in=mode_in, mode_out=mode_out)
-        self.int_proc.set_reg_entries()
-        nfo(f"triggered recalculation : {self.int_proc.coord_path} {self.int_proc.reg_entries}")
+        self.int_proc.set_registry_entries()
+        nfo(f"triggered recalculation : {self.int_proc.coord_path} {self.int_proc.registry_entries}")
         if not io_only:
             self.tx_data = {
                 "text": self.ui["mp"].text,
@@ -311,9 +311,9 @@ class Fold(Screen[bool]):
             sig = BasicImageSignature
         else:
             sig = QASignature
-        if registry_entries != self.chat.reg_entries or self.chat.streaming != streaming or sig != self.chat.sig or not self.chat.recycle:
+        if registry_entries != self.chat.registry_entries or self.chat.streaming != streaming or sig != self.chat.sig or not self.chat.recycle:
             dbug(f"Graph extraction : {registry_entries}")
-            self.chat.active_models(reg_entries=registry_entries, sig=sig, streaming=streaming)
+            self.chat.active_models(registry_entries=registry_entries, sig=sig, streaming=streaming)
         self.ui["rp"].synthesize(chat=self.chat, tx_data=self.tx_data, mode_out=self.mode_out)
 
     def stop_gen(self) -> None:

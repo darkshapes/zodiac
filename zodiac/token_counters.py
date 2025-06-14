@@ -37,9 +37,9 @@ async def ollama_counter(model: str, message: str) -> int:
     :param message: Message to tokenize
     :return: `int` Number of tokens needed to represent message
     """
-    from mir.constants import LibType
+    from mir.constants import CueType
 
-    if not LibType.OLLAMA:
+    if not CueType.OLLAMA:
         return 0
     else:
         from ollama import embed
@@ -68,9 +68,9 @@ async def cortex_counter(model: str, message: str) -> int:
     :param message: Message to tokenize
     :return: `int` Number of tokens needed to represent message
     """
-    from mir.constants import LibType
+    from mir.constants import CueType
 
-    if not LibType.CORTEX:
+    if not CueType.CORTEX:
         return 0
     else:
         import requests
@@ -92,9 +92,9 @@ async def lmstudio_counter(model: str, message: str) -> int:
     :param message: Message to tokenize
     :return: `int` Number of tokens needed to represent message
     """
-    from mir.constants import LibType
+    from mir.constants import CueType
 
-    if not LibType.LM_STUDIO:
+    if not CueType.LM_STUDIO:
         return 0
     else:
         from lmstudio import llm

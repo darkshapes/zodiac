@@ -12,9 +12,9 @@ def setUp(lookit_this):
     proc_name.intent_graph = nx.Graph(lookit_this)
     assert proc_name.has_graph() is True
     proc_name.set_path("mode_in", "mode_out")
-    proc_name.set_reg_entries()
+    proc_name.set_registry_entries()
     assert proc_name.has_path() is True
-    assert proc_name.has_reg_entries() is True
+    assert proc_name.has_registry_entries() is True
     return proc_name
 
 

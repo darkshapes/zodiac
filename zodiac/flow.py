@@ -6,7 +6,7 @@
 
 
 # # from zodiac.chat_machine import BasicImageSignature
-# # from mir.constants import LibType
+# # from mir.constants import CueType
 # # import asyncio
 # # from nnll.monitor.file import nfo, dbug
 # # from zodiac.__main__ import Combo
