@@ -11,7 +11,7 @@ from typing import Optional, Any
 # pylint:disable=import-outside-toplevel
 
 from nnll.monitor.file import debug_monitor, nfo, dbug
-from mir.registry_entry import from_cache
+from mir.registry_entry import from_cache  # leaving here for mocking
 
 sys.path.append(os.getcwd())
 
@@ -19,7 +19,7 @@ sys.path.append(os.getcwd())
 class IntentProcessor:
     intent_graph: Optional[dict[nx.Graph]] = None
     coord_path: Optional[list[str]] = None
-    reg_entries: Optional[list[dict[dict]]] = None
+    registry_entries: Optional[list[dict[dict]]] = None
     models: Optional[list[tuple[str]]] = None
     weight_idx: Optional[list[str]] = None
     # additional_model_names: dict = None
@@ -94,11 +94,11 @@ class IntentProcessor:
         return True
 
     @debug_monitor
-    def has_reg_entries(self) -> bool:
+    def has_registry_entries(self) -> bool:
         """A check to verify model checkpoints are available"""
         try:
-            assert self.reg_entries is not None
-            assert len(self.reg_entries) >= 1
+            assert self.registry_entries is not None
+            assert len(self.registry_entries) >= 1
         except AssertionError as error_log:
             dbug(error_log)
             return False
@@ -132,21 +132,21 @@ class IntentProcessor:
             nfo("No Path available...")
 
     @debug_monitor
-    def set_reg_entries(self) -> None:
+    def set_registry_entries(self) -> None:
         """Populate models list for text fields
         Check if model has been adjusted, if so adjust list
         1.0 weight bottom, <1.0 weight top"""
         self.has_graph()
         self.has_path()
         try:
-            self.reg_entries = self.pull_path_entries(self.intent_graph, self.coord_path)
+            self.registry_entries = self.pull_path_entries(self.intent_graph, self.coord_path)
         except KeyError as error_log:
             dbug(error_log)
             return ["", ""]
         idx = 0
         self.models = []
-        if self.reg_entries:
-            for edge, registry in enumerate(self.reg_entries):
+        if self.registry_entries:
+            for edge, registry in enumerate(self.registry_entries):
                 model = registry["entry"].model
                 nfo(f"node {edge}")
                 adj_model = (os.path.basename(model), edge)
@@ -177,7 +177,7 @@ class IntentProcessor:
         except KeyError as error_log:
             nfo(f"Failed to adjust weight of '{selection}' within registry contents '{self.intent_graph} {mode_in} {mode_out}'. Model or registry entry not found. ")
             dbug(error_log)
-            return self.set_reg_entries()
+            return self.set_registry_entries()
         entries = []
         for index, reg in self.intent_graph[mode_in][mode_out].items():
             entries.append([reg["entry"].model, index, "", ""])
@@ -186,7 +186,7 @@ class IntentProcessor:
         nfo(edge)
         entries = []
         if edge is None:
-            self.set_reg_entries()
+            self.set_registry_entries()
             return
         model = self.intent_graph[mode_in][mode_out][edge]["entry"].model
         weight = self.intent_graph[mode_in][mode_out][edge]["weight"]
@@ -201,7 +201,7 @@ class IntentProcessor:
             self.intent_graph[mode_in][mode_out][edge]["weight"] = round(weight - 0.1, 1)
             self.weight_idx.append(item)
         nfo(self.intent_graph[mode_in][mode_out][edge])
-        self.set_reg_entries()
+        self.set_registry_entries()
 
     @debug_monitor
     def pull_path_entries(self, nx_graph: nx.Graph, traced_path: list[tuple]) -> None:

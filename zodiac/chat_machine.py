@@ -9,7 +9,7 @@ import dspy
 
 from nnll.monitor.file import nfo
 from mir.registry_entry import RegistryEntry
-from mir.constants import LibType
+from mir.constants import CueType
 
 
 ps_sysprompt = "Provide x for Y"
@@ -64,7 +64,7 @@ class VectorMachine(dspy.Module):
         self.factory = ConstructPipeline()
         self.device = first_available()
         self.max_workers = max_workers
-        self.reg_entries = None
+        self.registry_entries = None
         self.pipe = None
         self.pipe_kwargs = None
         self.import_pkg = None
@@ -72,22 +72,22 @@ class VectorMachine(dspy.Module):
         self.sig: dspy.Signature = QASignature
         self.recycle = True
 
-    def active_models(self, reg_entries: RegistryEntry, sig: dspy.Signature, streaming: bool = True) -> Any:
+    def active_models(self, registry_entries: RegistryEntry, sig: dspy.Signature, streaming: bool = True) -> Any:
         """Prepare model for iniference\n
-        :param model: path to model
-        :param library: LibType of model origin
+        :param registry_entries: model info
+        :param sig: Type of generation output desired
         :param streaming: output type flag, defaults to True
         :yield: responses in chunks or response as a single block
         """
 
-        self.reg_entries = reg_entries
+        self.registry_entries = registry_entries
         self.sig = sig
         self.streaming = streaming
-        model = self.reg_entries.model
-        library = self.reg_entries.library
+        model = self.registry_entries.model
+        cuetype = self.registry_entries.cuetype
         lora = None
-        if library != LibType.HUB:
-            api_kwargs = self.reg_entries.api_kwargs
+        if cuetype != CueType.HUB:
+            api_kwargs = self.registry_entries.api_kwargs
             nfo(f"api_kwargs_passed = {api_kwargs}")
             dspy.settings.configure(lm=dspy.LM(model=model, **api_kwargs), async_max_workers=self.max_workers)
             if self.streaming:
@@ -100,7 +100,7 @@ class VectorMachine(dspy.Module):
             from nnll.tensor_pipe import segments
             from nnll.configure.init_gpu import soft_random, seed_planter, first_available
 
-            mir_arch = self.reg_entries.mir
+            mir_arch = self.registry_entries_entries.mir
             series = mir_arch[0]
             arch_data = self.mir_db.database[series][mir_arch[1]]
             init_modules = self.mir_db.database[series]["[init]"]

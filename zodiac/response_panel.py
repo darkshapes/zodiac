@@ -51,13 +51,13 @@ class ResponsePanel(TextArea):
         from nnll.metadata import save_generation as disk
 
         nfo("sync")
-        nfo(f"chat registry entries : {chat.reg_entries}")
+        nfo(f"chat registry entries : {chat.registry_entries}")
         streaming = mode_out == "text"
         if not streaming:
             metadata = {}
             prompt = tx_data["text"]
             content = chat.pipe(prompt=prompt, **chat.pipe_kwargs).images[0]
-            gen_data = disk.add_to_metadata(pipe=chat.pipe, model=chat.reg_entries.model, prompt=[prompt], kwargs=chat.pipe_kwargs)
+            gen_data = disk.add_to_metadata(pipe=chat.pipe, model=chat.registry_entries.model, prompt=[prompt], kwargs=chat.pipe_kwargs)
             nfo(f"content = {content}")
             metadata.update(gen_data.get("parameters"))
             nfo(f"content type output {content}, {type(content)}")

@@ -8,10 +8,10 @@ from unittest.mock import patch
 import pytest
 import pytest_asyncio
 
-from mir.json_cache import LIBTYPE_PATH_NAMED, JSONCache
+from mir.json_cache import CUETYPE_PATH_NAMED, JSONCache
 
 
-class LibType(Enum):
+class CueType(Enum):
     """API library constants"""
 
     # Integers are used to differentiate boolean condition
@@ -22,6 +22,8 @@ class LibType(Enum):
     CORTEX: tuple = (True, "CORTEX")
     LLAMAFILE: tuple = (True, "LLAMAFILE")
     VLLM: tuple = (True, "VLLM")
+    MLX_AUDIO: tuple = (True, "MLX_AUDIO")
+    KAGGLE: tuple = (True, "KAGGLE")
 
 
 @pytest_asyncio.fixture(loop_scope="module")
@@ -45,7 +47,7 @@ async def has_api():
 
 class PlaceholderClass:
     model = "🤡"
-    library = LibType.CORTEX
+    cuetype = CueType.CORTEX
     api_kwargs = {}
 
 
@@ -91,7 +93,7 @@ async def test_chat_machine_generation(mock_signature, mock_predict, has_api):
     # chat_machine.pipe = None
 
     with patch("zodiac.chat_machine.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
-        chat_machine.active_models(reg_entries=PlaceholderClass, sig=mock_signature)
+        chat_machine.active_models(registry_entries=PlaceholderClass, sig=mock_signature)
 
         assert callable(chat_machine.pipe)
         assert chat_machine.pipe is not None

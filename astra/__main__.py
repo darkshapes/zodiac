@@ -122,14 +122,14 @@ class ButtonsApp(App[str]):
         if start_type is not None and end_type is not None:
             self.intent_processor.set_path(mode_in=start_type, mode_out=end_type)
             results_panel.write(f"path request : {self.intent_processor.coord_path}")
-            self.intent_processor.set_reg_entries()
+            self.intent_processor.set_registry_entries()
 
             self.tokenizer = next(iter(self.intent_processor.models)) if self.intent_processor.models is not None else ""
             # nfo(self.intent_processor.intent_graph.nodes(data=True))
             # nfo([*self.intent_processor.intent_graph.edges(data=True)])
 
             self.query_one("#response_panel").insert(f"{str(self.tokenizer)}\n")
-            results_panel.write(f"model :\n {[x['entry'].model for x in list(self.intent_processor.reg_entries)]}\n")
+            results_panel.write(f"model :\n {[x['entry'].model for x in list(self.intent_processor.registry_entries)]}\n")
             convert_type = self.query_one("#convert_type")
             all_fields = GenTypeCText.model_fields | GenTypeC.model_fields
             convert_type.remove_children(ListItem)

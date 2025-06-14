@@ -19,7 +19,7 @@ class TestFlow:
     def test_flow_builder_edge_create_success(self, mock_ollama_data, mock_hub_data, mode_in: str = "text", mode_out: str = "speech"):
         from pytest import raises
         from mir.registry_entry import RegistryEntry
-        from mir.constants import LibType, PkgType
+        from mir.constants import CueType, PkgType
         from zodiac.graph import IntentProcessor
 
         self.graph = IntentProcessor()
@@ -32,8 +32,8 @@ class TestFlow:
         assert f"{self.graph.intent_graph}" == f"MultiDiGraph with {len(VALID_CONVERSIONS)} nodes and {model_data_len} edges"
         self.graph.set_path(mode_in=mode_in, mode_out=mode_out)
         assert self.graph.has_path() is True
-        self.graph.set_reg_entries()
-        assert self.graph.has_reg_entries() is True
+        self.graph.set_registry_entries()
+        assert self.graph.has_registry_entries() is True
         assert self.graph.models == [
             (
                 "parler-tts-large-v1",
@@ -45,7 +45,7 @@ class TestFlow:
                 model="parler-tts/parler-tts-large-v1",
                 size=9335526346,
                 tags=["text-to-speech", "annotation", "text-to-speech"],
-                library=LibType.HUB,
+                cuetype=CueType.HUB,
                 timestamp=1741908821,
                 mir=["info.art.parler-tts", "large-v1"],
                 api_kwargs=None,
@@ -57,16 +57,16 @@ class TestFlow:
         expected_true = expected
         expected.setdefault("weight", 1.0)
         # self.graph.edit_weight("parler", "text", "speech")
-        assert next(iter(self.graph.reg_entries)) == expected_true
+        assert next(iter(self.graph.registry_entries)) == expected_true
         expected_true["weight"] = 0.9
         expected_false = expected
         expected_false.setdefault("weight", 0.8)
         self.graph.edit_weight(0, "text", "speech")
-        assert next(iter(self.graph.reg_entries)) == expected_true
+        assert next(iter(self.graph.registry_entries)) == expected_true
         # with raises(AssertionError) as excinfo:
         self.graph.edit_weight(0, "text", "speech")
         expected_true["weight"] = 1.0
-        assert next(iter(self.graph.reg_entries)) == expected_true
+        assert next(iter(self.graph.registry_entries)) == expected_true
         # import re
 
         # nfo(f"{expected_true} == {expected_false}")
@@ -100,11 +100,11 @@ class TestGraphSetup2(TestCase):
         self.graph.set_path(mode_in=mode_in, mode_out=mode_out)
         nfo(f"coord_path {self.graph.coord_path}")
         assert self.graph.has_path() is True
-        nfo(f"ckpts : {self.graph.reg_entries}")
-        assert self.graph.has_reg_entries() is False
-        self.graph.set_reg_entries()
-        nfo(self.graph.reg_entries)
-        assert self.graph.has_reg_entries() is True
+        nfo(f"ckpts : {self.graph.registry_entries}")
+        assert self.graph.has_registry_entries() is False
+        self.graph.set_registry_entries()
+        nfo(self.graph.registry_entries)
+        assert self.graph.has_registry_entries() is True
         nfo(self.graph.models)
         assert self.graph.models == [("CogView3-Plus-3B", 0)]
         self.graph = None
