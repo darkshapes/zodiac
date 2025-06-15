@@ -3,7 +3,6 @@
 import pytest
 from unittest import TestCase
 from nnll.monitor.file import nfo
-from mir.registry_entry import from_cache
 from mir.constants import VALID_CONVERSIONS
 from test_graph import mock_hub_data, mock_ollama_data
 
@@ -19,7 +18,7 @@ class TestGraph(TestCase):
         assert self.graph.has_path() is False
         assert self.graph.has_registry_entries() is False
         assert self.graph.models is None
-        model_data = registry_entries = {"useless": "data"}
+        model_data = {"useless": "data"}
         self.graph.calc_graph(model_data)
         assert self.graph.has_path() is False
         assert self.graph.has_registry_entries() is False
@@ -30,7 +29,7 @@ class TestGraph(TestCase):
         import gc
 
         self.graph = None
-        gc.collect
+        gc.collect()
 
 
 class TestGraph_2(TestCase):
@@ -63,4 +62,4 @@ class TestGraph_2(TestCase):
         self.graph = None
         import gc
 
-        gc.collect
+        gc.collect()

@@ -11,7 +11,7 @@ from typing import Optional, Any
 # pylint:disable=import-outside-toplevel
 
 from nnll.monitor.file import debug_monitor, nfo, dbug
-from mir.registry_entry import from_cache  # leaving here for mocking
+from mir.provider_pools import register_models  # leaving here for mocking
 
 sys.path.append(os.getcwd())
 
@@ -56,7 +56,7 @@ class IntentProcessor:
         Therefore : While we can trust a node exists, we **CANNOT** trust the system has an edge to reach it\n
         """
         if not registry_entries:
-            registry_entries = from_cache()
+            registry_entries = register_models()
         nfo("Building graph...")
         if registry_entries is None:
             nfo("Registry error, graph attributes not applied.")
