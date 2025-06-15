@@ -3,7 +3,7 @@
 from unittest import TestCase
 import pytest
 from nnll.monitor.file import nfo
-from mir.registry_entry import from_cache
+from mir.provider_pools import register_models
 from mir.constants import VALID_CONVERSIONS
 from test_graph import mock_hub_data, mock_ollama_data, test_mocked_hub, test_mocked_ollama, test_mocked_hub
 
@@ -24,7 +24,7 @@ class TestFlow:
 
         self.graph = IntentProcessor()
         # graph.calc_graph()
-        model_data = from_cache()
+        model_data = register_models()
         self.graph.calc_graph(model_data)
         model_data_len = 0
         for model in model_data:
@@ -75,7 +75,7 @@ class TestFlow:
         self.graph = None
         import gc
 
-        gc.collect
+        gc.collect()
 
 
 class TestGraphSetup2(TestCase):
@@ -89,7 +89,7 @@ class TestGraphSetup2(TestCase):
 
     def test_flow_builder_edge_create_success(self, mode_in: str = "text", mode_out: str = "image"):
         # graph.calc_graph()
-        model_data = from_cache()
+        model_data = register_models()
         self.graph.calc_graph(model_data)
         assert self.graph.has_graph() is True
         model_data_len = 0
@@ -110,4 +110,4 @@ class TestGraphSetup2(TestCase):
         self.graph = None
         import gc
 
-        gc.collect
+        gc.collect()

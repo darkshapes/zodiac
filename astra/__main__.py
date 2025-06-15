@@ -73,10 +73,10 @@ class ButtonsApp(App[str]):
         build_button = self.query_one("#build")
         if self.hover_name == "build":
             # event.stop()
-            from mir.registry_entry import from_cache
+            from mir.provider_pools import register_models
 
             self.intent_processor = IntentProcessor()
-            self.intent_processor.calc_graph(from_cache())
+            self.intent_processor.calc_graph(register_models())
             results_panel.write(f"Created {self.intent_processor.intent_graph}")
             start_points = self.query_one("#start_points")
             end_points = self.query_one("#end_points")

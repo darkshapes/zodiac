@@ -74,11 +74,11 @@ class Fold(Screen[bool]):
     def compose(self) -> ComposeResult:
         """Textual API widget constructor, build graph, apply custom widget classes"""
         # from textual.widgets import Footer
-        from mir.registry_entry import from_cache
+        from mir.provider_pools import register_models
 
         self.int_proc = IntentProcessor()
 
-        self.int_proc.calc_graph(from_cache())
+        self.int_proc.calc_graph(register_models())
         nfo("Graph calculated.")
         with Horizontal(id="app-grid", classes="app-grid-horizontal"):
             yield ResponsiveLeftTop(id="left-frame")
