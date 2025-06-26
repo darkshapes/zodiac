@@ -7,7 +7,7 @@
 import pytest
 from textual.containers import Container, Horizontal  # noqa
 
-from zodiac.__main__ import Combo
+from zodiac.console.__main__ import Combo
 from test_graph import mock_ollama_data, mock_hub_data, test_mocked_hub, test_mocked_ollama, test_create_graph
 
 

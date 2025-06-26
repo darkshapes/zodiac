@@ -7,13 +7,13 @@ from unittest import mock
 import pytest
 import pytest_asyncio
 
-from zodiac.__main__ import Combo
+from zodiac.console.__main__ import Combo
 
 
 @pytest_asyncio.fixture(loop_scope="module")
 def mock_generate_response():
     """Create a decoy chat machine"""
-    with mock.patch("zodiac.main_screen.Fold.send_tx", mock.MagicMock()) as mocked:
+    with mock.patch("zodiac.console.main_screen.Fold.send_tx", mock.MagicMock()) as mocked:
         yield mocked
 
 
