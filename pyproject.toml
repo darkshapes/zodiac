@@ -28,16 +28,13 @@ classifiers = [
 dependencies = [
     "dspy>=2.6.27",
     "litellm>=1.72.0",
-    "matplotlib>=3.10.3",
-    "nnll[full] @ git+https://github.com/darkshapes/nnll@main",
     "networkx>=3.5",
     "sounddevice>=0.5.2",
     "soundfile>=0.13.1",
-    "textual-dev>=1.7.0",
-    "textual-plotext>=1.0.1",
-    "textual[syntax]>=3.3.0",
+    "nnll[full] @ git+https://github.com/darkshapes/nnll@main",
     "tiktoken>=0.9.0",
     "viztracer>=1.0.4",
+    "matplotlib>=3.10.3",
 ]
 
 [dependency-groups]
@@ -47,15 +44,23 @@ dev = [
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
     "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
+    "zodiac[full]",
 ]
 
 [project.optional-dependencies]
+console = [
+    "textual-dev>=1.7.0",
+    "textual-plotext>=1.0.1",
+    "textual[syntax]>=3.3.0",
+]
+full = ["zodiac[console]"]
 dev = [
     "matplotlib>=3.10.3",
     "pytest>=8.4.0",
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
     "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
+    "zodiac[full]",
 ]
 
 [project.urls]
@@ -63,7 +68,7 @@ Homepage      = "https://github.com/darkshapes/zodiac"
 Documentation = "https://github.com/darkshapes/sdbx/wiki"
 
 [project.scripts]
-zdac   = "zodiac.__init__:main"
+zdac   = "zodiac.console.__main__:main"
 zodiac = "zodiac.__init__:main"
 astra  = "astra.__init__:main"
 

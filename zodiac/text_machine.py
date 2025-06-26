@@ -42,7 +42,7 @@ class QASignature(dspy.Signature):
 
 
 # Don't capture user prompts: AVOID logging this class as much as possible
-class VectorMachine(dspy.Module):
+class TextMachine(dspy.Module):
     """Base module for inference using async and `dspy.Predict` List-based memory\n
     Defaults to 5 question history, 4 max workers, and `HistorySignature` query"""
 

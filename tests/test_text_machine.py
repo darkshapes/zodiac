@@ -29,13 +29,13 @@ class CueType(Enum):
 
 @pytest_asyncio.fixture(loop_scope="module")
 async def mock_signature():
-    with patch("zodiac.chat_machine.dspy.Signature", autospec=True) as mocked:
+    with patch("zodiac.text_machine.dspy.Signature", autospec=True) as mocked:
         yield mocked
 
 
 @pytest_asyncio.fixture(loop_scope="module")
 async def mock_predict():
-    with patch("zodiac.chat_machine.dspy.Predict", autospec=True) as mocked:
+    with patch("zodiac.text_machine.dspy.Predict", autospec=True) as mocked:
         yield mocked
 
 
@@ -61,40 +61,40 @@ async def test_chat_instance(mock_signature, mock_predict):
 
     # Create an instance of ChatMachineWithMemory
     max_workers = 8
-    from zodiac.chat_machine import VectorMachine
+    from zodiac.text_machine import TextMachine
 
-    return VectorMachine(max_workers=max_workers)  # sig=mock_signature,
-
-
-@pytest.mark.filterwarnings("ignore:open_text")
-@pytest.mark.filterwarnings("ignore::DeprecationWarning:")
-@pytest.mark.asyncio(loop_scope="module")
-async def test_chat_machine_initialization(mock_signature, mock_predict):
-    chat_machine = await test_chat_instance(mock_signature, mock_predict)
-    with patch("zodiac.chat_machine.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
-        assert hasattr(chat_machine, "mir_db")
-        assert chat_machine.mir_db.database is not None
-        assert callable(chat_machine.mir_db.find_path)
-        assert hasattr(chat_machine, "factory")
-        assert chat_machine.factory is not None
-        assert callable(chat_machine.factory.create_pipeline)
-        assert callable(chat_machine)
-        assert callable(chat_machine.forward)
+    return TextMachine(max_workers=max_workers)  # sig=mock_signature,
 
 
 @pytest.mark.filterwarnings("ignore:open_text")
 @pytest.mark.filterwarnings("ignore::DeprecationWarning:")
 @pytest.mark.asyncio(loop_scope="module")
-async def test_chat_machine_generation(mock_signature, mock_predict, has_api):
-    # from zodiac.chat_machine import ChatMachineWithMemory
+async def test_text_machine_initialization(mock_signature, mock_predict):
+    text_machine = await test_chat_instance(mock_signature, mock_predict)
+    with patch("zodiac.text_machine.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
+        assert hasattr(text_machine, "mir_db")
+        assert text_machine.mir_db.database is not None
+        assert callable(text_machine.mir_db.find_path)
+        assert hasattr(text_machine, "factory")
+        assert text_machine.factory is not None
+        assert callable(text_machine.factory.create_pipeline)
+        assert callable(text_machine)
+        assert callable(text_machine.forward)
 
-    # chat_machine = ChatMachineWithMemory(max_workers=8)
-    chat_machine = await test_chat_instance(mock_signature, mock_predict)
-    assert chat_machine.pipe is None
-    # chat_machine.pipe = None
 
-    with patch("zodiac.chat_machine.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
-        chat_machine.active_models(registry_entries=PlaceholderClass, sig=mock_signature)
+@pytest.mark.filterwarnings("ignore:open_text")
+@pytest.mark.filterwarnings("ignore::DeprecationWarning:")
+@pytest.mark.asyncio(loop_scope="module")
+async def test_text_machine_generation(mock_signature, mock_predict, has_api):
+    # from zodiac.text_machine import ChatMachineWithMemory
 
-        assert callable(chat_machine.pipe)
-        assert chat_machine.pipe is not None
+    # text_machine = ChatMachineWithMemory(max_workers=8)
+    text_machine = await test_chat_instance(mock_signature, mock_predict)
+    assert text_machine.pipe is None
+    # text_machine.pipe = None
+
+    with patch("zodiac.text_machine.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
+        text_machine.active_models(registry_entries=PlaceholderClass, sig=mock_signature)
+
+        assert callable(text_machine.pipe)
+        assert text_machine.pipe is not None

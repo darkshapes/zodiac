@@ -564,8 +564,8 @@ wheels = [
 
 [[package]]
 name = "diffusers"
-version = "0.34.0.dev0"
-source = { git = "https://github.com/huggingface/diffusers#88466358733da21a4ab45d85300ee6960f588e7d" }
+version = "0.35.0.dev0"
+source = { git = "https://github.com/huggingface/diffusers#00f95b9755718aabb65456e791b8408526ae6e76" }
 dependencies = [
     { name = "filelock" },
     { name = "huggingface-hub" },
@@ -660,16 +660,16 @@ sdist = { url = "https://files.pythonhosted.org/packages/62/59/e47bbd0542d0e6f4c
 
 [[package]]
 name = "fastapi"
-version = "0.115.13"
+version = "0.115.14"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pydantic" },
     { name = "starlette" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/20/64/ec0788201b5554e2a87c49af26b77a4d132f807a0fa9675257ac92c6aa0e/fastapi-0.115.13.tar.gz", hash = "sha256:55d1d25c2e1e0a0a50aceb1c8705cd932def273c102bff0b1c1da88b3c6eb307", size = 295680, upload-time = "2025-06-17T11:49:45.575Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ca/53/8c38a874844a8b0fa10dd8adf3836ac154082cf88d3f22b544e9ceea0a15/fastapi-0.115.14.tar.gz", hash = "sha256:b1de15cdc1c499a4da47914db35d0e4ef8f1ce62b624e94e0e5824421df99739", size = 296263, upload-time = "2025-06-26T15:29:08.21Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/59/4a/e17764385382062b0edbb35a26b7cf76d71e27e456546277a42ba6545c6e/fastapi-0.115.13-py3-none-any.whl", hash = "sha256:0a0cab59afa7bab22f5eb347f8c9864b681558c278395e94035a741fc10cd865", size = 95315, upload-time = "2025-06-17T11:49:44.106Z" },
+    { url = "https://files.pythonhosted.org/packages/53/50/b1222562c6d270fea83e9c9075b8e8600b8479150a18e4516a6138b980d1/fastapi-0.115.14-py3-none-any.whl", hash = "sha256:6c0c8bf9420bd58f565e585036d971872472b4f7d3f6c73b698e10cffdefb3ca", size = 95514, upload-time = "2025-06-26T15:29:06.49Z" },
 ]
 
 [[package]]
@@ -1666,7 +1666,7 @@ wheels = [
 [[package]]
 name = "mir"
 version = "0.0.1"
-source = { git = "https://github.com/darkshapes/mir?rev=main#b5ce12287115758e2dcce966d3df391380ea9e14" }
+source = { git = "https://github.com/darkshapes/mir?rev=main#648d4476b2d4d968472fa3572439d20d60a6ec81" }
 dependencies = [
     { name = "diffusers" },
     { name = "flash-attn", marker = "sys_platform == 'Linux'" },
@@ -2293,8 +2293,8 @@ wheels = [
 
 [[package]]
 name = "openai-whisper"
-version = "20240930"
-source = { git = "https://github.com/openai/whisper.git#1f8fc975d3f679035f55d9838158ab688e39a82e" }
+version = "20250625"
+source = { git = "https://github.com/openai/whisper.git#c0d2f624c09dc18e709e37c2ad90c039a4eb72a2" }
 dependencies = [
     { name = "more-itertools" },
     { name = "numba" },
@@ -4012,8 +4012,8 @@ wheels = [
 
 [[package]]
 name = "transformers"
-version = "4.53.0.dev0"
-source = { git = "https://github.com/huggingface/transformers#1d45d90e5d1552eccb6d8cc9b7bba283ccefb808" }
+version = "4.54.0.dev0"
+source = { git = "https://github.com/huggingface/transformers#23b7e73f0581a880370477597dc948e07c2f064b" }
 dependencies = [
     { name = "filelock" },
     { name = "huggingface-hub" },

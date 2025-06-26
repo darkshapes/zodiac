@@ -1,27 +1,40 @@
 #  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0  */ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
-import multiprocessing as mp
 import sys
 import os
-from nnll.configure import USER_PATH_NAMED, HOME_FOLDER_PATH
+import argparse
+import multiprocessing as mp
 
 mp.set_start_method("spawn", force=True)
-
-# pylint:disable=import-outside-toplevel
 sys.path.append(os.getcwd())
+# import platform
+
+# if platform.system == "darwin":
+#     import multiprocessing as mp
+
+#     mp.set_start_method("fork", force=True)
 
 
-def set_env(args: bool) -> None:
-    """Parse launch arguments (mostly turning down/disconnecting loud dependency packages)\n
-    :param args: Launch arguments from command line
-    """
+def start_trace():
+    from viztracer import VizTracer
+    from datetime import datetime
 
+    assembled_path = os.path.join("log", f".nnll{datetime.now().strftime('%Y%m%d')}_trace.json")
+    os.makedirs("log", exist_ok=True)
+    tracer = VizTracer()
+    tracer.start()
+    return tracer, assembled_path
+
+
+def set_env(args: argparse.ArgumentParser):
     os.environ["TELEMETRY"] = "False"
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     try:
         import huggingface_hub
-
+    except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
+        pass
+    else:
         huggingface_hub.constants.HF_HUB_DISABLE_TELEMETRY = 1  # privacy
         huggingface_hub.constants.HF_HUB_DISABLE_IMPLICIT_TOKEN = 1
         huggingface_hub.constants.HF_XET_HIGH_PERFORMANCE = int(args.net or args.diag)  # download methods (if online)
@@ -36,41 +49,28 @@ def set_env(args: bool) -> None:
         os.environ["HF_HUB_OFFLINE"] = str(int(not args.net or not args.diag))
 
         os.environ["DISABLE_HF_TOKENIZER_DOWNLOAD"] = str(not args.net or not args.diag)  # litellm
-
-    except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
-        pass
+        # huggingface_hub.constants.HF_HUB_VERBOSITY
 
     try:
         import litellm
-
+    except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
+        pass
+    else:
         litellm.disable_streaming_logging = True
         litellm.turn_off_message_logging = True
         litellm.suppress_debug_info = True
         litellm.json_logs = True  # type: ignore
-
         litellm.disable_end_user_cost_tracking = True
         litellm.telemetry = False
         litellm.disable_hf_tokenizer_download = not args.net  # -net = True -> disable download = False/0
         os.environ["DISABLE_END_USER_COST_TRACKING"] = "True"
-
-        # huggingface_hub.constants.HF_HUB_VERBOSITY
-
-    except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
-        pass
+    return True
 
 
 def main() -> None:
-    """Launch textual UI"""
-    # import platform
-
-    # if platform.system == "darwin":
-    #     import multiprocessing as mp
-
-    #     mp.set_start_method("fork", force=True)
-
-    import argparse
-    from zodiac.__main__ import Combo
-    from nnll.monitor.console import nfo
+    """Parse launch arguments (mostly turning down/disconnecting loud dependency packages)\n
+    :param args: Launch arguments from command line
+    """
 
     parser = argparse.ArgumentParser(description="Multimodal generative media sequencer")
     parser.add_argument("-n", "--net", action="store_true", help="Allow network access (for downloading requirements)")
@@ -80,27 +80,22 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    set_env(args)
+    parser = argparse.ArgumentParser(description="Multimodal generative media sequencer")
+    parser.add_argument("-n", "--net", action="store_true", help="Allow network access (for downloading requirements)")
+    parser.add_argument("-t", "--trace", action="store_true", help="Enable trace logs (generated in log folder)")
 
-    if args.trace:
-        from viztracer import VizTracer
+    parser.add_argument("-d", "--diag", action="store_true", help="Process using diagnostic settings")
 
-        tracer = VizTracer()
-        tracer.start()
-    app = Combo(ansi_color=False)
-    nfo("Launching...")
-    app.run()
-    if args.trace:
-        from datetime import datetime
+    args = parser.parse_args()
 
-        os.makedirs("log", exist_ok=True)
-        assembled_path = os.path.join("log", f".nnll{datetime.now().strftime('%Y%m%d')}_trace.json")
-        tracer.stop()
-        tracer.save(output_file=assembled_path)  # also takes output_file as an optional argument
+    env_ready = set_env(args)
+    if env_ready:
+        tracer, assembled_path = start_trace() if args.trace else None, None
+        return tracer, assembled_path
 
 
 if __name__ == "__main__":
-    main()
-
-    # asyncio.run(main()) #ValueError: a coroutine was expected, got None
-    # RuntimeError: asyncio.run() cannot be called from a running event loop
+    tracer, assembled_path = main()
+    if tracer and hasattr(tracer.stop):
+        tracer.stop()
+        tracer.save(output_file=assembled_path)

@@ -12,7 +12,8 @@ async def tk_count(model: str, message: str) -> Callable:
     :param message: Text to encode
     :return: Token embeddings
     """
-    return await litellm_counter(model, message)
+    character_count = len(message)
+    return await litellm_counter(model, message), character_count
 
 
 async def litellm_counter(model: str, message: str) -> Callable:

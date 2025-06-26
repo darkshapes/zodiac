@@ -1,6 +1,6 @@
 import pytest
 
-from zodiac.__main__ import Combo
+from zodiac.console.__main__ import Combo
 from nnll.monitor.console import nfo
 from textual.screen import Screen
 from textual.containers import Horizontal
