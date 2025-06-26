@@ -2,9 +2,9 @@
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 from unittest import TestCase
 import pytest
-from nnll.monitor.file import nfo
-from mir.provider_pools import register_models
-from mir.constants import VALID_CONVERSIONS
+from nnll.monitor.console import nfo
+from zodiac.providers.pools import register_models
+from zodiac.providers.constants import VALID_CONVERSIONS
 from test_graph import mock_hub_data, mock_ollama_data, test_mocked_hub, test_mocked_ollama, test_mocked_hub
 
 
@@ -18,8 +18,8 @@ class TestFlow:
 
     def test_flow_builder_edge_create_success(self, mock_ollama_data, mock_hub_data, mode_in: str = "text", mode_out: str = "speech"):
         from pytest import raises
-        from mir.registry_entry import RegistryEntry
-        from mir.constants import CueType, PkgType
+        from zodiac.providers.registry_entry import RegistryEntry
+        from zodiac.providers.constants import CueType, PkgType
         from zodiac.graph import IntentProcessor
 
         self.graph = IntentProcessor()
@@ -47,7 +47,7 @@ class TestFlow:
                 tags=["text-to-speech", "annotation", "text-to-speech"],
                 cuetype=CueType.HUB,
                 timestamp=1741908821,
-                mir=["info.art.parler-tts", "large-v1"],
+                mir=["info.artm.parler-tts", "large-v1"],
                 api_kwargs=None,
                 package=PkgType.TRANSFORMERS,
                 tokenizer=None,

@@ -7,10 +7,8 @@ from typing import Any, Optional
 import dspy
 # from pydantic import BaseModel, Field
 
-from nnll.monitor.file import nfo
-from mir.registry_entry import RegistryEntry
-from mir.constants import CueType
-
+from nnll.monitor.console import nfo
+from zodiac.providers.registry_entry import RegistryEntry
 
 ps_sysprompt = "Provide x for Y"
 bqa_sysprompt = "Reply with short responses within 60-90 word/10k character code limits"
@@ -55,14 +53,14 @@ class VectorMachine(dspy.Module):
         :param signature: The format of messages sent to the model
         :param max_workers: Maximum number of async processes, based on system resources
         """
-        from nnll.configure.init_gpu import first_available
         from mir.mir_maid import MIRDatabase
         from nnll.tensor_pipe.construct_pipe import ConstructPipeline
+        from zodiac.providers.constants import ChipType
 
         super().__init__()
         self.mir_db = MIRDatabase()
         self.factory = ConstructPipeline()
-        self.device = first_available()
+        self.device = getattr(ChipType, next(iter(ChipType._show_ready())), "CPU")
         self.max_workers = max_workers
         self.registry_entries = None
         self.pipe = None
@@ -79,6 +77,7 @@ class VectorMachine(dspy.Module):
         :param streaming: output type flag, defaults to True
         :yield: responses in chunks or response as a single block
         """
+        from zodiac.providers.constants import CueType, ChipType
 
         self.registry_entries = registry_entries
         self.sig = sig
@@ -98,12 +97,16 @@ class VectorMachine(dspy.Module):
             return self.pipe
         else:
             from nnll.tensor_pipe import segments
-            from nnll.configure.init_gpu import soft_random, seed_planter, first_available
+            from nnll.configure.init_gpu import seed_planter
 
-            mir_arch = self.registry_entries_entries.mir
+            mir_arch = self.registry_entries.mir
             series = mir_arch[0]
             arch_data = self.mir_db.database[series][mir_arch[1]]
-            init_modules = self.mir_db.database[series]["[init]"]
+            pkg_data = self.mir_db.database[series]["pkg"][0]
+            for pkg in ChipType._show_pkgs():  # pylint:disable=protected-access
+                init_modules = pkg_data.get(pkg.value[1].lower())
+                if init_modules:
+                    break
             self.pipe, model, self.import_pkg, self.pipe_kwargs = self.factory.create_pipeline(arch_data=arch_data, init_modules=init_modules)
 
             # lora=lora_opt)
@@ -126,7 +129,7 @@ class VectorMachine(dspy.Module):
             }
             self.pipe_kwargs.update(user_set)
 
-            if "mps" == first_available(assign=False):
+            if ChipType.MPS[0]:
                 self.pipe.enable_attention_slicing()
             nfo(f"Pre-generator Model {model}  Pipe {self.pipe} Arguments {self.pipe_kwargs}")  # Lora {lora_opt}
             if "diffusers" in self.import_pkg:
@@ -153,6 +156,9 @@ class VectorMachine(dspy.Module):
         yield self.pipe(message=tx_data["text"], stream=self.streaming)  # history=history)
 
     def destroy(self, recycle: bool = True):
+        """殺死他們。 殺死你的敵人。 征服他們的精神。 把他們的頭骨粉碎在你的腳下。
+        Slay them. Slay your enemies. Crush their skulls beneath your feet.\n
+        :param recycle: Please keep cache clean, thank you, defaults to True"""
         from nnll.configure.init_gpu import first_available
         import gc
 

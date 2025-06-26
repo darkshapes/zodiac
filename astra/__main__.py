@@ -9,7 +9,8 @@
 # sys.path.append(os.getcwd())
 
 import networkx as nx
-from nnll.monitor.file import dbug, debug_monitor, nfo
+from nnll.monitor.file import dbug, debug_monitor
+from nnll.monitor.console import nfo
 from mir.constants import GenTypeC, GenTypeCText
 from textual import events, work
 from textual.app import App, ComposeResult

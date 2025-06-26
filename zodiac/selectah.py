@@ -3,14 +3,14 @@
 
 # pylint: disable=import-outside-toplevel
 
-# import networkx as nx
+
 from textual import on, events, work
 from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Select
-from textual.widgets._select import SelectOverlay  # , SelectCurrent,
-
-from nnll.monitor.file import dbug, debug_monitor, nfo
+from textual.widgets._select import SelectOverlay
+from nnll.monitor.file import dbug, debug_monitor
+from nnll.monitor.console import nfo
 
 
 class Selectah(Select):

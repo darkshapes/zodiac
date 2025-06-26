@@ -7,8 +7,7 @@ from textual import events
 from textual.widgets import DataTable
 from textual.screen import Screen
 from textual.reactive import reactive
-
-from nnll.monitor.file import debug_monitor  # , nfo  # dbug,
+from nnll.monitor.file import debug_monitor
 
 
 class Carousel(DataTable):

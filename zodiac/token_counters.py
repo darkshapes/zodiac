@@ -2,7 +2,7 @@
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 # pylint: disable=import-error
-# from nnll_30 import read_json_file
+
 from typing import Callable
 
 
@@ -37,7 +37,7 @@ async def ollama_counter(model: str, message: str) -> int:
     :param message: Message to tokenize
     :return: `int` Number of tokens needed to represent message
     """
-    from mir.constants import CueType
+    from zodiac.providers.constants import CueType
 
     if not CueType.OLLAMA:
         return 0
@@ -68,7 +68,7 @@ async def cortex_counter(model: str, message: str) -> int:
     :param message: Message to tokenize
     :return: `int` Number of tokens needed to represent message
     """
-    from mir.constants import CueType
+    from zodiac.providers.constants import CueType
 
     if not CueType.CORTEX:
         return 0
@@ -92,7 +92,7 @@ async def lmstudio_counter(model: str, message: str) -> int:
     :param message: Message to tokenize
     :return: `int` Number of tokens needed to represent message
     """
-    from mir.constants import CueType
+    from zodiac.providers.constants import CueType
 
     if not CueType.LM_STUDIO:
         return 0

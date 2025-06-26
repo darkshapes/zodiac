@@ -8,7 +8,8 @@ from unittest.mock import patch
 import pytest
 import pytest_asyncio
 
-from mir.json_cache import CUETYPE_PATH_NAMED, JSONCache
+from mir.json_cache import JSONCache
+from zodiac.providers.constants import CUETYPE_PATH_NAMED
 
 
 class CueType(Enum):
@@ -40,7 +41,7 @@ async def mock_predict():
 
 @pytest_asyncio.fixture(loop_scope="module")
 async def has_api():
-    with patch("mir.constants.has_api", autospec=True) as mocked:
+    with patch("zodiac.providers.constants.has_api", autospec=True) as mocked:
         mocked.return_value = True
         yield mocked
 

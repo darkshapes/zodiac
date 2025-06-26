@@ -29,9 +29,8 @@ dependencies = [
     "dspy>=2.6.27",
     "litellm>=1.72.0",
     "matplotlib>=3.10.3",
-    "mir[full] @ git+https://github.com/darkshapes/mir@main",
+    "nnll[full] @ git+https://github.com/darkshapes/nnll@main",
     "networkx>=3.5",
-    "numpy>=2.2.6",
     "sounddevice>=0.5.2",
     "soundfile>=0.13.1",
     "textual-dev>=1.7.0",
@@ -47,7 +46,7 @@ dev = [
     "pytest>=8.4.0",
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
-    "mir[dev] @ git+https://github.com/darkshapes/mir@main",
+    "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
 ]
 
 [project.optional-dependencies]
@@ -56,7 +55,7 @@ dev = [
     "pytest>=8.4.0",
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
-    "mir[dev] @ git+https://github.com/darkshapes/mir@main",
+    "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
 ]
 
 [project.urls]
@@ -70,6 +69,10 @@ astra  = "astra.__init__:main"
 
 [tool.setuptools]
 packages = ["zodiac"]
+
+[tool.uv]
+preview    = true
+prerelease = "allow"
 
 [tool.ruff]
 line-length    = 140
@@ -93,5 +96,4 @@ files.extend-exclude = ["^tests/.*$", "test.*$"]
 default.extend-words = { "ot" = "ot" }
 
 [tool.uv.sources]
-mir  = { git = "https://github.com/darkshapes/mir", rev = "main" }
 nnll = { git = "https://github.com/darkshapes/nnll", rev = "main" }

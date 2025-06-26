@@ -1,0 +1,68 @@
+{
+    "OLLAMA": {
+        "module": "ollama",
+        "api_url": "http://localhost:11434/",
+        "api_kwargs": {
+            "api_base": "http://localhost:11434/api/chat",
+            "model_type": "chat"
+        },
+        "prefix": "ollama_chat/"
+    },
+    "HUB": {
+        "module": "huggingface_hub",
+        "api_kwargs": {
+            "api_base": "http://127.0.0.1:8188"
+        }
+    },
+    "LM_STUDIO": {
+        "module": "lmstudio",
+        "api_url": "http://localhost:1234/v1",
+        "api_kwargs": {
+            "api_base": "http://localhost:1234/v1",
+            "api_key": "lm-studio"
+        },
+        "prefix": "lm_studio/"
+    },
+    "CORTEX": {
+        "module": "openai",
+        "api_url": "http://127.0.0.1:39281/",
+        "api_kwargs": {
+            "api_base": "http://127.0.0.1:39281/v1/chat/completions",
+            "api_key": "sk-no-key-required"
+        },
+        "prefix": "openai/"
+    },
+    "LLAMAFILE": {
+        "module": "openai",
+        "api_url": "http://localhost:8080/v1",
+        "api_kwargs": {
+            "api_base": "http://localhost:8080/v1",
+            "api_key": "sk-no-key-required"
+        },
+        "prefix": "openai/"
+    },
+    "VLLM": {
+        "module": "vllm",
+        "api_url": "http://localhost:8000/",
+        "api_kwargs": {
+            "api_base": "http://localhost:8000/chat/completions",
+            "api_key": "sk-no-key-required"
+        },
+        "prefix": "hosted_vllm/"
+    },
+    "MLX_AUDIO": {
+        "module": "mlx_audio",
+        "api_url": "http://127.0.0.1:8000/",
+        "api_kwargs": {
+            "api_base": "http://127.0.0.1:8000/tts"
+        },
+        "prefix": ""
+    },
+    "KAGGLE": {
+        "module": "kagglehub",
+        "api_kwargs": {
+            "api_base": "http://127.0.0.1:8188"
+        },
+        "prefix": ""
+    }
+}

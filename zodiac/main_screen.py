@@ -13,8 +13,9 @@ from typing import Any, Callable, Union  # , Any
 
 import psutil
 from dspy import Module as dspy_Module
-from mir.registry_entry import RegistryEntry
-from nnll.monitor.file import dbug, debug_monitor, nfo
+
+from nnll.monitor.file import dbug, debug_monitor
+from nnll.monitor.console import nfo
 from textual import events, on, work
 from textual.app import ComposeResult
 from textual.binding import Binding
@@ -33,6 +34,7 @@ from zodiac.output_tag import OutputTag
 from zodiac.response_panel import ResponsePanel
 from zodiac.selectah import Selectah
 from zodiac.voice_panel import VoicePanel
+from zodiac.providers.registry_entry import RegistryEntry
 
 lock = asyncio.Lock()
 
@@ -74,7 +76,7 @@ class Fold(Screen[bool]):
     def compose(self) -> ComposeResult:
         """Textual API widget constructor, build graph, apply custom widget classes"""
         # from textual.widgets import Footer
-        from mir.provider_pools import register_models
+        from zodiac.providers.pools import register_models
 
         self.int_proc = IntentProcessor()
 

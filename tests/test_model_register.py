@@ -9,8 +9,6 @@ import pytest_asyncio
 
 from zodiac.__main__ import Combo
 
-from nnll.monitor.file import nfo
-
 
 @pytest_asyncio.fixture(loop_scope="module")
 def mock_generate_response():
@@ -22,7 +20,7 @@ def mock_generate_response():
 @pytest.mark.asyncio(loop_scope="module")
 async def test_status_color_remains(app=Combo()):
     """Control test for status color reflected in text line"""
-    from nnll.monitor.file import nfo
+    from nnll.monitor.console import nfo
 
     async with app.run_test() as pilot:
         expected = frozenset({"selectah"})

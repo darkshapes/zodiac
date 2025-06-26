@@ -3,15 +3,13 @@
 
 # pylint: disable=import-outside-toplevel
 
-
 import sys
 import os
 import networkx as nx
-from typing import Optional, Any
-# pylint:disable=import-outside-toplevel
-
-from nnll.monitor.file import debug_monitor, nfo, dbug
-from mir.provider_pools import register_models  # leaving here for mocking
+from typing import Optional
+from nnll.monitor.file import debug_monitor, dbug
+from nnll.monitor.console import nfo
+from zodiac.providers.pools import register_models  # leaving here for mocking
 
 sys.path.append(os.getcwd())
 
@@ -36,7 +34,7 @@ class IntentProcessor:
         Thus: All possible node start and end points listed in A are included in graph B.\n
         Therefore : It is impossible to call a node that does not exist.\n
         """
-        from mir.constants import VALID_CONVERSIONS  # , RegistryEntry,
+        from zodiac.providers.constants import VALID_CONVERSIONS  # , RegistryEntry,
 
         self.intent_graph = intent_graph
         self.intent_graph.add_nodes_from(VALID_CONVERSIONS)

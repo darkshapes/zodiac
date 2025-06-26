@@ -59,7 +59,7 @@ async def test_no_exit(mock_app, mock_exit):
 @pytest.mark.asyncio(loop_scope="module")
 async def test_exits(mock_app, mock_exit):
     """Test that the app exits correctly."""
-    from nnll.monitor.file import nfo
+    from nnll.monitor.console import nfo
 
     async with mock_app.run_test() as pilot:
         ui_elements = pilot.app._nodes._get_by_id("fold_screen")

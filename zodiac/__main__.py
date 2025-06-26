@@ -1,15 +1,10 @@
 #  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
-# pylint: disable=missing-module-docstring, disable=missing-class-docstring
+# pylint: disable=missing-module-docstring, missing-class-docstring,disable=import-error
 
-from textual import events, on
 from textual.app import App
-
-# from nnll.monitor.file import nfo
-from zodiac.main_screen import Fold  # pylint: disable=import-error
-
-# from theme import fluoresce_theme
+from zodiac.main_screen import Fold
 
 
 class Combo(App):
