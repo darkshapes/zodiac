@@ -4,14 +4,10 @@
 # import array
 
 import sounddevice as sd
-
 from textual import work
-
 from textual.reactive import reactive
-
 from textual_plotext import PlotextPlot
-
-from nnll.monitor.file import nfo  # , debug_monitor
+from nnll.monitor.console import nfo
 
 
 class VoicePanel(PlotextPlot):  # (PlotWidget)

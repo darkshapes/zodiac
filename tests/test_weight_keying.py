@@ -1,6 +1,6 @@
 def test_weight_key_error():
     import networkx as nx
-    from nnll.monitor.file import nfo
+    from nnll.monitor.console import nfo
     from zodiac.graph import IntentProcessor
 
     faux_int = IntentProcessor()

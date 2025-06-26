@@ -2,13 +2,11 @@
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 import multiprocessing as mp
-
-mp.set_start_method("spawn", force=True)
-
-
 import sys
 import os
 from nnll.configure import USER_PATH_NAMED, HOME_FOLDER_PATH
+
+mp.set_start_method("spawn", force=True)
 
 # pylint:disable=import-outside-toplevel
 sys.path.append(os.getcwd())
@@ -72,7 +70,7 @@ def main() -> None:
 
     import argparse
     from zodiac.__main__ import Combo
-    from nnll.monitor.file import nfo
+    from nnll.monitor.console import nfo
 
     parser = argparse.ArgumentParser(description="Multimodal generative media sequencer")
     parser.add_argument("-n", "--net", action="store_true", help="Allow network access (for downloading requirements)")

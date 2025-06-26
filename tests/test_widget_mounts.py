@@ -14,7 +14,7 @@ from test_graph import mock_ollama_data, mock_hub_data, test_mocked_hub, test_mo
 @pytest.mark.asyncio(loop_scope="module")
 async def test_screen_widget_contents(mock_ollama_data, mock_hub_data, app=Combo()):
     """Test elements in screen load"""
-    from nnll.monitor.file import nfo
+    from nnll.monitor.console import nfo
     import sys
 
     async with app.run_test() as pilot:

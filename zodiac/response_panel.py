@@ -1,12 +1,11 @@
 #  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
-# from typing import Callable
 from textual import work
 from textual.screen import Screen
 from textual.widgets import TextArea
-from nnll.monitor.file import nfo  # dbug
 from dspy import Module as dspy_Module
+from nnll.monitor.console import nfo
 
 
 class ResponsePanel(TextArea):

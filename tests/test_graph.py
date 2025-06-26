@@ -7,12 +7,10 @@
 import datetime
 from pathlib import PosixPath
 from unittest import mock
-
-# import matplotlib.pyplot as plt
 import pytest
 from zodiac.graph import IntentProcessor
-from mir.constants import VALID_CONVERSIONS
-from nnll.monitor.file import nfo
+from zodiac.providers.constants import VALID_CONVERSIONS
+from nnll.monitor.console import nfo
 
 
 class Model:
@@ -165,7 +163,7 @@ def test_mocked_hub(mock_hub_data):
 
 def test_create_graph(mock_ollama_data, mock_hub_data):
     """Run test of graph creation"""
-    from mir.provider_pools import register_models
+    from zodiac.providers.pools import register_models
 
     int_proc = IntentProcessor()
     nx_graph = int_proc.calc_graph(register_models())
