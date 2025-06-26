@@ -44,7 +44,7 @@ dev = [
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
     "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
-    "zodiac[console]",
+    "zodiac[full]",
 ]
 
 [project.optional-dependencies]
@@ -53,13 +53,14 @@ console = [
     "textual-plotext>=1.0.1",
     "textual[syntax]>=3.3.0",
 ]
+full = ["zodiac[console"]
 dev = [
     "matplotlib>=3.10.3",
     "pytest>=8.4.0",
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
     "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
-    "zodiac[console]",
+    "zodiac[full]",
 ]
 
 [project.urls]

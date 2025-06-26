@@ -3,41 +3,28 @@
 
 # import array
 
-import sounddevice as sd
 from textual import work
 from textual.reactive import reactive
 from textual_plotext import PlotextPlot
-from nnll.monitor.console import nfo
+from zodiac.audio_machine import AudioMachine
 
 
 class VoicePanel(PlotextPlot):  # (PlotWidget)
     """Create an unselectable display element"""
 
+    snd = AudioMachine()
     ALLOW_SELECT = False
-    audio = [0]
-    sample_freq: int = 16000
-    duration: float = 3.0
-    sample_len: reactive[str] = reactive(str(float(len(audio) / sample_freq) if len(audio) > 1 else 0.0), recompose=True)
+    sample_len: reactive[str] = reactive(snd.sample_length, recompose=True)
 
     def on_mount(self) -> None:
         self.can_focus = True
         self.blur()
         # self.theme = "flexoki"
 
-    # @work(exclusive=True)
-    async def record_audio(self) -> None:
-        """Get audio from mic"""
-        self.sample_freq = 16000
-        self.plt.clear_data()
-        precision = self.duration * self.sample_freq
-        self.audio = [0]
-        self.audio = sd.rec(int(precision), samplerate=self.sample_freq, channels=1)
-        sd.wait()
-        self.graph_audio()
-
-    @work(exclusive=True)
     async def graph_audio(self) -> None:
         """Draw audio waveform"""
+        self.clear_audio()
+        self.audio = self.snd.record_audio()
         self.plt.frame(0)
         self.plt.canvas_color((0, 0, 0))
         self.can_focus = True
@@ -45,26 +32,12 @@ class VoicePanel(PlotextPlot):  # (PlotWidget)
         self.plt.yfrequency("0", "0")
         self.plt.scatter(self.audio[:, 0], marker="braille", color=(128, 0, 255))
 
-    @work(exclusive=True)
-    async def play_audio(self) -> None:
-        """Playback audio recordings"""
-        try:
-            sd.play(self.audio, samplerate=self.sample_freq)
-            sd.wait()
-        except TypeError as error_log:
-            nfo(error_log)
+    async def replay(self) -> None:
+        self.snd.play_audio()
 
-    async def erase_audio(self) -> None:
-        """Clear audio graph and recording"""
+    async def clear_audio(self) -> None:
+        self.snd.erase_audio()
         self.plt.clear_data()
-        self.audio = [0]
-        self.sample_freq = 0.0
-
-    # @work(exclusive=True)
-    # async def time_audio(self) -> float:
-    #     sample_length = len(self.audio)
-    #     duration = float(sample_length / self.sample_freq) if sample_length > 1 else 0.0
-    #     return self.duration
 
     # from textual_plot import PlotWidget, HiResMode
     # to use PlotWidget

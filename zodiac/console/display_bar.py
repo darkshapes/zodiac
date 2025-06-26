@@ -31,8 +31,7 @@ class DisplayBar(DataTable):
     @work(exclusive=True)
     async def show_tokens(self, tokenizer_model: str, message: str) -> None:
         """Live display of tokens and characters"""
-        token_count = await tk_count(tokenizer_model, message)
-        character_count = len(message)
+        token_count, character_count = await tk_count(tokenizer_model, message)
         self.update_cell_at((0, 0), f"     {character_count}{self.unit_labels[0]}")
         self.update_cell_at((0, 1), f"{token_count}{self.unit_labels[1]}")
         self.update_cell_at((0, 2), f"{self.duration}{self.unit_labels[2]}")

@@ -24,7 +24,7 @@ from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Static
 
-from zodiac.chat_machine import BasicImageSignature, VectorMachine, QASignature
+from zodiac.text_machine import BasicImageSignature, TextMachine, QASignature
 from zodiac.console.display_bar import DisplayBar
 from zodiac.console.flip import Flip
 from zodiac.graph import IntentProcessor
@@ -67,7 +67,7 @@ class Fold(Screen[bool]):
     tx_data: dict = {}
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
-    chat: dspy_Module = VectorMachine(max_workers=8)  # and this
+    chat: dspy_Module = TextMachine(max_workers=8)  # and this
 
     mode_in: reactive[str] = reactive("text")
     mode_out: reactive[str] = reactive("text")
@@ -76,11 +76,7 @@ class Fold(Screen[bool]):
     def compose(self) -> ComposeResult:
         """Textual API widget constructor, build graph, apply custom widget classes"""
         # from textual.widgets import Footer
-        from zodiac.providers.pools import register_models
-
         self.int_proc = IntentProcessor()
-
-        self.int_proc.calc_graph(register_models())
         nfo("Graph calculated.")
         with Horizontal(id="app-grid", classes="app-grid-horizontal"):
             yield ResponsiveLeftTop(id="left-frame")
@@ -208,18 +204,18 @@ class Fold(Screen[bool]):
                 self.notify("Playing prompt audio...", severity="information")
                 self.mode_out = "speech"
                 self.ui["ot"].skip_to(self.mode_out)
-                self.ui["vr"].play_audio()
+                self.ui["vr"].replay()
             else:
                 self.notify("Playing response audio...", severity="information")
                 self.mode_in = "speech"
                 self.ui["it"].skip_to(self.mode_in)
-                self.ui["vm"].play_audio()
+                self.ui["vm"].replay()
 
         if is_char("`", "grave_accent"):
             await self.notify_recording()
             self.mode_in = "speech"
             self.ui["it"].skip_to(self.mode_in)
-            await self.ui["vm"].record_audio()
+            await self.ui["vm"].graph_audio()
             await self.audio_to_token()
 
     async def notify_recording(self):
@@ -249,11 +245,7 @@ class Fold(Screen[bool]):
         :param top: Selector for audio panel top or bottom
         """
         panel = "vm" if top else "vr"
-        if self.ui[panel].sample_freq > 1:
-            duration = len(self.ui[panel].audio) / self.ui[panel].sample_freq
-        else:
-            duration = 0.0
-        duration = self.ui["db"].show_time(duration)
+        duration = self.ui["db"].show_time(self.ui[panel].snd.sample_length)
         return duration
 
     # @work(exclusive=True)
@@ -271,7 +263,7 @@ class Fold(Screen[bool]):
         if not io_only:
             self.tx_data = {
                 "text": self.ui["mp"].text,
-                "speech": self.ui["vm"].audio,
+                "speech": self.ui["vm"].snd.audio_stream,
                 # "attachment": self.message_panel.file # drag and drop from external window
                 # "image": self.image_panel.image #  active video feed / screenshot / import file
             }
