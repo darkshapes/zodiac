@@ -25,15 +25,15 @@ from textual.screen import Screen
 from textual.widgets import Static
 
 from zodiac.chat_machine import BasicImageSignature, VectorMachine, QASignature
-from zodiac.display_bar import DisplayBar
-from zodiac.flip import Flip
+from zodiac.console.display_bar import DisplayBar
+from zodiac.console.flip import Flip
 from zodiac.graph import IntentProcessor
-from zodiac.input_tag import InputTag
-from zodiac.message_panel import MessagePanel
-from zodiac.output_tag import OutputTag
-from zodiac.response_panel import ResponsePanel
-from zodiac.selectah import Selectah
-from zodiac.voice_panel import VoicePanel
+from zodiac.console.input_tag import InputTag
+from zodiac.console.message_panel import MessagePanel
+from zodiac.console.output_tag import OutputTag
+from zodiac.console.response_panel import ResponsePanel
+from zodiac.console.selectah import Selectah
+from zodiac.console.voice_panel import VoicePanel
 from zodiac.providers.registry_entry import RegistryEntry
 
 lock = asyncio.Lock()
