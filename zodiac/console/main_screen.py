@@ -77,6 +77,7 @@ class Fold(Screen[bool]):
         """Textual API widget constructor, build graph, apply custom widget classes"""
         # from textual.widgets import Footer
         self.int_proc = IntentProcessor()
+        self.int_proc.calc_graph()
         nfo("Graph calculated.")
         with Horizontal(id="app-grid", classes="app-grid-horizontal"):
             yield ResponsiveLeftTop(id="left-frame")

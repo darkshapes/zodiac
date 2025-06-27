@@ -34,22 +34,26 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: dspy>=2.6.27
 Requires-Dist: litellm>=1.72.0
-Requires-Dist: matplotlib>=3.10.3
-Requires-Dist: nnll[full]@ git+https://github.com/darkshapes/nnll@main
 Requires-Dist: networkx>=3.5
 Requires-Dist: sounddevice>=0.5.2
 Requires-Dist: soundfile>=0.13.1
-Requires-Dist: textual-dev>=1.7.0
-Requires-Dist: textual-plotext>=1.0.1
-Requires-Dist: textual[syntax]>=3.3.0
+Requires-Dist: nnll[full]@ git+https://github.com/darkshapes/nnll@main
 Requires-Dist: tiktoken>=0.9.0
 Requires-Dist: viztracer>=1.0.4
+Requires-Dist: matplotlib>=3.10.3
+Provides-Extra: console
+Requires-Dist: textual-dev>=1.7.0; extra == "console"
+Requires-Dist: textual-plotext>=1.0.1; extra == "console"
+Requires-Dist: textual[syntax]>=3.3.0; extra == "console"
+Provides-Extra: full
+Requires-Dist: zodiac[console]; extra == "full"
 Provides-Extra: dev
 Requires-Dist: matplotlib>=3.10.3; extra == "dev"
 Requires-Dist: pytest>=8.4.0; extra == "dev"
 Requires-Dist: pytest-asyncio>=1.0.0; extra == "dev"
 Requires-Dist: ruff>=0.11.12; extra == "dev"
 Requires-Dist: nnll[dev]@ git+https://github.com/darkshapes/nnll@main ; extra == "dev"
+Requires-Dist: zodiac[full]; extra == "dev"
 Dynamic: license-file
 
 
