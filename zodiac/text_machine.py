@@ -3,7 +3,7 @@
 
 # pylint: disable=pointless-statement, unsubscriptable-object
 
-from typing import Any, Optional
+from typing import Any, Optional, Callable, Dict, Union
 import dspy
 # from pydantic import BaseModel, Field
 
@@ -46,7 +46,15 @@ class TextMachine(dspy.Module):
     """Base module for inference using async and `dspy.Predict` List-based memory\n
     Defaults to 5 question history, 4 max workers, and `HistorySignature` query"""
 
-    def __init__(self, max_workers=4) -> None:
+    streaming: bool = True
+    max_workers: int = 4
+    pipe: Callable = None
+    pipe_kwargs = Dict[str, Union[str, bool, int, float]]
+    registry_entries: RegistryEntry = None
+    import_pkg: str = None
+    recycle: bool = True
+
+    def __init__(self) -> None:
         """
         Instantiate the module, setup parameters, create async streaming generator.\n
         Does not load any models until forward pass
@@ -58,19 +66,16 @@ class TextMachine(dspy.Module):
         from zodiac.providers.constants import ChipType
 
         super().__init__()
+        if not dspy.settings.async_max_workers:
+            dspy.settings.configure(async_max_workers=self.max_workers)
+        elif dspy.settings.async_max_workers != self.max_workers:
+            dspy.settings.async_max_workers = self.max_workers
         self.mir_db = MIRDatabase()
         self.factory = ConstructPipeline()
         self.device = getattr(ChipType, next(iter(ChipType._show_ready())), "CPU")
-        self.max_workers = max_workers
-        self.registry_entries = None
-        self.pipe = None
-        self.pipe_kwargs = None
-        self.import_pkg = None
-        self.streaming = True
         self.sig: dspy.Signature = QASignature
-        self.recycle = True
 
-    def active_models(self, registry_entries: RegistryEntry, sig: dspy.Signature, streaming: bool = True) -> Any:
+    def active_models(self, registry_entries: RegistryEntry, sig: dspy.Signature, streaming: bool = streaming) -> Any:
         """Prepare model for iniference\n
         :param registry_entries: model info
         :param sig: Type of generation output desired
@@ -82,19 +87,14 @@ class TextMachine(dspy.Module):
         self.registry_entries = registry_entries
         self.sig = sig
         self.streaming = streaming
-        model = self.registry_entries.model
-        cuetype = self.registry_entries.cuetype
         lora = None
-        if cuetype != CueType.HUB:
-            api_kwargs = self.registry_entries.api_kwargs
-            nfo(f"api_kwargs_passed = {api_kwargs}")
-            dspy.settings.configure(lm=dspy.LM(model=model, **api_kwargs), async_max_workers=self.max_workers)
+        if self.registry_entries.cuetype != CueType.HUB:
+            self.lm = dspy.LM(model=self.registry_entries.model, **self.registry_entries.api_kwargs)
             if self.streaming:
                 generator = dspy.asyncify(program=dspy.Predict(signature=self.sig))  # this should only be used in the case of text
                 self.pipe = dspy.streamify(generator)
             else:
                 self.pipe = dspy.Predict(signature=self.sig)
-            return self.pipe
         else:
             from nnll.tensor_pipe import segments
             from nnll.configure.init_gpu import seed_planter
@@ -109,7 +109,6 @@ class TextMachine(dspy.Module):
                     break
             self.pipe, model, self.import_pkg, self.pipe_kwargs = self.factory.create_pipeline(arch_data=arch_data, init_modules=init_modules)
 
-            # lora=lora_opt)
             if lora is not None:
                 lora_arch = self.mir_db.database[series].get(lora[1])
                 lora_repo = next(iter(lora_arch["repo"]))  # <- user location here OR this
@@ -153,7 +152,8 @@ class TextMachine(dspy.Module):
         :param tx_data: prompt transmission values for all media formats
         :param mode_out: output type flag, defaults to "text"
         """
-        yield self.pipe(message=tx_data["text"], stream=self.streaming)  # history=history)
+        with dspy.context(lm=self.lm, async_max_workers=self.max_workers):
+            yield self.pipe(message=tx_data["text"], stream=self.streaming)  # history=history)
 
     def destroy(self, recycle: bool = True):
         """殺死他們。 殺死你的敵人。 征服他們的精神。 把他們的頭骨粉碎在你的腳下。

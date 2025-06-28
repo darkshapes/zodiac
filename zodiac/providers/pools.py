@@ -4,7 +4,7 @@
 """Feed models to RegistryEntry class"""
 
 # pylint:disable=protected-access, no-member
-
+import asyncio
 from typing import List, Dict, Optional, Any
 from mir.mir_maid import MIRDatabase
 from nnll.monitor.file import dbuq, debug_monitor
@@ -53,10 +53,10 @@ def hub_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[Regist
             if not package_name:
                 try:
                     series = mir_entry[0]
-                    comp = mir_entry[1]
+                    compatibility = mir_entry[1]
                     module_name = mir_db.database.get(series)
                     if module_name:
-                        sub_module_name = module_name.get(comp)
+                        sub_module_name = module_name.get(compatibility)
                         if sub_module_name:
                             pkg_num = sub_module_name.get("pkg")
                             if pkg_num:
@@ -101,7 +101,7 @@ def ollama_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[Reg
             size=model.size.real,
             tags=[model.details.family],
             cuetype=CueType.OLLAMA,
-            mir=[series for series, comp in mir_db.database.items() if model.details.family in str(comp)],
+            mir=[series for series, compatibility in mir_db.database.items() if model.details.family in str(compatibility)],
             package=CueType.OLLAMA,
             api_kwargs={**config["api_kwargs"]},
             timestamp=int(model.modified_at.timestamp()),
@@ -222,7 +222,7 @@ def lm_studio_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[
 
 
 @CUETYPE_CONFIG.decorator
-def register_models(data: Optional[Dict[str, Any]] = None) -> list[str, RegistryEntry]:
+def register_models(data: Optional[Dict[str, Any]] = None) -> List[RegistryEntry]:
     """
     Retrieve models from ollama server, local huggingface hub cache, local lmstudio cache & vllm.
     我們不應該繼續為LMStudio編碼。 歡迎貢獻者來改進它。 LMStudio is not OSS, but contributions are welcome.

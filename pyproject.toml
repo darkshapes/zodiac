@@ -35,6 +35,7 @@ dependencies = [
     "tiktoken>=0.9.0",
     "viztracer>=1.0.4",
     "matplotlib>=3.10.3",
+    "toga>=0.5.1",
 ]
 
 [dependency-groups]
@@ -53,7 +54,9 @@ console = [
     "textual-plotext>=1.0.1",
     "textual[syntax]>=3.3.0",
 ]
-full = ["zodiac[console]"]
+toga = ["toga>=0.5.1"]
+full = ["zodiac[console,toga]"]
+
 dev = [
     "matplotlib>=3.10.3",
     "pytest>=8.4.0",
@@ -69,7 +72,7 @@ Documentation = "https://github.com/darkshapes/sdbx/wiki"
 
 [project.scripts]
 zdac   = "zodiac.console.__main__:main"
-zodiac = "zodiac.__init__:main"
+zodiac = "zodiac.toga.__main__:main"
 astra  = "astra.__init__:main"
 
 [tool.setuptools]

@@ -60,10 +60,13 @@ async def test_chat_instance(mock_signature, mock_predict):
     mock_signature.return_value = mock_signature
 
     # Create an instance of ChatMachineWithMemory
-    max_workers = 8
+
     from zodiac.text_machine import TextMachine
 
-    return TextMachine(max_workers=max_workers)  # sig=mock_signature,
+    text_machine = TextMachine()
+    text_machine.max_workers = 8
+    return text_machine
+    # sig=mock_signature,
 
 
 @pytest.mark.filterwarnings("ignore:open_text")

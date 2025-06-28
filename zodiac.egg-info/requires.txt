@@ -7,6 +7,7 @@ nnll[full]@ git+https://github.com/darkshapes/nnll@main
 tiktoken>=0.9.0
 viztracer>=1.0.4
 matplotlib>=3.10.3
+toga>=0.5.1
 
 [console]
 textual-dev>=1.7.0
@@ -22,4 +23,7 @@ nnll[dev]@ git+https://github.com/darkshapes/nnll@main
 zodiac[full]
 
 [full]
-zodiac[console]
+zodiac[console,toga]
+
+[toga]
+toga>=0.5.1

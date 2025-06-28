@@ -67,7 +67,7 @@ class Fold(Screen[bool]):
     tx_data: dict = {}
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
-    chat: dspy_Module = TextMachine(max_workers=8)  # and this
+    chat: dspy_Module = TextMachine()  # and this
 
     mode_in: reactive[str] = reactive("text")
     mode_out: reactive[str] = reactive("text")
@@ -306,6 +306,7 @@ class Fold(Screen[bool]):
             sig = BasicImageSignature
         else:
             sig = QASignature
+        self.chat.max_workers = 8
         if registry_entries != self.chat.registry_entries or self.chat.streaming != streaming or sig != self.chat.sig or not self.chat.recycle:
             dbug(f"Graph extraction : {registry_entries}")
             self.chat.active_models(registry_entries=registry_entries, sig=sig, streaming=streaming)
