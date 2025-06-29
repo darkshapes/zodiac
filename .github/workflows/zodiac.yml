@@ -26,8 +26,7 @@ jobs:
       - name: Install dependencies and run tests
         run: |
           sudo apt-get update
-          sudo apt-get -y install libportaudio2
-          sudo apt install libcairo2-dev pkg-config python3-dev
+          sudo apt-get -y install libportaudio2 libcairo2-dev pkg-config python3-dev
           pip cache purge
           rm -rf .venv
           python -m venv .venv
