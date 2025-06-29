@@ -53,6 +53,8 @@ class IntentProcessor:
         Thus: Because of the randomness of B, the set P is unlikely to construct a complete graph attached all available points.\n
         Therefore : While we can trust a node exists, we **CANNOT** trust the system has an edge to reach it\n
         """
+        import asyncio
+
         if not registry_entries:
             registry_entries = register_models()
         nfo("Building graph...")

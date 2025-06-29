@@ -1,4 +1,4 @@
 [console_scripts]
 astra = astra.__init__:main
 zdac = zodiac.console.__main__:main
-zodiac = zodiac.__init__:main
+zodiac = zodiac.toga.__main__:main
