@@ -719,8 +719,8 @@ name = "flash-attn"
 version = "2.8.0.post2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "einops", marker = "sys_platform != 'darwin'" },
-    { name = "torch", marker = "sys_platform != 'darwin'" },
+    { name = "einops", marker = "sys_platform != 'darwin' and sys_platform != 'linux'" },
+    { name = "torch", marker = "sys_platform != 'darwin' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/32/5c/c7610beeb2fc0e70d0c09a93490bb2d07fb6c8fa1f80ef9617b0cd556d76/flash_attn-2.8.0.post2.tar.gz", hash = "sha256:b51d7015eb78f7ab2c332ec7c36681d7e97834f010b52eb4db1f118351982f58", size = 7857730, upload-time = "2025-06-15T01:39:32.219Z" }
 
@@ -3979,6 +3979,19 @@ wheels = [
 ]
 
 [[package]]
+name = "toga-textual"
+version = "0.5.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "textual" },
+    { name = "toga-core" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c8/ca/61cb3aca758e28de719dd17f82fd4fe3e4572f782e680eac6d0414d91443/toga_textual-0.5.1.tar.gz", hash = "sha256:534703b8a7888c3de8a26cc5e913883b04db07799ecc048c2323dcd5c32ae662", size = 16284, upload-time = "2025-05-08T05:13:33.705Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9a/27/4e1202f77b71c2ecd0b8dceeae1ea0db1755e55d99f4d110425e061f8e8f/toga_textual-0.5.1-py3-none-any.whl", hash = "sha256:ac9263f0366bbe02aa4519f2fe9d92da9dc3ff29ca5f21a4ae06a8b6235d1f4a", size = 18190, upload-time = "2025-05-08T05:13:32.079Z" },
+]
+
+[[package]]
 name = "toga-web"
 version = "0.5.1"
 source = { registry = "https://pypi.org/simple" }
@@ -4511,7 +4524,7 @@ name = "triton"
 version = "3.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "setuptools", marker = "sys_platform != 'darwin'" },
+    { name = "setuptools", marker = "(platform_machine != 'aarch64' and sys_platform == 'linux') or (sys_platform != 'darwin' and sys_platform != 'linux')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/21/2f/3e56ea7b58f80ff68899b1dbe810ff257c9d177d288c6b0f55bf2fe4eb50/triton-3.3.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:b31e3aa26f8cb3cc5bf4e187bf737cbacf17311e1112b781d4a059353dfd731b", size = 155689937, upload-time = "2025-05-29T23:39:44.182Z" },
@@ -4525,7 +4538,7 @@ name = "triton-windows"
 version = "3.3.1.post19"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "setuptools", marker = "sys_platform != 'darwin'" },
+    { name = "setuptools", marker = "sys_platform != 'darwin' and sys_platform != 'linux'" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e5/77/7dfe26a49020824a75601eb4327f3245f17b409abf6a632a082eaadb50bf/triton_windows-3.3.1.post19-cp311-cp311-win_amd64.whl", hash = "sha256:f9d80e12b55a842b2ec0c029cc3df4cc1301f839c6396ec93ded35fc80e11a28", size = 41915203, upload-time = "2025-05-30T15:12:20.836Z" },
@@ -4954,6 +4967,7 @@ console = [
     { name = "textual", extra = ["syntax"] },
     { name = "textual-dev" },
     { name = "textual-plotext" },
+    { name = "toga-textual" },
 ]
 dev = [
     { name = "matplotlib" },
@@ -4965,12 +4979,15 @@ dev = [
     { name = "textual-dev" },
     { name = "textual-plotext" },
     { name = "toga" },
+    { name = "toga-textual" },
+
 ]
 full = [
     { name = "textual", extra = ["syntax"] },
     { name = "textual-dev" },
     { name = "textual-plotext" },
     { name = "toga" },
+    { name = "toga-textual" },
 ]
 toga = [
     { name = "toga" },
@@ -5006,6 +5023,8 @@ requires-dist = [
     { name = "tiktoken", specifier = ">=0.9.0" },
     { name = "toga", specifier = ">=0.5.1" },
     { name = "toga", marker = "extra == 'toga'", specifier = ">=0.5.1" },
+    { name = "toga-textual", marker = "extra == 'console'", specifier = ">=0.5.1" },
+
     { name = "viztracer", specifier = ">=1.0.4" },
     { name = "zodiac", extras = ["console", "toga"], marker = "extra == 'full'" },
     { name = "zodiac", extras = ["full"], marker = "extra == 'dev'" },
