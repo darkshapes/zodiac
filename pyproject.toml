@@ -58,6 +58,7 @@ console = [
 toga = ["toga>=0.5.1"]
 full = ["zodiac[toga]"]
 
+
 dev = [
     "matplotlib>=3.10.3",
     "pytest>=8.4.0",

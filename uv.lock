@@ -4980,6 +4980,7 @@ dev = [
     { name = "textual-plotext" },
     { name = "toga" },
     { name = "toga-textual" },
+
 ]
 full = [
     { name = "textual", extra = ["syntax"] },
@@ -5023,6 +5024,7 @@ requires-dist = [
     { name = "toga", specifier = ">=0.5.1" },
     { name = "toga", marker = "extra == 'toga'", specifier = ">=0.5.1" },
     { name = "toga-textual", marker = "extra == 'console'", specifier = ">=0.5.1" },
+
     { name = "viztracer", specifier = ">=1.0.4" },
     { name = "zodiac", extras = ["console", "toga"], marker = "extra == 'full'" },
     { name = "zodiac", extras = ["full"], marker = "extra == 'dev'" },
