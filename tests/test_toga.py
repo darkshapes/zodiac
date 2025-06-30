@@ -10,5 +10,5 @@ async def test_show_edges():
         edge_data = await model_source.show_edges()
     else:
         await asyncio.sleep(1)
-    source = await model_source.ready_tx("text", "text")
+    source = await model_source.trace_models("text", "text")
     print(edge_data)

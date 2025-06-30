@@ -50,12 +50,13 @@ dev = [
 
 [project.optional-dependencies]
 console = [
+    "toga-textual>=0.5.1",
     "textual-dev>=1.7.0",
     "textual-plotext>=1.0.1",
     "textual[syntax]>=3.3.0",
 ]
 toga = ["toga>=0.5.1"]
-full = ["zodiac[console,toga]"]
+full = ["zodiac[toga]"]
 
 dev = [
     "matplotlib>=3.10.3",
@@ -93,7 +94,9 @@ extend-exclude = ["^tests/.*$", "test.*$"]
 [tool.pylint]
 max-line-length = 140
 ignore-paths    = ["^tests/.*$", "test_.*$"]
-disable         = ["C0415"]
+
+[tool.pylint.messages_control]
+disable = ["C0415"]
 
 [tool.ruff.lint.pycodestyle]
 max-line-length               = 140

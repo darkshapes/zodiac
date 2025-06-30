@@ -1,13 +1,12 @@
 #  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
-# pylint: disable=import-outside-toplevel
 
 import sys
 import os
 import networkx as nx
 from typing import Optional
-from nnll.monitor.file import debug_monitor, dbug
+from nnll.monitor.file import debug_monitor, dbug, dbuq
 from nnll.monitor.console import nfo
 from zodiac.providers.pools import register_models  # leaving here for mocking
 
@@ -148,7 +147,7 @@ class IntentProcessor:
         if self.registry_entries:
             for edge, registry in enumerate(self.registry_entries):
                 model = registry["entry"].model
-                nfo(f"node {edge}")
+                dbuq(f"node {edge}")
                 adj_model = (os.path.basename(model), edge)
                 self.models.append(adj_model)
             self.weight_idx = self.weight_idx or []
