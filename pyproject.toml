@@ -45,12 +45,12 @@ dev = [
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
     "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
-    "zodiac[full]",
+    "zodiac[full,console]",
 ]
 
 [project.optional-dependencies]
 console = [
-    "toga-textual>=0.5.1",
+    # "toga-textual>=0.5.1",
     "textual-dev>=1.7.0",
     "textual-plotext>=1.0.1",
     "textual[syntax]>=3.3.0",
@@ -65,7 +65,7 @@ dev = [
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
     "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
-    "zodiac[full]",
+    "zodiac[full,console]",
 ]
 
 [project.urls]
