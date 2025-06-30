@@ -46,6 +46,7 @@ Provides-Extra: console
 Requires-Dist: textual-dev>=1.7.0; extra == "console"
 Requires-Dist: textual-plotext>=1.0.1; extra == "console"
 Requires-Dist: textual[syntax]>=3.3.0; extra == "console"
+Requires-Dist: toga-textual>=0.5.1; extra == "console"
 Provides-Extra: toga
 Requires-Dist: toga>=0.5.1; extra == "toga"
 Provides-Extra: full

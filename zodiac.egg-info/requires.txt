@@ -13,6 +13,7 @@ toga>=0.5.1
 textual-dev>=1.7.0
 textual-plotext>=1.0.1
 textual[syntax]>=3.3.0
+toga-textual>=0.5.1
 
 [dev]
 matplotlib>=3.10.3
