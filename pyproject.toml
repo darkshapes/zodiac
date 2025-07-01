@@ -99,6 +99,12 @@ ignore-paths    = ["^tests/.*$", "test_.*$"]
 [tool.pylint.messages_control]
 disable = ["C0415"]
 
+[tool.ruff.lint]
+ignore = ["E731"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
 [tool.ruff.lint.pycodestyle]
 max-line-length               = 140
 ignore-overlong-task-comments = true

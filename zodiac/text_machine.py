@@ -61,16 +61,15 @@ class TextMachine(dspy.Module):
         :param signature: The format of messages sent to the model
         :param max_workers: Maximum number of async processes, based on system resources
         """
-        from mir.mir_maid import MIRDatabase
         from nnll.tensor_pipe.construct_pipe import ConstructPipeline
-        from zodiac.providers.constants import ChipType
+        from zodiac.providers.constants import ChipType, MIR_DB
 
         super().__init__()
         if not dspy.settings.async_max_workers:
             dspy.settings.configure(async_max_workers=self.max_workers)
         elif dspy.settings.async_max_workers != self.max_workers:
             dspy.settings.async_max_workers = self.max_workers
-        self.mir_db = MIRDatabase()
+        self.mir_db = MIR_DB
         self.factory = ConstructPipeline()
         self.device = getattr(ChipType, next(iter(ChipType._show_ready())), "CPU")
         self.sig: dspy.Signature = QASignature

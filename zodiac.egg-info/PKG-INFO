@@ -46,18 +46,17 @@ Provides-Extra: console
 Requires-Dist: textual-dev>=1.7.0; extra == "console"
 Requires-Dist: textual-plotext>=1.0.1; extra == "console"
 Requires-Dist: textual[syntax]>=3.3.0; extra == "console"
-Requires-Dist: toga-textual>=0.5.1; extra == "console"
 Provides-Extra: toga
 Requires-Dist: toga>=0.5.1; extra == "toga"
 Provides-Extra: full
-Requires-Dist: zodiac[console,toga]; extra == "full"
+Requires-Dist: zodiac[toga]; extra == "full"
 Provides-Extra: dev
 Requires-Dist: matplotlib>=3.10.3; extra == "dev"
 Requires-Dist: pytest>=8.4.0; extra == "dev"
 Requires-Dist: pytest-asyncio>=1.0.0; extra == "dev"
 Requires-Dist: ruff>=0.11.12; extra == "dev"
 Requires-Dist: nnll[dev]@ git+https://github.com/darkshapes/nnll@main ; extra == "dev"
-Requires-Dist: zodiac[full]; extra == "dev"
+Requires-Dist: zodiac[console,full]; extra == "dev"
 Dynamic: license-file
 
 

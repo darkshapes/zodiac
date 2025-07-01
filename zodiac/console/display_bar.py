@@ -4,7 +4,7 @@
 from textual import work
 from textual.reactive import reactive
 from textual.widgets import DataTable
-from zodiac.token_counters import tk_count
+from zodiac.providers.token_counters import tk_count
 
 
 class DisplayBar(DataTable):

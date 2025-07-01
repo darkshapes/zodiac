@@ -1,35 +1,28 @@
 #  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 from toga.sources import Source
 from zodiac.providers.constants import CueType
 from zodiac.providers.registry_entry import RegistryEntry
+from zodiac.sources.class_source import find_package, show_transformer_tasks
+
+
+flatten_map: List[Any] = lambda nested, unpack: [element for iterative in getattr(nested, unpack)() for element in iterative]
+flatten_map.__annotations__ = {"nested": List[str], "unpack": str}
 
 
 class TaskSource(Source):
     def __init__(self):
-        from mir.mir_maid import MIRDatabase
-
         self.mode_types = {
             ("image", "image"): ["Img2Img", "Inpaint", "ControlNet"],
             ("text", None): ["ForConditionalGeneration"],
             # Add more modes here as needed
         }
-        self.mir_db = MIRDatabase()
         self.package_name: Optional[str] = None
         self.class_name: Optional[str] = None
         self.model_mode: Optional[List[str]] = None
         self.exclude: Optional[List[str]] = None
-
-    async def flatten_list(self, nested_list: List[str]) -> List[str]:
-        flat_list = []
-        for i in nested_list:
-            if isinstance(i, list):
-                flat_list.extend(await self.flatten_list(i))
-            else:
-                flat_list.append(i)
-        return flat_list
 
     async def set_filter_type(self, mode_in: Optional[str] = "image", mode_out: Optional[str] = "image") -> None:
         """Filter class items by modality\n
@@ -42,34 +35,31 @@ class TaskSource(Source):
             self.exclude = None
         else:
             self.model_mode = None
-            self.exclude = await self.flatten_list(self.mode_types.values())
+            self.exclude = flatten_map(self.mode_types, "values")
 
     async def trace_tasks(self, entry: RegistryEntry) -> List[str]:
         """Trace tasks for a given model registry entry.\n
         :param entry: The object containing the model information.
         :return: A sorted list of tasks applicable to the model."""
 
-        from mir.inspectors import show_tasks_for
+        from mir.mappers import show_tasks_for
         from nnll.tensor_pipe.deconstructors import get_code_names
 
         snips: Dict[str, List[str]] = {"transformers": ["Model", "ForConditionalGeneration"], "diffusers": ["Pipeline"]}
 
         if entry.cuetype == CueType.HUB and entry.mir:
-            print(entry.mir)
-            model_data = self.mir_db.database[entry.mir[0]][entry.mir[1]]
-            package_data = [content for content in model_data.get("pkg").values() if next(iter(content)) in ["diffusers", "transformers"]]
-            print(package_data)
-            if package_data:
-                self.package_name = next(iter(package_data[0]))
-                self.class_name = package_data[0][self.package_name]
-                code_name = get_code_names(self.class_name, self.package_name)
-                if self.package_name == "transformers":
-                    preformatted_task_data = show_tasks_for(code_name=code_name)
+            package_bundle = await find_package(entry)
+            if package_bundle:
+                class_name, package_name = package_bundle
+                package_name = package_name.value[1].lower()
+                code_name = get_code_names(class_name, package_name)
+                if package_name == "transformers":
+                    preformatted_task_data = await show_transformer_tasks("class_name")
                 else:
-                    preformatted_task_data = show_tasks_for(code_name=code_name, class_name=self.class_name)
+                    preformatted_task_data = show_tasks_for(code_name=code_name, class_name=class_name)
                     preformatted_task_data.sort()
-                snip_words = snips.get(self.package_name)
-                class_prefix = self.class_name.replace(snip_words[0], "")
+                snip_words = snips.get(package_name)
+                class_prefix = class_name.replace(snip_words[0], "")
                 snip_words.append(class_prefix)
                 filtered_tasks = await self.filter_tasks(preformatted_task_data, snip_words)
                 return filtered_tasks

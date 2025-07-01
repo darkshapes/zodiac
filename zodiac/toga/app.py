@@ -7,8 +7,8 @@ import asyncio
 import toga
 from toga.constants import Direction
 from toga.style import Pack
-from zodiac.model_source import ModelSource
-from zodiac.task_source import TaskSource
+from zodiac.sources.model_source import ModelSource
+from zodiac.sources.task_source import TaskSource
 
 
 class Interface(toga.App):
