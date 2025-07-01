@@ -10,7 +10,9 @@ from pydantic import BaseModel, Field
 from nnll.monitor.file import dbuq
 from nnll.configure.init_gpu import first_available
 from mir.json_cache import JSONCache
+from mir.mir_maid import MIRDatabase
 
+MIR_DB = MIRDatabase()
 CUETYPE_PATH_NAMED = os.path.join(os.path.dirname(__file__), "cuetype.json")
 CUETYPE_CONFIG = JSONCache(CUETYPE_PATH_NAMED)
 
@@ -106,8 +108,15 @@ def has_api(api_name: str, data: dict = None) -> bool:
     return False
 
 
+show_all_docstring = ":param _show_all(): Show all POSSIBLE API types of a given class"
+show_available_docstring = ":param _show_available(): Show all AVAILABLE API types of a given class"
+check_type_docstring = ":param _check_type: Check for a SINGLE API availability"
+
+base_enum_docstring = f"""{show_all_docstring}{show_available_docstring}{check_type_docstring}"""
+
+
 class BaseEnum(Enum):
-    """Base class for available system packages\n"""
+    f"""{base_enum_docstring}"""
 
     @classmethod
     def show_all(cls) -> List:
@@ -127,9 +136,10 @@ class BaseEnum(Enum):
 
 
 class CueType(BaseEnum):
-    """Model Provider constants\n
+    f"""Model Provider constants\n
     Caches and servers\n
-    <NAME: (Availability, IMPORT_NAME)>"""
+    <NAME: (Availability, IMPORT_NAME)>{base_enum_docstring}
+    {base_enum_docstring}"""
 
     # Dfferentiation of boolean conditions
     # GIVEN : The state of all provider modules & servers are marked at launch
@@ -148,11 +158,14 @@ example_str = ("function_name", "import.function_name")
 
 
 class PkgType(BaseEnum):
-    """Package dependency constants\n
-    Collected info from hub model tags and dependencies\n
-    <NAME: (Availability, IMPORT_NAME, [Github repositories*]\n
-    *if applicable, otherwise IMPORT_NAME is pip package\n
+    (
+        """Package dependency constants
+    Collected info from hub model tags and dependencies
+    <NAME: (Availability, IMPORT_NAME, [Github repositories*]
+    *if applicable, otherwise IMPORT_NAME is pip package
     NOTE: NAME is colloquial and does not always match IMPORT_NAME>"""
+        + f"""{base_enum_docstring}"""
+    )
 
     AUDIOGEN: tuple = (has_api("AUDIOCRAFT"), "AUDIOCRAFT", ["exdysa/facebookresearch-audiocraft-revamp"])  # this fork supports mps
     BAGEL: tuple = (has_api("BAGEL"), "BAGEL", ["bytedance-seed/BAGEL"])
@@ -185,31 +198,58 @@ class PkgType(BaseEnum):
     TORCHAUDIO: tuple = (has_api("TORCHAUDIO"), "TORCHAUDIO", [])
     TORCHVISION: tuple = (has_api("TORCHVISION"), "TORCHVISION", [])
     TRANSFORMERS: tuple = (has_api("TRANSFORMERS"), "TRANSFORMERS", [])
+    VLLM: tuple = (
+        CueType.check_type("VLLM"),
+        "VLLM",
+    )
 
 
 class ChipType(Enum):
-    """Device constants
+    f"""Device constants\n
     CUDA, MPS, XPU, MTIA [Supported PkgTypes]\n
-    :param _show_all: ...
-    :param _show_ready: ...
-    : param _show_pkgs: ...
-    """
+    {base_enum_docstring}"""
 
     @classmethod
-    def _show_all(cls) -> List:
+    def initialize_device(cls) -> None:
+        chip_types = [
+            ("CUDA", [PkgType.BAGEL, PkgType.BITSANDBYTES, PkgType.EXLLAMAV2, PkgType.F_LITE, PkgType.LUMINA_MGPT, PkgType.ORPHEUS_TTS, PkgType.OUTETTS, PkgType.VLLM]),
+            ("MPS", [PkgType.MFLUX, PkgType.MLX_AUDIO, PkgType.MLX_LM, PkgType.MLX, PkgType.BAGEL]),
+            ("XPU", []),
+            ("MTIA", []),
+        ]
+        cls._device = first_available(assign=True, init=True, clean=True)  # pylint:disable=no-member, protected-access
+        if hasattr(cls._device, "type"):
+            gpu = cls._device.type
+        else:
+            gpu = ""
+        for name, pkg_type in chip_types:
+            setattr(cls, name, (name.lower() in gpu, name, pkg_type))
+        setattr(
+            cls,
+            "CPU",
+            (
+                True,
+                "CPU",
+                [PkgType.AUDIOGEN, PkgType.PARLER_TTS, PkgType.HIDIFFUSION, PkgType.SENTENCE_TRANSFORMERS, PkgType.DIFFUSERS, PkgType.TRANSFORMERS, PkgType.TORCH],
+            ),
+        )
+
+    @classmethod
+    def _show_all(cls) -> List[str]:
         """Show all POSSIBLE processor types"""
-        atypes = [atype for atype in ChipType.__dict__ if "_" not in atype]
+        atypes = [atype for atype in cls.__dict__ if "_" not in atype]
         return atypes
 
     @classmethod
     def _show_ready(cls, api_name: Optional[str] = None) -> Union[List[str], bool]:
         """Show all READY devices.\n
+        If api_name is provided, checks if the specific API is ready.
         :param api_name: Boolean check for the specific API by name, defaults to None
-        :return: `bool
+        :return: `bool` or list of ready devices
         """
         atypes = cls._show_all()
         if api_name:
-            return api_name.upper() in list(getattr(cls, x)[1] for x in atypes if getattr(cls, x)[0] is True)
+            return api_name.upper() in [getattr(cls, x)[1] for x in atypes if getattr(cls, x)[0] is True]
         return [getattr(cls, x)[1] for x in atypes if getattr(cls, x)[0] is True]
 
     @classmethod
@@ -225,55 +265,7 @@ class ChipType(Enum):
         return pkg_names
 
 
-chip_types = [
-    (
-        "CUDA",
-        "cuda",
-        [
-            PkgType.BAGEL,
-            PkgType.BITSANDBYTES,
-            PkgType.EXLLAMAV2,
-            PkgType.F_LITE,
-            PkgType.LUMINA_MGPT,
-            PkgType.ORPHEUS_TTS,
-            PkgType.OUTETTS,
-        ],
-    ),
-    (
-        "MPS",
-        "mps",
-        [
-            PkgType.MFLUX,
-            PkgType.MLX_AUDIO,
-            PkgType.MLX_LM,
-            PkgType.MLX,
-            PkgType.BAGEL,
-        ],
-    ),
-    ("XPU", "xpu", []),
-    ("MTIA", "mtia", []),
-]
-setattr(ChipType, "_device", first_available)
-accelerator = ChipType._device(assign=True, init=True, clean=True)  # pylint:disable=no-member, protected-access
-for name, key, pkg_type in chip_types:
-    setattr(ChipType, name, (key in str(accelerator), name, pkg_type))
-setattr(
-    ChipType,
-    "CPU",
-    (
-        True,
-        "CPU",
-        [
-            PkgType.AUDIOGEN,
-            PkgType.PARLER_TTS,
-            PkgType.HIDIFFUSION,
-            PkgType.SENTENCE_TRANSFORMERS,
-            PkgType.DIFFUSERS,
-            PkgType.TRANSFORMERS,
-            PkgType.TORCH,
-        ],
-    ),
-)
+ChipType.initialize_device()
 
 
 # class PipeType(Enum):

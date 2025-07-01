@@ -5,15 +5,14 @@
 
 # pylint:disable=protected-access, no-member
 import asyncio
-from typing import List, Dict, Optional, Any
-from mir.mir_maid import MIRDatabase
+from typing import List, Dict, Optional, Any, Callable
 from nnll.monitor.file import dbuq, debug_monitor
 from zodiac.providers.registry_entry import RegistryEntry
-from zodiac.providers.constants import CUETYPE_CONFIG, CueType, PkgType
+from zodiac.providers.constants import CUETYPE_CONFIG, MIR_DB, CueType, PkgType
 
 
 @debug_monitor
-def hub_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
+def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from huggingface_hub\n
     :param mir_db: MIR information
     :param api_data: API information
@@ -85,7 +84,7 @@ def hub_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[Regist
 
 
 @debug_monitor
-def ollama_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:
+def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:
     """Collect models from Ollama\n
     :param mir_db: MIR information
     :param api_data: API information
@@ -112,7 +111,7 @@ def ollama_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[Reg
 
 
 @debug_monitor
-def cortex_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
+def cortex_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from Cortex\n
     :param mir_db: MIR information
     :param api_data: API information
@@ -138,7 +137,7 @@ def cortex_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[Reg
 
 
 @debug_monitor
-def llamafile_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
+def llamafile_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from Llamafile\n
     :param mir_db: MIR information
     :param api_data: API information
@@ -164,7 +163,7 @@ def llamafile_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[
 
 
 @debug_monitor
-def vllm_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
+def vllm_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from VLLM\n
     :param mir_db: MIR information
     :param api_data: API information
@@ -190,7 +189,7 @@ def vllm_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[Regis
 
 
 @debug_monitor
-def lm_studio_pool(mir_db: MIRDatabase, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
+def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from LM STUDIO\n
     :param mir_db: MIR information
     :param api_data: API information
@@ -228,7 +227,6 @@ def register_models(data: Optional[Dict[str, Any]] = None) -> List[RegistryEntry
     我們不應該繼續為LMStudio編碼。 歡迎貢獻者來改進它。 LMStudio is not OSS, but contributions are welcome.
     """
 
-    MIR_DB = MIRDatabase()
     entries = []
     entry_map = {
         CueType.HUB.value: hub_pool,

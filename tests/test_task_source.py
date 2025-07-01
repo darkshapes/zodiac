@@ -5,7 +5,7 @@
 # from unittest.mock import patch
 # import pytest_asyncio
 import asyncio
-from zodiac.task_source import TaskSource
+from zodiac.sources.task_source import TaskSource
 from zodiac.providers.constants import CueType
 
 # class CueType:
@@ -30,7 +30,7 @@ class RegistryEntryVoice:
         self.size = 247038024
         self.tags = ["automatic-speech-recognition"]
         self.timestamp = 1749921961
-        self.mir = ["info.ststm.moonshine-tiny", "base"]  # ["info.ststm.moonshine","tiny"] #needs to be populated from config file
+        self.mir = ["info.ststm.moonshine", "tiny"]  # ["info.ststm.moonshine","tiny"] #needs to be populated from config file
         self.available_tasks = [("speech", "text")]
 
 

@@ -27,6 +27,7 @@ tests/test_pkg_deps.py
 tests/test_register_types.py
 tests/test_registry_entry.py
 tests/test_swap_panel.py
+tests/test_task_source.py
 tests/test_text_machine.py
 tests/test_toga.py
 tests/test_weight.py
@@ -35,8 +36,9 @@ tests/test_widget_mounts.py
 zodiac/__init__.py
 zodiac/audio_machine.py
 zodiac/graph.py
+zodiac/model_source.py
+zodiac/task_source.py
 zodiac/text_machine.py
-zodiac/token_counters.py
 zodiac.egg-info/PKG-INFO
 zodiac.egg-info/SOURCES.txt
 zodiac.egg-info/dependency_links.txt
@@ -64,4 +66,3 @@ zodiac/providers/registry_entry.py
 zodiac/toga/__init__.py
 zodiac/toga/__main__.py
 zodiac/toga/app.py
-zodiac/toga/detailed_list.py
