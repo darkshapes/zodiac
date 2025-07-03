@@ -10,11 +10,11 @@ def setUp(lookit_this):
 
     proc_name = IntentProcessor()  # Replace with actual class name
     proc_name.intent_graph = nx.Graph(lookit_this)
-    assert proc_name.has_graph() is True
+    assert hasattr(proc_name.intent_graph, "size") and proc_name.intent_graph.size() > 0
     proc_name.set_path("mode_in", "mode_out")
     proc_name.set_registry_entries()
-    assert proc_name.has_path() is True
-    assert proc_name.has_registry_entries() is True
+    assert isinstance(proc_name.coord_path, list) and len(proc_name.coord_path) > 1
+    assert isinstance(proc_name.registry_entries, list) and len(proc_name.registry_entries) > 1
     return proc_name
 
 
@@ -43,15 +43,15 @@ int_proc = setUp(lookit_this=graph())
 
 
 def test_edit_weight():
+    assert int_proc.intent_graph["mode_in"]["mode_out"][0]["weight"] == 0.5
+    assert int_proc.intent_graph["mode_in"]["mode_out"][1]["weight"] == 1.2
     int_proc.edit_weight(0, "mode_in", "mode_out")
-    assert int_proc.intent_graph["mode_in"]["mode_out"][0]["weight"] == 0.6, "Weight not updated correctly"
     int_proc.edit_weight(1, "mode_in", "mode_out")
-    assert int_proc.intent_graph["mode_in"]["mode_out"][1]["weight"] == 1.1, "Weight not decreased correctly"
+    assert int_proc.intent_graph["mode_in"]["mode_out"][0]["weight"] == 0.6
+    assert int_proc.intent_graph["mode_in"]["mode_out"][1]["weight"] == 1.1
 
 
 def test_edit_weight_model_not_present_quiet_fail():
-    import networkx as nx
-
     int_proc.edit_weight("nonexistent", "mode_in", "mode_out")
 
 
@@ -59,6 +59,9 @@ def test_edit_weight_node_not_present():
     import networkx as nx
 
     int_proc.intent_graph.remove_node("mode_out")
+    with raises(KeyError) as excinfo:
+        assert int_proc.intent_graph["mode_in"]["mode_out"][0]["weight"] == 0.6
+
     with raises(nx.exception.NodeNotFound) as excinfo:
         int_proc.edit_weight(0, "mode_in", "mode_out")
         assert str(excinfo.value) == f"Failed to adjust weight of '🤡1' within registry contents '{[nbrdict for n, nbrdict in int_proc.intent_graph.adjacency()]}'. Model or registry entry not found."
@@ -90,8 +93,9 @@ def test_edit_weight_minmax():
 
     gc.collect()
     int_proc_2 = setUp(lookit_this=graaaaph())
-
+    assert int_proc_2.intent_graph["mode_in"]["mode_out"][0]["weight"] == 1.0
+    assert int_proc_2.intent_graph["mode_in"]["mode_out"][1]["weight"] == 0.0
     int_proc_2.edit_weight(0, "mode_in", "mode_out")
-    assert int_proc_2.intent_graph["mode_in"]["mode_out"][0]["weight"] == 0.9, "Weight not updated correctly"
+    assert int_proc_2.intent_graph["mode_in"]["mode_out"][0]["weight"] == 0.9
     int_proc_2.edit_weight(1, "mode_in", "mode_out")
-    assert int_proc_2.intent_graph["mode_in"]["mode_out"][1]["weight"] == 0.1, "Weight not decreased correctly"
+    assert int_proc_2.intent_graph["mode_in"]["mode_out"][1]["weight"] == 0.1

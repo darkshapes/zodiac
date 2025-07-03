@@ -31,9 +31,9 @@ class TestFlow:
             model_data_len += len(model.available_tasks)
         assert f"{self.graph.intent_graph}" == f"MultiDiGraph with {len(VALID_CONVERSIONS)} nodes and {model_data_len} edges"
         self.graph.set_path(mode_in=mode_in, mode_out=mode_out)
-        assert self.graph.has_path() is True
+        assert self.graph.coord_path == ["text", "speech"]
         self.graph.set_registry_entries()
-        assert self.graph.has_registry_entries() is True
+        assert isinstance(self.graph.registry_entries, list)
         assert self.graph.models == [
             (
                 "parler-tts-large-v1",
@@ -53,25 +53,20 @@ class TestFlow:
                 tokenizer=None,
                 available_tasks=[("text", "speech")],
             ),
+            "weight": 1.0,
         }
-        expected_true = expected
-        expected.setdefault("weight", 1.0)
-        # self.graph.edit_weight("parler", "text", "speech")
-        assert next(iter(self.graph.registry_entries)) == expected_true
-        expected_true["weight"] = 0.9
-        expected_false = expected
-        expected_false.setdefault("weight", 0.8)
-        self.graph.edit_weight(0, "text", "speech")
-        assert next(iter(self.graph.registry_entries)) == expected_true
-        # with raises(AssertionError) as excinfo:
-        self.graph.edit_weight(0, "text", "speech")
-        expected_true["weight"] = 1.0
-        assert next(iter(self.graph.registry_entries)) == expected_true
-        # import re
+        # registry entry should start the same as above
+        assert next(iter(self.graph.registry_entries)) == expected
 
-        # nfo(f"{expected_true} == {expected_false}")
-        # clean_text = re.sub(r"\x1b$$[0-?]*[ -/]*[@-~]", "", f"{excinfo.value}")
-        # assert str(clean_text) == expected_false
+        expected["weight"] = 0.8
+        self.graph.edit_weight(0, "text", "speech")
+        assert next(iter(self.graph.registry_entries)) != expected
+        expected["weight"] = 0.9
+        assert next(iter(self.graph.registry_entries)) == expected
+
+        self.graph.edit_weight(0, "text", "speech")
+        expected["weight"] = 1.0
+        assert next(iter(self.graph.registry_entries)) == expected
         self.graph = None
         import gc
 
@@ -89,22 +84,24 @@ class TestGraphSetup2(TestCase):
 
     def test_flow_builder_edge_create_success(self, mode_in: str = "text", mode_out: str = "image"):
         # graph.calc_graph()
+        import networkx as nx
+
         model_data = register_models()
         self.graph.calc_graph(model_data)
-        assert self.graph.has_graph() is True
+        assert self.graph.intent_graph.size() != 0 and self.graph.intent_graph.size() is not False
         model_data_len = 0
         for model in model_data:
             model_data_len += len(model.available_tasks)
         assert f"{self.graph.intent_graph}" == f"MultiDiGraph with {len(VALID_CONVERSIONS)} nodes and {model_data_len} edges"
-        assert self.graph.has_path() is False
+        assert not self.graph.coord_path
         self.graph.set_path(mode_in=mode_in, mode_out=mode_out)
         nfo(f"coord_path {self.graph.coord_path}")
-        assert self.graph.has_path() is True
+        assert self.graph.coord_path == ["text", "image"]
         nfo(f"ckpts : {self.graph.registry_entries}")
-        assert self.graph.has_registry_entries() is False
+        assert not self.graph.registry_entries
         self.graph.set_registry_entries()
         nfo(self.graph.registry_entries)
-        assert self.graph.has_registry_entries() is True
+        assert isinstance(self.graph.registry_entries, list)
         nfo(self.graph.models)
         assert self.graph.models == [("CogView3-Plus-3B", 0)]
         self.graph = None

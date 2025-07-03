@@ -26,8 +26,9 @@
     "CORTEX": {
         "module": "openai",
         "api_url": "http://127.0.0.1:39281/",
+        "model_path": "v1/models",
         "api_kwargs": {
-            "api_base": "http://127.0.0.1:39281/v1/chat/completions",
+            "api_base": "v1/chat/completions",
             "api_key": "sk-no-key-required"
         },
         "prefix": "openai/"

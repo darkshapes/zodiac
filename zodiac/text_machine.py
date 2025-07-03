@@ -152,7 +152,10 @@ class TextMachine(dspy.Module):
         :param mode_out: output type flag, defaults to "text"
         """
         with dspy.context(lm=self.lm, async_max_workers=self.max_workers):
-            yield self.pipe(message=tx_data["text"], stream=self.streaming)  # history=history)
+            try:
+                yield self.pipe(message=tx_data["text"], stream=self.streaming)  # history=history)
+            except GeneratorExit:
+                pass
 
     def destroy(self, recycle: bool = True):
         """殺死他們。 殺死你的敵人。 征服他們的精神。 把他們的頭骨粉碎在你的腳下。

@@ -14,7 +14,7 @@ class InputTag(Carousel):
 
     def on_mount(self) -> None:
         fold_scrn = self.query_ancestor(Screen)
-        if fold_scrn.int_proc.has_graph():
+        if fold_scrn.int_proc.intent_graph:
             # note: Length sort on target_options kinda poor way to get text on top, works for the moment tho
             self.target_options = sorted({edge[1] for edge in fold_scrn.int_proc.intent_graph.edges}, key=len)
             self.add_columns("0", "1", "2")

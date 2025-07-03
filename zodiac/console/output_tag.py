@@ -14,7 +14,7 @@ class OutputTag(Carousel):
 
     def on_mount(self) -> None:
         scrn = self.query_ancestor(Screen)
-        if scrn.int_proc.has_graph():
+        if scrn.int_proc.intent_graph:
             graph_edges = scrn.int_proc.intent_graph.edges
 
             self.target_options = sorted({edge[0] for edge in graph_edges}, key=len)

@@ -15,7 +15,9 @@ img_src/screenshot.png
 img_src/zodiac_dark_bg.png
 img_src/zodiac_dark_stealth.png
 img_src/zodiac_light_stealth.png
+tests/test_chiptype.py
 tests/test_cuetype.py
+tests/test_find_package.py
 tests/test_flow.py
 tests/test_flow_second.py
 tests/test_graph.py
@@ -36,8 +38,6 @@ tests/test_widget_mounts.py
 zodiac/__init__.py
 zodiac/audio_machine.py
 zodiac/graph.py
-zodiac/model_source.py
-zodiac/task_source.py
 zodiac/text_machine.py
 zodiac.egg-info/PKG-INFO
 zodiac.egg-info/SOURCES.txt
@@ -63,6 +63,13 @@ zodiac/providers/constants.py
 zodiac/providers/cuetype.json
 zodiac/providers/pools.py
 zodiac/providers/registry_entry.py
+zodiac/providers/token_counters.py
+zodiac/sources/class_source.py
+zodiac/sources/model_source.py
+zodiac/sources/task_source.py
+zodiac/streams/class_stream.py
+zodiac/streams/model_stream.py
+zodiac/streams/task_stream.py
 zodiac/toga/__init__.py
 zodiac/toga/__main__.py
 zodiac/toga/app.py
