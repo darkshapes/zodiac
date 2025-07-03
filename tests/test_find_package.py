@@ -14,6 +14,7 @@ class MockPackage(Enum):
 
 @pytest.fixture
 def mock_package_available():
+
     with patch("zodiac.streams.class_stream.PkgType") as mock_pkg_type:
         mock_pkg_type.return_value = MockPackage
         yield mock_pkg_type
@@ -23,7 +24,6 @@ def mock_package_available():
 def mock_cpu_available():
     class MockDevice(Enum):
         """"""
-
     with patch("zodiac.streams.class_stream.ChipType") as mock_chip_type:
         mock_chip_type._show_ready.return_value = ["CPU"]
         mock_chip_type.CPU = (True, "CPU", [MockPackage.TRANSFORMERS, MockPackage.DIFFUSERS])
@@ -36,17 +36,18 @@ def mock_gpu_available():
     class MockDevice(Enum):
         """"""
 
+
     with patch("zodiac.streams.class_stream.ChipType") as mock_chip_type:
         mock_chip_type._show_ready.return_value = ["CUDA"]
         mock_chip_type.MPS = (False, "MFLUX", [MockPackage.MFLUX])
         mock_chip_type.CPU = (True, "CUDA", [MockPackage.VLLM, MockPackage.TRANSFORMERS, MockPackage.DIFFUSERS])
         yield mock_chip_type
 
-
 # @patch("zodiac.streams.class_stream.has_api", return_value=True)
 async def test_lookup(mock_cpu_available, mock_package_available):
     from zodiac.streams.class_stream import find_package
     # from zodiac.task_stream import ChipType, PkgType
+
 
     class Entry:
         mir: List[str] = ["info.dit.flux-1-dev", "base"]
@@ -80,7 +81,6 @@ async def test_lookup_transformers(mock_cpu_available, mock_package_available):
 async def test_lookup_with_reverse_position(mock_cpu_available, mock_package_available):
     from zodiac.streams.class_stream import find_package
     # from zodiac.streams.class_stream import ChipType, PkgType
-
     class Entry:
         mir: List[str] = ["info.dit.flux-1-dev", "base"]
 
@@ -98,9 +98,9 @@ async def test_lookup_with_reverse_position(mock_cpu_available, mock_package_ava
 
 
 # def test_lookup_with_reverse_position(mock_cpu_available, mock_package_available):
+
 #     from zodiac.streams.class_stream import find_package
 #     # from zodiac.task_stream import ChipType, PkgType
-
 #     class Entry:
 #         mir: List[str] = ["info.dit.flux-1-dev", "base"]
 

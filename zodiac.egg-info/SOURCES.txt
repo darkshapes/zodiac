@@ -38,6 +38,8 @@ tests/test_widget_mounts.py
 zodiac/__init__.py
 zodiac/audio_machine.py
 zodiac/graph.py
+zodiac/model_source.py
+zodiac/task_source.py
 zodiac/text_machine.py
 zodiac.egg-info/PKG-INFO
 zodiac.egg-info/SOURCES.txt

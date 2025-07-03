@@ -35,7 +35,6 @@ def class_to_mir_id(mir_db: Dict[str, str], id_tag: str) -> Optional[str]:
                             return [series, compatibility]
     return None
 
-
 # @debug_monitor
 def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from huggingface_hub\n
@@ -215,7 +214,6 @@ def vllm_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Registry
         )
         entries.append(entry)
     return entries
-
 
 # @debug_monitor
 def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
