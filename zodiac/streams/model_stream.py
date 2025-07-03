@@ -20,7 +20,7 @@ class ModelStream(Source):
         :param target: If True, sorts based on the second element of each edge pair; defaults to False.
         :return: A sorted list of unique elements from the edge pairs."""
 
-        if self._graph.has_graph():
+        if self._graph.intent_graph:
             edge_pairs = list(self._graph.intent_graph.edges)
             pair = 0 if not target else 1
             seen = []

@@ -72,37 +72,6 @@ class IntentProcessor:
         return self.intent_graph
 
     @debug_monitor
-    def has_graph(self) -> bool:
-        """A check to verify the graph has been created"""
-        try:
-            assert self.intent_graph is not None
-        except AssertionError as error_log:
-            dbug(error_log)
-            return False
-        return True
-
-    @debug_monitor
-    def has_path(self) -> bool:
-        """A check to verify the path has been created"""
-        try:
-            assert self.coord_path is not None
-        except AssertionError as error_log:
-            dbug(error_log)
-            return False
-        return True
-
-    @debug_monitor
-    def has_registry_entries(self) -> bool:
-        """A check to verify model checkpoints are available"""
-        try:
-            assert self.registry_entries is not None
-            assert len(self.registry_entries) >= 1
-        except AssertionError as error_log:
-            dbug(error_log)
-            return False
-        return True
-
-    @debug_monitor
     def set_path(self, mode_in: str, mode_out: str) -> None:
         """Find a valid path from current state (mode_in) to designated state (mode_out)\n
         :param mode_in: Input prompt type or starting state/states
@@ -111,7 +80,6 @@ class IntentProcessor:
         :type mode_out: str
         """
 
-        self.has_graph()
         if nx.has_path(self.intent_graph, mode_in, mode_out):  # Ensure path exists (otherwise 'bidirectional' may loop infinitely)
             # Self loops in the multidirected graph complete themselves
             # In practice, this means often the same model can be used to compute prompt input and response output
@@ -134,8 +102,6 @@ class IntentProcessor:
         """Populate models list for text fields
         Check if model has been adjusted, if so adjust list
         1.0 weight bottom, <1.0 weight top"""
-        self.has_graph()
-        self.has_path()
         try:
             self.registry_entries = self.pull_path_entries(self.intent_graph, self.coord_path)
         except KeyError as error_log:
@@ -177,9 +143,10 @@ class IntentProcessor:
             dbug(error_log)
             return self.set_registry_entries()
         entries = []
-        for index, reg in self.intent_graph[mode_in][mode_out].items():
-            entries.append([reg["entry"].model, index, "", ""])
+        for index, items_view in self.intent_graph[mode_in][mode_out].items():
+            entries.append([items_view["entry"].model, index, "", ""])
         nfo(f"graph weight : {entries} {mode_in} {mode_out} {target} \n")
+        print(entries)
         edge, _ = MIRDatabase.grade_maybes(entries, target)
         nfo(str(edge))
         entries = []

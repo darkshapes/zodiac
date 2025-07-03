@@ -145,14 +145,14 @@ class CueType(BaseEnum):
     # Dfferentiation of boolean conditions
     # GIVEN : The state of all provider modules & servers are marked at launch
 
-    OLLAMA: tuple = (has_api("OLLAMA"), "OLLAMA")
-    HUB: tuple = (has_api("HUB"), "HUB")
-    LM_STUDIO: tuple = (has_api("LM_STUDIO"), "LM_STUDIO")
     CORTEX: tuple = (has_api("CORTEX"), "CORTEX")
-    LLAMAFILE: tuple = (has_api("LLAMAFILE"), "LLAMAFILE")
-    VLLM: tuple = (has_api("VLLM"), "VLLM")
-    MLX_AUDIO: tuple = (has_api("MLX_AUDIO"), "MLX_AUDIO")
+    HUB: tuple = (has_api("HUB"), "HUB")
     KAGGLE: tuple = (has_api("KAGGLE"), "KAGGLE")
+    LLAMAFILE: tuple = (has_api("LLAMAFILE"), "LLAMAFILE")
+    LM_STUDIO: tuple = (has_api("LM_STUDIO"), "LM_STUDIO")
+    MLX_AUDIO: tuple = (has_api("MLX_AUDIO"), "MLX_AUDIO")
+    OLLAMA: tuple = (has_api("OLLAMA"), "OLLAMA")
+    VLLM: tuple = (has_api("VLLM"), "VLLM")
 
 
 example_str = ("function_name", "import.function_name")
@@ -172,6 +172,7 @@ class PkgType(BaseEnum):
     BAGEL: tuple = (has_api("BAGEL"), "BAGEL", ["bytedance-seed/BAGEL"])
     BITNET: tuple = (has_api("BITNET"), "BITNET", ["microsoft/BitNet"])
     BITSANDBYTES: tuple = (has_api("BITSANDBYTES"), "BITSANDBYTES", [])  # bitsandbytes-foundation/bitsandbytes
+    DFLOAT11: tuple = (has_api("DFLOAT11"), "DFLOAT11", ["LeanModels/DFloat11"])
     DIFFUSERS: tuple = (has_api("DIFFUSERS"), "DIFFUSERS", [])
     EXLLAMAV2: tuple = (has_api("EXLLAMAV2"), "EXLLAMAV2", [])  # turboderp-org/exllamav2
     F_LITE: tuple = (has_api("F_LITE"), "F_LITE", ["fal-ai/f-lite"])
@@ -181,28 +182,20 @@ class PkgType(BaseEnum):
     MFLUX: tuple = (has_api("MFLUX"), "MFLUX", [])  # "filipstrand/mflux"
     MLX_AUDIO: tuple = (CueType.check_type("MLX_AUDIO"), "MLX_AUDIO", [])  # Blaizzy/mlx-audio
     MLX_LM: tuple = (has_api("MLX_LM"), "MLX_LM", [])  # "ml-explore/mlx-lm"
-    MLX: tuple = (
-        has_api("MFLUX") and has_api("MLX_LM") and CueType.check_type("MLX_AUDIO"),
-        "MLX",
-        [],
-    )
-    PARLER_TTS: tuple = (has_api("PARLER_TTS"), "PARLER_TTS", ["huggingface/parler-tts"])
-    PLEIAS: tuple = (has_api("PLEIAS"), "PLEIAS", ["exdysa/Pleias-Pleias-RAG-Library"])  # bypasses vllm for macos to avoid requiring gcc/AVIX
     ORPHEUS_TTS: tuple = (has_api("ORPHEUS_TTS"), "ORPHEUS_TTS", ["canopyai/Orpheus-TTS"])
     OUTETTS: tuple = (has_api("OUTETTS"), "OUTETTS", ["edwko/OuteTTS"])
+    PARLER_TTS: tuple = (has_api("PARLER_TTS"), "PARLER_TTS", ["huggingface/parler-tts"])
+    PLEIAS: tuple = (has_api("PLEIAS"), "PLEIAS", ["exdysa/Pleias-Pleias-RAG-Library"])  # bypasses vllm for macos to avoid requiring gcc/AVIX
     SENTENCE_TRANSFORMERS: tuple = (has_api("SENTENCE_TRANSFORMERS"), "SENTENCE_TRANSFORMERS", [])  # UKPLab/sentence-transformers
     SHOW_O: tuple = (has_api("SHOW_O"), "SHOW_O", ["showlab/show-o"])
-    SPANDREL: tuple = (has_api("SPANDREL"), "SPANDREL", [])
     SPANDREL_EXTRA_ARCHES: tuple = (has_api("SPANDREL_EXTRA_ARCHES"), "SPANDREL_EXTRA_ARCHES", [])
+    SPANDREL: tuple = (has_api("SPANDREL"), "SPANDREL", [])
     SVDQUANT: tuple = (has_api("NUNCHAKU"), "NUNCHAKU", ["mit-han-lab/nunchaku"])
     TORCH: tuple = (has_api("TORCH"), "TORCH", [])  # Possible that torch is NOT needed (mlx_lm, or some other unforeseen future )
     TORCHAUDIO: tuple = (has_api("TORCHAUDIO"), "TORCHAUDIO", [])
     TORCHVISION: tuple = (has_api("TORCHVISION"), "TORCHVISION", [])
     TRANSFORMERS: tuple = (has_api("TRANSFORMERS"), "TRANSFORMERS", [])
-    VLLM: tuple = (
-        CueType.check_type("VLLM"),
-        "VLLM",
-    )
+    VLLM: tuple = (CueType.check_type("VLLM"), "VLLM", [])
 
 
 class ChipType(Enum):
@@ -213,8 +206,21 @@ class ChipType(Enum):
     @classmethod
     def initialize_device(cls) -> None:
         chip_types = [
-            ("CUDA", [PkgType.BAGEL, PkgType.BITSANDBYTES, PkgType.EXLLAMAV2, PkgType.F_LITE, PkgType.LUMINA_MGPT, PkgType.ORPHEUS_TTS, PkgType.OUTETTS, PkgType.VLLM]),
-            ("MPS", [PkgType.MFLUX, PkgType.MLX_AUDIO, PkgType.MLX_LM, PkgType.MLX, PkgType.BAGEL]),
+            (
+                "CUDA",
+                [
+                    PkgType.BAGEL,
+                    PkgType.BITSANDBYTES,
+                    PkgType.DFLOAT11,
+                    PkgType.EXLLAMAV2,
+                    PkgType.F_LITE,
+                    PkgType.LUMINA_MGPT,
+                    PkgType.ORPHEUS_TTS,
+                    PkgType.OUTETTS,
+                    PkgType.VLLM,
+                ],
+            ),
+            ("MPS", [PkgType.MFLUX, PkgType.MLX_AUDIO, PkgType.MLX_LM, PkgType.BAGEL]),
             ("XPU", []),
             ("MTIA", []),
         ]
@@ -231,7 +237,15 @@ class ChipType(Enum):
             (
                 True,
                 "CPU",
-                [PkgType.AUDIOGEN, PkgType.PARLER_TTS, PkgType.HIDIFFUSION, PkgType.SENTENCE_TRANSFORMERS, PkgType.DIFFUSERS, PkgType.TRANSFORMERS, PkgType.TORCH],
+                [
+                    PkgType.AUDIOGEN,
+                    PkgType.PARLER_TTS,
+                    PkgType.HIDIFFUSION,
+                    PkgType.SENTENCE_TRANSFORMERS,
+                    PkgType.DIFFUSERS,
+                    PkgType.TRANSFORMERS,
+                    PkgType.TORCH,
+                ],
             ),
         )
 

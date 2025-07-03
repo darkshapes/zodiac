@@ -10,11 +10,11 @@ def setUp(lookit_this):
 
     proc_name = IntentProcessor()  # Replace with actual class name
     proc_name.intent_graph = nx.Graph(lookit_this)
-    assert proc_name.has_graph() is True
+    assert hasattr(proc_name.intent_graph, "size") and proc_name.intent_graph.size() > 0
     proc_name.set_path("mode_in", "mode_out")
     proc_name.set_registry_entries()
-    assert proc_name.has_path() is True
-    assert proc_name.has_registry_entries() is True
+    assert isinstance(proc_name.coord_path, list) and len(proc_name.coord_path) > 1
+    assert isinstance(proc_name.registry_entries, list) and len(proc_name.registry_entries) > 1
     return proc_name
 
 
@@ -50,8 +50,6 @@ def test_edit_weight():
 
 
 def test_edit_weight_model_not_present_quiet_fail():
-    import networkx as nx
-
     int_proc.edit_weight("nonexistent", "mode_in", "mode_out")
 
 

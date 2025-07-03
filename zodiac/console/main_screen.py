@@ -353,7 +353,7 @@ class Fold(Screen[bool]):
         :param bypass_send: Make a dry run that plots the generation path only, defaults to True
         """
         self.ready_tx(io_only=io_only, mode_in=self.mode_in, mode_out=self.mode_out)
-        if self.int_proc.has_graph() and self.int_proc.has_path():
+        if self.int_proc.intent_graph and self.int_proc.coord_path:
             await self.walk_intent(bypass_send=bypass_send)
         if not hasattr(self.ui["sl"], "prompt") or self.int_proc.models is None:
             nfo("intent processor models not available")
