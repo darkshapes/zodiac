@@ -53,25 +53,20 @@ class TestFlow:
                 tokenizer=None,
                 available_tasks=[("text", "speech")],
             ),
+            "weight": 1.0,
         }
-        expected_true = expected
-        expected.setdefault("weight", 1.0)
-        # self.graph.edit_weight("parler", "text", "speech")
-        assert next(iter(self.graph.registry_entries)) == expected_true
-        expected_true["weight"] = 0.9
-        expected_false = expected
-        expected_false.setdefault("weight", 0.8)
-        self.graph.edit_weight(0, "text", "speech")
-        assert next(iter(self.graph.registry_entries)) == expected_true
-        # with raises(AssertionError) as excinfo:
-        self.graph.edit_weight(0, "text", "speech")
-        expected_true["weight"] = 1.0
-        assert next(iter(self.graph.registry_entries)) == expected_true
-        # import re
+        # registry entry should start the same as above
+        assert next(iter(self.graph.registry_entries)) == expected
 
-        # nfo(f"{expected_true} == {expected_false}")
-        # clean_text = re.sub(r"\x1b$$[0-?]*[ -/]*[@-~]", "", f"{excinfo.value}")
-        # assert str(clean_text) == expected_false
+        expected["weight"] = 0.8
+        self.graph.edit_weight(0, "text", "speech")
+        assert next(iter(self.graph.registry_entries)) != expected
+        expected["weight"] = 0.9
+        assert next(iter(self.graph.registry_entries)) == expected
+
+        self.graph.edit_weight(0, "text", "speech")
+        expected["weight"] = 1.0
+        assert next(iter(self.graph.registry_entries)) == expected
         self.graph = None
         import gc
 
