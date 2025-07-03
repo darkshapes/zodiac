@@ -38,8 +38,6 @@ tests/test_widget_mounts.py
 zodiac/__init__.py
 zodiac/audio_machine.py
 zodiac/graph.py
-zodiac/model_source.py
-zodiac/task_source.py
 zodiac/text_machine.py
 zodiac.egg-info/PKG-INFO
 zodiac.egg-info/SOURCES.txt
@@ -66,6 +64,12 @@ zodiac/providers/cuetype.json
 zodiac/providers/pools.py
 zodiac/providers/registry_entry.py
 zodiac/providers/token_counters.py
+zodiac/sources/class_source.py
+zodiac/sources/model_source.py
+zodiac/sources/task_source.py
+zodiac/streams/class_stream.py
+zodiac/streams/model_stream.py
+zodiac/streams/task_stream.py
 zodiac/toga/__init__.py
 zodiac/toga/__main__.py
 zodiac/toga/app.py

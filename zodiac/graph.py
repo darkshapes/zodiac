@@ -124,47 +124,35 @@ class IntentProcessor:
                     idx += 1
 
     # @debug_monitor
-    def edit_weight(self, selection: str, mode_in: str, mode_out: str) -> None:
+    def edit_weight(self, edge_number: str, mode_in: str, mode_out: str) -> None:
         """Determine entry edge, determine index, then adjust weight\n
-        :param selection: Text pattern from `models` class attribute to identify the model by
+        :param edge_number: Text pattern from `models` class attribute to identify the model by
         :param mode_in: The conversion type, representing a source graph node
         :param mode_out: The target type, , representing a source graph node
         :raises ValueError: No models fit the request
         """
-        from zodiac.providers.constants import MIR_DB
+        # from zodiac.providers.constants import MIR_DB
 
         self.weight_idx = self.weight_idx or []
         try:
             if not nx.has_path(self.intent_graph, mode_in, mode_out):
                 raise KeyError()
-            target = os.path.basename(self.intent_graph[mode_in][mode_out][selection]["entry"].model)
+            model = self.intent_graph[mode_in][mode_out][edge_number]["entry"].model
         except KeyError as error_log:
-            nfo(f"Failed to adjust weight of '{selection}' within registry contents '{self.intent_graph} {mode_in} {mode_out}'. Model or registry entry not found. ")
+            nfo(f"Failed to adjust weight of '{edge_number}' within registry contents '{self.intent_graph} {mode_in} {mode_out}'. Model or registry entry not found. ")
             dbug(error_log)
             return self.set_registry_entries()
-        entries = []
-        for index, items_view in self.intent_graph[mode_in][mode_out].items():
-            entries.append([items_view["entry"].model, index, "", ""])
-        # nfo(f"graph weight : {entries} {mode_in} {mode_out} {target} \n")
-        edge_data = MIR_DB.grade_maybes(entries, target)
-        if edge_data is None:
-            self.set_registry_entries()
-            return
-        edge, _ = edge_data
-        entries = []
-        model = self.intent_graph[mode_in][mode_out][edge]["entry"].model
-        weight = self.intent_graph[mode_in][mode_out][edge]["weight"]
-        item = (os.path.basename(model), edge)
+        weight = self.intent_graph[mode_in][mode_out][edge_number]["weight"]
+        item = (os.path.basename(model), edge_number)
         nfo(f" model : {model}  weight: {weight} ")
         if weight < 1.0:
-            self.intent_graph[mode_in][mode_out][edge]["weight"] = round(weight + 0.1, 1)
-            self.models = [((f"*{os.path.basename(model)}", edge))]
+            self.intent_graph[mode_in][mode_out][edge_number]["weight"] = round(weight + 0.1, 1)
+            self.models = [((f"*{os.path.basename(model)}", edge_number))]
             if item in self.weight_idx:
                 self.weight_idx.remove(item)
         else:
-            self.intent_graph[mode_in][mode_out][edge]["weight"] = round(weight - 0.1, 1)
+            self.intent_graph[mode_in][mode_out][edge_number]["weight"] = round(weight - 0.1, 1)
             self.weight_idx.append(item)
-        # nfo(str(self.intent_graph[mode_in][mode_out][edge]))
         self.set_registry_entries()
 
     # @debug_monitor
