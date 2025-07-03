@@ -6,7 +6,7 @@ import sys
 import os
 import networkx as nx
 from typing import Optional
-from nnll.monitor.file import debug_monitor, dbug, dbuq
+from nnll.monitor.file import dbug, dbuq
 from zodiac.providers.pools import register_models  # leaving here for mocking
 
 sys.path.append(os.getcwd())
@@ -38,7 +38,7 @@ class IntentProcessor:
         self.intent_graph = intent_graph
         self.intent_graph.add_nodes_from(VALID_CONVERSIONS)
 
-    @debug_monitor
+    # @debug_monitor
     def calc_graph(self, registry_entries: Optional[list] = None) -> None:
         """Generate graph of coordinate pairs from valid conversions\n
         Model libraries are auto-detected from cache loading\n
@@ -71,7 +71,7 @@ class IntentProcessor:
         nfo(f"Complete {self.intent_graph}")
         return self.intent_graph
 
-    @debug_monitor
+    # @debug_monitor
     def set_path(self, mode_in: str, mode_out: str) -> None:
         """Find a valid path from current state (mode_in) to designated state (mode_out)\n
         :param mode_in: Input prompt type or starting state/states
@@ -97,7 +97,7 @@ class IntentProcessor:
         else:
             nfo("No Path available...")
 
-    @debug_monitor
+    # @debug_monitor
     def set_registry_entries(self) -> None:
         """Populate models list for text fields
         Check if model has been adjusted, if so adjust list
@@ -123,7 +123,7 @@ class IntentProcessor:
                     self.models.insert(idx, adj_model)
                     idx += 1
 
-    @debug_monitor
+    # @debug_monitor
     def edit_weight(self, selection: str, mode_in: str, mode_out: str) -> None:
         """Determine entry edge, determine index, then adjust weight\n
         :param selection: Text pattern from `models` class attribute to identify the model by
@@ -131,7 +131,7 @@ class IntentProcessor:
         :param mode_out: The target type, , representing a source graph node
         :raises ValueError: No models fit the request
         """
-        from mir.mir_maid import MIRDatabase
+        from zodiac.providers.constants import MIR_DB
 
         self.weight_idx = self.weight_idx or []
         try:
@@ -145,14 +145,13 @@ class IntentProcessor:
         entries = []
         for index, items_view in self.intent_graph[mode_in][mode_out].items():
             entries.append([items_view["entry"].model, index, "", ""])
-        nfo(f"graph weight : {entries} {mode_in} {mode_out} {target} \n")
-        print(entries)
-        edge, _ = MIRDatabase.grade_maybes(entries, target)
-        nfo(str(edge))
-        entries = []
-        if edge is None:
+        # nfo(f"graph weight : {entries} {mode_in} {mode_out} {target} \n")
+        edge_data = MIR_DB.grade_maybes(entries, target)
+        if edge_data is None:
             self.set_registry_entries()
             return
+        edge, _ = edge_data
+        entries = []
         model = self.intent_graph[mode_in][mode_out][edge]["entry"].model
         weight = self.intent_graph[mode_in][mode_out][edge]["weight"]
         item = (os.path.basename(model), edge)
@@ -165,10 +164,10 @@ class IntentProcessor:
         else:
             self.intent_graph[mode_in][mode_out][edge]["weight"] = round(weight - 0.1, 1)
             self.weight_idx.append(item)
-        nfo(str(self.intent_graph[mode_in][mode_out][edge]))
+        # nfo(str(self.intent_graph[mode_in][mode_out][edge]))
         self.set_registry_entries()
 
-    @debug_monitor
+    # @debug_monitor
     def pull_path_entries(self, nx_graph: nx.Graph, traced_path: list[tuple]) -> None:
         """Create operating instructions from user input
         Trace the next hop along the path, collect all compatible models

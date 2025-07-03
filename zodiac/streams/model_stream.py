@@ -22,13 +22,15 @@ class ModelStream(Source):
 
         if self._graph.intent_graph:
             edge_pairs = list(self._graph.intent_graph.edges)
-            pair = 0 if not target else 1
-            seen = []
-            for edge in edge_pairs:
-                if edge[pair] not in seen:
-                    seen.append(edge[pair])
-            seen.sort(key=len)
-            return seen
+            print(edge_pairs)
+            if edge_pairs:
+                pair = 0 if not target else 1
+                seen = []
+                for edge in edge_pairs:
+                    if edge[pair] not in seen:
+                        seen.append(edge[pair])
+                seen.sort(key=len)
+                return seen
 
     async def trace_models(self, mode_in: str, mode_out: str) -> List[Tuple[str, int]]:
         """Trace model path through input to output mode, then updates the internal model list..\n
