@@ -5,13 +5,13 @@ from typing import List, Tuple
 from toga.sources import Source
 
 
-class ModelSource(Source):
+class ModelStream(Source):
     async def model_graph(self) -> None:
         """Build an intent graph from models using the IntentProcessor class"""
         from zodiac.graph import IntentProcessor
 
         self._graph = {}
-        # self._graph.add_listener(self)
+        # self._graph.add_listener()
         self._graph = IntentProcessor()
         self._graph.calc_graph()
 
@@ -42,7 +42,17 @@ class ModelSource(Source):
         self._graph.set_registry_entries()
         dbuq(f"triggered recalculation : {self._graph.coord_path} {self._graph.registry_entries}")
         self._models = self._graph.models
+        for entry in self._graph.registry_entries:
+            for _, data in entry.items():
+                if hasattr(data, "mir"):
+                    data
         return self._models
+
+    async def chart_path(self) -> List[str]:
+        """Return hop names of current path\n
+        :return: List of [x,y,z] node names along the chosen path
+        """
+        return self._graph.coord_path
 
     def __len__(self):
         return len(list(self._models()))

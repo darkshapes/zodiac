@@ -1,9 +1,9 @@
 import asyncio
-from zodiac.toga.app import ModelSource
+from zodiac.toga.app import ModelStream
 
 
 async def test_show_edges():
-    model_source = ModelSource()
+    model_source = ModelStream()
     await model_source.model_graph()
     edge_data = None
     if hasattr(model_source, "int_proc"):

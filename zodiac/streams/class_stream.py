@@ -1,7 +1,6 @@
 #  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
-import sys
 from typing import List, Tuple, Callable, Union
 from mir.mappers import make_callable
 from zodiac.providers.constants import PkgType
@@ -9,13 +8,17 @@ from zodiac.providers.registry_entry import RegistryEntry
 from zodiac.providers.constants import MIR_DB, ChipType
 
 
-async def find_package(entry: RegistryEntry) -> Tuple[str]:
+async def find_package(entry: RegistryEntry, base: bool = False) -> Tuple[str]:
     """Look up class and package in MIR from RegistryEntry.\n
     :param entry: A RegistryEntry object containing MIR (Model Identifier Resource) details.
     :return: A tuple containing the class name of the package and its type if found; otherwise, None.
     :raises: AttributeError: If PkgType or ChipType classes are not properly defined."""
-
     model_data = MIR_DB.database[entry.mir[0]][entry.mir[1]].get("pkg")
+    if not model_data:
+        try:
+            model_data = MIR_DB.database[entry.base[0]][entry.base[1]].get("pkg")
+        except (KeyError, AttributeError):
+            return
     if model_data:
         main_gpu: List[str] = next(iter(ChipType._show_ready()))
         gpu_packages = getattr(ChipType, main_gpu)[2]
@@ -32,6 +35,7 @@ async def find_package(entry: RegistryEntry) -> Tuple[str]:
                         if package_name in data:
                             class_name = model_data[index][package_name]
                             return (class_name, package_type)
+    return
 
 
 async def stage_class(class_object: Callable) -> List[Tuple[Union[str, Callable]]]:
@@ -63,8 +67,8 @@ async def show_transformer_tasks(class_name: str) -> List[str]:
 
 # from mir.mappers import make_callable
 # from zodiac.providers.constants import MIR_DB
-# from zodiac.class_source import lookup_package
-# from zodiac.class_source import trace_class
+# from zodiac.class_stream import lookup_package
+# from zodiac.class_stream import trace_class
 
 # model_data = lookup_package(entry)
 # package_data = [content for content in model_data.get("pkg").values() if next(iter(content)) in ["diffusers", "transformers"]]

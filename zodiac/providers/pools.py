@@ -4,14 +4,39 @@
 """Feed models to RegistryEntry class"""
 
 # pylint:disable=protected-access, no-member
-import asyncio
+
 from typing import List, Dict, Optional, Any, Callable
-from nnll.monitor.file import dbuq, debug_monitor
+from nnll.monitor.file import dbuq
 from zodiac.providers.registry_entry import RegistryEntry
-from zodiac.providers.constants import CUETYPE_CONFIG, MIR_DB, CueType, PkgType
+from zodiac.providers.constants import CUETYPE_CONFIG, MIR_DB, CueType, PkgType, TEMPLATE_CONFIG
 
 
-@debug_monitor
+def class_to_mir_id(mir_db: Dict[str, str], id_tag: str) -> Optional[str]:
+    @TEMPLATE_CONFIG.decorator
+    def _read_data(data: Optional[Dict[str, str]] = None):
+        return data["arch"]["transformer"]
+
+    template_data = list(_read_data())
+    for series, compatibility_data in mir_db.database.items():
+        if any([x for x in template_data if x in series.split(".")[1]]):
+            for compatibility, field_data in compatibility_data.items():
+                if id_tag == series.split(".")[2]:
+                    return [series, compatibility]
+                from transformers.models.auto.modeling_auto import MODEL_MAPPING_NAMES
+
+                class_name = MODEL_MAPPING_NAMES.get(id_tag, False)
+                if not class_name:
+                    return None
+                pkg_data = field_data.get("pkg")
+                if pkg_data:
+                    for index_num, pkg_type_data in pkg_data.items():
+                        maybe_class = pkg_type_data.get("transformers")
+                        if maybe_class == class_name:
+                            return [series, compatibility]
+    return None
+
+
+# @debug_monitor
 def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from huggingface_hub\n
     :param mir_db: MIR information
@@ -30,40 +55,39 @@ def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryE
         for repo in model_data.repos:
             meta = {}
             tags = []
+            mir_entry = mir_db.find_path("repo", repo.repo_id)
             package_name = None
-            mir_entry = None
+            mir_family = None
             tokenizer = None
-            mir_entry = mir_db.find_path("repo", repo.repo_id.lower())
+            sub_module_name = None
             try:
                 meta = repocard.RepoCard.load(repo.repo_id).data
             except (LocalEntryNotFoundError, EntryNotFoundError, HTTPError, OfflineModeIsEnabled):
                 pass
+            if hasattr("meta", "base_model"):
+                mir_family = mir_db.find_path("repo", meta.base_model)
+            if mir_family:
+                sub_module_name = mir_db.database[mir_family[0]][mir_family[1]]
+            elif mir_entry:
+                sub_module_name = mir_db.database[mir_entry[0]][mir_entry[1]]
+            if sub_module_name:
+                try:
+                    pkg_id = sub_module_name.get("pkg").get("0")
+                    if hasattr(PkgType, pkg_id.upper()):
+                        package_name = getattr(PkgType, pkg_id.upper())
+                except (AttributeError, TypeError, KeyError, ValueError):
+                    pass
             if meta:
                 if hasattr(meta, "tags"):
                     tags.extend(meta.tags)
                 if hasattr(meta, "pipeline_tag"):
                     tags.append(meta.pipeline_tag)
                 test_package: str = meta.get("library_name")
-                if test_package:
+                if test_package and not package_name:
                     test_package = test_package.replace("-", "_")
                     test_package.upper()
                     if hasattr(PkgType, test_package.upper()):
                         package_name = getattr(PkgType, test_package.upper())
-            if not package_name:
-                try:
-                    series = mir_entry[0]
-                    compatibility = mir_entry[1]
-                    module_name = mir_db.database.get(series)
-                    if module_name:
-                        sub_module_name = module_name.get(compatibility)
-                        if sub_module_name:
-                            pkg_num = sub_module_name.get("pkg")
-                            if pkg_num:
-                                pkg_id = next(iter(list(pkg_num.get(0, "diffusers"))))
-                                if hasattr(PkgType, pkg_id.upper()):
-                                    package_name = getattr(PkgType, pkg_id.get.upper())
-                except (TypeError, KeyError, ValueError):
-                    pass
             if hasattr(repo, "revisions") and repo.revisions:
                 tokenizer_models = [info.file_path for info in next(iter(repo.revisions)).files if "tokenizer.json" in str(info.file_path)]
                 tokenizer = tokenizer_models[-1] if tokenizer_models else None
@@ -74,6 +98,7 @@ def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryE
                 tags=tags,
                 cuetype=CueType.HUB,
                 mir=mir_entry,
+                mir_family=mir_family,
                 package=package_name,
                 api_kwargs=None,  # api_data based on package_name (diffusers/mlx_audio)
                 timestamp=int(repo.last_modified),
@@ -83,7 +108,7 @@ def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryE
         return entries
 
 
-@debug_monitor
+# @debug_monitor
 def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:
     """Collect models from Ollama\n
     :param mir_db: MIR information
@@ -100,9 +125,9 @@ def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Regist
             size=model.size.real,
             tags=[model.details.family],
             cuetype=CueType.OLLAMA,
-            mir=[series for series, compatibility in mir_db.database.items() if model.details.family in str(compatibility)],
+            mir=class_to_mir_id(mir_db, model.details.family),
             package=CueType.OLLAMA,
-            api_kwargs={**config["api_kwargs"]},
+            api_kwargs=config["api_kwargs"],
             timestamp=int(model.modified_at.timestamp()),
             tokenizer=model.model,
         )
@@ -110,7 +135,7 @@ def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Regist
     return entries
 
 
-@debug_monitor
+# @debug_monitor
 def cortex_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from Cortex\n
     :param mir_db: MIR information
@@ -120,23 +145,27 @@ def cortex_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Regist
     import requests
 
     config = api_data[CueType.CORTEX.value[1]]
-    response: requests.models.Request = requests.get(api_data["CORTEX"]["api_kwargs"]["api_base"], timeout=(3, 3))
+    model_url = config["api_url"] + config["model_path"]
+    response: requests.models.Request = requests.get(url=model_url, timeout=(1, 1))
     model_data = response.json()
     for model in model_data["data"]:
+        model_id = model.get("id")
+        if model_id:
+            model_id = model_id.split(":", maxsplit=1)
+            model_id = class_to_mir_id(mir_db, model_id[0])
         entry = RegistryEntry.create_entry(
-            model=f"{api_data[CueType.CORTEX.value[1]].get('prefix')}/{model.get('model')}",
+            model=f"{config.get('prefix')}{model.get('model')}",
             size=model.get("size", 0),
             tags=[str(model.get("modalities", "text"))],
+            mir=model_id,
             cuetype=CueType.CORTEX,
-            mir=None,
-            package=None,
-            api_kwargs={**config["api_kwargs"]},
+            api_kwargs=config["api_kwargs"],
         )
         entries.append(entry)
     return entries
 
 
-@debug_monitor
+# @debug_monitor
 def llamafile_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from Llamafile\n
     :param mir_db: MIR information
@@ -149,20 +178,19 @@ def llamafile_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
     config = api_data[CueType.LLAMAFILE.value[1]]
     for model in model_data.models.list().data:
         entry = RegistryEntry.create_entry(
-            model=f"{api_data[CueType.LLAMAFILE.value[1]].get('prefix')}/{model.id}",
+            model=f"{api_data[CueType.LLAMAFILE.value[1]].get('prefix')}{model.id}",
             size=0,
             tags=["text"],
+            mir=class_to_mir_id(mir_db, model.id) if hasattr(model, id) else None,
             cuetype=CueType.LLAMAFILE,
-            mir=None,
-            package=None,
-            api_kwargs={**config["api_kwargs"]},
+            api_kwargs=config["api_kwargs"],
             timestamp=int(model.created),
         )
         entries.append(entry)
     return entries
 
 
-@debug_monitor
+# @debug_monitor
 def vllm_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from VLLM\n
     :param mir_db: MIR information
@@ -174,21 +202,22 @@ def vllm_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Registry
     config = api_data[CueType.VLLM.value[1]]
     model_data = OpenAI(base_url=api_data["VLLM"]["api_kwargs"]["api_base"], api_key=api_data["VLLM"]["api_kwargs"]["api_key"])
     for model in model_data.models.list().data:
+        id_name = model["data"].get("id")
         entry = RegistryEntry.create_entry(
-            model=f"{api_data[CueType.VLLM.value[1]].get('prefix')}{model['data'].get('id')}f",
+            model=f"{api_data[CueType.VLLM.value[1]].get('prefix')}{id_name}",
             size=0,
             tags=["text"],
+            mir=class_to_mir_id(mir_db, id_name) if id_name else None,
             cuetype=CueType.VLLM,
-            mir=None,
-            package=None,
-            api_kwargs={**config["api_kwargs"]},
+            package=PkgType.VLLM,
+            api_kwargs=config["api_kwargs"],
             timestamp=int(model.created),
         )
         entries.append(entry)
     return entries
 
 
-@debug_monitor
+# @debug_monitor
 def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     """Collect models from LM STUDIO\n
     :param mir_db: MIR information
@@ -210,9 +239,8 @@ def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
             model=f"{api_data[CueType.LM_STUDIO.value[1]].get('prefix')}{model.model_key}",
             size=model._data.size_bytes,
             tags=tags,
+            mir=class_to_mir_id(mir_db, model.architecture) if hasattr(model, "architecture") else None,
             cuetype=CueType.LM_STUDIO,
-            mir=None,
-            package=None,
             api_kwargs={**config["api_kwargs"]},
             timestamp=int(model.modified_at.timestamp()),
         )
@@ -237,7 +265,6 @@ def register_models(data: Optional[Dict[str, Any]] = None) -> List[RegistryEntry
         CueType.LM_STUDIO.value: lm_studio_pool,
     }
     for cue_type, provider in entry_map.items():
-        print(cue_type, provider)
         if cue_type[0]:
             api_data = data
             entries = provider(api_data=api_data, mir_db=MIR_DB, entries=entries)

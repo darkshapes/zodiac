@@ -7,10 +7,10 @@ import os
 import networkx as nx
 from typing import Optional
 from nnll.monitor.file import debug_monitor, dbug, dbuq
-from nnll.monitor.console import nfo
 from zodiac.providers.pools import register_models  # leaving here for mocking
 
 sys.path.append(os.getcwd())
+nfo = sys.stderr.write
 
 
 class IntentProcessor:
@@ -52,7 +52,6 @@ class IntentProcessor:
         Thus: Because of the randomness of B, the set P is unlikely to construct a complete graph attached all available points.\n
         Therefore : While we can trust a node exists, we **CANNOT** trust the system has an edge to reach it\n
         """
-        import asyncio
 
         if not registry_entries:
             registry_entries = register_models()
@@ -181,8 +180,8 @@ class IntentProcessor:
         for index, reg in self.intent_graph[mode_in][mode_out].items():
             entries.append([reg["entry"].model, index, "", ""])
         nfo(f"graph weight : {entries} {mode_in} {mode_out} {target} \n")
-        edge, _ = MIRDatabase.grade_char_match(entries, target)
-        nfo(edge)
+        edge, _ = MIRDatabase.grade_maybes(entries, target)
+        nfo(str(edge))
         entries = []
         if edge is None:
             self.set_registry_entries()
@@ -199,7 +198,7 @@ class IntentProcessor:
         else:
             self.intent_graph[mode_in][mode_out][edge]["weight"] = round(weight - 0.1, 1)
             self.weight_idx.append(item)
-        nfo(self.intent_graph[mode_in][mode_out][edge])
+        nfo(str(self.intent_graph[mode_in][mode_out][edge]))
         self.set_registry_entries()
 
     @debug_monitor
@@ -211,8 +210,8 @@ class IntentProcessor:
         registry_entries = []
         if traced_path is not None and nx.has_path(nx_graph, traced_path[0], traced_path[1]):
             registry_entries = [  # ruff : noqa
-                nx_graph[traced_path[i]][traced_path[i + 1]][hop]  #
-                for i in range(len(traced_path) - 1)  #
-                for hop in nx_graph[traced_path[i]][traced_path[i + 1]]  #
+                nx_graph[traced_path[index]][traced_path[index + 1]][hop]  #
+                for index in range(len(traced_path) - 1)  #
+                for hop in nx_graph[traced_path[index]][traced_path[index + 1]]  #
             ]
         return registry_entries

@@ -5,7 +5,7 @@
 # from unittest.mock import patch
 # import pytest_asyncio
 import asyncio
-from zodiac.sources.task_source import TaskSource
+from zodiac.streams.task_stream import TaskStream
 from zodiac.providers.constants import CueType
 
 # class CueType:
@@ -50,11 +50,11 @@ class RegistryEntryText:
 
 def test_trace_tasks():
     entry = RegistryEntryImg()
-    task_source = TaskSource()
+    task_stream = TaskStream()
     loop = asyncio.get_event_loop()
 
-    loop.run_until_complete(task_source.set_filter_type("text", "image"))
-    result = loop.run_until_complete(task_source.trace_tasks(entry))
+    loop.run_until_complete(task_stream.set_filter_type("text", "image"))
+    result = loop.run_until_complete(task_stream.trace_tasks(entry))
     # print(f"{result}")
     assert result not in ["ControlNet", "ControlNetImg2Img", "ControlNetInpaint", "ControlNetPAG", "ControlNetPAGImg2Img", "ControlNetUnion", "ControlNetUnionImg2Img", "ControlNetUnionInpaint", "Img2Img", "Inpaint", "PAGImg2Img", "PAGInpaint"]
     assert result == ["PAG"]
@@ -62,19 +62,19 @@ def test_trace_tasks():
 
 def test_trace_mode_tasks():
     entry = RegistryEntryImg()
-    task_source = TaskSource()
+    task_stream = TaskStream()
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(task_source.set_filter_type("image", "image"))
-    result = loop.run_until_complete(task_source.trace_tasks(entry))
+    loop.run_until_complete(task_stream.set_filter_type("image", "image"))
+    result = loop.run_until_complete(task_stream.trace_tasks(entry))
     assert result == ["ControlNet", "ControlNetImg2Img", "ControlNetInpaint", "ControlNetPAG", "ControlNetPAGImg2Img", "ControlNetUnion", "ControlNetUnionImg2Img", "ControlNetUnionInpaint", "Img2Img", "Inpaint", "PAGImg2Img", "PAGInpaint"]
 
 
 def test_trace_tf_tasks():
     entry = RegistryEntryVoice()
-    task_source = TaskSource()
+    task_stream = TaskStream()
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(task_source.set_filter_type("text", None))
-    result = loop.run_until_complete(task_source.trace_tasks(entry))
+    loop.run_until_complete(task_stream.set_filter_type("text", None))
+    result = loop.run_until_complete(task_stream.trace_tasks(entry))
     assert result != ["ForConditionalGeneration"]
     assert result != [""]
     assert result == []
@@ -82,8 +82,8 @@ def test_trace_tf_tasks():
 
 def test_trace_text_tasks():
     entry = RegistryEntryText()
-    task_source = TaskSource()
+    task_stream = TaskStream()
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(task_source.set_filter_type("text", None))
-    result = loop.run_until_complete(task_source.trace_tasks(entry))
+    loop.run_until_complete(task_stream.set_filter_type("text", None))
+    result = loop.run_until_complete(task_stream.trace_tasks(entry))
     assert result == []

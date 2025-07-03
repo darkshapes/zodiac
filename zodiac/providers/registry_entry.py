@@ -22,6 +22,7 @@ class RegistryEntry(BaseModel):
     timestamp: int
     api_kwargs: Optional[dict] = None
     mir: Optional[List[str]] = None
+    mir_family: Optional[List[str]] = None
     package: Optional[Union[PkgType, CueType]] = None
     tokenizer: Optional[Path] = None
 
@@ -38,6 +39,13 @@ class RegistryEntry(BaseModel):
         default_task = None
         processed_tasks = []
         # nfo(self.model)
+        if self.mir:
+            arch = self.mir[0].split(".")[1]
+            if arch in ["detr", "vit"]:
+                processed_tasks = [("image", "text")]
+            elif arch in ["controlnet", "unet", "dit"]:
+                processed_tasks = [("text", "image")]
+                processed_tasks = [("image", "image")]
         if self.cuetype in [x for x in list(CueType) if x != CueType.HUB]:  # Literal list of CueType, must use list()
             default_task = ("text", "text")  # usually these are txt gen libraries
         elif self.cuetype == CueType.HUB:
@@ -63,6 +71,7 @@ class RegistryEntry(BaseModel):
         tags: List[str],
         cuetype: CueType,
         mir: Optional[List[str]] = None,
+        mir_family: Optional[List[str]] = None,
         package: Optional[Union[PkgType, CueType]] = None,
         api_kwargs=None,
         timestamp: Optional[int] = None,
@@ -88,6 +97,7 @@ class RegistryEntry(BaseModel):
             tags=tags,
             cuetype=cuetype,
             mir=mir,
+            mir_family=mir_family,
             package=package,
             api_kwargs=api_kwargs,
             timestamp=timestamp or int(datetime.now().timestamp()),  # Default to current time if not provided
