@@ -8,9 +8,6 @@ pyproject.toml
 pytest.ini
 uv.lock
 .github/workflows/zodiac.yml
-astra/__init__.py
-astra/__main__.py
-astra/button.tcss
 img_src/screenshot.png
 img_src/zodiac_dark_bg.png
 img_src/zodiac_dark_stealth.png
@@ -25,7 +22,6 @@ tests/test_has_api.py
 tests/test_init_exit.py
 tests/test_model_register.py
 tests/test_orientation.py
-tests/test_pkg_deps.py
 tests/test_register_types.py
 tests/test_registry_entry.py
 tests/test_swap_panel.py
@@ -64,9 +60,6 @@ zodiac/providers/cuetype.json
 zodiac/providers/pools.py
 zodiac/providers/registry_entry.py
 zodiac/providers/token_counters.py
-zodiac/sources/class_source.py
-zodiac/sources/model_source.py
-zodiac/sources/task_source.py
 zodiac/streams/class_stream.py
 zodiac/streams/model_stream.py
 zodiac/streams/task_stream.py

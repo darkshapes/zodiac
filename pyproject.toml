@@ -75,7 +75,6 @@ Documentation = "https://github.com/darkshapes/sdbx/wiki"
 [project.scripts]
 zdac   = "zodiac.console.__main__:main"
 zodiac = "zodiac.toga.__main__:main"
-astra  = "astra.__init__:main"
 
 [tool.setuptools]
 packages = ["zodiac"]

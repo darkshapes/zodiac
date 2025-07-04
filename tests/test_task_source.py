@@ -30,7 +30,7 @@ class RegistryEntryVoice:
         self.size = 247038024
         self.tags = ["automatic-speech-recognition"]
         self.timestamp = 1749921961
-        self.mir = ["info.ststm.moonshine", "tiny"]  # ["info.ststm.moonshine","tiny"] #needs to be populated from config file
+        self.mir = ["info.ststm.moonshine", "*"]  # ["info.ststm.moonshine","tiny"] #needs to be populated from config file
         self.available_tasks = [("speech", "text")]
 
 
@@ -38,14 +38,14 @@ class RegistryEntryImg:
     def __init__(self):
         self.cuetype = CueType.HUB
         self.model = "stability-ai/stable-diffusion-xl-1.0-base"
-        self.mir = ["info.unet.stable-diffusion-xl", "base"]
+        self.mir = ["info.unet.stable-diffusion-xl", "*"]
         self.available_tasks = [("text", "image"), ("image", "image")]
 
 
 class RegistryEntryText:
     def __init__(self):
         self.cuetype = CueType.HUB
-        self.mir = ["info.vit.blip-vqa", "base"]
+        self.mir = ["info.vit.blip-vqa", "*"]
 
 
 def test_trace_tasks():
