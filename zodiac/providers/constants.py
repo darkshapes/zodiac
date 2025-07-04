@@ -9,8 +9,8 @@ import os
 from pydantic import BaseModel, Field
 from nnll.monitor.file import dbuq
 from nnll.configure.init_gpu import first_available
-from mir.json_cache import JSONCache, TEMPLATE_PATH_NAMED
-from mir.mir_maid import MIRDatabase
+from nnll.mir.json_cache import JSONCache, TEMPLATE_PATH_NAMED
+from nnll.mir.maid import MIRDatabase
 
 MIR_DB = MIRDatabase()
 CUETYPE_PATH_NAMED = os.path.join(os.path.dirname(__file__), "cuetype.json")

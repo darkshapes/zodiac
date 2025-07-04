@@ -8,7 +8,7 @@ from unittest.mock import patch
 import pytest
 import pytest_asyncio
 
-from mir.json_cache import JSONCache
+from nnll.mir.json_cache import JSONCache
 from zodiac.providers.constants import CUETYPE_PATH_NAMED
 
 

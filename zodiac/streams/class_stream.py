@@ -2,7 +2,7 @@
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 from typing import List, Tuple, Callable, Union
-from mir.mappers import make_callable
+from nnll.metadata.helpers import make_callable
 from zodiac.providers.constants import PkgType
 from zodiac.providers.registry_entry import RegistryEntry
 from zodiac.providers.constants import MIR_DB, ChipType

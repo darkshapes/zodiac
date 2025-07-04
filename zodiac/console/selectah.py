@@ -25,7 +25,7 @@ class Selectah(Select):
         if self.value != Select.BLANK and self.value != "No Models.":
             try:
                 nfo(f"selected : {self.value}")
-                from_fold.int_proc.edit_weight(selection=self.value, mode_in=self.mode_in, mode_out=self.mode_out)
+                from_fold.int_proc.edit_weight(self.value, mode_in=self.mode_in, mode_out=self.mode_out)
             except ValueError as error_log:
                 dbug(error_log)
             value_changed = next(iter(x for x in from_fold.int_proc.models if self.value in x))

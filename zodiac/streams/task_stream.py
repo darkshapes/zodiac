@@ -23,7 +23,7 @@ class TaskStream(Source):
         }
         self.exclusive_tasks = {
             ("image", "text"): ["Vision"],
-            ("image", "image"): ["Img2Img", "Inpaint", "PAG"],
+            ("image", "image"): ["Img2Img", "Inpaint", "PAG", "Vision"],
             ("text", "text"): ["Text", "CasualLM", "SequenceClassification", "QuestionAnswering"],
         }
         self.all_tasks = set().union(*self.basic_tasks.values()).union(*self.exclusive_tasks.values())
@@ -52,7 +52,7 @@ class TaskStream(Source):
         :param entry: The object containing the model information.
         :return: A sorted list of tasks applicable to the model."""
 
-        from mir.mappers import show_tasks_for
+        from nnll.tensor_pipe.parenting import show_tasks_for
         from nnll.tensor_pipe.deconstructors import get_code_names
 
         snip_words: List[str] = ["Model", "PreTrained", "ForConditionalGeneration", "Pipeline", "For"]
