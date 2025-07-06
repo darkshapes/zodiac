@@ -22,7 +22,6 @@ class ModelStream(Source):
 
         if self._graph.intent_graph:
             edge_pairs = list(self._graph.intent_graph.edges)
-            print(edge_pairs)
             if edge_pairs:
                 pair = 0 if not target else 1
                 seen = []

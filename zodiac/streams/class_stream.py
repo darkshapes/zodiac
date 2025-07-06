@@ -5,7 +5,18 @@ from typing import List, Tuple, Callable, Union
 from nnll.metadata.helpers import make_callable
 from zodiac.providers.constants import PkgType
 from zodiac.providers.registry_entry import RegistryEntry
-from zodiac.providers.constants import MIR_DB, ChipType
+from zodiac.providers.constants import MIR_DB, VERSIONS_CONFIG, ChipType
+
+
+async def best_package(model_data, package_sets):
+    for processor in package_sets:
+        for package_type in processor:
+            if package_type.value[0]:  # Determine if the package is available
+                package_name = package_type.value[1].lower()
+                for index, data in model_data.items():
+                    if package_name in data:
+                        class_name = model_data[index][package_name]
+                        return (class_name, package_type)
 
 
 async def find_package(entry: RegistryEntry, base: bool = False) -> Tuple[str]:
@@ -13,28 +24,24 @@ async def find_package(entry: RegistryEntry, base: bool = False) -> Tuple[str]:
     :param entry: A RegistryEntry object containing MIR (Model Identifier Resource) details.
     :return: A tuple containing the class name of the package and its type if found; otherwise, None.
     :raises: AttributeError: If PkgType or ChipType classes are not properly defined."""
-    model_data = MIR_DB.database[entry.mir[0]][entry.mir[1]].get("pkg")
-    if not model_data:
-        try:
-            model_data = MIR_DB.database[entry.base[0]][entry.base[1]].get("pkg")
-        except (KeyError, AttributeError):
-            return
-    if model_data:
-        main_gpu: List[str] = next(iter(ChipType._show_ready()))
-        gpu_packages = getattr(ChipType, main_gpu)[2]
-        cpu_packages = ChipType.CPU[2]
-        if cpu_packages != gpu_packages:
-            package_sets = [gpu_packages, cpu_packages]
-        else:
-            package_sets = [cpu_packages]  # Fallback to CPU packages if no match found in GPU packages
-        for processor in package_sets:
-            for package_type in processor:
-                if package_type.value[0]:  # Determine if the package is available
-                    package_name = package_type.value[1].lower()  # is
-                    for index, data in model_data.items():
-                        if package_name in data:
-                            class_name = model_data[index][package_name]
-                            return (class_name, package_type)
+    import re
+
+    mir_ids = [entry.mir[1], "*"]
+    suffixes = VERSIONS_CONFIG.get("suffixes")
+    if suffixes:
+        for compatibility, model_data in MIR_DB.database[entry.mir[0]].items():
+            package_key = model_data.get("pkg")
+            if package_key and (any(re.match(pattern, compatibility) for pattern in suffixes) or compatibility in mir_ids):
+                main_gpu: List[str] = next(iter(ChipType._show_ready()))
+                gpu_packages = getattr(ChipType, main_gpu)[2]
+                cpu_packages = ChipType.CPU[2]
+                if cpu_packages != gpu_packages:
+                    package_sets = [gpu_packages, cpu_packages]
+                else:
+                    package_sets = [cpu_packages]  # Fallback to CPU packages if no match found in GPU packages
+                package_data = await best_package(package_key, package_sets)
+                if package_data:
+                    return package_data
     return
 
 
