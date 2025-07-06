@@ -88,4 +88,4 @@ def test_trace_text_tasks():
     loop = asyncio.get_event_loop()
     loop.run_until_complete(task_stream.set_filter_type("text", None))
     result = loop.run_until_complete(task_stream.trace_tasks(entry))
-    assert result == ["BlipQuestionAnswering"]
+    assert result == ["QuestionAnswering"]

@@ -1,7 +1,7 @@
 #  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
-from typing import List, Any
+from typing import List, Any, Set
 from toga.sources import Source
 from zodiac.providers.registry_entry import RegistryEntry
 from zodiac.streams.class_stream import find_package, show_transformer_tasks
@@ -55,7 +55,7 @@ class TaskStream(Source):
         from nnll.tensor_pipe.parenting import show_tasks_for
         from nnll.tensor_pipe.deconstructors import get_code_names
 
-        snip_words: List[str] = ["Model", "PreTrained", "ForConditionalGeneration", "Pipeline", "For"]
+        snip_words: Set[str] = {"Model", "PreTrained", "ForConditionalGeneration", "Pipeline", "For"}
         if entry.mir:
             package_bundle = await find_package(entry)
             if package_bundle:
@@ -67,6 +67,11 @@ class TaskStream(Source):
                     code_name = get_code_names(class_name, package_name)
                     preformatted_task_data = show_tasks_for(code_name=code_name, class_name=class_name)
                     preformatted_task_data.sort()
+                class_snippets = snip_words | self.all_tasks
+                subtracted_name = class_name
+                for snip in class_snippets:
+                    subtracted_name = subtracted_name.replace(snip, "")
+                snip_words.add(subtracted_name)
                 filtered_tasks = await self.filter_tasks(preformatted_task_data, snip_words)
                 return filtered_tasks
         return None

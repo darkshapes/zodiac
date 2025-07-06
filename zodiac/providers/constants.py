@@ -9,13 +9,16 @@ import os
 from pydantic import BaseModel, Field
 from nnll.monitor.file import dbuq
 from nnll.configure.init_gpu import first_available
-from nnll.mir.json_cache import JSONCache, TEMPLATE_PATH_NAMED
+from nnll.mir.json_cache import JSONCache, TEMPLATE_PATH_NAMED, VERSIONS_PATH_NAMED
 from nnll.mir.maid import MIRDatabase
 
 MIR_DB = MIRDatabase()
 CUETYPE_PATH_NAMED = os.path.join(os.path.dirname(__file__), "cuetype.json")
 CUETYPE_CONFIG = JSONCache(CUETYPE_PATH_NAMED)
 TEMPLATE_CONFIG = JSONCache(TEMPLATE_PATH_NAMED)
+VERSIONS_DATA = JSONCache(VERSIONS_PATH_NAMED)
+VERSIONS_DATA._load_cache()
+VERSIONS_CONFIG = VERSIONS_DATA._cache
 
 
 def check_host(api_name: str, api_url: str) -> bool:

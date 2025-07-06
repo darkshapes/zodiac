@@ -1,15 +1,8 @@
-log
-log/.DS_Store
+/log
+*/.DS_Store
 log/.nnll*
-build/*
-build/lib/*
-textual.log
-.DS_Store
-.DS_Store*
-*.DS_Store
-textual.log
-img_src/.DS_Store
-tests/.DS_Store
-zodiac/.DS_Store
-.DS_Store
+*build/
+*build/lib/
+*/textual.log
+*zodiac.egg-info
 
