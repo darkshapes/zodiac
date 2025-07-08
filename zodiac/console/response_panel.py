@@ -38,7 +38,7 @@ class ResponsePanel(TextArea):
         tx_data-⏐-speech   array
                 ⏐-video    array
                 '-music    array
-        ```
+        ```import pyperclip
         :param chat: Processing module for request
         :param tx_data: Prompt request
         :param out_type: Media type for this pass, defaults to 'text'
