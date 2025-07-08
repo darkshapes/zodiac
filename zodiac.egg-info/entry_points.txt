@@ -1,3 +1,4 @@
 [console_scripts]
-zdac = zodiac.console.__main__:main
+zdac = zodiac.toga.__main__:main
+zdac-cli = zodiac.console.__main__:main
 zodiac = zodiac.toga.__main__:main

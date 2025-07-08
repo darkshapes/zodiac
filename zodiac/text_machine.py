@@ -5,8 +5,8 @@
 
 from typing import Any, Optional, Callable, Dict, Union
 import dspy
-# from pydantic import BaseModel, Field
 
+# from pydantic import BaseModel, Field
 from nnll.monitor.console import nfo
 from zodiac.providers.registry_entry import RegistryEntry
 
@@ -172,3 +172,36 @@ class TextMachine(dspy.Module):
         first_available(clean=True)
         self.recycle = recycle
         gc.collect()
+
+
+# async def send_to_clipboard_and_paste(stream):
+#     keyboard = Controller()
+
+#     async def copy_to_clipboard(text):
+#         """Asynchronously copy text to the clipboard."""
+#         pyperclip.copy(text)
+#         await asyncio.sleep(0.1)  # Allow time for the clipboard to update
+
+#     async def simulate_paste():
+#         """Simulate a paste action (Ctrl+V)."""
+#         with keyboard.pressed(Key.ctrl):
+#             keyboard.press("v")
+#             keyboard.release("v")
+#         await asyncio.sleep(0.5)  # Wait for paste to complete
+
+#     for text in stream:
+#         print(f"Copying to clipboard: {text}")
+#         await copy_to_clipboard(text)
+#         print("Simulating paste action...")
+#         await simulate_paste()
+
+
+# # Entry point
+# async def main():
+#     stream = text_stream()
+#     await send_to_clipboard_and_paste(stream)
+
+
+# # Run the async loop
+# if __name__ == "__main__":
+#     asyncio.run(main())
