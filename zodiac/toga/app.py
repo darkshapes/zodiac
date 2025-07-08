@@ -31,9 +31,6 @@ class Interface(toga.App):
         self.chat.ready(self.registry_entry, sig=QATask, streaming=True)
         self.status.text = f"Processing : {self.model_stack.value}" + self.status.text
         self.response_panel.scroll_to_bottom()
-        import pyperclip
-
-        # pyperclip.set_clipboard("pyobjc")
         async for prediction in self.chat(prompts=prompts):  # mode_out=self.out_types.value):
             try:
                 async for chunk in prediction:

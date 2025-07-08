@@ -11,7 +11,7 @@ from zodiac.providers.registry_entry import RegistryEntry
 from zodiac.toga.signatures import QATask
 
 # from pydantic import BaseModel
-from zodiac.providers.constants import ChipType, MIR_DB as mir_db
+# from zodiac.providers.constants import ChipType, MIR_DB as mir_db
 
 
 class InferenceProcessor(dspy.Module):
@@ -33,6 +33,7 @@ class InferenceProcessor(dspy.Module):
         :param signature: The format of messages sent to the model
         :param max_workers: Maximum number of async processes, based on system resources
         """
+        from zodiac.providers.constants import ChipType
 
         super().__init__()
         if not dspy.settings.async_max_workers:
@@ -67,7 +68,16 @@ class InferenceProcessor(dspy.Module):
     async def forward(self, prompts: Dict[str, List[float]], metadata: Optional[dict] = None) -> Any:
         """Forward pass for multimodal process\n
         :param prompts: prompt transmission values for all media formats
-        :param mode_out: output type flag, defaults to 'text'"""
+        :param metadata: Additional metadata to tag the generation with, defaults to None
+        ```
+        name    [ medium : data ]
+                ,-text     String
+                ⏐-image    List
+        tx_data-⏐-speech   List
+                ⏐-video    List
+                '-music    List
+        ```
+        """
 
         with dspy.context(lm=self.lm, async_max_workers=self.max_workers):
             try:

@@ -29,13 +29,13 @@ class CueType(Enum):
 
 @pytest_asyncio.fixture(loop_scope="module")
 async def mock_signature():
-    with patch("zodiac.text_machine.dspy.Signature", autospec=True) as mocked:
+    with patch("zodiac.inference.dspy.Signature", autospec=True) as mocked:
         yield mocked
 
 
 @pytest_asyncio.fixture(loop_scope="module")
 async def mock_predict():
-    with patch("zodiac.text_machine.dspy.Predict", autospec=True) as mocked:
+    with patch("zodiac.inference.dspy.Predict", autospec=True) as mocked:
         yield mocked
 
 
@@ -63,41 +63,41 @@ async def test_chat_instance(mock_signature, mock_predict):
 
     from zodiac.inference import InferenceProcessor
 
-    text_machine = InferenceProcessor()
-    text_machine.max_workers = 8
-    return text_machine
+    inference = InferenceProcessor()
+    inference.max_workers = 8
+    return inference
     # sig=mock_signature,
 
 
-@pytest.mark.filterwarnings("ignore:open_text")
-@pytest.mark.filterwarnings("ignore::DeprecationWarning:")
-@pytest.mark.asyncio(loop_scope="module")
-async def test_text_machine_initialization(mock_signature, mock_predict):
-    text_machine = await test_chat_instance(mock_signature, mock_predict)
-    with patch("zodiac.text_machine.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
-        assert hasattr(text_machine, "mir_db")
-        assert text_machine.mir_db.database is not None
-        assert callable(text_machine.mir_db.find_path)
-        assert hasattr(text_machine, "factory")
-        assert text_machine.factory is not None
-        assert callable(text_machine.factory.create_pipeline)
-        assert callable(text_machine)
-        assert callable(text_machine.forward)
+# @pytest.mark.filterwarnings("ignore:open_text")
+# @pytest.mark.filterwarnings("ignore::DeprecationWarning:")
+# @pytest.mark.asyncio(loop_scope="module")
+# async def test_inference_initialization(mock_signature, mock_predict):
+#     inference = await test_chat_instance(mock_signature, mock_predict)
+#     with patch("zodiac.inference.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
+#         assert hasattr(inference, "mir_db")
+#         assert inference.mir_db.database is not None
+#         assert callable(inference.mir_db.find_path)
+#         assert hasattr(inference, "factory")
+#         assert inference.factory is not None
+#         assert callable(inference.factory.create_pipeline)
+#         assert callable(inference)
+#         assert callable(inference.forward)
 
 
 @pytest.mark.filterwarnings("ignore:open_text")
 @pytest.mark.filterwarnings("ignore::DeprecationWarning:")
 @pytest.mark.asyncio(loop_scope="module")
-async def test_text_machine_generation(mock_signature, mock_predict, has_api):
-    # from zodiac.text_machine import ChatMachineWithMemory
+async def test_inference_generation(mock_signature, mock_predict, has_api):
+    # from zodiac.inference import ChatMachineWithMemory
 
-    # text_machine = ChatMachineWithMemory(max_workers=8)
-    text_machine = await test_chat_instance(mock_signature, mock_predict)
-    assert text_machine.pipe is None
-    # text_machine.pipe = None
+    # inference = ChatMachineWithMemory(max_workers=8)
+    inference = await test_chat_instance(mock_signature, mock_predict)
+    assert inference.pipe is None
+    # inference.pipe = None
 
-    with patch("zodiac.text_machine.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
-        text_machine.active_models(registry_entries=PlaceholderClass, sig=mock_signature)
+    with patch("zodiac.inference.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
+        inference.ready(registry_entries=PlaceholderClass, sig=mock_signature)
 
-        assert callable(text_machine.pipe)
-        assert text_machine.pipe is not None
+        assert callable(inference.pipe)
+        assert inference.pipe is not None

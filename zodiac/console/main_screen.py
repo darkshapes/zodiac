@@ -24,7 +24,8 @@ from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Static
 
-from zodiac.inference import BasicImageSignature, InferenceProcessor, QATask
+from zodiac.inference import InferenceProcessor
+from zodiac.toga.signatures import QATask, VisionTask
 from zodiac.console.display_bar import DisplayBar
 from zodiac.console.flip import Flip
 from zodiac.graph import IntentProcessor
@@ -303,7 +304,7 @@ class Fold(Screen[bool]):
         edge_data = await self.pull_registry_entry()
         registry_entries = edge_data["entry"]
         if self.mode_out == "image":
-            sig = BasicImageSignature
+            sig = VisionTask
         else:
             sig = QATask
         self.chat.max_workers = 8
