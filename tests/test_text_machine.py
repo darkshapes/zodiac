@@ -61,9 +61,9 @@ async def test_chat_instance(mock_signature, mock_predict):
 
     # Create an instance of ChatMachineWithMemory
 
-    from zodiac.text_machine import TextMachine
+    from zodiac.inference import InferenceProcessor
 
-    text_machine = TextMachine()
+    text_machine = InferenceProcessor()
     text_machine.max_workers = 8
     return text_machine
     # sig=mock_signature,
