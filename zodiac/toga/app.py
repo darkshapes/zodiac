@@ -15,6 +15,7 @@ from zodiac.streams.task_stream import TaskStream
 
 class Interface(toga.App):
     units = [["chr ", 000000, " / "], ["tok ", 000000, " / "], ["sec ", 000.00, "″"]]
+    background = "#1B1B1B"  # "#09090B"
 
     async def ticker(self, widget: Callable, external: bool = False, **kwargs) -> None:
         """Process and synthesize input data based on selected model.\n
@@ -83,14 +84,14 @@ class Interface(toga.App):
         await self.update_status()
 
     async def update_status(self, widget: Callable = None):
-        index = int(self.path_slider.value)
-        self.slider_state.text = f"{self.chart_path[index]}"  # if selection else ""
+        index = int(self.intent_swipe.value)
+        self.current_intent.text = f"{self.chart_path[index]}"  # if selection else ""
 
     async def traverse(self, slider, **kwargs):
         await self.update_status()  # slider.value
-        index = int(self.path_slider.value)
+        index = int(self.intent_swipe.value)
         traversal = f"{self.chart_path[index]}"  # {slider.value}"
-        self.slider_state.text = traversal
+        self.current_intent.text = traversal
 
     async def model_graph(self):
         """Builds the model graph."""
@@ -108,81 +109,116 @@ class Interface(toga.App):
 
         token_count, character_count = await tk_count(self.registry_entry.model, widget.value)
         formatted_units = [f"{unit[0]}{unit[1]}" for unit in self.units]
-        self.char_units.text = "".join(formatted_units[0]) + str(character_count)
-        self.token_units.text = "".join(formatted_units[1]) + str(token_count)
-        self.sec_units.text = "".join(formatted_units[2])
+        self.character_stats.text = "".join(formatted_units[0]) + str(character_count)
+        self.token_stats.text = "".join(formatted_units[1]) + str(token_count)
+        self.time_stats.text = "".join(formatted_units[2])
 
     async def populate_in_types(self):
         """Builds the input types selection."""
 
         in_edge_names = await self.model_source.show_edges()
-        self.in_types.items = in_edge_names
+        self.input_types.items = in_edge_names
 
     async def populate_out_types(self):
         """Builds the output types selection."""
 
         out_edges = await self.model_source.show_edges(target=True)
-        self.out_types.items = out_edges
+        self.output_types.items = out_edges
 
     async def populate_model_stack(self, widget: Optional[Callable] = None):
         """Builds the model stack selection dropdown."""
         from decimal import Decimal
 
         await self.model_source.clear()
-        if self.in_types.value and self.out_types.value:
-            models = await self.model_source.trace_models(self.in_types.value, self.out_types.value)
-            self.model_stack.items = models
+        if self.input_types.value and self.output_types.value:
+            models = await self.model_source.trace_models(self.input_types.value, self.output_types.value)
+            self.model_stack.items = [model[0][:20] for model in models if len(model[0]) > 20]
             self.chart_path = await self.model_source.chart_path()
             range = len(self.chart_path)
-            self.path_slider.tick_count = range
-            self.path_slider.max = Decimal(str(range - 1) + ".0")
+            self.intent_swipe.tick_count = range
+            self.intent_swipe.max = Decimal(str(range - 1) + ".0")
 
     async def populate_task_stack(self, widget: Optional[Callable] = None):
         """Builds the task stack selection dropdown."""
         selection = self.model_stack.value
-        registry_entry = next(iter(registry["entry"] for registry in self.model_source._graph.registry_entries if selection in registry["entry"].model))
-        await self.task_source.set_filter_type(self.in_types.value, self.out_types.value)
+        registry_entry = next(
+            iter(
+                registry["entry"]  # formatting
+                for registry in self.model_source._graph.registry_entries  # formatting
+                if selection in registry["entry"].model
+            )
+        )
+        await self.task_source.set_filter_type(self.input_types.value, self.output_types.value)
         tasks = await self.task_source.trace_tasks(registry_entry)
         # if tasks:
         # self.task_stack.style = Pack(flex=1, visibility="visible")
         self.task_stack.items = tasks
 
-    def initialize_widgets(self):
-        """Create the main input fields"""
+    def initialize_inputs(self):
+        self.character_stats = toga.Label("")
+        self.token_stats = toga.Label("")
+        self.time_stats = toga.Label("")
         self.status = toga.Label("Ready.")
-        self.counter = toga.Row(style=Pack(flex=3, height=20, gap=2, margin=5))
-        formatted_units = [f"{unit[0]}{unit[1]}" for unit in self.units]
-        self.char_units = toga.Label("".join(formatted_units[0]))
-        self.token_units = toga.Label("".join(formatted_units[1]))
-        self.sec_units = toga.Label("".join(formatted_units[2]))
-        self.slider_state = toga.Label("", style=Pack(gap=2, margin=5))
-        self.counter.children.extend([self.char_units, self.token_units, self.sec_units])  # , self.slider_state])
-        self.path_slider = toga.Slider(min=0, tick_count=2, on_change=self.traverse, style=Pack(flex=1, margin=5))
-        counter_box = toga.Row(
-            children=[self.counter, self.slider_state],
-        )
-
-        self.counter_slider = toga.Column(children=[counter_box, self.path_slider], style=Pack(flex=5, margin_left=0, margin_right=0))
-
-        self.in_types = toga.Selection(items=[], style=Pack(flex=0.25), on_change=self.populate_model_stack)
-        self.out_types = toga.Selection(items=[], style=Pack(flex=0.25), on_change=self.populate_model_stack)
-
-        self.model_stack = toga.Selection(items=[], on_change=self.on_select_handler, style=Pack(flex=0.5))
-        self.task_stack = toga.Selection(items=[], style=Pack(flex=1))
-        self.parameter_stack = toga.Column(children=[self.model_stack, self.task_stack], align_items="end", text_direction="rtl", style=Pack(gap=10))
-        intent_fields = toga.Column(children=[self.in_types, self.out_types], align_items="start", text_direction="ltr", style=Pack(gap=10))
-        model_fields = toga.Row(children=[intent_fields, self.counter_slider, self.parameter_stack], vertical_align_items="center")
-        status_bar = toga.Box(children=[self.status], style=Pack(flex=1, height=10))
-        center_panel = toga.Column(children=[model_fields, status_bar], style=Pack(margin=5))
-        self.message_panel = toga.MultilineTextInput(value="Message", style=Pack(flex=1), on_change=self.token_estimate)
-        combined_top = toga.Column(children=[self.message_panel, center_panel], style=Pack(flex=1))
-
+        self.current_intent = toga.Label("", style=Pack(gap=2, margin=5))
+        self.intent_swipe = toga.Slider(min=0, tick_count=2, on_change=self.traverse, style=Pack(flex=1, margin=5))
+        self.input_types = toga.Selection(items=[], style=Pack(flex=0.25, background_color=self.background), on_change=self.populate_model_stack)
+        self.output_types = toga.Selection(items=[], style=Pack(flex=0.25, background_color=self.background), on_change=self.populate_model_stack)
+        self.model_stack = toga.Selection(items=[], style=Pack(flex=0.25, background_color=self.background), on_change=self.on_select_handler)
+        self.task_stack = toga.Selection(items=[], style=Pack(flex=1, background_color=self.background))
+        self.message_panel = toga.MultilineTextInput(value="Prompt", on_change=self.token_estimate, style=Pack(flex=0.1))
         self.response_panel = toga.MultilineTextInput(readonly=True, value="", style=Pack(flex=5))
-        self.center_layout = toga.SplitContainer(content=[combined_top, self.response_panel], direction=Direction.HORIZONTAL, flex=20, margin=0)
+
+    def initialize_static(self):
+        """Create the main input fields"""
+        prompt_stats = toga.Row(
+            children=[self.character_stats, self.token_stats, self.time_stats],
+            style=Pack(flex=3, height=20, gap=2, margin=5, background_color=self.background),
+        )
+        live_stats = toga.Row(children=[prompt_stats, self.current_intent])
+        detail_fields = toga.Column(
+            children=[live_stats, self.intent_swipe],
+            style=Pack(flex=5, margin_left=0, margin_right=0, background_color=self.background),
+        )
+        process_fields = toga.Column(
+            children=[self.model_stack, self.task_stack],
+            align_items="end",
+            text_direction="rtl",
+            style=Pack(gap=10, background_color=self.background),
+        )
+        intent_fields = toga.Column(
+            children=[self.input_types, self.output_types],
+            align_items="start",
+            text_direction="ltr",
+            style=Pack(gap=10, background_color=self.background),
+        )
+        fields_bar = toga.Row(children=[intent_fields, detail_fields, process_fields], vertical_align_items="center")
+        status_bar = toga.Box(children=[self.status], style=Pack(flex=1, height=10, background_color=self.background))
+        display_bar = toga.Column(children=[fields_bar, status_bar], style=Pack(margin=5, background_color=self.background))
+        top_center = toga.Column(children=[self.message_panel, display_bar], style=Pack(flex=0.66, background_color=self.background))
+        browser_panel = toga.WebView(url="http://127.0.0.1:8188", style=Pack(background_color=self.background))
+        audio_panel = toga.Canvas(style=Pack(background_color=self.background))
+        model_graph = toga.Canvas(style=Pack(background_color=self.background))
+        bottom_section = toga.OptionContainer(
+            content=[
+                ("Language", self.response_panel),
+                ("Waveform", audio_panel),
+                ("Model Graph", model_graph),
+                ("Node Graph", browser_panel),
+            ],
+            style=Pack(background_color="#000000"),
+        )
+        left_buffer = toga.Column(justify_content="start", style=Pack(flex=0.33, background_color=self.background))
+        right_buffer = toga.Column(justify_content="end", style=Pack(flex=0.33, background_color=self.background))
+        top_section = toga.Row(children=[left_buffer, top_center, right_buffer], style=Pack(background_color=self.background))
+        self.final_layout = toga.SplitContainer(
+            content=[top_section, bottom_section],
+            direction=Direction.HORIZONTAL,
+            style=Pack(flex=20, margin=0, background_color=self.background),
+        )
 
     def initialize_layout(self):
         """Create the layout of the application."""
-        self.main_window.content = self.center_layout
+        self.main_window.content = self.final_layout
 
     def startup(self):
         """Startup Logic. Initialize widgets and layout, then asynchronous tasks for populating datagets"""
@@ -204,21 +240,22 @@ class Interface(toga.App):
             group=control_group,
             section=0,
         )
-        add_file = toga.Command.standard(
+        attach = toga.Command.standard(
             self,
             toga.Command.OPEN,
-            text="Add File...",
+            text="Attack File...",
             tooltip="Attach a file to the prompt.",
             shortcut=Key.MOD_1 + Key.O,
             action=self.include_file,
             group=control_group,
             section=1,
         )
-        self.commands.add(start, stop, add_file)
-        # self.main_window.toolbar.add(add_file)
-        self.initialize_widgets()
-        self.initialize_layout()
+        self.commands.add(start, stop, attach)
 
+        self.initialize_inputs()
+        self.initialize_static()
+        self.initialize_layout()
+        asyncio.create_task(self.token_estimate(self))
         asyncio.create_task(self.model_graph())
         asyncio.create_task(self.create_chat())
         asyncio.create_task(self.populate_in_types())
@@ -231,5 +268,5 @@ class Interface(toga.App):
 
 def main():
     """The entry point for the application."""
-    app = Interface("Shadowbox", "org.beeware.toga.examples.table_source")
+    app = Interface("Shadowbox", "org.darkshapes.shadowbox", author="Darkshapes", home_page="https://darkshapes.github.io")
     app.main_loop()

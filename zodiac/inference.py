@@ -9,7 +9,7 @@ import dspy
 # from pydantic import BaseModel, Field
 from zodiac.providers.registry_entry import RegistryEntry
 from zodiac.toga.signatures import QATask
-
+from nnll.metadata import save_generation as disk
 # from pydantic import BaseModel
 # from zodiac.providers.constants import ChipType, MIR_DB as mir_db
 
