@@ -24,7 +24,8 @@ from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Static
 
-from zodiac.text_machine import BasicImageSignature, TextMachine, QASignature
+from zodiac.inference import InferenceProcessor
+from zodiac.toga.signatures import QATask, VisionTask
 from zodiac.console.display_bar import DisplayBar
 from zodiac.console.flip import Flip
 from zodiac.graph import IntentProcessor
@@ -67,7 +68,7 @@ class Fold(Screen[bool]):
     tx_data: dict = {}
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
-    chat: dspy_Module = TextMachine()  # and this
+    chat: dspy_Module = InferenceProcessor()  # and this
 
     mode_in: reactive[str] = reactive("text")
     mode_out: reactive[str] = reactive("text")
@@ -303,9 +304,9 @@ class Fold(Screen[bool]):
         edge_data = await self.pull_registry_entry()
         registry_entries = edge_data["entry"]
         if self.mode_out == "image":
-            sig = BasicImageSignature
+            sig = VisionTask
         else:
-            sig = QASignature
+            sig = QATask
         self.chat.max_workers = 8
         if registry_entries != self.chat.registry_entries or self.chat.streaming != streaming or sig != self.chat.sig or not self.chat.recycle:
             dbug(f"Graph extraction : {registry_entries}")

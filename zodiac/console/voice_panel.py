@@ -6,7 +6,7 @@
 from textual import work
 from textual.reactive import reactive
 from textual_plotext import PlotextPlot
-from zodiac.audio_machine import AudioMachine
+from zodiac.streams.audio_stream import AudioMachine
 
 
 class VoicePanel(PlotextPlot):  # (PlotWidget)

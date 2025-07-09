@@ -14,7 +14,7 @@ from zodiac.streams.task_stream import TaskStream
 
 
 class Interface(toga.App):
-    units = [["characters / ", 00000], ["tokens / ", 00000], ["seconds ″", 0]]
+    units = [["chr ", 000000, " / "], ["tok ", 000000, " / "], ["sec ", 000.00, "″"]]
 
     async def ticker(self, widget: Callable, external: bool = False, **kwargs) -> None:
         """Process and synthesize input data based on selected model.\n
@@ -22,29 +22,35 @@ class Interface(toga.App):
         :type widget: toga.widgets
         :param external: Indicates whether the processing should be handled externally (e.g., via clipboard), defaults to False
         :type external: bool"""
-        from zodiac.toga.synthesis import synthesize
-        from zodiac.text_machine import QASignature
+        from zodiac.toga.signatures import QATask
+        from dspy import Prediction
+        from litellm import ModelResponseStream
+        from dspy.utils.exceptions import AdapterParseError
 
         prompts = {"text": self.message_panel.value, "audio": [0], "image": []}
-        # selection = self.model_stack.value
-        self.chat.active_models(self.registry_entry, sig=QASignature, streaming=True)
-        self.status.text = f"Beginning processing : {self.model_stack.value}" + self.status.text
+        self.chat.ready(self.registry_entry, sig=QATask, streaming=True)
+        self.status.text = f"Processing : {self.model_stack.value}" + self.status.text
         self.response_panel.scroll_to_bottom()
-        async for prediction in synthesize(chat=self.chat, tx_data=prompts, mode_out=self.out_types.value):
-            if prediction:  # and not external:
-                self.response_panel.value += prediction.replace(
-                    "/n",
-                    """
-""",
-                )
-        # if external:
-        #     import pyperclip
-        #     pyperclip.set_clipboard("pyobjc")
-        # if external and pyperclip.is_available:
-        #     await pyperclip.copy(prediction)
-        #     await pyperclip.paste()
-        # if not prediction:
-        #     self.status.text = "Processing complete."
+        async for prediction in self.chat(prompts=prompts):  # mode_out=self.out_types.value):
+            try:
+                async for chunk in prediction:
+                    print(sum(len(x) for x in prediction))
+                    if isinstance(chunk, Prediction):
+                        if hasattr(chunk, "answer"):
+                            self.response_panel.value += ""
+                            self.status.text = "Processing complete."
+                    elif chunk and isinstance(chunk, ModelResponseStream):
+                        self.response_panel.value += (
+                            chunk["choices"][0]["delta"]["content"].replace(
+                                "/n",
+                                """
+            """,
+                            )
+                            if chunk["choices"][0]["delta"]["content"]
+                            else str("")
+                        )
+            except (AdapterParseError, TypeError) as error_log:
+                print(f"LM parse error : {error_log}")
 
     async def halt(self, widget, **kwargs) -> None:
         """Stop processing prompt\n
@@ -74,15 +80,17 @@ class Interface(toga.App):
         selection = widget.value
         self.registry_entry = next(iter(registry["entry"] for registry in self.model_source._graph.registry_entries if selection in registry["entry"].model))
         await self.populate_task_stack()
-        await self.update_status(selection)
+        await self.update_status()
 
-    async def update_status(self, selection):
-        self.status.text = f"In = {self.in_types.value.title()} / Out = {self.out_types.value.title()}" if selection else "Select conversion."
+    async def update_status(self, widget: Callable = None):
+        index = int(self.path_slider.value)
+        self.slider_state.text = f"{self.chart_path[index]}"  # if selection else ""
 
     async def traverse(self, slider, **kwargs):
-        await self.update_status(slider.value)
-        traversal = f" - {self.chart_path} {self.model_stack.value} {slider.value}"
-        self.status.text += traversal
+        await self.update_status()  # slider.value
+        index = int(self.path_slider.value)
+        traversal = f"{self.chart_path[index]}"  # {slider.value}"
+        self.slider_state.text = traversal
 
     async def model_graph(self):
         """Builds the model graph."""
@@ -91,9 +99,9 @@ class Interface(toga.App):
         await self.model_source.model_graph()
 
     async def create_chat(self):
-        from zodiac.text_machine import TextMachine
+        from zodiac.inference import InferenceProcessor
 
-        self.chat = TextMachine()
+        self.chat = InferenceProcessor()
 
     async def token_estimate(self, widget, **kwargs):
         from zodiac.providers.token_counters import tk_count
@@ -103,8 +111,6 @@ class Interface(toga.App):
         self.char_units.text = "".join(formatted_units[0]) + str(character_count)
         self.token_units.text = "".join(formatted_units[1]) + str(token_count)
         self.sec_units.text = "".join(formatted_units[2])
-        # setattr(self, unit[0], toga.Label(f"{unit[2]}"))
-        # setattr(self, unit[0] + "_symbol", toga.Label(unit[1]))
 
     async def populate_in_types(self):
         """Builds the input types selection."""
@@ -120,12 +126,16 @@ class Interface(toga.App):
 
     async def populate_model_stack(self, widget: Optional[Callable] = None):
         """Builds the model stack selection dropdown."""
+        from decimal import Decimal
+
         await self.model_source.clear()
         if self.in_types.value and self.out_types.value:
             models = await self.model_source.trace_models(self.in_types.value, self.out_types.value)
             self.model_stack.items = models
             self.chart_path = await self.model_source.chart_path()
-            self.path_slider.tick_count = len(self.chart_path)
+            range = len(self.chart_path)
+            self.path_slider.tick_count = range
+            self.path_slider.max = Decimal(str(range - 1) + ".0")
 
     async def populate_task_stack(self, widget: Optional[Callable] = None):
         """Builds the task stack selection dropdown."""
@@ -140,14 +150,20 @@ class Interface(toga.App):
     def initialize_widgets(self):
         """Create the main input fields"""
         self.status = toga.Label("Ready.")
-        self.counter = toga.Row(style=Pack(height=20, flex=1, align_items="center", justify_content="center", gap=5, margin=5))
+        self.counter = toga.Row(style=Pack(flex=3, height=20, gap=2, margin=5))
         formatted_units = [f"{unit[0]}{unit[1]}" for unit in self.units]
         self.char_units = toga.Label("".join(formatted_units[0]))
         self.token_units = toga.Label("".join(formatted_units[1]))
         self.sec_units = toga.Label("".join(formatted_units[2]))
-        self.counter.children.extend([self.char_units, self.token_units, self.sec_units])
+        self.slider_state = toga.Label("", style=Pack(gap=2, margin=5))
+        self.counter.children.extend([self.char_units, self.token_units, self.sec_units])  # , self.slider_state])
         self.path_slider = toga.Slider(min=0, tick_count=2, on_change=self.traverse, style=Pack(flex=1, margin=5))
-        self.counter_slider = toga.Column(children=[self.counter, self.path_slider], style=Pack(flex=1))
+        counter_box = toga.Row(
+            children=[self.counter, self.slider_state],
+        )
+
+        self.counter_slider = toga.Column(children=[counter_box, self.path_slider], style=Pack(flex=5, margin_left=0, margin_right=0))
+
         self.in_types = toga.Selection(items=[], style=Pack(flex=0.25), on_change=self.populate_model_stack)
         self.out_types = toga.Selection(items=[], style=Pack(flex=0.25), on_change=self.populate_model_stack)
 
