@@ -32,7 +32,7 @@ class QuestionAnswer(dspy.Module):
 qa_program = dspy.streamify(
     QuestionAnswer(),
     stream_listeners=[
-        dspy.streaming.StreamListener(signature_field_name="answer", allow_reuse=True),
+        dspy.streaming.StreamListener(signature_field_name="answer"),  # allow_reuse=True),
     ],
 )
 
