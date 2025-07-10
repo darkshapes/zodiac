@@ -76,7 +76,7 @@ def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryE
                 mir=mir_entry,
                 mir_family=mir_family,
                 package=package_name,
-                api_kwargs=None,  # api_data based on package_name (diffusers/mlx_audio)
+                api_kwargs=api_data[CueType.HUB.value[1]],  # api_data based on package_name (diffusers/mlx_audio)
                 timestamp=int(repo.last_modified),
                 tokenizer=tokenizer,
             )

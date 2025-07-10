@@ -11,7 +11,6 @@ class ModelStream(Source):
         from zodiac.graph import IntentProcessor
 
         self._graph = {}
-        # self._graph.add_listener()
         self._graph = IntentProcessor()
         self._graph.calc_graph()
 
