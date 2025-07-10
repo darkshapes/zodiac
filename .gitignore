@@ -1,6 +1,6 @@
-/log
-*.DS_Store
-log/.nnll*
+/log*
+*/.DS_Store
+*/.nnll*
 *build/
 *build/lib/
 */textual.log

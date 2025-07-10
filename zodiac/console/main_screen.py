@@ -24,8 +24,8 @@ from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Static
 
-from zodiac.inference import InferenceProcessor
-from zodiac.toga.signatures import QATask, VisionTask
+from zodiac.toga.signatures import QuestionAnswer
+from zodiac.toga.signatures import QATask  # , VisionTask
 from zodiac.console.display_bar import DisplayBar
 from zodiac.console.flip import Flip
 from zodiac.graph import IntentProcessor
@@ -68,7 +68,7 @@ class Fold(Screen[bool]):
     tx_data: dict = {}
     hover_name: reactive[str] = reactive("")
     safety: reactive[int] = reactive(1)
-    chat: dspy_Module = InferenceProcessor()  # and this
+    chat: dspy_Module = QuestionAnswer()  # and this
 
     mode_in: reactive[str] = reactive("text")
     mode_out: reactive[str] = reactive("text")

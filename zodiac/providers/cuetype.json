@@ -12,7 +12,8 @@
         "module": "huggingface_hub",
         "api_kwargs": {
             "api_base": "http://127.0.0.1:8188"
-        }
+        },
+        "prefix": ""
     },
     "LM_STUDIO": {
         "module": "lmstudio",

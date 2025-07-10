@@ -48,7 +48,7 @@ class TestFlow:
                 cuetype=CueType.HUB,
                 timestamp=1741908821,
                 mir=["info.artm.parler-tts", "large-v1"],
-                api_kwargs=None,
+                api_kwargs={"module": "huggingface_hub", "api_kwargs": {"api_base": "http://127.0.0.1:8188"}, "prefix": ""},
                 package=PkgType.TRANSFORMERS,
                 tokenizer=None,
                 available_tasks=[("text", "speech")],

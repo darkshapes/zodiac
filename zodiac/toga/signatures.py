@@ -4,19 +4,44 @@
 import dspy
 
 
+class Active(dspy.streaming.StatusMessageProvider):
+    def lm_start_status_message(self):
+        return "Processing.."
+
+    def lm_end_status_message(self):
+        return "Complete."
+
+
 class QATask(dspy.Signature):
     """Reply with short responses within 60-90 word/10k character code limits"""
 
-    message: str = dspy.InputField(desc="The message to respond to")
-    # history: dspy.History = dspy.InputField()
+    question: str = dspy.InputField(desc="The question to respond to")
     answer = dspy.OutputField(desc="Often between 60 and 90 words and limited to 10000 character code blocks")
 
 
-class VisionTask(dspy.Signature):
-    """Describe the image in detail."""
+class QuestionAnswer(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.predict = dspy.Predict(QATask)
 
-    image: dspy.Image = dspy.InputField(desc="An image")
-    description: str = dspy.OutputField(desc="Detailed description of the image.")
+    def forward(self, question, **kwargs):
+        self.predict(question=question, **kwargs)
+        return self.predict(question=question, **kwargs)
+
+
+qa_program = dspy.streamify(
+    QuestionAnswer(),
+    stream_listeners=[
+        dspy.streaming.StreamListener(signature_field_name="answer"),  # allow_reuse=True),
+    ],
+)
+
+
+# class VisionTask(dspy.Signature):
+#     """Describe the image in detail."""
+
+#     image: dspy.Image = dspy.InputField(desc="An image")
+#     description: str = dspy.OutputField(desc="Detailed description of the image.")
 
 
 # image_path="image.png"
