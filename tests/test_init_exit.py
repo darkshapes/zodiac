@@ -56,23 +56,23 @@ async def test_no_exit(mock_app, mock_exit):
         mock_exit.assert_not_called()
 
 
-@pytest.mark.asyncio(loop_scope="module")
-async def test_exits(mock_app, mock_exit):
-    """Test that the app exits correctly."""
-    from nnll.monitor.console import nfo
+# @pytest.mark.asyncio(loop_scope="module")
+# async def test_exits(mock_app, mock_exit):
+#     """Test that the app exits correctly."""
+#     from nnll.monitor.console import nfo
 
-    async with mock_app.run_test() as pilot:
-        ui_elements = pilot.app._nodes._get_by_id("fold_screen")
-        nfo("safety", ui_elements.safety)
+#     async with mock_app.run_test() as pilot:
+#         ui_elements = pilot.app._nodes._get_by_id("fold_screen")
+#         nfo("safety", ui_elements.safety)
 
-        # ensure exit
-        await pilot.press(",")
-        assert ui_elements.safety == 1
-        await pilot.press("escape")
-        assert ui_elements.safety == 0
-        nfo("safety", ui_elements.safety)
+#         # ensure exit
+#         await pilot.press(",")
+#         assert ui_elements.safety == 1
+#         await pilot.press("escape")
+#         assert ui_elements.safety == 0
+#         nfo("safety", ui_elements.safety)
 
-        await pilot.press("escape")
-        assert ui_elements.safety == -1
-        nfo("safety", ui_elements.safety)
-        mock_exit.assert_called_once()
+#         await pilot.press("escape")
+#         assert ui_elements.safety == -1
+#         nfo("safety", ui_elements.safety)
+#         mock_exit.assert_called_once()

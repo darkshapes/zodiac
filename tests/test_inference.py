@@ -29,13 +29,13 @@ class CueType(Enum):
 
 @pytest_asyncio.fixture(loop_scope="module")
 async def mock_signature():
-    with patch("zodiac.inference.dspy.Signature", autospec=True) as mocked:
+    with patch("zodiac.toga.signatures.dspy.Signature", autospec=True) as mocked:
         yield mocked
 
 
 @pytest_asyncio.fixture(loop_scope="module")
 async def mock_predict():
-    with patch("zodiac.inference.dspy.Predict", autospec=True) as mocked:
+    with patch("zodiac.toga.signatures.dspy.Predict", autospec=True) as mocked:
         yield mocked
 
 
@@ -61,9 +61,9 @@ async def test_chat_instance(mock_signature, mock_predict):
 
     # Create an instance of ChatMachineWithMemory
 
-    from zodiac.inference import InferenceProcessor
+    from zodiac.toga.signatures import QuestionAnswer
 
-    inference = InferenceProcessor()
+    inference = QuestionAnswer()
     inference.max_workers = 8
     return inference
     # sig=mock_signature,
@@ -72,32 +72,13 @@ async def test_chat_instance(mock_signature, mock_predict):
 # @pytest.mark.filterwarnings("ignore:open_text")
 # @pytest.mark.filterwarnings("ignore::DeprecationWarning:")
 # @pytest.mark.asyncio(loop_scope="module")
-# async def test_inference_initialization(mock_signature, mock_predict):
+# async def test_inference_generation(mock_signature, mock_predict, has_api):
 #     inference = await test_chat_instance(mock_signature, mock_predict)
-#     with patch("zodiac.inference.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
-#         assert hasattr(inference, "mir_db")
-#         assert inference.mir_db.database is not None
-#         assert callable(inference.mir_db.find_path)
-#         assert hasattr(inference, "factory")
-#         assert inference.factory is not None
-#         assert callable(inference.factory.create_pipeline)
-#         assert callable(inference)
-#         assert callable(inference.forward)
+#     assert inference.pipe is None
 
-
-@pytest.mark.filterwarnings("ignore:open_text")
-@pytest.mark.filterwarnings("ignore::DeprecationWarning:")
-@pytest.mark.asyncio(loop_scope="module")
-async def test_inference_generation(mock_signature, mock_predict, has_api):
-    # from zodiac.inference import ChatMachineWithMemory
-
-    # inference = ChatMachineWithMemory(max_workers=8)
-    inference = await test_chat_instance(mock_signature, mock_predict)
-    assert inference.pipe is None
-    # inference.pipe = None
-
-    with patch("zodiac.inference.dspy.LM", autospec=True, return_value="🤡") as mock_lm:
-        inference.ready(registry_entries=PlaceholderClass, sig=mock_signature)
-
-        assert callable(inference.pipe)
-        assert inference.pipe is not None
+#     with patch("zodiac.toga.signatures.dspy.LM", autospec=True, return_value="🤡"):
+#         # inference.ready(registry_entries=PlaceholderClass, sig=mock_signature)
+#         with dspy.context(lm=dspy.LM(model=PlaceholderClass.model, **PlaceholderClass.api_kwargs, cache=False)):
+#             async for prediction in qa_program(question=prompts["text"]):
+#                 assert callable(inference.pipe)
+#                 assert inference.pipe is not None

@@ -4,7 +4,7 @@
 from textual import work
 from textual.reactive import reactive
 from textual.widgets import DataTable
-from zodiac.streams.token_stream import tk_count
+from zodiac.streams.token_stream import TokenStream
 
 
 class DisplayBar(DataTable):
@@ -27,11 +27,13 @@ class DisplayBar(DataTable):
         self.show_row_labels = False
         self.cursor_type = None
         self.can_focus = False
+        self.token_stream = TokenStream()
 
     @work(exclusive=True)
     async def show_tokens(self, tokenizer_model: str, message: str) -> None:
         """Live display of tokens and characters"""
-        token_count, character_count = await tk_count(tokenizer_model, message)
+        self.token_stream.set_tokenizer(tokenizer_model)
+        token_count, character_count = await self.token_stream.token_count(message)
         self.update_cell_at((0, 0), f"     {character_count}{self.unit_labels[0]}")
         self.update_cell_at((0, 1), f"{token_count}{self.unit_labels[1]}")
         self.update_cell_at((0, 2), f"{self.duration}{self.unit_labels[2]}")
