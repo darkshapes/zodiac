@@ -36,18 +36,13 @@ class Activity(dspy.streaming.StatusMessageProvider):
         return "Complete."
 
 
-async def text_qa_stream(registry_entry: Callable, prompt: str):
-    qa_program = dspy.streamify(
-        QuestionAnswer(QATask),
-        stream_listeners=[
-            dspy.streaming.StreamListener(signature_field_name="answer"),  # allow_reuse=True),
-        ],
-        status_message_provider=Activity(),
-    )
-
-    with dspy.context(lm=dspy.LM(model=registry_entry.model, **registry_entry.api_kwargs, cache=False)):
-        async for prediction in qa_program(question=prompt):
-            yield prediction
+qa_program = dspy.streamify(
+    QuestionAnswer(QATask),
+    stream_listeners=[
+        dspy.streaming.StreamListener(signature_field_name="answer"),  # allow_reuse=True),
+    ],
+    status_message_provider=Activity(),
+)
 
 
 # class VisionTask(dspy.Signature):
