@@ -33,9 +33,9 @@ class TokenStream(Source):
         import os
         import warnings
 
-        from litellm.utils import token_counter
-
         warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+        from litellm.utils import token_counter
 
         character_count = len(message)
         model_name = os.path.split(self.tokenizer)
