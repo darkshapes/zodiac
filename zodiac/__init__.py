@@ -56,10 +56,11 @@ def set_env(args: argparse.ArgumentParser):
     except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
         pass
     else:
+        litellm.disable_token_counter = False
         litellm.disable_streaming_logging = True
         litellm.turn_off_message_logging = True
-        litellm.suppress_debug_info = True
-        litellm.json_logs = True  # type: ignore
+        litellm.suppress_debug_info = False
+        litellm.json_logs = False  # type: ignore
         litellm.disable_end_user_cost_tracking = True
         litellm.telemetry = False
         litellm.disable_hf_tokenizer_download = not args.net  # -net = True -> disable download = False/0
