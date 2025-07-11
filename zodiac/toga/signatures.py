@@ -2,14 +2,7 @@
 # <!-- // /*  d a r k s h a p e s */ -->
 
 import dspy
-
-
-class Active(dspy.streaming.StatusMessageProvider):
-    def lm_start_status_message(self):
-        return "Processing.."
-
-    def lm_end_status_message(self):
-        return "Complete."
+from typing import Dict, Callable
 
 
 class QATask(dspy.Signature):
@@ -20,21 +13,41 @@ class QATask(dspy.Signature):
 
 
 class QuestionAnswer(dspy.Module):
-    def __init__(self):
+    def __init__(self, sig: dspy.Signature):
         super().__init__()
-        self.predict = dspy.Predict(QATask)
+        self.predict = dspy.Predict(sig)
 
     def forward(self, question, **kwargs):
         self.predict(question=question, **kwargs)
         return self.predict(question=question, **kwargs)
 
 
-qa_program = dspy.streamify(
-    QuestionAnswer(),
-    stream_listeners=[
-        dspy.streaming.StreamListener(signature_field_name="answer"),  # allow_reuse=True),
-    ],
-)
+class Activity(dspy.streaming.StatusMessageProvider):
+    def lm_start_status_message(self, instance, inputs):
+        return "Processing.."
+
+    def module_start_status_message(self, instance, inputs):
+        return "Structuring..."
+
+    def module_end_status_message(self, outputs):
+        return "Complete."
+
+    def lm_end_status_message(self, outputs):
+        return "Complete."
+
+
+async def text_qa_stream(registry_entry: Callable, prompt: str):
+    qa_program = dspy.streamify(
+        QuestionAnswer(QATask),
+        stream_listeners=[
+            dspy.streaming.StreamListener(signature_field_name="answer"),  # allow_reuse=True),
+        ],
+        status_message_provider=Activity(),
+    )
+
+    with dspy.context(lm=dspy.LM(model=registry_entry.model, **registry_entry.api_kwargs, cache=False)):
+        async for prediction in qa_program(question=prompt):
+            yield prediction
 
 
 # class VisionTask(dspy.Signature):
