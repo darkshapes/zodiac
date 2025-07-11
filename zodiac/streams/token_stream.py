@@ -21,7 +21,7 @@ class TokenStream(Source):
         :param message: Text to encode
         :return: Token embeddings
         """
-        self.tokenizer = str(registry_entry.tokenizer)
+        self.tokenizer = str(registry_entry.model)
 
     async def token_count(self, message: str) -> Callable:
         """
