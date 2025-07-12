@@ -19,6 +19,7 @@ class TokenStream(Source):
     def __init__(self):
         self.tokenizer: Optional[str] = None
         self.message: Optional[str] = None
+        self.tokenizer_args = {}
 
     async def set_tokenizer(self, registry_entry: RegistryEntry) -> Callable:
         """Pass message to model routine
@@ -35,11 +36,15 @@ class TokenStream(Source):
                 tokenizer_data = json.dumps(tokenizer_json)
                 self.tokenizer_args = {"custom_tokenizer": create_tokenizer(tokenizer_data)}
         else:
-            model_name = os.path.split(registry_entry.model)
-            model_name = os.path.join(os.path.split(model_name[0])[-1], model_name[-1])
-            self.tokenizer_args = {"model": model_name}
+            # model_name = os.path.split(registry_entry.model)
+            # model_name = os.path.join(os.path.split(model_name[0])[-1], model_name[-1])
+            # [print(model_name)]
+            self.tokenizer_args = {"model": registry_entry.model}
 
-    async def token_count(self, message: str) -> Callable:
+    async def token_count(
+        self,
+        message: str,
+    ) -> Callable:
         """
         Return token count of message based on model\n
         :param model: Model path to lookup tokenizer for

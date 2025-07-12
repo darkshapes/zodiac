@@ -22,7 +22,7 @@ class Interface(toga.App):
     bg_text = "#1B1B1B"  # "#1B1B1B"  # "#09090B"
     bg = bg_text
     bg_static = "#5D5E62"
-    activity = "#8E22C4"
+    activity = "#8122C4"
 
     static = Pack(color="#727378")
     fg_static = Pack(color="#8D8E94")
@@ -34,21 +34,26 @@ class Interface(toga.App):
         :type widget: toga.widgets
         :param external: Indicates whether the processing should be handled externally (e.g., via clipboard), defaults to False
         :type external: bool"""
-        from zodiac.toga.signatures import qa_program
-        from dspy.streaming import StatusMessage, StreamResponse
-        from dspy import Prediction, context as dspy_context, LM
+        from zodiac.toga.signatures import Predictor
+        from litellm.types.utils import ModelResponseStream
+        import dspy
 
+        await self.token_source.set_tokenizer(self.registry_entry)
         prompts = {"text": self.message_panel.value, "audio": [0], "image": []}
         self.status.style = Pack(color=self.activity)
-        with dspy_context(lm=LM(model=self.registry_entry.model, **self.registry_entry.api_kwargs, cache=False)):
-            async for prediction in qa_program(question=prompts["text"]):
-                # async for prediction in text_qa_stream(prompt=prompts["text"]):
-                if isinstance(prediction, StreamResponse):
-                    self.response_panel.value += str(prediction.chunk)
-                elif isinstance(prediction, Prediction):
-                    self.response_panel.value += "---"
-                elif isinstance(prediction, StatusMessage):
-                    self.status.text = prediction.message  # .message
+        predictor = Predictor(registry_entry=self.registry_entry)  #  asyncio.gather(
+        async for prediction in predictor(question=prompts["text"]):
+            async for chunk in prediction:
+                if chunk:
+                    if isinstance(chunk, ModelResponseStream) and chunk["choices"][0]["delta"]["content"]:
+                        self.response_panel.value += chunk["choices"][0]["delta"]["content"]
+                    if isinstance(chunk, dspy.streaming.StreamResponse):
+                        self.response_panel.value += chunk.chunk
+                    elif isinstance(chunk, dspy.Prediction):
+                        self.response_panel.value += chunk.answer
+                    elif isinstance(chunk, dspy.streaming.StatusMessage):
+                        self.status.text = chunk.message
+        self.response_panel.value += "\n---"
         self.status.style = Pack(color=self.bg_static)
 
     async def empty_prompt(self, widget, **kwargs) -> None:
@@ -81,14 +86,14 @@ class Interface(toga.App):
         except (ValueError, json.JSONDecodeError):
             self.status.text = "Read failed... "
 
-    async def reset_position(self, widget, **kwargs) -> None:
-        """Scrolls text panel to bottom after content update.
-        :param widget: text panel widget
-        """
-        setattr(self, "position_counter", getattr(self, "position_counter", 0) + 1)
-        if max(self.scroll_buffer, self.position_counter) >= self.scroll_buffer:
-            self.position_counter = 0
-            widget.scroll_to_bottom()
+    # async def reset_position(self, widget, **kwargs) -> None:
+    #     """Scrolls text panel to bottom after content update.
+    #     :param widget: text panel widget
+    #     """
+    #     setattr(self, "position_counter", getattr(self, "position_counter", 0) + 1)
+    #     if max(self.scroll_buffer, self.position_counter) >= self.scroll_buffer:
+    #         self.position_counter = 0
+    #         widget.scroll_to_bottom()
 
     async def on_select_handler(self, widget, **kwargs):
         """React to input/output choice\n
@@ -101,15 +106,11 @@ class Interface(toga.App):
 
     async def model_graph(self):
         """Builds the model graph."""
-        self.model_source = ModelStream()
-        self.task_source = TaskStream()
-        self.token_source = TokenStream()
         await self.model_source.model_graph()
 
     async def token_estimate(self, widget, **kwargs):
         """Updates character and token count based on user input.
-        :param widget: Input widget providing text
-        """
+        :param widget: Input widget providing text"""
         token_count, character_count = await self.token_source.token_count(message=self.message_panel.value)
         self.character_stats.text = "{:02}".format(character_count) + "".join(self.formatted_units[0])
         self.token_stats.text = "{:02}".format(token_count) + "".join(self.formatted_units[1])
@@ -117,13 +118,11 @@ class Interface(toga.App):
 
     async def populate_in_types(self):
         """Builds the input types selection."""
-
         in_edge_names = await self.model_source.show_edges()
         self.input_types.items = in_edge_names
 
     async def populate_out_types(self):
         """Builds the output types selection."""
-
         out_edges = await self.model_source.show_edges(target=True)
         self.output_types.items = out_edges
 
@@ -134,6 +133,7 @@ class Interface(toga.App):
         if self.input_types.value and self.output_types.value:
             models = await self.model_source.trace_models(self.input_types.value, self.output_types.value)
             self.model_stack.items = models  # [model[0][:20] for model in models if len(model[0]) > 20]
+            await self.token_estimate(widget=self.message_panel)
 
     async def populate_task_stack(self, widget: Optional[Callable] = None):
         """Builds the task stack selection dropdown."""
@@ -153,10 +153,10 @@ class Interface(toga.App):
     async def switch_tabs(self, widget: Optional[Callable] = None):
         """Switches between text and graph tabs.
         :param widget: The triggering widget (optional), defaults to None"""
+        self.browser_panel.evaluate_javascript("location.reload();")
         self.bg = self.bg_graph if self.bg == self.bg_text else self.bg_text
         self.final_layout.style.background_color = self.bg
         self.final_layout.refresh()
-        self.browser_panel.evaluate_javascript("location.reload();")
 
     def initialize_inputs(self):
         """Initializes UI elements for input handling."""
@@ -171,7 +171,7 @@ class Interface(toga.App):
         self.message_panel = toga.MultilineTextInput(placeholder="Prompt", on_change=self.token_estimate, style=Pack(flex=0.66, margin=10))
         self.browser_panel = toga.WebView(url="http://127.0.0.1:8188")
         self.audio_panel = toga.Canvas()
-        self.response_panel = toga.MultilineTextInput(readonly=True, placeholder="Response", on_change=self.reset_position, style=Pack(flex=5))
+        self.response_panel = toga.MultilineTextInput(readonly=True, placeholder="Response", style=Pack(flex=5))  # , on_change=self.reset_position))
 
     def initialize_static(self):
         """Create the main input fields"""
@@ -239,6 +239,10 @@ class Interface(toga.App):
     def startup(self):
         """Startup Logic. Initialize widgets and layout, then asynchronous tasks for populating datagets"""
         self.main_window = toga.MainWindow()
+        self.model_source = ModelStream()
+        self.task_source = TaskStream()
+        self.token_source = TokenStream()
+
         # control_group = toga.Group("Controls", order=40)
         start = toga.Command(
             self.ticker,
