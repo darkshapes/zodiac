@@ -3,7 +3,10 @@
 
 import os
 import asyncio
-from typing import Callable, Optional
+import requests
+from requests.exceptions import ConnectionError, ConnectTimeout
+from urllib3.exceptions import MaxRetryError, NewConnectionError
+from typing import Callable
 
 import toga
 import toga.app
@@ -41,7 +44,6 @@ class Interface(toga.App):
 
         await self.token_source.set_tokenizer(self.registry_entry)
         prompts = {"text": self.message_panel.value, "audio": [0], "image": []}
-        self.status.style = Pack(color=self.activity)
         context_kwargs, predictor_kwargs = await ready_predictor(self.registry_entry)
         with context(**context_kwargs):
             program = streamify(Predictor(), **predictor_kwargs)
@@ -55,10 +57,8 @@ class Interface(toga.App):
                 elif hasattr(prediction, "answer") and isinstance(prediction, Prediction):
                     self.response_panel.value += prediction.answer
                 elif isinstance(prediction, StatusMessage):
-                    self.status.text = prediction.message
-                # print(str(prediction))
+                    self.status_display.text = self.graph_id + prediction.message
         self.response_panel.value += "\n---\n\n"
-        self.status.style = Pack(color=self.bg_static)
         return widget
 
     async def empty_prompt(self, widget, **kwargs) -> None:
@@ -69,7 +69,7 @@ class Interface(toga.App):
     async def halt(self, widget, **kwargs) -> None:
         """Stop processing prompt\n
         :param widget: The calling widget object"""
-        self.status.text = "Cancelled."
+        self.status_display.text = self.graph_id + "Cancelled."
 
     async def include_file(self, widget, **kwargs) -> None:
         """Attaches a file's contents to the prompt area.
@@ -78,18 +78,18 @@ class Interface(toga.App):
 
         try:
             file_path_named = await self.main_window.dialog(toga.OpenFileDialog(title="Attach a file to the prompt"))
-            self.status.text = f"Read. {file_path_named}"
+            self.status_display.text = self.graph_id + f"Read. {file_path_named}"
             if file_path_named is not None:
                 from nnll.metadata.json_io import read_json_file
 
                 file_contents = read_json_file(file_path_named)
                 self.message_panel.scroll_to_bottom()
                 self.message_panel.value = json.dumps(file_contents)
-                self.status.text = f"Attached {os.path.basename(file_path_named)}."
+                self.status_display.text = self.graph_id + f"Attached {os.path.basename(file_path_named)}."
             else:
-                self.status.text = "No file. "
+                self.status_display.text = self.graph_id + "No file. "
         except (ValueError, json.JSONDecodeError):
-            self.status.text = "Read failed... "
+            self.status_display.text = self.graph_id + "Read failed... "
 
     # async def reset_position(self, widget, **kwargs) -> None:
     #     """Scrolls text panel to bottom after content update.
@@ -131,7 +131,7 @@ class Interface(toga.App):
         out_edges = await self.model_source.show_edges(target=True)
         self.output_types.items = out_edges
 
-    async def populate_model_stack(self, widget: Optional[Callable] = None):
+    async def populate_model_stack(self, widget: toga.Widget = None, **kwargs):
         """Builds the model stack selection dropdown."""
 
         await self.model_source.clear()
@@ -140,7 +140,7 @@ class Interface(toga.App):
             self.model_stack.items = models  # [model[0][:20] for model in models if len(model[0]) > 20]
             await self.token_estimate(widget=self.message_panel)
 
-    async def populate_task_stack(self, widget: Optional[Callable] = None):
+    async def populate_task_stack(self, widget: toga.Widget = None, **kwargs):
         """Builds the task stack selection dropdown."""
         selection = self.model_stack.value
         registry_entry = next(
@@ -155,75 +155,88 @@ class Interface(toga.App):
 
         self.task_stack.items = tasks
 
-    async def switch_tabs(self, widget: Optional[Callable] = None):
+    async def switch_tabs(self, widget: toga.Widget = None, **kwargs):
         """Switches between text and graph tabs.
         :param widget: The triggering widget (optional), defaults to None"""
         self.browser_panel.evaluate_javascript("location.reload();")
         self.bg = self.bg_graph if self.bg == self.bg_text else self.bg_text
         self.final_layout.style.background_color = self.bg
         self.final_layout.refresh()
+        await self.ping_server(widget=self.status_display)
+
+    async def ping_server(self, widget: toga.Widget, **kwargs) -> None:
+        widget.text = self.graph_id + "Checking server...."
+        try:
+            request = requests.get("http://127.0.0.1:8188", timeout=(3, 3))
+            if request is not None:
+                if hasattr(request, "status_code"):
+                    status = request.status_code
+                if (hasattr(request, "ok") and request.ok) or (hasattr(request, "reason") and request.reason == "OK"):
+                    widget.text = self.graph_id + "Ready."
+                elif hasattr(request, "json"):
+                    status = request.json()
+                    if status.get("result") == "OK":
+                        widget.text = self.graph_id + "Ready."
+                else:
+                    widget.text = self.graph_id + "Server?."
+            else:
+                widget.text = self.graph_id + "Server?"
+        except (ConnectTimeout, ConnectionError, ConnectionRefusedError, MaxRetryError, NewConnectionError):
+            widget.text = self.graph_id + "Server?"
+        return widget
+        # self.final_layout.refresh()
 
     def initialize_inputs(self):
         """Initializes UI elements for input handling."""
         self.character_stats = toga.Label("{:02}".format(0) + "".join(self.formatted_units[0]), **self.fg_static)
         self.token_stats = toga.Label("{:02}".format(0) + "".join(self.formatted_units[1]), **self.fg_static)
         self.time_stats = toga.Label("{:02}".format(0.0) + "".join(self.formatted_units[2]), **self.fg_static)
-        self.status = toga.Label("Ready.", style=Pack(color=self.bg_static))
         self.input_types = toga.Selection(items=[], on_change=self.populate_model_stack)
         self.output_types = toga.Selection(items=[], on_change=self.populate_model_stack)
         self.model_stack = toga.Selection(items=[], on_change=self.on_select_handler)
         self.task_stack = toga.Selection(items=[])
         self.message_panel = toga.MultilineTextInput(placeholder="Prompt", on_change=self.token_estimate, style=Pack(flex=0.66, margin=10))
-        self.browser_panel = toga.WebView(url="http://127.0.0.1:8188")
+        self.browser_panel = toga.WebView(url="http://127.0.0.1:8188", id="Graph - ")
         self.audio_panel = toga.Canvas()
         self.response_panel = toga.MultilineTextInput(readonly=True, placeholder="Response", style=Pack(flex=5))  # , on_change=self.reset_position))
 
     def initialize_static(self):
         """Create the main input fields"""
 
-        top_left_buffer = toga.Column(
-            children=[toga.Label("From:", style=Pack(color="grey")), toga.Label("To:", **self.static)],
-            justify_content="end",
-            style=Pack(
-                flex=0.1,
-                margin_top=3,
-                align_items="end",
-                justify_content="end",
-                gap=15,
-            ),
+        intent_fields = toga.Row(  # toga.Label("From:", style=Pack(color="grey")),toga.Label("Task", style=Pack(color="grey")),
+            children=[self.input_types, toga.Label("➾"), self.output_types, self.task_stack],
+            justify_content="start",
+            style=Pack(flex=0.1, gap=5, align_items="end", justify_content="end", vertical_align_items="center"),
         )
-        intent_fields = toga.Column(
-            children=[self.input_types, self.output_types],  # , live_stats
-            align_items="start",
-            text_direction="ltr",
-            style=Pack(gap=10, margin="2", flex=0.25),
+        model_filter = toga.Row(
+            children=[self.model_stack, toga.Label("↪︎")],  # , live_stats
+            style=Pack(flex=0.25, align_items="end", text_direction="rtl", justify_content="end"),
         )
-        process_fields = toga.Column(
-            children=[self.model_stack, self.task_stack],
-            align_items="end",
-            text_direction="rtl",
-            style=Pack(gap=10, margin="2", flex=0.25),
-        )
+
         line_displays = toga.Column(
-            children=[self.character_stats, self.token_stats, self.time_stats, self.status],
+            children=[self.character_stats, self.token_stats, self.time_stats],
             style=Pack(flex=1, gap=2, margin_left=2),
         )
-        top_right_buffer = toga.Column(justify_content="end", style=Pack(flex=0.33))
+        top_right_buffer = toga.Column(children=[intent_fields, model_filter], justify_content="end", style=Pack(flex=0.33, gap=10, margin=2, align_items="end"))
 
-        status_bar = toga.Box(
-            children=[top_left_buffer, intent_fields, process_fields, line_displays, top_right_buffer],
-            style=Pack(flex=0, margin=10),
-        )  # height=10,
+        status_bar = toga.Row(
+            children=[
+                top_right_buffer,
+                line_displays,
+            ],
+            style=Pack(flex=0, gap=2, margin_top=10, margin_bottom=2, margin_left=5, margin_right=5),
+        )
 
         left_buffer = toga.Column(justify_content="start", style=Pack(flex=0.33))
-        right_buffer = toga.Column(justify_content="end", style=Pack(flex=0.33))
+        right_buffer = toga.Column(children=[toga.Button("▶︎", on_press=self.ticker, style=Pack(flex=0.1, width=15))], style=Pack(flex=0.33, margin_top=20, justify_content="start", vertical_align_items="start"))
         center_response = toga.Box(children=[self.response_panel], style=Pack(flex=1))
         center_prompt = toga.Box(children=[self.message_panel], style=Pack(flex=1))
         lower_section = toga.Row(children=[left_buffer, center_prompt, right_buffer])
+        self.response_container = toga.OptionItem(text="Graph ...", content=self.browser_panel)
         tab_panel = toga.OptionContainer(
             content=[
                 ("Output", center_response),
-                ("Graph", self.browser_panel),
+                self.response_container,
             ],
             on_select=self.switch_tabs,
             style=Pack(background_color="#000000", flex=2),
@@ -295,6 +308,11 @@ class Interface(toga.App):
         asyncio.create_task(self.populate_model_stack())
         asyncio.create_task(self.populate_task_stack())
         self.main_window.show()
+        self.status_display = self.response_container
+        self.bg = self.bg_graph
+        self.graph_id = self.status_display.content.id
+
+        asyncio.create_task(self.switch_tabs())
 
 
 def main():

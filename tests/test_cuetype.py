@@ -46,7 +46,7 @@ class CueType(BaseEnum):
     OLLAMA: tuple = (has_api("OLLAMA"), "OLLAMA")
     HUB: tuple = (has_api("HUB"), "HUB")
     LM_STUDIO: tuple = (has_api("LM_STUDIO"), "LM_STUDIO")
-    CORTEX: tuple = (has_api("CORTEX"), "CORTEX")
+    # CORTEX: tuple = (has_api("CORTEX"), "CORTEX")
     LLAMAFILE: tuple = (has_api("LLAMAFILE"), "LLAMAFILE")
     VLLM: tuple = (has_api("VLLM"), "VLLM")
 
@@ -64,6 +64,6 @@ def test_cuetype(mock_has_api):
     assert CueType.OLLAMA.value[0] is True
     assert CueType.HUB.value[0] is True
     assert CueType.LM_STUDIO.value[0] is True
-    assert CueType.CORTEX.value[0] is True
+    # assert CueType.CORTEX.value[0] is True
     assert CueType.LLAMAFILE.value[0] is True
     assert CueType.VLLM.value[0] is True

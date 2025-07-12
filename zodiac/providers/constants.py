@@ -92,7 +92,7 @@ def has_api(api_name: str, data: dict = None) -> bool:
     from importlib import import_module
     from json.decoder import JSONDecodeError
 
-    hosted_apis = ["OLLAMA", "LM_STUDIO", "CORTEX", "LLAMAFILE", "VLLM"]
+    hosted_apis = ["OLLAMA", "LM_STUDIO", "LLAMAFILE", "VLLM"]  # , "CORTEX"]
     try:
         api_data = data.get(api_name, {"module": api_name.lower()})  # pylint: disable=unsubscriptable-object
     except JSONDecodeError as error_log:
@@ -149,8 +149,8 @@ class CueType(BaseEnum):
 
     # Dfferentiation of boolean conditions
     # GIVEN : The state of all provider modules & servers are marked at launch
+    # CORTEX: tuple = (has_api("CORTEX"), "CORTEX")
 
-    CORTEX: tuple = (has_api("CORTEX"), "CORTEX")
     HUB: tuple = (has_api("HUB"), "HUB")
     KAGGLE: tuple = (has_api("KAGGLE"), "KAGGLE")
     LLAMAFILE: tuple = (has_api("LLAMAFILE"), "LLAMAFILE")
@@ -379,9 +379,9 @@ VALID_JUNCTIONS = [""]
 
 # note : decide on a way to keep paired tuples and sets together inside config dict
 VALID_TASKS = {
-    CueType.CORTEX: {
-        ("text", "text"): ["text"],
-    },
+    # CueType.CORTEX: {
+    #     ("text", "text"): ["text"],
+    # },
     CueType.VLLM: {
         ("text", "text"): ["text"],
         ("image", "text"): ["vision"],
