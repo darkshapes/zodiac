@@ -4,7 +4,6 @@
 """Feed models to RegistryEntry class"""
 
 # pylint:disable=protected-access, no-member
-
 from typing import List, Dict, Optional, Any, Callable
 from nnll.mir.tag import class_to_mir_tag
 from zodiac.providers.registry_entry import RegistryEntry
@@ -65,9 +64,10 @@ def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryE
                     if hasattr(PkgType, test_package.upper()):
                         package_name = getattr(PkgType, test_package.upper())
             if hasattr(repo, "revisions") and repo.revisions:
-                tokenizer_models = [info.file_path for info in next(iter(repo.revisions)).files if "tokenizer.json" in str(info.file_path)]
-                tokenizer = tokenizer_models[-1] if tokenizer_models else None
-
+                tokenizers = [info.file_path for info in next(iter(repo.revisions)).files if "tokenizer.json" in str(info.file_path)]
+                if tokenizers:
+                    tokenizer_path = tokenizers[-1]
+                    tokenizer = tokenizer_path
             entry = RegistryEntry.create_entry(
                 model=repo.repo_id,
                 size=repo.size_on_disk,
@@ -91,22 +91,31 @@ def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Regist
     :param api_data: API information
     :param entries: Cumulative registry data
     :return: `dict` of additional registry entries"""
-    from ollama import ListResponse, list as ollama_list
+    from ollama import ListResponse, list as ollama_list, show
+    # import re
+    # import os
 
     entries = [] if not entries else entries
     config = api_data[CueType.OLLAMA.value[1]]
     model_data: ListResponse = ollama_list()
+    # regex_pattern = r"FROM\s+(/\S+)"
     for model in model_data.models:
+        gguf_data = show(model.model)
+        gguf_arch = gguf_data.modelinfo.get("general.architecture")
+        mir_tag = class_to_mir_tag(mir_db, model.details.family)
+        # model_paths = re.findall(regex_pattern, gguf_data.modelfile)
+        # tokenizer = min(model_paths, key=os.path.getsize)
         entry = RegistryEntry.create_entry(
             model=f"{api_data[CueType.OLLAMA.value[1]].get('prefix')}{model.model}",
             size=model.size.real,
             tags=[model.details.family],
             cuetype=CueType.OLLAMA,
-            mir=class_to_mir_tag(mir_db, model.details.family),
+            mir=mir_tag,
+            mir_family=[gguf_arch],
             package=CueType.OLLAMA,
             api_kwargs=config["api_kwargs"],
             timestamp=int(model.modified_at.timestamp()),
-            tokenizer=model.model,
+            tokenizer=None,
         )
         entries.append(entry)
     return entries

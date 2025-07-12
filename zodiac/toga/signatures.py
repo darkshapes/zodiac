@@ -2,7 +2,8 @@
 # <!-- // /*  d a r k s h a p e s */ -->
 
 import dspy
-from typing import Dict, Callable
+from typing import Callable
+from zodiac.providers.registry_entry import RegistryEntry
 
 
 class QATask(dspy.Signature):
@@ -12,117 +13,85 @@ class QATask(dspy.Signature):
     answer = dspy.OutputField(desc="Often between 60 and 90 words and limited to 10000 character code blocks")
 
 
-class QuestionAnswer(dspy.Module):
-    def __init__(self, sig: dspy.Signature):
-        super().__init__()
-        self.predict = dspy.Predict(sig)
-
-    def forward(self, question, **kwargs):
-        self.predict(question=question, **kwargs)
-        return self.predict(question=question, **kwargs)
-
-
-class Activity(dspy.streaming.StatusMessageProvider):
+class StreamActivity(dspy.streaming.StatusMessageProvider):
     def lm_start_status_message(self, instance, inputs):
         return "Processing.."
 
     def module_start_status_message(self, instance, inputs):
-        return "Structuring..."
+        return "Preparing..."
 
     def module_end_status_message(self, outputs):
-        return "Complete."
+        return "Completed."
 
     def lm_end_status_message(self, outputs):
-        return "Complete."
+        return "Done."
+
+    def tool_start_status_message(self, instance, inputs):
+        return "Tool start..."
+
+    def tool_end_status_message(self, outputs):
+        return "Tool end."
 
 
-async def text_qa_stream(registry_entry: Callable, prompt: str):
-    qa_program = dspy.streamify(
-        QuestionAnswer(QATask),
-        stream_listeners=[
-            dspy.streaming.StreamListener(signature_field_name="answer"),  # allow_reuse=True),
-        ],
-        status_message_provider=Activity(),
-    )
+class Predictor(dspy.Module):
+    def __init__(
+        self,
+        registry_entry: RegistryEntry,
+        signature: dspy.Signature = QATask,
+        max_workers: int = 8,
+        cache: bool = False,
+    ):
+        super().__init__()
+        program = dspy.Predict(signature=signature)
+        self.registry_entry = registry_entry
+        self.context_kwargs = {"async_max_workers": max_workers, "cache": cache}
+        # aprogram = dspy.asyncify(program=program)
+        streamify_arguments = {
+            "stream_listeners": [
+                dspy.streaming.StreamListener(signature_field_name="answer"),
+            ],
+            "status_message_provider": StreamActivity(),
+            "include_final_prediction_in_output_stream": False,
+        }
+        self.aprogram = dspy.streamify(program, async_streaming=True, **streamify_arguments)
 
-    with dspy.context(lm=dspy.LM(model=registry_entry.model, **registry_entry.api_kwargs, cache=False)):
-        async for prediction in qa_program(question=prompt):
-            yield prediction
-
-
-# class VisionTask(dspy.Signature):
-#     """Describe the image in detail."""
-
-#     image: dspy.Image = dspy.InputField(desc="An image")
-#     description: str = dspy.OutputField(desc="Detailed description of the image.")
-
-
-# image_path="image.png"
-# minicpm = dspy.LM('openai/gemma3:12b-it-qat', base_url='http://localhost:11454/v1', api_key='ollama', cache=False)
-
-# predictor = dspy.Predict(signature)
-# predictor.set_lm(minicpm)
-# result = predictor(image=dspy.Image.from_url(image_path))
-# print(result.description)
-
-# dspy.Audio
-
-
-# class SpeechTask(dspy.Signature):
-#     f"""{bqa_sysprompt}"""
-
-#     message: str = dspy.InputField(desc="The message to respond to")
-#     # history: dspy.History = dspy.InputField()
-#     answer = dspy.OutputField(desc="Often between 60 and 90 words and limited to 10000 character code blocks")
+    async def forward(self, question: str):
+        with dspy.context(
+            lm=dspy.LM(
+                self.registry_entry.model,
+                **self.context_kwargs,
+                **self.registry_entry.api_kwargs,
+            )
+        ):
+            yield self.aprogram(question=question)  # history=history)
 
 
-# class T2ASignature(dspy.Signature):
-#     f"""Reply with short responses within 60-90 word/10k character code limits"""
-
-#     audio: dspy.Image = dspy.InputField(desc="An image")
-
-#     message: str = dspy.InputField(desc="The message to respond to")
-#     # history: dspy.History = dspy.InputField()
-#     answer = dspy.OutputField(desc="Often between 60 and 90 words and limited to 10000 character code blocks")
-
-# class A2TSignature(dspy.Signature):
-#     f"""Reply with short responses within 60-90 word/10k character code limits"""
-
-#     audio: dspy.Image = dspy.InputField(desc="An image")
-
-#     message: str = dspy.InputField(desc="The message to respond to")
-#     # history: dspy.History = dspy.InputField()
-#     answer = dspy.OutputField(desc="Often between 60 and 90 words and limited to 10000 character code blocks")
-
-# class T2ISignature(dspy.Signature):
-#     message: str = dspy.InputField(desc=is_msg)
-#     image_output: dspy.Image = dspy.OutputField(desc=is_out)
+# with ThreadPoolExecutor(max_workers=5) as executor:
+#     executor.map(worker, range(3))
 
 
-# class I2ISignature(dspy.Signature):
-#     f"""{ps_sysprompt}"""
-#     image_input: dspy.Image = dspy.InputField(desc="An image")
-#     answer: str = dspy.OutputField(desc="The nature of the image.")
-#     image_output: dspy.Image = dspy.OutputField(desc="Edited input image.")
+# def wrap_program(program: dspy.Module, metric: Callable):
+#     def wrapped_program(example):
+#         with dspy.context(trace=[]):
+#             prediction, trace, score = None, None, 0.0
+#             try:
+#                 prediction = program(**example.inputs())
+
+# with dspy.context(lm=dspy.LM(registry_entry), callbacks=[]):
+#     assert dspy.settings.lm.model == registry_entry
 
 
-# ps_sysprompt = "Provide x for Y"
-# bqa_sysprompt =
+# async def read_output_stream():
+#     output = stream_predict(question="why did a chicken cross the kitchen?")
 
-# is_msg: str = "Description x of the image to generate"
-# is_out: str = "An image matching the description x"
+#     return_value = None
+#     async for chunk in output:
+#         if isinstance(chunk, dspy.streaming.StreamResponse):
+#             print(chunk)
+#         elif isinstance(chunk, dspy.Prediction):
+#             return_value = chunk
+#     return return_value
 
 
-# class ControlNetSignature(dspy.Signature):
-
-
-# class SequenceSignature(dspy.Signature
-
-# class VisionSignature(dspy.Signature:
-
-# class ImageToImageSignature(dspy.Signature:
-
-# class InpaintSignature(dspy.Signature:
-
-# CasualLM
-# PAG
+# program_output = asyncio.run(read_output_stream())
+# print("Final output: ", program_output)

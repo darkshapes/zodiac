@@ -3,14 +3,15 @@
 
 # pylint:disable=no-name-in-module
 
+import os
 from enum import Enum
 from typing import Annotated, Callable, List, Optional, Union
-import os
-from pydantic import BaseModel, Field
-from nnll.monitor.file import dbuq
+
 from nnll.configure.init_gpu import first_available
-from nnll.mir.json_cache import JSONCache, TEMPLATE_PATH_NAMED, VERSIONS_PATH_NAMED
+from nnll.mir.json_cache import TEMPLATE_PATH_NAMED, VERSIONS_PATH_NAMED, JSONCache
 from nnll.mir.maid import MIRDatabase
+from nnll.monitor.file import dbuq
+from pydantic import BaseModel, Field
 
 MIR_DB = MIRDatabase()
 CUETYPE_PATH_NAMED = os.path.join(os.path.dirname(__file__), "cuetype.json")
@@ -28,15 +29,16 @@ def check_host(api_name: str, api_url: str) -> bool:
     :return: Whether the server is up or not
     """
 
+    from json.decoder import JSONDecodeError
+
     import httpcore
     import httpx
-    from urllib3.exceptions import NewConnectionError, MaxRetryError
     import requests
-    from json.decoder import JSONDecodeError
-    from openai import APIConnectionError, APITimeoutError, APIStatusError  # , JSONDecodeError,
+    from openai import APIConnectionError, APIStatusError, APITimeoutError  # , JSONDecodeError,
+    from urllib3.exceptions import MaxRetryError, NewConnectionError
 
     if api_name == "LM_STUDIO":
-        from lmstudio import APIConnectionError, APITimeoutError, APIStatusError, JSONDecodeError
+        from lmstudio import APIConnectionError, APIStatusError, APITimeoutError, JSONDecodeError
     try:
         dbuq(api_url)
         request = requests.get(api_url, timeout=(1, 1))
@@ -181,6 +183,7 @@ class PkgType(BaseEnum):
     F_LITE: tuple = (has_api("F_LITE"), "F_LITE", ["fal-ai/f-lite"])
     HIDIFFUSION: tuple = (has_api("HIDIFFUSION"), "HIDIFFUSION", ["megvii-research/HiDiffusion"])
     IMAGE_GEN_AUX: tuple = (has_api("IMAGE_GEN_AUX"), "IMAGE_GEN_AUX", ["huggingface/image_gen_aux"])
+    JAX: tuple = (has_api("JAX"), "JAX", [])
     LUMINA_MGPT: tuple = (has_api("INFERENCE_SOLVER"), "INFERENCE_SOLVER", "Alpha-VLLM/Lumina-mGPT")
     MFLUX: tuple = (has_api("MFLUX"), "MFLUX", [])  # "filipstrand/mflux"
     MLX_AUDIO: tuple = (CueType.check_type("MLX_AUDIO"), "MLX_AUDIO", [])  # Blaizzy/mlx-audio
@@ -194,6 +197,7 @@ class PkgType(BaseEnum):
     SPANDREL_EXTRA_ARCHES: tuple = (has_api("SPANDREL_EXTRA_ARCHES"), "SPANDREL_EXTRA_ARCHES", [])
     SPANDREL: tuple = (has_api("SPANDREL"), "SPANDREL", [])
     SVDQUANT: tuple = (has_api("NUNCHAKU"), "NUNCHAKU", ["mit-han-lab/nunchaku"])
+    TENSORFLOW: tuple = (has_api("TENSORFLOW"), "TENSORFLOW", [])
     TORCH: tuple = (has_api("TORCH"), "TORCH", [])  # Possible that torch is NOT needed (mlx_lm, or some other unforeseen future )
     TORCHAUDIO: tuple = (has_api("TORCHAUDIO"), "TORCHAUDIO", [])
     TORCHVISION: tuple = (has_api("TORCHVISION"), "TORCHVISION", [])
