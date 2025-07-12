@@ -37,8 +37,10 @@ def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryE
             sub_module_name = None
             try:
                 meta = repocard.RepoCard.load(repo.repo_id).data
-            except (LocalEntryNotFoundError, EntryNotFoundError, HTTPError, OfflineModeIsEnabled):
+            except (LocalEntryNotFoundError, EntryNotFoundError, HTTPError, OfflineModeIsEnabled) as error_log:
+                print(f"Pooling error: '{error_log}'")
                 pass
+                return entries
             if hasattr("meta", "base_model"):
                 mir_family = mir_db.find_path("repo", meta.base_model)
             if mir_family:
@@ -47,10 +49,13 @@ def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryE
                 sub_module_name = mir_db.database[mir_entry[0]][mir_entry[1]]
             if sub_module_name:
                 try:
-                    pkg_id = sub_module_name.get("pkg").get("0")
-                    if hasattr(PkgType, pkg_id.upper()):
-                        package_name = getattr(PkgType, pkg_id.upper())
-                except (AttributeError, TypeError, KeyError, ValueError):
+                    pkg_data = sub_module_name.get("pkg").get("0")
+                    for pkg_id in pkg_data.keys():
+                        print(pkg_id)
+                        if hasattr(PkgType, pkg_id.upper()):
+                            package_name = getattr(PkgType, pkg_id.upper())
+                except (AttributeError, TypeError, KeyError, ValueError) as error_log:
+                    print(f"Pooling error: '{error_log}'")
                     pass
             if meta:
                 if hasattr(meta, "tags"):
@@ -121,35 +126,35 @@ def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Regist
     return entries
 
 
-# @debug_monitor
-def cortex_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
-    """Collect models from Cortex\n
-    :param mir_db: MIR information
-    :param api_data: API information
-    :param entries: Cumulative registry data
-    :return: `dict` of additional registry entries"""
-    import requests
+# # @debug_monitor
+# def cortex_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
+#     """Collect models from Cortex\n
+#     :param mir_db: MIR information
+#     :param api_data: API information
+#     :param entries: Cumulative registry data
+#     :return: `dict` of additional registry entries"""
+#     import requests
 
-    entries = [] if not entries else entries
-    config = api_data[CueType.CORTEX.value[1]]
-    model_url = config["api_url"] + config["model_path"]
-    response: requests.models.Request = requests.get(url=model_url, timeout=(1, 1))
-    model_data = response.json()
-    for model in model_data["data"]:
-        model_id = model.get("id")
-        if model_id:
-            model_id = model_id.split(":", maxsplit=1)
-            model_id = class_to_mir_tag(mir_db, model_id[0])
-        entry = RegistryEntry.create_entry(
-            model=f"{config.get('prefix')}{model.get('model')}",
-            size=model.get("size", 0),
-            tags=[str(model.get("modalities", "text"))],
-            mir=model_id,
-            cuetype=CueType.CORTEX,
-            api_kwargs=config["api_kwargs"],
-        )
-        entries.append(entry)
-    return entries
+#     entries = [] if not entries else entries
+#     config = api_data[CueType.CORTEX.value[1]]
+#     model_url = config["api_url"] + config["model_path"]
+#     response: requests.models.Request = requests.get(url=model_url, timeout=(1, 1))
+#     model_data = response.json()
+#     for model in model_data["data"]:
+#         model_id = model.get("id")
+#         if model_id:
+#             model_id = model_id.split(":", maxsplit=1)
+#             model_id = class_to_mir_tag(mir_db, model_id[0])
+#         entry = RegistryEntry.create_entry(
+#             model=f"{config.get('prefix')}{model.get('model')}",
+#             size=model.get("size", 0),
+#             tags=[str(model.get("modalities", "text"))],
+#             mir=model_id,
+#             cuetype=CueType.CORTEX,
+#             api_kwargs=config["api_kwargs"],
+#         )
+#         entries.append(entry)
+#     return entries
 
 
 # @debug_monitor
@@ -249,7 +254,7 @@ def register_models(data: Optional[Dict[str, Any]] = None) -> List[RegistryEntry
     entry_map = {
         CueType.HUB.value: hub_pool,
         CueType.OLLAMA.value: ollama_pool,
-        CueType.CORTEX.value: cortex_pool,
+        # CueType.CORTEX.value: cortex_pool,
         CueType.LLAMAFILE.value: llamafile_pool,
         CueType.VLLM.value: vllm_pool,
         CueType.LM_STUDIO.value: lm_studio_pool,

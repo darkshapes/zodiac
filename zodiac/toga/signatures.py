@@ -2,7 +2,6 @@
 # <!-- // /*  d a r k s h a p e s */ -->
 
 import dspy
-from typing import Callable
 from zodiac.providers.registry_entry import RegistryEntry
 
 
@@ -34,64 +33,28 @@ class StreamActivity(dspy.streaming.StatusMessageProvider):
 
 
 class Predictor(dspy.Module):
-    def __init__(
-        self,
-        registry_entry: RegistryEntry,
-        signature: dspy.Signature = QATask,
-        max_workers: int = 8,
-        cache: bool = False,
-    ):
-        super().__init__()
-        program = dspy.Predict(signature=signature)
-        self.registry_entry = registry_entry
-        self.context_kwargs = {"async_max_workers": max_workers, "cache": cache}
-        # aprogram = dspy.asyncify(program=program)
-        streamify_arguments = {
-            "stream_listeners": [
-                dspy.streaming.StreamListener(signature_field_name="answer"),
-            ],
-            "status_message_provider": StreamActivity(),
-            "include_final_prediction_in_output_stream": False,
-        }
-        self.aprogram = dspy.streamify(program, async_streaming=True, **streamify_arguments)
+    def __init__(self):
+        self.program = dspy.Predict(signature=QATask)
 
-    async def forward(self, question: str):
-        with dspy.context(
-            lm=dspy.LM(
-                self.registry_entry.model,
-                **self.context_kwargs,
-                **self.registry_entry.api_kwargs,
-            )
-        ):
-            yield self.aprogram(question=question)  # history=history)
+    def __call__(self, question: str):
+        return self.program(question=question)
 
 
-# with ThreadPoolExecutor(max_workers=5) as executor:
-#     executor.map(worker, range(3))
+async def ready_predictor(registry_entry: RegistryEntry, max_workers: int = 8, cache: bool = False):
+    lm_kwargs = {"async_max_workers": max_workers, "cache": cache}
+    lm_model = dspy.LM(
+        registry_entry.model,
+        **registry_entry.api_kwargs,
+        **lm_kwargs,
+    )
+    context_kwargs = {"lm": lm_model, "adapter": dspy.ChatAdapter()}
+    predictor_kwargs = {
+        "stream_listeners": [
+            dspy.streaming.StreamListener(signature_field_name="answer"),
+        ],
+        "status_message_provider": StreamActivity(),
+        "async_streaming": True,
+        "include_final_prediction_in_output_stream": False,
+    }
 
-
-# def wrap_program(program: dspy.Module, metric: Callable):
-#     def wrapped_program(example):
-#         with dspy.context(trace=[]):
-#             prediction, trace, score = None, None, 0.0
-#             try:
-#                 prediction = program(**example.inputs())
-
-# with dspy.context(lm=dspy.LM(registry_entry), callbacks=[]):
-#     assert dspy.settings.lm.model == registry_entry
-
-
-# async def read_output_stream():
-#     output = stream_predict(question="why did a chicken cross the kitchen?")
-
-#     return_value = None
-#     async for chunk in output:
-#         if isinstance(chunk, dspy.streaming.StreamResponse):
-#             print(chunk)
-#         elif isinstance(chunk, dspy.Prediction):
-#             return_value = chunk
-#     return return_value
-
-
-# program_output = asyncio.run(read_output_stream())
-# print("Final output: ", program_output)
+    return context_kwargs, predictor_kwargs

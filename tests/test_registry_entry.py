@@ -146,24 +146,24 @@ def test_hub_extra_tasks(registry_entry_hub_extra: RegistryEntry):  # ensure tha
     assert set(registry_entry_hub_extra.available_tasks) == set(expected_tasks)
 
 
-@pytest.fixture
-def registry_entry_cortex():
-    return RegistryEntry(
-        model="🤡",
-        size=1024,
-        tags=["speech-translation", "speech-summarization", "automatic-speech-recognition", "text-to-speech", "video generation"],
-        cuetype=CueType.CORTEX,
-        mir=None,
-        api_kwargs=None,
-        timestamp=int(datetime.now().timestamp()),
-    )
+# @pytest.fixture
+# def registry_entry_cortex():
+#     return RegistryEntry(
+#         model="🤡",
+#         size=1024,
+#         tags=["speech-translation", "speech-summarization", "automatic-speech-recognition", "text-to-speech", "video generation"],
+#         # cuetype=CueType.CORTEX,
+#         mir=None,
+#         api_kwargs=None,
+#         timestamp=int(datetime.now().timestamp()),
+#     )
 
 
-def test_cortex_tasks(registry_entry_cortex: RegistryEntry):  # ensure that the system does not duplicate entries
-    expected_tasks = [
-        ("text", "text"),
-    ]
-    assert set(registry_entry_cortex.available_tasks) == set(expected_tasks)
+# def test_cortex_tasks(registry_entry_cortex: RegistryEntry):  # ensure that the system does not duplicate entries
+#     expected_tasks = [
+#         ("text", "text"),
+#     ]
+#     assert set(registry_entry_cortex.available_tasks) == set(expected_tasks)
 
 
 @pytest.fixture
