@@ -34,27 +34,32 @@ class Interface(toga.App):
         :type widget: toga.widgets
         :param external: Indicates whether the processing should be handled externally (e.g., via clipboard), defaults to False
         :type external: bool"""
-        from zodiac.toga.signatures import Predictor
+        from zodiac.toga.signatures import Predictor, ready_predictor
         from litellm.types.utils import ModelResponseStream
-        import dspy
+        from dspy.streaming import StreamResponse, StatusMessage
+        from dspy import Prediction, streamify, context
 
         await self.token_source.set_tokenizer(self.registry_entry)
         prompts = {"text": self.message_panel.value, "audio": [0], "image": []}
         self.status.style = Pack(color=self.activity)
-        predictor = Predictor(registry_entry=self.registry_entry)  #  asyncio.gather(
-        async for prediction in predictor(question=prompts["text"]):
-            async for chunk in prediction:
-                if chunk:
-                    if isinstance(chunk, ModelResponseStream) and chunk["choices"][0]["delta"]["content"]:
-                        self.response_panel.value += chunk["choices"][0]["delta"]["content"]
-                    if isinstance(chunk, dspy.streaming.StreamResponse):
-                        self.response_panel.value += chunk.chunk
-                    elif isinstance(chunk, dspy.Prediction):
-                        self.response_panel.value += chunk.answer
-                    elif isinstance(chunk, dspy.streaming.StatusMessage):
-                        self.status.text = chunk.message
-        self.response_panel.value += "\n---"
+        context_kwargs, predictor_kwargs = await ready_predictor(self.registry_entry)
+        with context(**context_kwargs):
+            program = streamify(Predictor(), **predictor_kwargs)
+            output = program(question=prompts["text"])
+
+            async for prediction in output:
+                if isinstance(prediction, ModelResponseStream) and prediction["choices"][0]["delta"]["content"]:
+                    self.response_panel.value += prediction["choices"][0]["delta"]["content"]
+                elif isinstance(prediction, StreamResponse):
+                    self.response_panel.value += prediction.chunk
+                elif hasattr(prediction, "answer") and isinstance(prediction, Prediction):
+                    self.response_panel.value += prediction.answer
+                elif isinstance(prediction, StatusMessage):
+                    self.status.text = prediction.message
+                # print(str(prediction))
+        self.response_panel.value += "\n---\n\n"
         self.status.style = Pack(color=self.bg_static)
+        return widget
 
     async def empty_prompt(self, widget, **kwargs) -> None:
         """Clears the prompt input area.

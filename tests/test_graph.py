@@ -76,6 +76,22 @@ def mock_ollama_data():
         yield mock_get_registry_data
 
 
+class ShowResponse:
+    """Mock ollama show class"""
+
+    def __init__(self):
+        self.modelinfo = {"general.architecture": "🤡"}
+
+
+@pytest.fixture(scope="module")
+def mock_ollama_show():
+    """Mock ollama response"""
+    with mock.patch("ollama.show", autospec=True) as mock_the_fk_up:
+        data = ShowResponse()
+        mock_the_fk_up.return_value = data
+        return mock_the_fk_up
+
+
 class HFCacheInfo:
     """Mock hub cache"""
 
@@ -136,7 +152,7 @@ def mock_hub_data():
         yield mock_get_registry_data
 
 
-def test_mocked_ollama(mock_ollama_data):
+def test_mocked_ollama(mock_ollama_data, mock_ollama_show):
     """Check if mocking ollama correctly"""
     result = mock_ollama_data()
 
@@ -161,7 +177,7 @@ def test_mocked_hub(mock_hub_data):
     assert new_list[0][1] == 9335526346
 
 
-def test_create_graph(mock_ollama_data, mock_hub_data):
+def test_create_graph(mock_ollama_data, mock_hub_data, mock_ollama_show):
     """Run test of graph creation"""
     from zodiac.providers.pools import register_models
 

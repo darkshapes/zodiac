@@ -5,7 +5,7 @@ import pytest
 from nnll.monitor.console import nfo
 from zodiac.providers.pools import register_models
 from zodiac.providers.constants import VALID_CONVERSIONS
-from test_graph import mock_hub_data, mock_ollama_data, test_mocked_hub, test_mocked_ollama, test_mocked_hub
+from test_graph import mock_hub_data, mock_ollama_data, test_mocked_hub, test_mocked_ollama, test_mocked_hub, mock_ollama_show
 
 
 # For some reason the graph holds states between tests, need to troubleshoot later
@@ -16,7 +16,7 @@ class TestFlow:
     # def setUp(self):
     #     from zodiac.graph import IntentProcessor
 
-    def test_flow_builder_edge_create_success(self, mock_ollama_data, mock_hub_data, mode_in: str = "text", mode_out: str = "speech"):
+    def test_flow_builder_edge_create_success(self, mock_ollama_data, mock_hub_data, mock_ollama_show, mode_in: str = "text", mode_out: str = "speech"):
         from pytest import raises
         from zodiac.providers.registry_entry import RegistryEntry
         from zodiac.providers.constants import CueType, PkgType
