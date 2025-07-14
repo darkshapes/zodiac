@@ -38,7 +38,7 @@ class TokenStream(Source):
         else:
             # model_name = os.path.split(registry_entry.model)
             # model_name = os.path.join(os.path.split(model_name[0])[-1], model_name[-1])
-            # [print(model_name)]
+            # self.status_log.registry_entry.model
             self.tokenizer_args = {"model": registry_entry.model}
 
     async def token_count(

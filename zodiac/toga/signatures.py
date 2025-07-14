@@ -4,6 +4,8 @@
 import dspy
 from zodiac.providers.registry_entry import RegistryEntry
 
+dspy.configure_cache(enable_disk_cache=False)
+
 
 class QATask(dspy.Signature):
     """Reply with short responses within 60-90 word/10k character code limits"""
@@ -14,47 +16,54 @@ class QATask(dspy.Signature):
 
 class StreamActivity(dspy.streaming.StatusMessageProvider):
     def lm_start_status_message(self, instance, inputs):
-        return "Processing.."
+        return "Processing..."
 
     def module_start_status_message(self, instance, inputs):
-        return "Preparing..."
-
-    def module_end_status_message(self, outputs):
-        return "Completed."
+        return "Module started."
 
     def lm_end_status_message(self, outputs):
         return "Done."
 
     def tool_start_status_message(self, instance, inputs):
-        return "Tool start..."
+        return "Tool started..."
 
     def tool_end_status_message(self, outputs):
-        return "Tool end."
+        return "Tool finished."
 
 
 class Predictor(dspy.Module):
     def __init__(self):
+        super().__init__
         self.program = dspy.Predict(signature=QATask)
 
     def __call__(self, question: str):
-        return self.program(question=question)
+        from litellm.exceptions import APIConnectionError
+        from litellm.llms.ollama.common_utils import OllamaError
+        from httpx import ConnectError
+        from dspy.utils.exceptions import AdapterParseError
+        from aiohttp.client_exceptions import ClientConnectorError
+
+        try:
+            return self.program(question=question)
+        except (ClientConnectorError, ConnectError, AdapterParseError, APIConnectionError, OllamaError, OSError):
+            pass
 
 
-async def ready_predictor(registry_entry: RegistryEntry, max_workers: int = 8, cache: bool = False):
+async def ready_predictor(registry_entry: RegistryEntry, async_stream: bool = True, dspy_stream: bool = True, max_workers: int = 8, cache: bool = True):
     lm_kwargs = {"async_max_workers": max_workers, "cache": cache}
     lm_model = dspy.LM(
         registry_entry.model,
         **registry_entry.api_kwargs,
         **lm_kwargs,
     )
-    context_kwargs = {"lm": lm_model, "adapter": dspy.ChatAdapter()}
+    stream_listeners = [dspy.streaming.StreamListener(signature_field_name="answer")]
+    context_kwargs = {"lm": lm_model}  # , "adapter": dspy.ChatAdapter()}
     predictor_kwargs = {
-        "stream_listeners": [
-            dspy.streaming.StreamListener(signature_field_name="answer"),
-        ],
         "status_message_provider": StreamActivity(),
-        "async_streaming": True,
+        "async_streaming": async_stream,
         "include_final_prediction_in_output_stream": False,
     }
+    if dspy_stream:
+        predictor_kwargs["stream_listeners"] = stream_listeners
 
     return context_kwargs, predictor_kwargs
