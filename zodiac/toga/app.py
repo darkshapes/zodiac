@@ -18,7 +18,7 @@ from zodiac.streams.model_stream import ModelStream
 from zodiac.streams.task_stream import TaskStream
 from zodiac.streams.token_stream import TokenStream
 import platform
-
+    from dspy import Prediction, streamify, context as dspy_context, inspect_history
 OS_NAME = platform.system  # replace with config from sdbx later
 
 
@@ -35,7 +35,7 @@ class Interface(toga.App):
     scroll_buffer = 5000
     graph_disabled = "http://localhost"
     graph_server = "http://127.0.0.1:8188"
-    status_info = ("Checking server...", "Server?", "Ready.", "Done.", "No File.", "Read Failed.", "Attached.")
+    status_info = ("Checking server...", "Server?", "Ready.", "Done.", "No File.", "Read Failed.", "Attached.", "Copied.")
     _is_cancelled = False
 
     async def ticker(self, widget: Callable, external: bool = False, **kwargs) -> toga.Widget:
@@ -47,7 +47,6 @@ class Interface(toga.App):
         from zodiac.toga.signatures import Predictor, ready_predictor
         from litellm.types.utils import ModelResponseStream  # StatusStreamingCallback
         from dspy.streaming import StatusMessage, StreamResponse
-        from dspy import Prediction, streamify, context as dspy_context
 
         await self.token_source.set_tokenizer(self.registry_entry)
         prompts = {"text": self.message_panel.value, "audio": [0], "image": []}
@@ -86,7 +85,7 @@ class Interface(toga.App):
         import pyperclip
 
         pyperclip.copy(self.response_panel.value)
-        self.status_display.text = "Copied."
+        self.status_display.text = self.status_info[6]
 
     async def attach_file(self, widget, **kwargs) -> None:
         """Attaches a file's contents to the prompt area.
@@ -112,10 +111,10 @@ class Interface(toga.App):
         """Scrolls text panel to bottom after content update.
         :param widget: text panel widget
         """
-        # setattr(self, "position_counter", getattr(self, "position_counter", 0) + 1)
-        # if max(self.scroll_buffer, self.position_counter) >= self.scroll_buffer:
-        # self.position_counter = 0
-        widget.scroll_to_bottom()
+        setattr(self, "position_counter", getattr(self, "position_counter", 0) + 1)
+        if max(self.scroll_buffer, self.position_counter) >= self.scroll_buffer:
+            self.position_counter = 0
+            widget.scroll_to_bottom()
 
     async def on_select_handler(self, widget, **kwargs) -> None:
         """React to input/output choice\n
@@ -229,7 +228,7 @@ class Interface(toga.App):
         self.message_panel = toga.MultilineTextInput(placeholder="Prompt", on_change=self.token_estimate, style=Pack(flex=0.66, margin=10))
         self.browser_panel = toga.WebView(url=self.graph_server, id="Graph ")
         self.audio_panel = toga.Canvas()
-        self.response_panel = toga.MultilineTextInput(readonly=True, placeholder="Response", style=Pack(flex=5))  # , on_change=self.reset_position))
+        self.response_panel = toga.MultilineTextInput(readonly=True, placeholder="Response", style=Pack(flex=5), on_change=self.reset_position)
 
     def initialize_static(self) -> None:
         """Create the main input fields"""
@@ -261,7 +260,12 @@ class Interface(toga.App):
                         ),
                         toga.Column(
                             children=[
-                                toga.Button("₪", on_press=self.attach_file, style=Pack(width=30, height=20, font_size="13")),
+                                toga.Button(
+                                    """📎
+                                _""",
+                                    on_press=self.attach_file,
+                                    style=Pack(width=30, height=20, font_size="10", align_items="start", justify_content="start"),
+                                ),
                                 toga.Button("⌫", on_press=self.empty_prompt, style=Pack(width=30, height=20, font_size="14")),
                             ],
                             style=Pack(font_size="15", gap=5),
@@ -272,8 +276,8 @@ class Interface(toga.App):
             ],
             style=Pack(margin=10, gap=5, vertical_align_items="center", justify_content="start", align_items="start"),
         )
-        self.status_log = toga.Label("")
-        self.status_tab = toga.OptionItem(text="| Checking server...", content=self.status_log, enabled=False)
+        self.status_log = toga.Label(f"{inspect_history()}")
+        self.status_tab = toga.OptionItem(text="|  Connecting...", content=self.status_log, enabled=False)
         resize_area = toga.SplitContainer(
             content=[
                 toga.OptionContainer(
@@ -367,7 +371,7 @@ class Interface(toga.App):
         self.main_window.show()
         self.status_display = self.status_tab
         self.bg = self.bg_graph
-        self.status_text_prefix = "| "
+        self.status_text_prefix = "|  "
 
         asyncio.create_task(self.switch_tabs())
 
