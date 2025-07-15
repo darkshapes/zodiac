@@ -42,6 +42,7 @@ Requires-Dist: tiktoken>=0.9.0
 Requires-Dist: viztracer>=1.0.4
 Requires-Dist: matplotlib>=3.10.3
 Requires-Dist: toga>=0.5.1
+Requires-Dist: pyperclip>=1.9.0
 Provides-Extra: console
 Requires-Dist: textual-dev>=1.7.0; extra == "console"
 Requires-Dist: textual-plotext>=1.0.1; extra == "console"
