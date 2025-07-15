@@ -36,7 +36,7 @@ class Interface(toga.App):
     scroll_buffer = 5000
     graph_disabled = "http://localhost"
     graph_server = "http://127.0.0.1:8188"
-    status_info = ("Checking server...", "Server?", "Ready.", "Done.", "No File.", "Read Failed.", "Attached.", "Copied.")
+    status_info = ("Connecting...", "Server?", "Ready.", "Done.", "No File.", "Read Failed.", "Attached.", "Copied.")
     _is_cancelled = False
 
     async def ticker(self, widget: Callable, external: bool = False, **kwargs) -> toga.Widget:
@@ -278,7 +278,7 @@ class Interface(toga.App):
             style=Pack(margin=10, gap=5, vertical_align_items="center", justify_content="start", align_items="start"),
         )
         self.status_log = toga.Label(f"{inspect_history()}")  # show llm history
-        self.status_tab = toga.OptionItem(text="|  Connecting...", content=self.status_log)  # , enabled=False)
+        self.status_tab = toga.OptionItem(text="|  Connecting...", content=self.status_log, enabled=False)
         resize_area = toga.SplitContainer(
             content=[
                 toga.OptionContainer(
