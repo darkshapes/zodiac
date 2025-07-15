@@ -18,7 +18,8 @@ from zodiac.streams.model_stream import ModelStream
 from zodiac.streams.task_stream import TaskStream
 from zodiac.streams.token_stream import TokenStream
 import platform
-    from dspy import Prediction, streamify, context as dspy_context, inspect_history
+from dspy import Prediction, streamify, context as dspy_context, inspect_history
+
 OS_NAME = platform.system  # replace with config from sdbx later
 
 
@@ -276,8 +277,8 @@ class Interface(toga.App):
             ],
             style=Pack(margin=10, gap=5, vertical_align_items="center", justify_content="start", align_items="start"),
         )
-        self.status_log = toga.Label(f"{inspect_history()}")
-        self.status_tab = toga.OptionItem(text="|  Connecting...", content=self.status_log, enabled=False)
+        self.status_log = toga.Label(f"{inspect_history()}")  # show llm history
+        self.status_tab = toga.OptionItem(text="|  Connecting...", content=self.status_log)  # , enabled=False)
         resize_area = toga.SplitContainer(
             content=[
                 toga.OptionContainer(
