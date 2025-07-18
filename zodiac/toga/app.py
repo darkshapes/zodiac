@@ -33,7 +33,7 @@ class Interface(toga.App):
 
     static = Pack(color="#727378")
     fg_static = Pack(color="#8D8E94")
-    scroll_buffer = 5000
+    scroll_buffer = 5000  # chunks required to scroll down
     graph_disabled = "http://localhost"
     graph_server = "http://127.0.0.1:8188"
     status_info = ("Connecting...", "Server?", "Ready.", "Done.", "No File.", "Read Failed.", "Attached.", "Copied.")
@@ -49,13 +49,15 @@ class Interface(toga.App):
         from litellm.types.utils import ModelResponseStream  # StatusStreamingCallback
         from dspy.streaming import StatusMessage, StreamResponse
 
+        self.response_panel.value += f"{os.path.basename(self.registry_entry.model)} :\n"
+
         await self.token_source.set_tokenizer(self.registry_entry)
         prompts = {"text": self.message_panel.value, "audio": [0], "image": []}
         context_kwargs, predictor_kwargs = await ready_predictor(self.registry_entry, dspy_stream=True, async_stream=True, cache=False)  # ,dspy_stream=False)
         self.response_panel.scroll_to_bottom()
         with dspy_context(**context_kwargs):
-            program = streamify(Predictor(), **predictor_kwargs)
-            async for prediction in program(question=prompts["text"]):
+            self.program = streamify(Predictor(), **predictor_kwargs)
+            async for prediction in self.program(question=prompts["text"]):
                 if isinstance(prediction, ModelResponseStream) and prediction["choices"][0]["delta"]["content"]:
                     self.response_panel.value += prediction["choices"][0]["delta"]["content"]
                 elif isinstance(prediction, StreamResponse):
@@ -71,8 +73,11 @@ class Interface(toga.App):
     async def halt(self, widget, **kwargs) -> None:
         """Stop processing prompt\n
         :param widget: The calling widget object"""
-        if not self.output.done():
-            _is_cancelled = True
+        if not self.program.done():
+            import gc
+
+            del self.program
+            gc.collect()
             self.status_display.text = self.status_text_prefix + "Cancelled."
 
     async def empty_prompt(self, widget, **kwargs) -> None:
@@ -86,7 +91,7 @@ class Interface(toga.App):
         import pyperclip
 
         pyperclip.copy(self.response_panel.value)
-        self.status_display.text = self.status_info[6]
+        self.status_display.text = self.status_text_prefix + self.status_info[7]
 
     async def attach_file(self, widget, **kwargs) -> None:
         """Attaches a file's contents to the prompt area.
@@ -316,7 +321,6 @@ class Interface(toga.App):
         self.task_source = TaskStream()
         self.token_source = TokenStream()
 
-        # control_group = toga.Group("Controls", order=40)
         start = toga.Command(
             self.ticker,
             text="Start",
@@ -354,7 +358,7 @@ class Interface(toga.App):
             self.halt,
             text="Stop",
             tooltip="Cancel the current sequence generation.",
-            shortcut=Key.MOD_1 + Key.ESCAPE,
+            shortcut=Key.MOD_1 + Key.ESCAPE,  #
             group=toga.Group.APP,
             section=1,
         )
@@ -377,15 +381,16 @@ class Interface(toga.App):
         asyncio.create_task(self.switch_tabs())
 
 
-def main():
+def main(url: str):
     """The entry point for the application."""
     app = Interface(
         formal_name="Shadowbox",
         app_id="org.darkshapes.shadowbox",
         app_name="sdbx",
         author="Darkshapes",
-        home_page="https://darkshapes.github.io",
+        home_page="https://darkshapes.org",
         description=" A generative AI instrument. ",
     )
     app.icon = toga.Icon(path="resources/anomaly_128x")
     app.main_loop()
+    app.graph_server = url

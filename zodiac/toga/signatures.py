@@ -3,8 +3,13 @@
 
 import dspy
 from zodiac.providers.registry_entry import RegistryEntry
+from PIL.Image import Image as ImageType
+import sounddevice as sd
 
 dspy.configure_cache(enable_disk_cache=False)
+
+# cherry pick examples
+# dspy.Adapter.format(demos=[{:,:}],signatures:,inputs:)
 
 
 class QATask(dspy.Signature):
@@ -29,6 +34,30 @@ class StreamActivity(dspy.streaming.StatusMessageProvider):
 
     def tool_end_status_message(self, outputs):
         return "Tool finished."
+
+
+class VisionTask(dspy.Signature):
+    """Describe the image in detail."""
+
+    image: ImageType = dspy.InputField(desc="An image")
+    description: str = dspy.OutputField(desc="A detailed description of the image.")
+
+
+class TranscribeTask(dspy.Signature):
+    """Transcribe spoken words into text"""
+
+    message: sd.RawStream = dspy.InputField(desc="The speech to transcribe.")
+    answer: str = dspy.OutputField(desc="A transcript of the recorded speech")
+
+
+TARGET_LANGUAGE = "English"
+
+
+class TranslateTask(dspy.Signature):
+    f"""Translate from a language to {TARGET_LANGUAGE}"""
+
+    message: ImageType | sd.RawStream | str = dspy.InputField(desc="The input to translate.")
+    translation: ImageType | sd.RawStream | str = dspy.OutputField(desc="A translation of the input")
 
 
 class Predictor(dspy.Module):
