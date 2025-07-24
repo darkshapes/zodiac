@@ -184,7 +184,7 @@ class PkgType(BaseEnum):
     LUMINA_MGPT: tuple = (has_api("INFERENCE_SOLVER"), "INFERENCE_SOLVER", "Alpha-VLLM/Lumina-mGPT")
     MFLUX: tuple = (has_api("MFLUX"), "MFLUX", [])  # "filipstrand/mflux"
     MLX_AUDIO: tuple = (CueType.check_type("MLX_AUDIO"), "MLX_AUDIO", [])  # Blaizzy/mlx-audio
-    MLX_CHROMA: tuple = (has_api("MLX_CHROMA"), "MLX_CHROMA", ["exdysa/jack813-mlx-chroma"])
+    MLX_CHROMA: tuple = (has_api("CHROMA"), "CHROMA", ["exdysa/jack813-mlx-chroma"])
     MLX_LM: tuple = (has_api("MLX_LM"), "MLX_LM", [])  # "ml-explore/mlx-lm"
     MLX: tuple = (has_api("MLX_LM"), "MLX", [])
     ONNX: tuple = (has_api("ONNX"), "ONNX", ["ONNX"])
