@@ -149,7 +149,6 @@ class CueType(BaseEnum):
 
     # Dfferentiation of boolean conditions
     # GIVEN : The state of all provider modules & servers are marked at launch
-    # CORTEX: tuple = (has_api("CORTEX"), "CORTEX")
 
     HUB: tuple = (has_api("HUB"), "HUB")
     KAGGLE: tuple = (has_api("KAGGLE"), "KAGGLE")
@@ -164,14 +163,11 @@ example_str = ("function_name", "import.function_name")
 
 
 class PkgType(BaseEnum):
-    (
-        """Package dependency constants
+    """Package dependency constants
     Collected info from hub model tags and dependencies
     <NAME: (Availability, IMPORT_NAME, [Github repositories*]
     *if applicable, otherwise IMPORT_NAME is pip package
     NOTE: NAME is colloquial and does not always match IMPORT_NAME>"""
-        + f"""{base_enum_docstring}"""
-    )
 
     AUDIOGEN: tuple = (has_api("AUDIOCRAFT"), "AUDIOCRAFT", ["exdysa/facebookresearch-audiocraft-revamp"])  # this fork supports mps
     BAGEL: tuple = (has_api("BAGEL"), "BAGEL", ["bytedance-seed/BAGEL"])
@@ -184,10 +180,14 @@ class PkgType(BaseEnum):
     HIDIFFUSION: tuple = (has_api("HIDIFFUSION"), "HIDIFFUSION", ["megvii-research/HiDiffusion"])
     IMAGE_GEN_AUX: tuple = (has_api("IMAGE_GEN_AUX"), "IMAGE_GEN_AUX", ["huggingface/image_gen_aux"])
     JAX: tuple = (has_api("JAX"), "JAX", [])
+    KERAS: tuple = (has_api("KERAS"), "KERAS", [])
     LUMINA_MGPT: tuple = (has_api("INFERENCE_SOLVER"), "INFERENCE_SOLVER", "Alpha-VLLM/Lumina-mGPT")
     MFLUX: tuple = (has_api("MFLUX"), "MFLUX", [])  # "filipstrand/mflux"
     MLX_AUDIO: tuple = (CueType.check_type("MLX_AUDIO"), "MLX_AUDIO", [])  # Blaizzy/mlx-audio
+    MLX_CHROMA: tuple = (has_api("MLX_CHROMA"), "MLX_CHROMA", ["exdysa/jack813-mlx-chroma"])
     MLX_LM: tuple = (has_api("MLX_LM"), "MLX_LM", [])  # "ml-explore/mlx-lm"
+    MLX: tuple = (has_api("MLX_LM"), "MLX", [])
+    ONNX: tuple = (has_api("ONNX"), "ONNX", ["ONNX"])
     ORPHEUS_TTS: tuple = (has_api("ORPHEUS_TTS"), "ORPHEUS_TTS", ["canopyai/Orpheus-TTS"])
     OUTETTS: tuple = (has_api("OUTETTS"), "OUTETTS", ["edwko/OuteTTS"])
     PARLER_TTS: tuple = (has_api("PARLER_TTS"), "PARLER_TTS", ["huggingface/parler-tts"])

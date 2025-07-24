@@ -5,11 +5,9 @@
 
 from zodiac.toga.app import main
 
-if __name__ == "__main__":
-    import sys
 
-    if sys.argv[0]:
-        server = sys.argv[0]
-    else:
-        server = "http://127.0.0.1:8188"
-    main(url=server).main_loop()
+if __name__ == "__main__":
+    # import subprocess
+
+    # subprocess.popen("sdbx")
+    main().main_loop()

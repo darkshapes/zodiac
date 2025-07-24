@@ -8,28 +8,34 @@ from zodiac.providers.registry_entry import RegistryEntry
 from zodiac.providers.constants import MIR_DB, VERSIONS_CONFIG, ChipType
 
 
-async def best_package(model_data, package_sets):
-    for processor in package_sets:
-        for package_type in processor:
-            if package_type.value[0]:  # Determine if the package is available
-                package_name = package_type.value[1].lower()
-                for index, data in model_data.items():
+async def best_package(mir_db_pkg: dict, ready_pkg_types: list[str]) -> tuple[str]:
+    """Identify the best package based on model data and package sets.\n
+    :param mir_db_pkg: Dictionary containing package data to match
+    :param ready_pkg_types: List of priority package processors to evaluate
+    :return: Tuple containing (class name, package type) if match found, otherwise None"""
+    for processor in ready_pkg_types:
+        for pkg_type in processor:
+            if pkg_type.value[0]:  # Determine if the package is available
+                package_name = pkg_type.value[1].lower()
+                for index, data in mir_db_pkg.items():
                     if package_name in data:
-                        class_name = model_data[index][package_name]
-                        return (class_name, package_type)
+                        class_name = mir_db_pkg[index][package_name]
+                        return (class_name, pkg_type)
 
 
-async def find_package(entry: RegistryEntry, base: bool = False) -> Tuple[str]:
+async def find_package(entry: RegistryEntry = None, base: bool = False, mir_entry: list[str] | None = None) -> Tuple[str]:
     """Look up class and package in MIR from RegistryEntry.\n
     :param entry: A RegistryEntry object containing MIR (Model Identifier Resource) details.
     :return: A tuple containing the class name of the package and its type if found; otherwise, None.
     :raises: AttributeError: If PkgType or ChipType classes are not properly defined."""
     import re
 
-    mir_ids = [entry.mir[1], "*"]
+    mir_base = entry.mir[0] if not mir_entry else mir_entry[0]
+    mir_comp = entry.mir[1] if not mir_entry else mir_entry[1]
+    mir_ids = [mir_comp, "*"]
     suffixes = VERSIONS_CONFIG.get("suffixes")
     if suffixes:
-        for compatibility, model_data in MIR_DB.database[entry.mir[0]].items():
+        for compatibility, model_data in MIR_DB.database[mir_base].items():
             package_key = model_data.get("pkg")
             if package_key and (any(re.match(pattern, compatibility) for pattern in suffixes) or compatibility in mir_ids):
                 main_gpu: List[str] = next(iter(ChipType._show_ready()))

@@ -45,30 +45,50 @@ class Interface(toga.App):
         :type widget: toga.widgets
         :param external: Indicates whether the processing should be handled externally (e.g., via clipboard), defaults to False
         :type external: bool"""
-        from zodiac.toga.signatures import Predictor, ready_predictor
-        from litellm.types.utils import ModelResponseStream  # StatusStreamingCallback
-        from dspy.streaming import StatusMessage, StreamResponse
+        from zodiac.toga.signatures import ready_predictor
 
         self.response_panel.value += f"{os.path.basename(self.registry_entry.model)} :\n"
 
         await self.token_source.set_tokenizer(self.registry_entry)
-        prompts = {"text": self.message_panel.value, "audio": [0], "image": []}
-        context_kwargs, predictor_kwargs = await ready_predictor(self.registry_entry, dspy_stream=True, async_stream=True, cache=False)  # ,dspy_stream=False)
+        prompts = {}
+        if self.message_panel.value:
+            stream = True
+            cache = False
+            prompts.setdefault("text", self.message_panel.value)
+        # prompts.setdefault("audio",[0]) if else []
+        # prompts.setdefault("image",[]) if image": []
+
+        context_data, predictor_data = await ready_predictor(self.registry_entry, dspy_stream=stream, async_stream=stream, cache=cache)
+        if stream:
+            await self.stream_text(prompts, context_data, predictor_data)
+        else:
+            await self.generate_media(prompts, context_data, predictor_data)
+        return widget
+
+    async def stream_text(self, prompts, context_data, predictor_data):
+        from zodiac.toga.signatures import Predictor
+        from litellm.types.utils import ModelResponseStream  # StatusStreamingCallback
+        from dspy.streaming import StatusMessage, StreamResponse
+
         self.response_panel.scroll_to_bottom()
-        with dspy_context(**context_kwargs):
-            self.program = streamify(Predictor(), **predictor_kwargs)
+        with dspy_context(**context_data):
+            self.program = streamify(Predictor(), **predictor_data)
             async for prediction in self.program(question=prompts["text"]):
                 if isinstance(prediction, ModelResponseStream) and prediction["choices"][0]["delta"]["content"]:
                     self.response_panel.value += prediction["choices"][0]["delta"]["content"]
-                elif isinstance(prediction, StreamResponse):
+                elif isinstance(prediction, StreamResponse) or hasattr(prediction, "chunk"):
                     self.response_panel.value += str(prediction.chunk)
-                elif isinstance(prediction, Prediction):
+                elif isinstance(prediction, Prediction) or hasattr(prediction, "answer"):
                     self.response_panel.value += str(prediction.answer)
-                elif isinstance(prediction, StatusMessage):
+                elif isinstance(prediction, StatusMessage) or hasattr(prediction, "message"):
                     self.status_display.text = self.status_text_prefix + str(prediction.message)
+        self.response_panel.value += "\n--\n\n"
+        return prediction
 
-        self.response_panel.value += "\n---\n\n"
-        return widget
+    async def generate_media(self, prompts, context_data, predictor_data):
+        from zodiac.toga.signatures import Predictor
+
+        return prediction
 
     async def halt(self, widget, **kwargs) -> None:
         """Stop processing prompt\n
@@ -381,7 +401,7 @@ class Interface(toga.App):
         asyncio.create_task(self.switch_tabs())
 
 
-def main(url: str):
+def main(url: str = "http://127.0.0.1:8188"):
     """The entry point for the application."""
     app = Interface(
         formal_name="Shadowbox",
@@ -391,6 +411,9 @@ def main(url: str):
         home_page="https://darkshapes.org",
         description=" A generative AI instrument. ",
     )
+
     app.icon = toga.Icon(path="resources/anomaly_128x")
-    app.main_loop()
-    app.graph_server = url
+    try:
+        app.main_loop()
+    except Exception as error_log:
+        print(error_log)

@@ -62,11 +62,16 @@ class TaskStream(Source):
                 class_name = package_bundle[0]
                 package_name = package_bundle[1].value[1].lower()
                 if package_name == "transformers":
+                    if isinstance(class_name, dict):
+                        class_name = next(iter(list(class_name)))
+                        print(class_name)
                     preformatted_task_data = await show_transformer_tasks(class_name)
-                else:
+                elif package_name == "diffusers":
                     code_name = get_code_names(class_name, package_name)
                     preformatted_task_data = show_tasks_for(code_name=code_name, class_name=class_name)
                     preformatted_task_data.sort()
+                elif package_name == "mflux":
+                    return ["Image", "Redux", "Kontext", "Depth", "Fill", "ConceptAttention", "ControlNet", "CavTon", "IC-Edit"]
                 class_snippets = snip_words | self.all_tasks
                 subtracted_name = class_name
                 for snip in class_snippets:
