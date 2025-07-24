@@ -20,9 +20,10 @@ class RegistryEntry(BaseModel):
     size: int
     tags: List[str]
     timestamp: int
+    path: Optional[str] = None
     api_kwargs: Optional[dict] = None
     mir: Optional[List[str]] = None
-    mir_family: Optional[List[str]] = None
+    model_family: Optional[List[str]] = None
     package: Optional[Union[PkgType, CueType]] = None
     tokenizer: Optional[Path] = None
 
@@ -70,8 +71,10 @@ class RegistryEntry(BaseModel):
         size: int,
         tags: List[str],
         cuetype: CueType,
+        path: Optional[str] = None,
         mir: Optional[List[str]] = None,
-        mir_family: Optional[List[str]] = None,
+        mir_data: Optional[dict] = None,
+        model_family: Optional[List[str]] = None,
         package: Optional[Union[PkgType, CueType]] = None,
         api_kwargs=None,
         timestamp: Optional[int] = None,
@@ -94,10 +97,12 @@ class RegistryEntry(BaseModel):
         entry = cls(
             model=model,
             size=size,
+            path=path,
             tags=tags,
             cuetype=cuetype,
             mir=mir,
-            mir_family=mir_family,
+            mir_data=mir_data,
+            model_family=model_family,
             package=package,
             api_kwargs=api_kwargs,
             timestamp=timestamp or int(datetime.now().timestamp()),  # Default to current time if not provided

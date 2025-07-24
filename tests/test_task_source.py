@@ -30,7 +30,7 @@ class RegistryEntryVoice:
         self.size = 247038024
         self.tags = ["automatic-speech-recognition"]
         self.timestamp = 1749921961
-        self.mir = ["info.ststm.moonshine", "*"]  # ["info.ststm.moonshine","tiny"] #needs to be populated from config file
+        self.mir = ["info.stst.moonshine", "*"]  # ["info.ststm.moonshine","tiny"] #needs to be populated from config file
         self.available_tasks = [("speech", "text")]
 
 
@@ -38,7 +38,7 @@ class RegistryEntryImg:
     def __init__(self):
         self.cuetype = CueType.HUB
         self.model = "stability-ai/stable-diffusion-xl-1.0-base"
-        self.mir = ["info.unet.stable-diffusion-xl", "*"]
+        self.mir = ["info.unet.stable-diffusion-xl-1", "*"]
         self.available_tasks = [("text", "image"), ("image", "image")]
 
 
@@ -71,7 +71,7 @@ def test_trace_mode_tasks():
     )  # == ["ControlNet", "ControlNetImg2Img", "ControlNetInpaint", "ControlNetPAG", "ControlNetPAGImg2Img", "ControlNetUnion", "ControlNetUnionImg2Img", "ControlNetUnionInpaint", "Img2Img", "Inpaint", "PAGImg2Img", "PAGInpaint"]
 
 
-def test_trace_tf_tasks():
+def test_trace_transformer_tasks():
     entry = RegistryEntryVoice()
     task_stream = TaskStream()
     loop = asyncio.get_event_loop()

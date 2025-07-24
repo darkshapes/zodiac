@@ -23,8 +23,8 @@ async def main():
     nx.draw_networkx_nodes(nx_graph, pos, node_size=700)
 
     # edges
-    print(nx_graph.edges())
-    print(nx_graph.adjacency())
+    # print(nx_graph.edges())
+    # print(nx_graph.adjacency())
     path = nx.bidirectional_shortest_path(nx_graph, "image", "speech")
     path_list = [nx_graph[path[x]][path[x + 1]] for x in range(len(path) - 1)]
     nx.draw_networkx_edges(nx_graph, pos, edgelist=nx_graph.edges(), width=6)

@@ -7,7 +7,11 @@ import os
 import networkx as nx
 from typing import Optional
 from nnll.monitor.file import dbug, dbuq
-from zodiac.providers.pools import register_models  # leaving here for mocking
+
+try:
+    from zodiac.providers.pools import register_models  # leaving here for mocking
+except Exception as error_log:
+    print(error_log)
 
 sys.path.append(os.getcwd())
 nfo = sys.stderr.write

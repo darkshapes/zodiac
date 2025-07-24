@@ -224,3 +224,4 @@ tests/log/
 # Misc logs
 result.json
 textual.log
+.DS_Store
