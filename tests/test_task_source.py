@@ -38,7 +38,7 @@ class RegistryEntryImg:
     def __init__(self):
         self.cuetype = CueType.HUB
         self.model = "stability-ai/stable-diffusion-xl-1.0-base"
-        self.mir = ["info.unet.stable-diffusion-xl", "*"]
+        self.mir = ["info.unet.stable-diffusion-xl-1", "*"]
         self.available_tasks = [("text", "image"), ("image", "image")]
 
 

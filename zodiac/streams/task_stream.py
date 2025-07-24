@@ -31,8 +31,8 @@ class TaskStream(Source):
     async def set_filter_type(self, mode_in: str = "image", mode_out: str = "image") -> None:
         """Filter class items by modality
         :param mode_in: Input modality operation, defaults to "image"
-        :param mode_out: Output modality operation, defaults to "image"
-        """
+        :param mode_out: Output modality operation, defaults to "image"""
+
         self.tasks = None
         self.exclude = None
         self.tasks = set()
@@ -57,6 +57,7 @@ class TaskStream(Source):
 
         snip_words: Set[str] = {"Model", "PreTrained", "ForConditionalGeneration", "Pipeline", "For"}
         if entry.mir:
+            print(entry.mir)
             package_bundle = await find_package(entry)
             if package_bundle:
                 class_name = package_bundle[0]
@@ -64,12 +65,13 @@ class TaskStream(Source):
                 if package_name == "transformers":
                     if isinstance(class_name, dict):
                         class_name = next(iter(list(class_name)))
-                        print(class_name)
+                        # print(class_name)
                     preformatted_task_data = await show_transformer_tasks(class_name)
                 elif package_name == "diffusers":
                     code_name = get_code_names(class_name, package_name)
                     preformatted_task_data = show_tasks_for(code_name=code_name, class_name=class_name)
                     preformatted_task_data.sort()
+                    print(preformatted_task_data)
                 elif package_name == "mflux":
                     return ["Image", "Redux", "Kontext", "Depth", "Fill", "ConceptAttention", "ControlNet", "CavTon", "IC-Edit"]
                 class_snippets = snip_words | self.all_tasks
