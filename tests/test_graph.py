@@ -8,7 +8,6 @@ import datetime
 from pathlib import PosixPath
 from unittest import mock
 import pytest
-from zodiac.graph import IntentProcessor
 from zodiac.providers.constants import VALID_CONVERSIONS
 from nnll.monitor.console import nfo
 
@@ -177,12 +176,22 @@ def test_mocked_hub(mock_hub_data):
     assert new_list[0][1] == 9335526346
 
 
-def test_create_graph(mock_ollama_data, mock_hub_data, mock_ollama_show):
+# difficulty mocking this atm
+async def test_create_graph(mock_ollama_data, mock_hub_data, mock_ollama_show):
     """Run test of graph creation"""
     from zodiac.providers.pools import register_models
+    from zodiac.graph import IntentProcessor
+    import asyncio
 
     int_proc = IntentProcessor()
-    nx_graph = int_proc.calc_graph(register_models())
+    # task = asyncio.create_task(register_models())
+    # if not task.done():
+    #     asyncio.sleep(2)
+    data = await register_models()
+    if not data:
+        asyncio.sleep(2)
+    nx_graph = int_proc.calc_graph(data)
+    task.result()
     nfo(list(nx_graph))
     nfo(list(VALID_CONVERSIONS))
     assert list(nx_graph) == VALID_CONVERSIONS

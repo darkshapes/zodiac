@@ -8,7 +8,7 @@ pyproject.toml
 pytest.ini
 uv.lock
 .github/workflows/zodiac.yml
-img_src/screenshot.png
+img_src/screenshot07-14.png
 img_src/zodiac_dark_bg.png
 img_src/zodiac_dark_stealth.png
 img_src/zodiac_light_stealth.png
@@ -56,6 +56,7 @@ zodiac/console/voice_panel.py
 zodiac/providers/__init__.py
 zodiac/providers/constants.py
 zodiac/providers/cuetype.json
+zodiac/providers/identity.py
 zodiac/providers/pools.py
 zodiac/providers/registry_entry.py
 zodiac/streams/__init__.py
