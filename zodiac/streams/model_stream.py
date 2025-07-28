@@ -12,7 +12,7 @@ class ModelStream(Source):
 
         self._graph = {}
         self._graph = IntentProcessor()
-        self._graph.calc_graph()
+        await self._graph.calc_graph()
 
     async def show_edges(self, target: bool = False) -> List[str]:
         """Retrieve and sort edges from the intent graph.\n

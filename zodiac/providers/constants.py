@@ -181,7 +181,8 @@ class PkgType(BaseEnum):
     IMAGE_GEN_AUX: tuple = (has_api("IMAGE_GEN_AUX"), "IMAGE_GEN_AUX", ["huggingface/image_gen_aux"])
     JAX: tuple = (has_api("JAX"), "JAX", [])
     KERAS: tuple = (has_api("KERAS"), "KERAS", [])
-    LUMINA_MGPT: tuple = (has_api("INFERENCE_SOLVER"), "INFERENCE_SOLVER", "Alpha-VLLM/Lumina-mGPT")
+    LLAMA: tuple = (has_api("LLAMA_CPP"), "LLAMA_CPP", [])
+    LUMINA_MGPT: tuple = (has_api("INFERENCE_SOLVER"), "INFERENCE_SOLVER", ["Alpha-VLLM/Lumina-mGPT"])
     MFLUX: tuple = (has_api("MFLUX"), "MFLUX", [])  # "filipstrand/mflux"
     MLX_AUDIO: tuple = (CueType.check_type("MLX_AUDIO"), "MLX_AUDIO", [])  # Blaizzy/mlx-audio
     MLX_CHROMA: tuple = (has_api("CHROMA"), "CHROMA", ["exdysa/jack813-mlx-chroma"])
@@ -247,6 +248,7 @@ class ChipType(Enum):
                 [
                     PkgType.AUDIOGEN,
                     PkgType.PARLER_TTS,
+                    PkgType.LLAMA,
                     PkgType.HIDIFFUSION,
                     PkgType.SENTENCE_TRANSFORMERS,
                     PkgType.DIFFUSERS,

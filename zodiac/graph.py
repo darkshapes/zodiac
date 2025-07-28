@@ -7,11 +7,7 @@ import os
 import networkx as nx
 from typing import Optional
 from nnll.monitor.file import dbug, dbuq
-
-try:
-    from zodiac.providers.pools import register_models  # leaving here for mocking
-except Exception as error_log:
-    print(error_log)
+from zodiac.providers.pools import register_models  # leaving here for mocking
 
 sys.path.append(os.getcwd())
 nfo = sys.stderr.write
@@ -42,7 +38,7 @@ class IntentProcessor:
         self.intent_graph = intent_graph
         self.intent_graph.add_nodes_from(VALID_CONVERSIONS)
 
-    def calc_graph(self, registry_entries: Optional[list] = None) -> None:
+    async def calc_graph(self, registry_entries: Optional[list] = None) -> None:
         """Generate graph of coordinate pairs from valid conversions\n
         Model libraries are auto-detected from cache loading\n
         :param registry_data: Registry function or method of calling registry, defaults to
@@ -57,28 +53,25 @@ class IntentProcessor:
         """
         # import asyncio
 
-        try:
-            if not registry_entries:
-                registry_entries = register_models()
-            print("Building graph...")
+        if not registry_entries:
+            registry_entries = await register_models()
+        print("Building graph...")
 
-            if registry_entries is None:
-                nfo("Registry error, graph attributes not applied.")
-            elif len(self.intent_graph.edges) > 0:
-                nfo("Edges already calculated")
-                return self.intent_graph
-            else:
-                for model in registry_entries:
-                    try:
-                        self.intent_graph.add_edges_from(model.available_tasks, entry=model, weight=1.0)
-                    except AttributeError as error_log:
-                        dbug(error_log)
-                        nfo("Error: Registry initialized but not populated with data. Graph could not create edges.")
-
-            print("Complete {self.intent_graph}")
+        if registry_entries is None:
+            nfo("Registry error, graph attributes not applied.")
+        elif len(self.intent_graph.edges) > 0:
+            nfo("Edges already calculated")
             return self.intent_graph
-        except Exception as error_log:
-            print(error_log)
+        else:
+            for model in registry_entries:
+                try:
+                    self.intent_graph.add_edges_from(model.available_tasks, entry=model, weight=1.0)
+                except AttributeError as error_log:
+                    dbug(error_log)
+                    nfo("Error: Registry initialized but not populated with data. Graph could not create edges.")
+
+        print("Complete {self.intent_graph}")
+        return self.intent_graph
 
     # @debug_monitor
     def set_path(self, mode_in: str, mode_out: str) -> None:

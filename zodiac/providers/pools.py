@@ -39,14 +39,15 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
             print(f"Pooling error: '{error_log}'")
             return entries
         base_model = meta.base_model if hasattr("meta", "base_model") else None
-        mir_tag, mir_data = await model_id.tag_model(repo.repo_id, base_model)
-        if not mir_tag:
-            try:
-                mir_tag, pkg_type = await model_id.find_model_type(repo)
-            except Exception as error_log:
-                print(f"error_log  {error_log}")
+        mir_tag = mir_db.find_path(field="repo", target=repo.repo_id)
+        if mir_tag:
+            mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
         else:
-            print(f"mir tag not found for {repo.repo_id}")
+            mir_tag, mir_data = await model_id.tag_model(repo.repo_id, base_model)
+        if not mir_tag:
+            mir_tag, pkg_type = await model_id.find_model_type(repo)
+            if not mir_tag:
+                print(f"mir tag not found for {repo.repo_id}")
         if meta:
             if hasattr(meta, "tags"):
                 tags.extend(meta.tags)
@@ -95,11 +96,8 @@ async def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[
             gguf_arch = model.details.family
         mir_tag = None
         mir_data = None
-        try:
-            mir_tag, mir_data = await model_id.tag_model(gguf_arch, model.model)
-            print(f"no tag for {model.model}") if not mir_tag else print(mir_tag)
-        except Exception as error_log:
-            print(error_log)
+        mir_tag, mir_data = await model_id.tag_model(gguf_arch, model.model)
+        print(f"no tag for {model.model}") if not mir_tag else print(f"{mir_tag} ollama search")
         entry = RegistryEntry.create_entry(
             model=f"{api_data[CueType.OLLAMA.value[1]].get('prefix')}{model.model}",
             size=model.size.real,
