@@ -46,7 +46,6 @@ class CueType(BaseEnum):
     OLLAMA: tuple = (has_api("OLLAMA"), "OLLAMA")
     HUB: tuple = (has_api("HUB"), "HUB")
     LM_STUDIO: tuple = (has_api("LM_STUDIO"), "LM_STUDIO")
-    # CORTEX: tuple = (has_api("CORTEX"), "CORTEX")
     LLAMAFILE: tuple = (has_api("LLAMAFILE"), "LLAMAFILE")
     VLLM: tuple = (has_api("VLLM"), "VLLM")
 

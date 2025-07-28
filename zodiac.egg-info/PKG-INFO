@@ -29,11 +29,28 @@ Classifier: License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)
 Classifier: Operating System :: OS Independent
 Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
 Classifier: Topic :: Scientific/Engineering :: Image Processing
+Classifier: Topic :: Multimedia
+Classifier: Topic :: Multimedia :: Graphics
+Classifier: Topic :: Multimedia :: Graphics :: Editors
+Classifier: Topic :: Multimedia :: Graphics :: Graphics Conversion
+Classifier: Topic :: Multimedia :: Graphics :: Presentation
+Classifier: Topic :: Multimedia :: Graphics :: Viewers
+Classifier: Topic :: Multimedia :: Sound/Audio
+Classifier: Topic :: Multimedia :: Sound/Audio :: Conversion
+Classifier: Topic :: Multimedia :: Sound/Audio :: Editors
+Classifier: Topic :: Multimedia :: Sound/Audio :: Mixers
+Classifier: Topic :: Multimedia :: Sound/Audio :: Players
+Classifier: Topic :: Multimedia :: Video
+Classifier: Topic :: Multimedia :: Video :: Capture
+Classifier: Topic :: Multimedia :: Video :: Conversion
+Classifier: Topic :: Multimedia :: Video :: Display
+Classifier: Topic :: Multimedia :: Video :: Non-Linear Editor
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: dspy>=2.6.27
 Requires-Dist: litellm>=1.72.0
+Requires-Dist: tokenizers==0.21.2
 Requires-Dist: networkx>=3.5
 Requires-Dist: sounddevice>=0.5.2
 Requires-Dist: soundfile>=0.13.1
@@ -74,7 +91,7 @@ Dynamic: license-file
 
 ### [ [Windows](https://github.com/darkshapes/sdbx/wiki/Develop) | [MacOS](https://github.com/darkshapes/sdbx/wiki/Develop) | [Linux](https://github.com/darkshapes/sdbx/wiki/Develop) ]
 
-https://github.com/user-attachments/assets/1b3a231a-8d79-4502-8447-c394eca13afb
+![A dark theme screenshot of the image](img_src/screenshot07-14.png)
  <hr>
  </div>
 Zodiac is a creative research platform for Generative AI. Guided by text, audio, or files, it identifies your models (text, image, speech, video, anything) and constructs generative AI workflows, eliminating the need for technical expertise in building action chains. It empowers users to focus on creating art, storytelling, research, and tool development, rather than the mechanics of creation, enabling exploration of emerging technology on virtually any system immediately, rather than after months of study.
@@ -98,34 +115,7 @@ Zodiac is a creative research platform for Generative AI. Guided by text, audio,
 <br>
 <details><summary>
 
-Supported HuggingFace Models list </summary>
-
-- Alpha-VLLM/Lumina-Image-2.0
-- black-forest-labs/FLUX.1-dev | schnell
-- fal/AuraFlow-v0.3
-- Freepik/flux.1-lite-8B
-- Kwai-Kolors/Kolors-diffusers
-- PixArt-alpha/PixArt-Sigma-XL-2-1024-MS
-- playgroundai/playground-v2.5-1024px | aesthetic
-- shuttleai/shuttle-3.1-diffusion/aesthetic
-- stabilityai/stable-diffusion-3.5-large | medium
-- stabilityai/stable-diffusion-xl-base | refiner-1.0
-- stabilityai/stable-cascade
-- THUDM/CogView3-Plus-3B
-- THUDM/CogView4-6B
-
-More soon..<br>
-- [ ] facebook/audiogen-medium
-- [ ] microsoft/Phi-4-multimodal-instruct
-- [ ] Alpha-VLLM/Lumina-mGPT-768
-- [ ] parler-tts/parler-tts-large-v1
-- [ ] ooutlierr/fuse-dit
-- [ ] yandex/stable-diffusion-3.5-alchemist
-- [ ] lodestones/Chroma
-- [ ] HiDream
-- [ ] TencentARC/flux-mini
-- [ ] Bytedance-Seed/Bagel
-</details>
+Supported models: 450
 
 ### [installation instructions link](https://github.com/darkshapes/sdbx/wiki/Develop)<br>
 

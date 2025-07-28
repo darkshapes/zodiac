@@ -4,6 +4,7 @@
 """Feed models to RegistryEntry class"""
 
 # pylint:disable=protected-access, no-member
+import asyncio
 from typing import Any, Callable, Dict, List, Optional
 
 from nnll.configure.constants import ExtensionType
@@ -12,12 +13,8 @@ from zodiac.providers.identity import ModelIdentity
 from zodiac.providers.registry_entry import RegistryEntry
 
 
-def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> List[RegistryEntry | None]:  # pylint:disable=unused-argument
-    """Collect models from huggingface_hub\n
-    :param mir_db: MIR information
-    :param api_data: API information
-    :param entries: Cumulative registry data
-    :return: List of additional registry entries"""
+async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> List[RegistryEntry | None]:
+    # pylint:disable=unused-argument
     from huggingface_hub import CacheNotFound, HFCacheInfo, repocard, scan_cache_dir
     from huggingface_hub.errors import EntryNotFoundError, LocalEntryNotFoundError, OfflineModeIsEnabled
     from requests import HTTPError
@@ -37,29 +34,34 @@ def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryE
         mir_data = None
         mir_tag = None
         try:
-            meta = repocard.RepoCard.load(repo.repo_id).data
+            meta = repocard.RepoCard.load(repo.repo_id)
         except (LocalEntryNotFoundError, EntryNotFoundError, HTTPError, OfflineModeIsEnabled) as error_log:
             print(f"Pooling error: '{error_log}'")
             return entries
         base_model = meta.base_model if hasattr("meta", "base_model") else None
-        try:
-            mir_tag, mir_data = model_id.tag_model(repo.repo_id, base_model)
-            print(mir_tag)
-        except Exception as error_log:
-            print(error_log)
-        print(mir_tag)
+        mir_tag = mir_db.find_path(field="repo", target=repo.repo_id)
+        if mir_tag:
+            mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
+        else:
+            mir_tag, mir_data = await model_id.tag_model(repo.repo_id, base_model)
+        if not mir_tag:
+            mir_tag, pkg_type = await model_id.find_model_type(repo)
+            if not mir_tag:
+                print(f"mir tag not found for {repo.repo_id}")
         if meta:
             if hasattr(meta, "tags"):
                 tags.extend(meta.tags)
             if hasattr(meta, "pipeline_tag"):
                 tags.append(meta.pipeline_tag)
-            library_name: str = meta.get("library_name")
-            if library_name:
-                library_name = library_name.replace("-", "_")
-                pkg_type = library_name.upper()
-        tokenizer = model_id.get_model_path(repo, "tokenizer.json")
-        if pkg_type and hasattr(PkgType, pkg_type):
-            pkg_type = getattr(PkgType, pkg_type)
+            if hasattr(meta, "get"):
+                library_name: str = meta.get("library_name")
+                if library_name:
+                    library_name = library_name.replace("-", "_")
+                    if pkg_type := library_name.upper():
+                        if hasattr(PkgType, pkg_type):
+                            pkg_type = getattr(PkgType, pkg_type)
+        tokenizer = await model_id.get_model_path(repo, "tokenizer.json")
+
         entry = RegistryEntry.create_entry(
             model=repo.repo_id,
             size=repo.size_on_disk,
@@ -78,12 +80,8 @@ def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryE
     return entries
 
 
-def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:
-    """Collect models from Ollama\n
-    :param mir_db: MIR information
-    :param api_data: API information
-    :param entries: Cumulative registry data
-    :return: `dict` of additional registry entries"""
+async def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:
+    # pylint:disable=unused-argument
     from ollama import ListResponse, show
     from ollama import list as ollama_list
 
@@ -98,11 +96,8 @@ def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Regist
             gguf_arch = model.details.family
         mir_tag = None
         mir_data = None
-        try:
-            mir_tag, mir_data = model_id.tag_model(gguf_arch, model.model)
-            print(mir_tag)
-        except Exception as error_log:
-            print(error_log)
+        mir_tag, mir_data = await model_id.tag_model(gguf_arch, model.model)
+        print(f"no tag for {model.model}") if not mir_tag else print(f"{mir_tag} ollama search")
         entry = RegistryEntry.create_entry(
             model=f"{api_data[CueType.OLLAMA.value[1]].get('prefix')}{model.model}",
             size=model.size.real,
@@ -120,12 +115,7 @@ def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Regist
     return entries
 
 
-def llamafile_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
-    """Collect models from Llamafile\n
-    :param mir_db: MIR information
-    :param api_data: API information
-    :param entries: Cumulative registry data
-    :return: `dict` of additional registry entries"""
+async def llamafile_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     from openai import OpenAI
 
     model_id = ModelIdentity()
@@ -151,12 +141,7 @@ def llamafile_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
     return entries
 
 
-def vllm_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
-    """Collect models from VLLM\n
-    :param mir_db: MIR information
-    :param api_data: API information
-    :param entries: Cumulative registry data
-    :return: `dict` of additional registry entries"""
+async def vllm_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
     from openai import OpenAI
 
     model_id = ModelIdentity()
@@ -169,48 +154,41 @@ def vllm_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Registry
         mir_tag = None
         if id_name:
             mir_tag = mir_tag = model_id.tag_model(id_name)
-        if mir_tag:
-            mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
+            if mir_tag:
+                mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
         entry = RegistryEntry.create_entry(
             model=f"{api_data[CueType.VLLM.value[1]].get('prefix')}{id_name}",
-            size=0,
+            size=model._data.size_bytes,
             tags=["text"],
             mir=mir_tag,
             mir_data=mir_data,
             cuetype=CueType.VLLM,
-            package=PkgType.VLLM,
-            api_kwargs=config["api_kwargs"],
-            timestamp=int(model.created),
+            api_kwargs={**config["api_kwargs"]},
+            timestamp=int(model.modified_at.timestamp()),
         )
         entries.append(entry)
     return entries
 
 
-def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:  # pylint:disable=unused-argument
-    """Collect models from LM STUDIO\n
-    :param mir_db: MIR information
-    :param api_data: API information
-    :param entries: Cumulative registry data
-    :return: `dict` of additional registry entries"""
-    from lmstudio import list_downloaded_models
+async def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> None:
+    from lmstudio import LMStudioClient
 
     model_id = ModelIdentity()
     entries = [] if not entries else entries
-    config = api_data[CueType.LM_STUDIO.value[1]]
-    cache_dir = list_downloaded_models()
-    for model in cache_dir:
+    client = LMStudioClient()
+    models = client.list_models()
+    for model in models:
         tags = []
-
-        if hasattr(model._data, "vision"):
-            tags.extend("vision", model._data.vision)
-        if hasattr(model._data, "trained_for_tool_use"):
-            tags.append(("tool", model._data.trained_for_tool_use))
+        if hasattr(model, "vision"):
+            tags.extend(["vision", model.vision])
+        if hasattr(model, "tool_use"):
+            tags.append(["tool", model.tool_use])
         mir_data = None
         mir_tag = None
         if hasattr(model, "architecture"):
-            mir_tag = mir_tag = model_id.tag_model(model.architecture)
-        if mir_tag:
-            mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
+            mir_tag = model_id.tag_model(model.architecture)
+            if mir_tag:
+                mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
         entry = RegistryEntry.create_entry(
             model=f"{api_data[CueType.LM_STUDIO.value[1]].get('prefix')}{model.model_key}",
             size=model._data.size_bytes,
@@ -225,12 +203,19 @@ def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
     return entries
 
 
-@CUETYPE_CONFIG.decorator
-def register_models(data: Optional[Dict[str, Any]] = None) -> List[RegistryEntry]:
+async def register_models(data: Optional[Dict[str, Any]] = None) -> List[RegistryEntry]:
     """
     Retrieve models from ollama server, local huggingface hub cache, local lmstudio cache & vllm.
     我們不應該繼續為LMStudio編碼。 歡迎貢獻者來改進它。 LMStudio is not OSS, but contributions are welcome.
     """
+
+    @CUETYPE_CONFIG.decorator
+    async def read_cuetype(data: Optional[Dict[str, Any]] = None) -> dict:
+        return data
+
+    if not data:
+        data = await read_cuetype()
+
     entries = []
     entry_map = {
         CueType.HUB.value: hub_pool,
@@ -242,7 +227,7 @@ def register_models(data: Optional[Dict[str, Any]] = None) -> List[RegistryEntry
     for cue_type, provider in entry_map.items():
         if cue_type[0]:
             api_data = data
-            entries = provider(api_data=api_data, mir_db=MIR_DB, entries=entries)
+            entries = await provider(api_data=api_data, mir_db=MIR_DB, entries=entries)
             # dbuq(entries)
-    print(entries)
+
     return sorted(entries, key=lambda x: x.timestamp, reverse=True)

@@ -7,11 +7,7 @@ import os
 import networkx as nx
 from typing import Optional
 from nnll.monitor.file import dbug, dbuq
-
-try:
-    from zodiac.providers.pools import register_models  # leaving here for mocking
-except Exception as error_log:
-    print(error_log)
+from zodiac.providers.pools import register_models  # leaving here for mocking
 
 sys.path.append(os.getcwd())
 nfo = sys.stderr.write
@@ -27,7 +23,7 @@ class IntentProcessor:
 
     def __init__(self, intent_graph: nx.MultiDiGraph = nx.MultiDiGraph()) -> None:
         """
-        Create instance of graph processor & initialize objectives for tracing paths\n
+        Create instance of graph processor & initialize objectieves for tracing paths\n
         :param nx_graph:Preassembled graph of models to substitute, default uses nx.MultiDiGraph()
 
         ========================================================\n
@@ -42,7 +38,7 @@ class IntentProcessor:
         self.intent_graph = intent_graph
         self.intent_graph.add_nodes_from(VALID_CONVERSIONS)
 
-    def calc_graph(self, registry_entries: Optional[list] = None) -> None:
+    async def calc_graph(self, registry_entries: Optional[list] = None) -> None:
         """Generate graph of coordinate pairs from valid conversions\n
         Model libraries are auto-detected from cache loading\n
         :param registry_data: Registry function or method of calling registry, defaults to
@@ -55,10 +51,12 @@ class IntentProcessor:
         Thus: Because of the randomness of B, the set P is unlikely to construct a complete graph attached all available points.\n
         Therefore : While we can trust a node exists, we **CANNOT** trust the system has an edge to reach it\n
         """
+        # import asyncio
 
         if not registry_entries:
-            registry_entries = register_models()
-        nfo("Building graph...")
+            registry_entries = await register_models()
+        print("Building graph...")
+
         if registry_entries is None:
             nfo("Registry error, graph attributes not applied.")
         elif len(self.intent_graph.edges) > 0:
@@ -71,7 +69,8 @@ class IntentProcessor:
                 except AttributeError as error_log:
                     dbug(error_log)
                     nfo("Error: Registry initialized but not populated with data. Graph could not create edges.")
-        nfo(f"Complete {self.intent_graph}")
+
+        print("Complete {self.intent_graph}")
         return self.intent_graph
 
     # @debug_monitor
@@ -88,6 +87,7 @@ class IntentProcessor:
             # In practice, this means often the same model can be used to compute prompt input and response output
             # Unfortunately, this doesn't always work in all modalities, ex. Image to Image.
             # This condition is meant to solve the case of non-text self-loop edge being an incomplete transformation
+
             if mode_in == mode_out and mode_in != "text":  # Its not a great solution, but it works for the moment
                 orig_mode_out = mode_out
                 mode_out = "text"
@@ -97,6 +97,7 @@ class IntentProcessor:
                 self.coord_path = nx.bidirectional_shortest_path(self.intent_graph, mode_in, mode_out)
                 if len(self.coord_path) == 1:
                     self.coord_path.append(mode_out)  # this behaviour likely to change in future
+
         else:
             nfo("No Path available...")
 
@@ -104,6 +105,7 @@ class IntentProcessor:
         """Populate models list for text fields
         Check if model has been adjusted, if so adjust list
         1.0 weight bottom, <1.0 weight top"""
+
         try:
             self.registry_entries = self.pull_path_entries(self.intent_graph, self.coord_path)
         except KeyError as error_log:
@@ -111,6 +113,7 @@ class IntentProcessor:
             return ["", ""]
         idx = 0
         self.models = []
+
         if self.registry_entries:
             for edge, registry in enumerate(self.registry_entries):
                 model = registry["entry"].model
@@ -134,6 +137,7 @@ class IntentProcessor:
         """
 
         self.weight_idx = self.weight_idx or []
+
         try:
             if not nx.has_path(self.intent_graph, mode_in, mode_out):
                 raise KeyError()
@@ -142,9 +146,11 @@ class IntentProcessor:
             nfo(f"Failed to adjust weight of '{edge_number}' within registry contents '{self.intent_graph} {mode_in} {mode_out}'. Model or registry entry not found. ")
             dbug(error_log)
             return self.set_registry_entries()
+
         weight = self.intent_graph[mode_in][mode_out][edge_number]["weight"]
         item = (os.path.basename(model), edge_number)
         nfo(f" model : {model}  weight: {weight} ")
+
         if weight < 1.0:
             self.intent_graph[mode_in][mode_out][edge_number]["weight"] = round(weight + 0.1, 1)
             self.models = [((f"*{os.path.basename(model)}", edge_number))]
