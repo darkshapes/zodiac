@@ -7,58 +7,53 @@ from zodiac.providers.constants import VALID_CONVERSIONS
 from test_graph import mock_hub_data, mock_ollama_data
 
 
-class TestGraph(TestCase):
-    def setUp(self):
-        from zodiac.graph import IntentProcessor
+@pytest.mark.asyncio(loop_scope="session")
+async def test_flow_builder_fail_registry(mode_in: str = "text", image: str = "speech"):
+    from zodiac.graph import IntentProcessor
 
-        self.graph = IntentProcessor()
+    graph = IntentProcessor()
+    assert hasattr(graph.intent_graph, "size") and graph.intent_graph.size() == 0
+    assert not graph.coord_path
+    assert not graph.registry_entries
+    assert not graph.models
+    model_data = {"useless": "data"}
+    await graph.calc_graph(model_data)
+    assert not graph.coord_path
+    assert not graph.registry_entries
+    assert not graph.models
+    model_data_len = 0
+    assert f"{graph.intent_graph}" == f"MultiDiGraph with {len(VALID_CONVERSIONS)} nodes and {model_data_len} edges"
+    # assert f"{graph.intent_graph}" == f"MultiDiGraph with {len(VALID_CONVERSIONS)} nodes and 0 edges"
+    import gc
 
-    def test_flow_builder_fail_registry(self, mode_in: str = "text", image: str = "speech"):
-        assert hasattr(self.graph.intent_graph, "size") and self.graph.intent_graph.size() == 0
-        assert not self.graph.coord_path
-        assert not self.graph.registry_entries
-        assert not self.graph.models
-        model_data = {"useless": "data"}
-        self.graph.calc_graph(model_data)
-        assert not self.graph.coord_path
-        assert not self.graph.registry_entries
-        assert not self.graph.models
-        model_data_len = 0
-        assert f"{self.graph.intent_graph}" == f"MultiDiGraph with {len(VALID_CONVERSIONS)} nodes and {model_data_len} edges"
-        # assert f"{graph.intent_graph}" == f"MultiDiGraph with {len(VALID_CONVERSIONS)} nodes and 0 edges"
-        import gc
-
-        self.graph = None
-        gc.collect()
+    gc.collect()
+    return graph
 
 
-class TestGraph_2(TestCase):
-    def setUp(self):
-        import gc
+@pytest.mark.asyncio(loop_scope="session")
+async def test_flow_builder_fail_edge_create(mode_in: str = "text", mode_out: str = "image"):
+    import gc
 
-        gc.collect()
-        from zodiac.graph import IntentProcessor
+    gc.collect()
+    from zodiac.graph import IntentProcessor
 
-        self.graph = IntentProcessor()
+    graph = IntentProcessor()
+    await graph.calc_graph(registry_entries={"useless": "data"})
+    assert hasattr(graph.intent_graph, "size") and graph.intent_graph.size() == 0
+    assert f"{graph.intent_graph}" == f"MultiDiGraph with {len(VALID_CONVERSIONS)} nodes and 0 edges"
+    assert not graph.coord_path
+    graph.set_path(mode_in=mode_in, mode_out=mode_out)
+    nfo(graph.coord_path)
+    assert not graph.coord_path
+    nfo(graph.registry_entries)
+    assert not graph.registry_entries
+    graph.set_registry_entries()
+    nfo(graph.registry_entries)
+    assert not graph.registry_entries
+    nfo(graph.models)
+    assert not graph.models
+    graph.edit_weight("flux", "text", "image")
+    import gc
 
-    def test_flow_builder_fail_edge_create(self, mode_in: str = "text", mode_out: str = "image"):
-        # graph.calc_graph()
-        self.graph.calc_graph(registry_entries={"useless": "data"})
-        assert hasattr(self.graph.intent_graph, "size") and self.graph.intent_graph.size() == 0
-        assert f"{self.graph.intent_graph}" == f"MultiDiGraph with {len(VALID_CONVERSIONS)} nodes and 0 edges"
-        assert not self.graph.coord_path
-        self.graph.set_path(mode_in=mode_in, mode_out=mode_out)
-        nfo(self.graph.coord_path)
-        assert not self.graph.coord_path
-        nfo(self.graph.registry_entries)
-        assert not self.graph.registry_entries
-        self.graph.set_registry_entries()
-        nfo(self.graph.registry_entries)
-        assert not self.graph.registry_entries
-        nfo(self.graph.models)
-        assert not self.graph.models
-        self.graph.edit_weight("flux", "text", "image")
-        self.graph = None
-        import gc
-
-        gc.collect()
+    gc.collect()
+    return graph

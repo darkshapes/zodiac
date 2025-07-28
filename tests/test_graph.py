@@ -8,6 +8,7 @@ import datetime
 from pathlib import PosixPath
 from unittest import mock
 import pytest
+import pytest_asyncio
 from zodiac.providers.constants import VALID_CONVERSIONS
 from nnll.monitor.console import nfo
 
@@ -42,7 +43,7 @@ class ListResponse:
         self.models = models
 
 
-@pytest.fixture(scope="module")
+@pytest_asyncio.fixture(loop_scope="session")
 def mock_ollama_data():
     """Mock ollama response"""
     with mock.patch("ollama.list", new_callable=mock.MagicMock()) as mock_get_registry_data:
@@ -82,8 +83,8 @@ class ShowResponse:
         self.modelinfo = {"general.architecture": "🤡"}
 
 
-@pytest.fixture(scope="module")
-def mock_ollama_show():
+@pytest_asyncio.fixture(loop_scope="session")
+async def mock_ollama_show():
     """Mock ollama response"""
     with mock.patch("ollama.show", autospec=True) as mock_the_fk_up:
         data = ShowResponse()
@@ -114,8 +115,8 @@ class CachedRepoInfo:
         self.last_modified = last_modified
 
 
-@pytest.fixture(scope="module")
-def mock_hub_data():
+@pytest_asyncio.fixture(loop_scope="session")
+async def mock_hub_data():
     """Mock hub data"""
     with mock.patch("huggingface_hub.scan_cache_dir", new_callable=mock.MagicMock()) as mock_get_registry_data:
         data = HFCacheInfo(
@@ -151,7 +152,7 @@ def mock_hub_data():
         yield mock_get_registry_data
 
 
-def test_mocked_ollama(mock_ollama_data, mock_ollama_show):
+async def test_mocked_ollama(mock_ollama_data, mock_ollama_show):
     """Check if mocking ollama correctly"""
     result = mock_ollama_data()
 
@@ -161,7 +162,7 @@ def test_mocked_ollama(mock_ollama_data, mock_ollama_show):
     assert next_model.size == 29565711760
 
 
-def test_mocked_hub(mock_hub_data):
+async def test_mocked_hub(mock_hub_data):
     """Check if mocking hub correctly.
     `frozenset` is converted to a sorted list
     Otherwise hashed return becomes unordered"""
@@ -176,7 +177,7 @@ def test_mocked_hub(mock_hub_data):
     assert new_list[0][1] == 9335526346
 
 
-# difficulty mocking this atm
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_graph(mock_ollama_data, mock_hub_data, mock_ollama_show):
     """Run test of graph creation"""
     from zodiac.providers.pools import register_models
@@ -184,14 +185,10 @@ async def test_create_graph(mock_ollama_data, mock_hub_data, mock_ollama_show):
     import asyncio
 
     int_proc = IntentProcessor()
-    # task = asyncio.create_task(register_models())
-    # if not task.done():
-    #     asyncio.sleep(2)
     data = await register_models()
     if not data:
         asyncio.sleep(2)
     nx_graph = int_proc.calc_graph(data)
-    task.result()
     nfo(list(nx_graph))
     nfo(list(VALID_CONVERSIONS))
     assert list(nx_graph) == VALID_CONVERSIONS
