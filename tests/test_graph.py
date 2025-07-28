@@ -188,7 +188,7 @@ async def test_create_graph(mock_ollama_data, mock_hub_data, mock_ollama_show):
     data = await register_models()
     if not data:
         asyncio.sleep(2)
-    nx_graph = int_proc.calc_graph(data)
+    nx_graph = await int_proc.calc_graph(data)
     nfo(list(nx_graph))
     nfo(list(VALID_CONVERSIONS))
     assert list(nx_graph) == VALID_CONVERSIONS
