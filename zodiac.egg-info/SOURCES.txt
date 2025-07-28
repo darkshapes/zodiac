@@ -14,6 +14,7 @@ img_src/zodiac_dark_stealth.png
 img_src/zodiac_light_stealth.png
 tests/test_chiptype.py
 tests/test_cuetype.py
+tests/test_find_model_type.py
 tests/test_find_package.py
 tests/test_flow.py
 tests/test_flow_second.py

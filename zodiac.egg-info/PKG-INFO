@@ -50,6 +50,7 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: dspy>=2.6.27
 Requires-Dist: litellm>=1.72.0
+Requires-Dist: tokenizers==0.21.2
 Requires-Dist: networkx>=3.5
 Requires-Dist: sounddevice>=0.5.2
 Requires-Dist: soundfile>=0.13.1

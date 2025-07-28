@@ -999,7 +999,7 @@ wheels = [
 [[package]]
 name = "diffusers"
 version = "0.35.0.dev0"
-source = { git = "https://github.com/huggingface/diffusers#3d2f8ae99b88c50a340dd879ec7f44981ffd12fe" }
+source = { git = "https://github.com/huggingface/diffusers#284150449d805ab01aeed18fc3bae930e14fa70f" }
 dependencies = [
     { name = "filelock" },
     { name = "huggingface-hub" },
@@ -2998,8 +2998,8 @@ wheels = [
 
 [[package]]
 name = "nnll"
-version = "0.1.dev677+g2dc8958"
-source = { git = "https://github.com/darkshapes/nnll?rev=main#2dc8958e00223b1b708b21fc33946b3ce6e3426d" }
+version = "0.1.dev681+g6eeabee"
+source = { git = "https://github.com/darkshapes/nnll?rev=main#6eeabee7f43a7522005b10ab8571073ab4443e94" }
 dependencies = [
     { name = "accelerate" },
     { name = "aiofiles" },
@@ -5677,27 +5677,27 @@ wheels = [
 
 [[package]]
 name = "tokenizers"
-version = "0.21.4.dev0"
+version = "0.21.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "huggingface-hub" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4f/4e/6efc93d07add459f0800b496046e048907030eeebf56a755d4fcbf5d0d54/tokenizers-0.21.4.dev0.tar.gz", hash = "sha256:1dedf85cae0d58c74fc8023d58f28b510996a9c79dfc62136639d5c3ace6bdc0", size = 352282, upload-time = "2025-07-04T12:01:37.424Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ab/2d/b0fce2b8201635f60e8c95990080f58461cc9ca3d5026de2e900f38a7f21/tokenizers-0.21.2.tar.gz", hash = "sha256:fdc7cffde3e2113ba0e6cc7318c40e3438a4d74bbc62bf04bcc63bdfb082ac77", size = 351545, upload-time = "2025-06-24T10:24:52.449Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c9/85/b93e68532f53efdeb16d0a4cd40ce8e0c8c701d0c7c279ce02ec986b7b44/tokenizers-0.21.4.dev0-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:2f11947acd633175c0097184d3616a5708ba16b0e608b729fb9a668ceb84412f", size = 2864738, upload-time = "2025-07-04T12:01:28.364Z" },
-    { url = "https://files.pythonhosted.org/packages/fb/19/01b89568b4788c5efa03bd9abaf6cd4b3a5c987511d108b3a7aba0f035be/tokenizers-0.21.4.dev0-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:db4d5148e904006242bc6a83a9e2778389b231c5782f7627f1e768b0b1eff964", size = 2731650, upload-time = "2025-07-04T12:01:26.673Z" },
-    { url = "https://files.pythonhosted.org/packages/e6/eb/7cae36ef668d478138ab2a1b757efc9fc09b913d774d397d25986c9ee945/tokenizers-0.21.4.dev0-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:8348601d6dda43a8878f48f07ef356070317f24c58984deb946c3789df99563c", size = 3012808, upload-time = "2025-07-04T12:01:16.119Z" },
-    { url = "https://files.pythonhosted.org/packages/ff/63/00ab414f73fc0bf1579622f917e585a5e4229f16a4bf1e6f07833179b745/tokenizers-0.21.4.dev0-cp39-abi3-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:587ec122c84aa2237d82ec86479e772f441671ee88587a8b673d471b5f69eb71", size = 2938134, upload-time = "2025-07-04T12:01:19.021Z" },
-    { url = "https://files.pythonhosted.org/packages/60/2c/86197c8e9503ce2f29a95af03a4ad31451dab04afa29db89a8fbabc887f7/tokenizers-0.21.4.dev0-cp39-abi3-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:b6ea5b7ac38274e05587929b1d4f86e4c05304c91e2f3ec05510c6d1f424d035", size = 3248144, upload-time = "2025-07-04T12:01:23.918Z" },
-    { url = "https://files.pythonhosted.org/packages/da/a5/afd87899925f02703f99710ed5d2304be84220e5aa9d42a51a5b42f1c1eb/tokenizers-0.21.4.dev0-cp39-abi3-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:1515ee73fb66d77805ea5a226921c790fb7013c3d1b7c89ba329f10c59fcb69e", size = 3428707, upload-time = "2025-07-04T12:01:20.73Z" },
-    { url = "https://files.pythonhosted.org/packages/2d/e8/43d4c0c319d3a90f1e1be6e8b438b4ccb0050d07a00d9b038f832c25b997/tokenizers-0.21.4.dev0-cp39-abi3-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:7847a14ea2508b021797f9099694425df7ef07275b46b4bd5a3ea8bb0d075a7d", size = 3192848, upload-time = "2025-07-04T12:01:22.311Z" },
-    { url = "https://files.pythonhosted.org/packages/a4/f7/f4253f6d82cce668a39fd018c05e28d7786a15394cffbf0caeed1deb2608/tokenizers-0.21.4.dev0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5f1fa2acd44f27b0caaf0f3a07b93b8daa2601486eee526ebd6dd3c696048e79", size = 3115834, upload-time = "2025-07-04T12:01:25.33Z" },
-    { url = "https://files.pythonhosted.org/packages/f5/4f/c21ef22c4d6ea7bad0bcc79be4be3d13e259b4f82ad22bcb7504698c661e/tokenizers-0.21.4.dev0-cp39-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:21ecf0d02607207d7339a48cb30f215da5f43c495dd5310666aebe8464828f58", size = 9087920, upload-time = "2025-07-04T12:01:29.707Z" },
-    { url = "https://files.pythonhosted.org/packages/59/f6/1a6821e3a5b8dda3be0c7f02c526119a39275c203f26365903a5f05eb29d/tokenizers-0.21.4.dev0-cp39-abi3-musllinux_1_2_armv7l.whl", hash = "sha256:485a6bdb4f753289d3068aca8a143614baade79f1441a97225fc97e1763e8bba", size = 9053683, upload-time = "2025-07-04T12:01:31.594Z" },
-    { url = "https://files.pythonhosted.org/packages/d9/db/cf8a05f0d67607633156f1663fe6b6f75d1cb38874a3cf46db2a9763a270/tokenizers-0.21.4.dev0-cp39-abi3-musllinux_1_2_i686.whl", hash = "sha256:12d5b4decf63a7393cf10494282164797d2a1f9e70e95b0960e8e32a3993cc6d", size = 9297385, upload-time = "2025-07-04T12:01:33.413Z" },
-    { url = "https://files.pythonhosted.org/packages/a5/73/b3b3fe4a989fff4fb66a33261e534205931cb03e74e4fd6c2168153d01af/tokenizers-0.21.4.dev0-cp39-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:5351ebc4522bf7965129a54706e030a24491526726a244fe7552e9bea0d5fec2", size = 9464148, upload-time = "2025-07-04T12:01:35.501Z" },
-    { url = "https://files.pythonhosted.org/packages/bb/ba/ac9ae487b85450e470b9ff03e5bc9f3c98936d0738299f8ebc2ac3d63d65/tokenizers-0.21.4.dev0-cp39-abi3-win32.whl", hash = "sha256:ceca51b3922325bffd63d06c42f0c8f1ca5667463f78b1fdf5fdb2d4e7cf66f5", size = 2330769, upload-time = "2025-07-04T12:01:39.876Z" },
-    { url = "https://files.pythonhosted.org/packages/5e/86/a1954d11d0a635a5596bd42b9746ea81f02fdbb97831fee29ef73652594c/tokenizers-0.21.4.dev0-cp39-abi3-win_amd64.whl", hash = "sha256:7dc8a83d21035b38ded1e74b29d6d85a686bc5056c30c92ac1cf348de9a1625d", size = 2506854, upload-time = "2025-07-04T12:01:38.493Z" },
+    { url = "https://files.pythonhosted.org/packages/1d/cc/2936e2d45ceb130a21d929743f1e9897514691bec123203e10837972296f/tokenizers-0.21.2-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:342b5dfb75009f2255ab8dec0041287260fed5ce00c323eb6bab639066fef8ec", size = 2875206, upload-time = "2025-06-24T10:24:42.755Z" },
+    { url = "https://files.pythonhosted.org/packages/6c/e6/33f41f2cc7861faeba8988e7a77601407bf1d9d28fc79c5903f8f77df587/tokenizers-0.21.2-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:126df3205d6f3a93fea80c7a8a266a78c1bd8dd2fe043386bafdd7736a23e45f", size = 2732655, upload-time = "2025-06-24T10:24:41.56Z" },
+    { url = "https://files.pythonhosted.org/packages/33/2b/1791eb329c07122a75b01035b1a3aa22ad139f3ce0ece1b059b506d9d9de/tokenizers-0.21.2-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4a32cd81be21168bd0d6a0f0962d60177c447a1aa1b1e48fa6ec9fc728ee0b12", size = 3019202, upload-time = "2025-06-24T10:24:31.791Z" },
+    { url = "https://files.pythonhosted.org/packages/05/15/fd2d8104faa9f86ac68748e6f7ece0b5eb7983c7efc3a2c197cb98c99030/tokenizers-0.21.2-cp39-abi3-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:8bd8999538c405133c2ab999b83b17c08b7fc1b48c1ada2469964605a709ef91", size = 2934539, upload-time = "2025-06-24T10:24:34.567Z" },
+    { url = "https://files.pythonhosted.org/packages/a5/2e/53e8fd053e1f3ffbe579ca5f9546f35ac67cf0039ed357ad7ec57f5f5af0/tokenizers-0.21.2-cp39-abi3-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:5e9944e61239b083a41cf8fc42802f855e1dca0f499196df37a8ce219abac6eb", size = 3248665, upload-time = "2025-06-24T10:24:39.024Z" },
+    { url = "https://files.pythonhosted.org/packages/00/15/79713359f4037aa8f4d1f06ffca35312ac83629da062670e8830917e2153/tokenizers-0.21.2-cp39-abi3-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:514cd43045c5d546f01142ff9c79a96ea69e4b5cda09e3027708cb2e6d5762ab", size = 3451305, upload-time = "2025-06-24T10:24:36.133Z" },
+    { url = "https://files.pythonhosted.org/packages/38/5f/959f3a8756fc9396aeb704292777b84f02a5c6f25c3fc3ba7530db5feb2c/tokenizers-0.21.2-cp39-abi3-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:b1b9405822527ec1e0f7d8d2fdb287a5730c3a6518189c968254a8441b21faae", size = 3214757, upload-time = "2025-06-24T10:24:37.784Z" },
+    { url = "https://files.pythonhosted.org/packages/c5/74/f41a432a0733f61f3d21b288de6dfa78f7acff309c6f0f323b2833e9189f/tokenizers-0.21.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fed9a4d51c395103ad24f8e7eb976811c57fbec2af9f133df471afcd922e5020", size = 3121887, upload-time = "2025-06-24T10:24:40.293Z" },
+    { url = "https://files.pythonhosted.org/packages/3c/6a/bc220a11a17e5d07b0dfb3b5c628621d4dcc084bccd27cfaead659963016/tokenizers-0.21.2-cp39-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:2c41862df3d873665ec78b6be36fcc30a26e3d4902e9dd8608ed61d49a48bc19", size = 9091965, upload-time = "2025-06-24T10:24:44.431Z" },
+    { url = "https://files.pythonhosted.org/packages/6c/bd/ac386d79c4ef20dc6f39c4706640c24823dca7ebb6f703bfe6b5f0292d88/tokenizers-0.21.2-cp39-abi3-musllinux_1_2_armv7l.whl", hash = "sha256:ed21dc7e624e4220e21758b2e62893be7101453525e3d23264081c9ef9a6d00d", size = 9053372, upload-time = "2025-06-24T10:24:46.455Z" },
+    { url = "https://files.pythonhosted.org/packages/63/7b/5440bf203b2a5358f074408f7f9c42884849cd9972879e10ee6b7a8c3b3d/tokenizers-0.21.2-cp39-abi3-musllinux_1_2_i686.whl", hash = "sha256:0e73770507e65a0e0e2a1affd6b03c36e3bc4377bd10c9ccf51a82c77c0fe365", size = 9298632, upload-time = "2025-06-24T10:24:48.446Z" },
+    { url = "https://files.pythonhosted.org/packages/a4/d2/faa1acac3f96a7427866e94ed4289949b2524f0c1878512516567d80563c/tokenizers-0.21.2-cp39-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:106746e8aa9014a12109e58d540ad5465b4c183768ea96c03cbc24c44d329958", size = 9470074, upload-time = "2025-06-24T10:24:50.378Z" },
+    { url = "https://files.pythonhosted.org/packages/d8/a5/896e1ef0707212745ae9f37e84c7d50269411aef2e9ccd0de63623feecdf/tokenizers-0.21.2-cp39-abi3-win32.whl", hash = "sha256:cabda5a6d15d620b6dfe711e1af52205266d05b379ea85a8a301b3593c60e962", size = 2330115, upload-time = "2025-06-24T10:24:55.069Z" },
+    { url = "https://files.pythonhosted.org/packages/13/c3/cc2755ee10be859c4338c962a35b9a663788c0c0b50c0bdd8078fb6870cf/tokenizers-0.21.2-cp39-abi3-win_amd64.whl", hash = "sha256:58747bb898acdb1007f37a7bbe614346e98dc28708ffb66a3fd50ce169ac6c98", size = 2509918, upload-time = "2025-06-24T10:24:53.71Z" },
 ]
 
 [[package]]
@@ -6738,6 +6738,7 @@ dependencies = [
     { name = "soundfile" },
     { name = "tiktoken" },
     { name = "toga" },
+    { name = "tokenizers" },
     { name = "viztracer" },
 ]
 
@@ -6796,6 +6797,7 @@ requires-dist = [
     { name = "tiktoken", specifier = ">=0.9.0" },
     { name = "toga", specifier = ">=0.5.1" },
     { name = "toga", marker = "extra == 'toga'", specifier = ">=0.5.1" },
+    { name = "tokenizers", specifier = "==0.21.2" },
     { name = "viztracer", specifier = ">=1.0.4" },
     { name = "zodiac", extras = ["full", "console"], marker = "extra == 'dev'" },
     { name = "zodiac", extras = ["toga"], marker = "extra == 'full'" },

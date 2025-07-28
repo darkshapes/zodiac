@@ -1,5 +1,6 @@
 dspy>=2.6.27
 litellm>=1.72.0
+tokenizers==0.21.2
 networkx>=3.5
 sounddevice>=0.5.2
 soundfile>=0.13.1
