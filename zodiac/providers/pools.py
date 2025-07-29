@@ -97,7 +97,7 @@ async def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[
         mir_tag = None
         mir_data = None
         mir_tag, mir_data = await model_id.tag_model(gguf_arch, model.model)
-        print(f"no tag for {model.model}") if not mir_tag else print(f"{mir_tag} ollama search")
+        print(f"no tag for {model.model}") if not mir_tag else print(f"{mir_tag}")
         entry = RegistryEntry.create_entry(
             model=f"{api_data[CueType.OLLAMA.value[1]].get('prefix')}{model.model}",
             size=model.size.real,

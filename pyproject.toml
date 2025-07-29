@@ -12,7 +12,7 @@ license = { file = "LICENSE" }
 name = "zodiac"
 readme = "README.md"
 requires-python = ">=3.11"
-version = "0.0.1"
+version = "0.0.2"
 keywords = ["ML", "AI", "TUI", "no-code", "diffusion", "LLM", "torch"]
 
 classifiers = [
