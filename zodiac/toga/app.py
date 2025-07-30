@@ -49,7 +49,7 @@ class Interface(toga.App):
 
         self.response_panel.value += f"{os.path.basename(self.registry_entry.model)} :\n"
 
-        await self.token_source.set_tokenizer(self.registry_entry)
+        await self.token_stream.set_tokenizer(self.registry_entry)
         prompts = {}
         if self.message_panel.value:
             stream = True
@@ -146,39 +146,39 @@ class Interface(toga.App):
         """React to input/output choice\n
         :param widget: The widget that triggered the event."""
         selection = widget.value
-        registry_entry = next(iter(registry["entry"] for registry in self.model_source._graph.registry_entries if selection in registry["entry"].model))
+        registry_entry = next(iter(registry["entry"] for registry in self.model_stream._graph.registry_entries if selection in registry["entry"].model))
         self.registry_entry = registry_entry
         await self.populate_task_stack()
-        await self.token_source.set_tokenizer(self.registry_entry)
+        await self.token_stream.set_tokenizer(self.registry_entry)
 
     async def model_graph(self):
         """Builds the model graph."""
-        await self.model_source.model_graph()
+        await self.model_stream.model_graph()
 
     async def token_estimate(self, widget, **kwargs) -> None:
         """Updates character and token count based on user input.
         :param widget: Input widget providing text"""
-        token_count, character_count = await self.token_source.token_count(message=self.message_panel.value)
+        token_count, character_count = await self.token_stream.token_count(message=self.message_panel.value)
         self.character_stats.text = "{:02}".format(character_count) + "".join(self.formatted_units[0])
         self.token_stats.text = "{:02}".format(token_count) + "".join(self.formatted_units[1])
         self.time_stats.text = "{:02}".format(0.0) + "".join(self.formatted_units[2])
 
     async def populate_in_types(self) -> None:
         """Builds the input types selection."""
-        in_edge_names = await self.model_source.show_edges()
+        in_edge_names = await self.model_stream.show_edges()
         self.input_types.items = in_edge_names
 
     async def populate_out_types(self) -> None:
         """Builds the output types selection."""
-        out_edges = await self.model_source.show_edges(target=True)
+        out_edges = await self.model_stream.show_edges(target=True)
         self.output_types.items = out_edges
 
     async def populate_model_stack(self, widget: toga.Widget = None, **kwargs) -> None:
         """Builds the model stack selection dropdown."""
 
-        await self.model_source.clear()
+        await self.model_stream.clear()
         if self.input_types.value and self.output_types.value:
-            models = await self.model_source.trace_models(self.input_types.value, self.output_types.value)
+            models = await self.model_stream.trace_models(self.input_types.value, self.output_types.value)
             self.model_stack.items = models  # [model[0][:20] for model in models if len(model[0]) > 20]
             await self.token_estimate(widget=self.message_panel)
 
@@ -188,12 +188,12 @@ class Interface(toga.App):
         registry_entry = next(
             iter(
                 registry["entry"]  # formatting
-                for registry in self.model_source._graph.registry_entries  # formatting
+                for registry in self.model_stream._graph.registry_entries  # formatting
                 if selection in registry["entry"].model
             )
         )
-        await self.task_source.set_filter_type(self.input_types.value, self.output_types.value)
-        tasks = await self.task_source.trace_tasks(registry_entry)
+        await self.task_stream.set_filter_type(self.input_types.value, self.output_types.value)
+        tasks = await self.task_stream.trace_tasks(registry_entry)
 
         self.task_stack.items = tasks
 
@@ -337,9 +337,9 @@ class Interface(toga.App):
     def startup(self) -> None:
         """Startup Logic. Initialize widgets and layout, then asynchronous tasks for populating datagets"""
         self.main_window = toga.MainWindow()
-        self.model_source = ModelStream()
-        self.task_source = TaskStream()
-        self.token_source = TokenStream()
+        self.model_stream = ModelStream()
+        self.task_stream = TaskStream()
+        self.token_stream = TokenStream()
 
         start = toga.Command(
             self.ticker,
