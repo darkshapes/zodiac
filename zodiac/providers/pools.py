@@ -4,12 +4,10 @@
 """Feed models to RegistryEntry class"""
 
 # pylint:disable=protected-access, no-member
-import asyncio
 from typing import Any, Callable, Dict, List, Optional
+from nnll.model_detect.identity import ModelIdentity
 
-from nnll.configure.constants import ExtensionType
 from zodiac.providers.constants import CUETYPE_CONFIG, MIR_DB, CueType, PkgType
-from zodiac.providers.identity import ModelIdentity
 from zodiac.providers.registry_entry import RegistryEntry
 
 
@@ -31,23 +29,19 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
         model_path = None
         tokenizer = None
         pkg_type = None
-        mir_data = None
-        mir_tag = None
         try:
             meta = repocard.RepoCard.load(repo.repo_id)
         except (LocalEntryNotFoundError, EntryNotFoundError, HTTPError, OfflineModeIsEnabled) as error_log:
             print(f"Pooling error: '{error_log}'")
             return entries
         base_model = meta.base_model if hasattr("meta", "base_model") else None
-        mir_tag = mir_db.find_path(field="repo", target=repo.repo_id)
-        if mir_tag:
-            mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
+        mir_tags: list[list[str]] = await model_id.label_model_repo(repo.repo_id)
+        if not mir_tags or not mir_tags[0]:
+            mir_tags = await model_id.label_model_layers(repo.repo_id)
+        if mir_tags:
+            print(mir_tags)
         else:
-            mir_tag, mir_data = await model_id.tag_model(repo.repo_id, base_model)
-        if not mir_tag:
-            mir_tag, pkg_type = await model_id.find_model_type(repo)
-            if not mir_tag:
-                print(f"mir tag not found for {repo.repo_id}")
+            print(f"mir tag not found for {repo.repo_id}")
         if meta:
             if hasattr(meta, "tags"):
                 tags.extend(meta.tags)
@@ -61,22 +55,22 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                         if hasattr(PkgType, pkg_type):
                             pkg_type = getattr(PkgType, pkg_type)
         tokenizer = await model_id.get_model_path(repo, "tokenizer.json")
-
-        entry = RegistryEntry.create_entry(
-            model=repo.repo_id,
-            size=repo.size_on_disk,
-            path=model_path,
-            tags=tags,
-            mir=mir_tag,
-            mir_data=mir_data,
-            model_family=base_model,
-            cuetype=CueType.HUB,
-            package=pkg_type,
-            api_kwargs=api_data[CueType.HUB.value[1]],  # api_data based on package_name (diffusers/mlx_audio)
-            timestamp=int(repo.last_modified),
-            tokenizer=tokenizer,
-        )
-        entries.append(entry)
+        for mir_entry in mir_tags:
+            entry = RegistryEntry.create_entry(
+                model=repo.repo_id,
+                size=repo.size_on_disk,
+                path=model_path,
+                tags=tags,
+                mir=mir_entry,
+                mir_data=mir_db.database[mir_entry[0]][mir_entry[1]],
+                model_family=base_model,
+                cuetype=CueType.HUB,
+                package=pkg_type,
+                api_kwargs=api_data[CueType.HUB.value[1]],  # api_data based on package_name (diffusers/mlx_audio)
+                timestamp=int(repo.last_modified),
+                tokenizer=tokenizer,
+            )
+            entries.append(entry)
     return entries
 
 
@@ -94,9 +88,15 @@ async def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[
         gguf_arch = gguf_data.modelinfo.get("general.architecture")
         if hasattr(model, "family") and model.details.family != gguf_arch:
             gguf_arch = model.details.family
-        mir_tag = None
-        mir_data = None
-        mir_tag, mir_data = await model_id.tag_model(gguf_arch, model.model)
+        if mir_tag := await model_id.label_model_class(gguf_arch):
+            mir_tag = mir_tag[0]
+            mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
+        else:
+            if mir_tag := await model_id.label_model_class(model.model):
+                mir_tag = mir_tag[0]
+                mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
+            else:
+                mir_data = None
         print(f"no tag for {model.model}") if not mir_tag else print(f"{mir_tag}")
         entry = RegistryEntry.create_entry(
             model=f"{api_data[CueType.OLLAMA.value[1]].get('prefix')}{model.model}",
@@ -229,5 +229,4 @@ async def register_models(data: Optional[Dict[str, Any]] = None) -> List[Registr
             api_data = data
             entries = await provider(api_data=api_data, mir_db=MIR_DB, entries=entries)
             # dbuq(entries)
-
     return sorted(entries, key=lambda x: x.timestamp, reverse=True)
