@@ -31,13 +31,14 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
         except CacheNotFound:
             nfo("Cache error")
             yield None, None
-        for repo in cache_dir.repos:
-            try:
-                meta = repocard.RepoCard.load(repo.repo_id)
-            except (LocalEntryNotFoundError, EntryNotFoundError, HTTPError, OfflineModeIsEnabled) as error_log:
-                nfo(f"Pooling error: '{error_log}'")
-                yield None, None
-            yield repo, meta
+        else:
+            for repo in cache_dir.repos:
+                try:
+                    meta = repocard.RepoCard.load(repo.repo_id)
+                except (LocalEntryNotFoundError, EntryNotFoundError, HTTPError, OfflineModeIsEnabled) as error_log:
+                    nfo(f"Pooling error: '{error_log}'")
+                    yield None, None
+                yield repo, meta
 
     model_id = ModelIdentity()
 
@@ -111,9 +112,10 @@ async def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[
         from ollama import ListResponse, show, list as ollama_list
 
         cache_dir: ListResponse = ollama_list()
-        for model in cache_dir.models:
-            gguf_data = show(model.model)
-            yield model, gguf_data
+        if cache_dir:
+            for model in cache_dir.models:
+                gguf_data = show(model.model)
+                yield model, gguf_data
 
     mir_data = None
     model_id = ModelIdentity()
