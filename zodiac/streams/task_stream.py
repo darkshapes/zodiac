@@ -6,13 +6,14 @@ from toga.sources import Source
 from zodiac.providers.registry_entry import RegistryEntry
 from zodiac.streams.class_stream import find_package, show_transformer_tasks
 
+nfo = print
 
 flatten_map: List[Any] = lambda nested, unpack: [element for iterative in getattr(nested, unpack)() for element in iterative]
 flatten_map.__annotations__ = {"nested": List[str], "unpack": str}
 
 
 class TaskStream(Source):
-    def __init__(self):
+    def __init__(self) -> None:
         self.basic_tasks = {
             "speech": ["Audio"],
             "image": ["ControlNet", "PAG"],
@@ -57,7 +58,7 @@ class TaskStream(Source):
 
         snip_words: Set[str] = {"Model", "PreTrained", "ForConditionalGeneration", "Pipeline", "For"}
         if entry.mir:
-            print(entry.mir)
+            nfo(entry.mir)
             package_bundle = await find_package(entry)
             if package_bundle:
                 class_name = package_bundle[0]
@@ -65,13 +66,13 @@ class TaskStream(Source):
                 if package_name == "transformers":
                     if isinstance(class_name, dict):
                         class_name = next(iter(list(class_name)))
-                        # print(class_name)
+                        # nfo(class_name)
                     preformatted_task_data = await show_transformer_tasks(class_name)
                 elif package_name == "diffusers":
                     code_name = get_code_names(class_name, package_name)
                     preformatted_task_data = show_tasks_for(code_name=code_name, class_name=class_name)
                     preformatted_task_data.sort()
-                    print(preformatted_task_data)
+                    nfo(preformatted_task_data)
                 elif package_name == "mflux":
                     return ["Image", "Redux", "Kontext", "Depth", "Fill", "ConceptAttention", "ControlNet", "CavTon", "IC-Edit"]
                 class_snippets = snip_words | self.all_tasks
@@ -87,8 +88,7 @@ class TaskStream(Source):
         """Processes preformatted task data by removing specified prefixes and keywords, then adds valid data to task_data.\n
         :param preformatted_task_data: A list of strings to be processed.
         :param snip_words: A list of prefixes or suffixes to be removed from each pipe.
-        :return: A sorted list of unique task_data entries after processing.
-        """
+        :return: A sorted list of unique task_data entries after processing."""
         import re
 
         task_data = set()

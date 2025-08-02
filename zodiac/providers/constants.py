@@ -92,7 +92,7 @@ def has_api(api_name: str, data: dict = None) -> bool:
     from importlib import import_module
     from json.decoder import JSONDecodeError
 
-    hosted_apis = ["OLLAMA", "LM_STUDIO", "LLAMAFILE", "VLLM"]  # , "CORTEX"]
+    hosted_apis = ["OLLAMA", "LM_STUDIO", "LLAMAFILE", "VLLM"]  # , "CORTEX" ] #became jan
     try:
         api_data = data.get(api_name, {"module": api_name.lower()})  # pylint: disable=unsubscriptable-object
     except JSONDecodeError as error_log:
@@ -297,7 +297,7 @@ ChipType.initialize_device()
 # MFLUX: tuple = ("MPS" in ChipType._show_ready("mps"), PkgType.MFLUX, {"mir_tag": "flux"})  # pylint:disable=protected-access
 
 
-# Experimental way to abstract/declarify complex process names
+# Experimental way to abstract/declarify complex task names
 class GenTypeC(BaseModel):
     """
     Generative inference types in ***C***-dimensional order\n
