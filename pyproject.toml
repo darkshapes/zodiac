@@ -92,9 +92,9 @@ Homepage      = "https://github.com/darkshapes/zodiac"
 Documentation = "https://github.com/darkshapes/sdbx/wiki"
 
 [project.scripts]
-zdac-cli = "zodiac.console.__main__:main"
-zdac     = "zodiac.toga.__main__:main"
-zodiac   = "zodiac.toga.__main__:main"
+zdac      = "zodiac.toga.__main__:main"
+zdac-pool = "zodiac.providers.pools:generate_pool"
+zodiac    = "zodiac.toga.__main__:main"
 
 [tool.setuptools]
 packages = ["zodiac"]

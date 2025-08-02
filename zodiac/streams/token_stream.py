@@ -22,12 +22,11 @@ class TokenStream(Source):
         self.tokenizer_args = {}
 
     async def set_tokenizer(self, registry_entry: RegistryEntry) -> Callable:
-        """Pass message to model routine
+        """Pass message to model routine\n
         :param model: Path to model
         :param message: Text to encode
-        :return: Token embeddings for the model
-        """
-        import os
+        :return: Token embeddings for the model"""
+
         import json
 
         if registry_entry.tokenizer:
@@ -45,12 +44,10 @@ class TokenStream(Source):
         self,
         message: str,
     ) -> Callable:
-        """
-        Return token count of message based on model\n
+        """Return token count of message based on model\n
         :param model: Model path to lookup tokenizer for
         :param message: Message to tokenize
-        :return: `int` Number of tokens needed to represent message
-        """
+        :return: `int` Number of tokens needed to represent message"""
         import warnings
 
         warnings.filterwarnings("ignore", category=DeprecationWarning)

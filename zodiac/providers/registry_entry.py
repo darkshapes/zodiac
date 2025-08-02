@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import List, Tuple, Optional, Union
 from pydantic import BaseModel, computed_field
 from nnll.monitor.file import dbuq
+from functools import lru_cache
 from zodiac.providers.constants import VALID_CONVERSIONS, VALID_TASKS, CueType, PkgType
 
 
