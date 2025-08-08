@@ -1,6 +1,5 @@
-### <!-- // /*  SPDX-License-Identifier: LGPL-3.0  */ -->
-### <!-- // /*  d a r k s h a p e s */ -->### <!-- // /*  d a r k s h a p e s */ -->
-
+# SPDX-License-Identifier: MPL-2.0 AND LicenseRef-Commons-Clause-License-Condition-1.0
+# <!-- // /*  d a r k s h a p e s */ -->
 
 from unittest.mock import patch, MagicMock
 import pytest

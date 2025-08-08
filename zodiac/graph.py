@@ -142,7 +142,10 @@ class IntentProcessor:
                 raise KeyError()
             model = self.intent_graph[mode_in][mode_out][edge_number]["entry"].model
         except KeyError as error_log:
-            nfo(f"Failed to adjust weight of '{edge_number}' within registry contents '{self.intent_graph} {mode_in} {mode_out}'. Model or registry entry not found. ")
+            nfo(
+                f"Failed to adjust weight of '{edge_number}' within registry contents \
+                '{self.intent_graph} {mode_in} {mode_out}'. Model or registry entry not found. "
+            )
             dbug(error_log)
             return self.set_registry_entries()
 

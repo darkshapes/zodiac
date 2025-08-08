@@ -6,10 +6,11 @@
 # pylint: disable=line-too-long, import-outside-toplevel, protected-access, unsubscriptable-object
 
 from pathlib import Path
-from typing import List, Tuple, Optional, Union
-from pydantic import BaseModel, computed_field
+from typing import List, Optional, Tuple, Union, Iterable
+
 from nnll.monitor.file import dbuq
-from functools import lru_cache
+from pydantic import BaseModel, computed_field
+
 from zodiac.providers.constants import VALID_CONVERSIONS, VALID_TASKS, CueType, PkgType
 
 
@@ -17,15 +18,20 @@ class RegistryEntry(BaseModel):
     """Validate Hub / Ollama / LMStudio model input"""
 
     cuetype: CueType
+
     model: str
     size: int
     tags: List[str]
     timestamp: int
-    path: Optional[str] = None
     api_kwargs: Optional[dict] = None
+    keys: Iterable = (None,)
     mir: Optional[List[str]] = None
     model_family: Optional[List[str]] = None
+    modules: Optional[dict[str, dict]] = None
     package: Optional[Union[PkgType, CueType]] = None
+    path: Optional[str] = None
+    pipe: Optional[dict[str, Union[List[List[str]], List[str], str]]] = (None,)
+    tasks: Optional[List[Union[str, List[str]]]] = (None,)
     tokenizer: Optional[Path] = None
 
     @computed_field
@@ -40,7 +46,7 @@ class RegistryEntry(BaseModel):
 
         default_task = None
         processed_tasks = []
-        # nfo(self.model)
+        dbuq(self.model)
         if self.mir:
             arch = self.mir[0].split(".")[1]
             if arch in ["detr", "vit"]:
@@ -51,7 +57,7 @@ class RegistryEntry(BaseModel):
         if self.cuetype in [x for x in list(CueType) if x != CueType.HUB]:  # Literal list of CueType, must use list()
             default_task = ("text", "text")  # usually these are txt gen libraries
         elif self.cuetype == CueType.HUB:
-            # print(self.cuetype)  # pair tags from the hub such 'x-to-y' such as 'text-to-text' etc
+            dbuq(self.cuetype)  # pair tags from the hub such 'x-to-y' such as 'text-to-text' etc
             pattern = re.compile(r"(\w+)-to-(\w+)")
             for tag in self.tags:
                 match = pattern.search(tag)
@@ -68,27 +74,36 @@ class RegistryEntry(BaseModel):
     @classmethod
     def create_entry(
         cls,
+        cuetype: CueType,
         model: str,
         size: int,
         tags: List[str],
-        cuetype: CueType,
-        path: Optional[str] = None,
+        api_kwargs: dict = None,
+        keys: type[dict.keys] = None,
         mir: Optional[List[str]] = None,
-        mir_data: Optional[dict] = None,
         model_family: Optional[List[str]] = None,
+        modules: Optional[dict[str, dict]] = None,
         package: Optional[Union[PkgType, CueType]] = None,
-        api_kwargs=None,
+        path: Optional[str] = None,
+        pipe: Optional[dict[str, Union[List[List[str]], List[str], str]]] = None,
+        tasks: Optional[List[Union[str, List[str]]]] = None,
         timestamp: Optional[int] = None,
         tokenizer=Optional[str],
     ):
         """API specific data to call models\n
+        :param cuetype: Provider to trigger loading
         :param model:Cache location for model
         :param size: File size (usually in bytes)
         :param tags: List of available machine tasks for model
-        :param cuetype: Provider to trigger loading
-        :param mir: MIR information, defaults to None
-        :param package: Package name and availability, defaults to None
         :param api_kwargs: Localhost server defaults, defaults to None
+        :param keys: List of available data buckets inside the MIR tree, defaults to None
+        :param mir: MIR information, defaults to None
+        :param model_family: Compatibility information for the model, defaults to None
+        :param modules: List of packages that can support the model, defaults to None
+        :param path: Location of the model on disk, defaults to None
+        :param pipe: List of components to build the execution for the model, defaults to None
+        :param package: Package name and availability, defaults to None
+        :param tasks: Available methods to run the model
         :param timestamp: Download time of model, defaults to None
         :param tokenizer: Tokenizer configuration location, defaults to None
         :return: An instance of RegistryEntry with the provided values
@@ -96,16 +111,19 @@ class RegistryEntry(BaseModel):
         from datetime import datetime
 
         entry = cls(
-            model=model,
-            size=size,
-            path=path,
-            tags=tags,
-            cuetype=cuetype,
-            mir=mir,
-            mir_data=mir_data,
-            model_family=model_family,
-            package=package,
             api_kwargs=api_kwargs,
+            cuetype=cuetype,
+            keys=keys,
+            mir=mir,
+            model_family=model_family,
+            model=model,
+            modules=modules,
+            package=package,
+            path=path,
+            pipe=pipe,
+            size=size,
+            tags=tags,
+            tasks=tasks,
             timestamp=timestamp or int(datetime.now().timestamp()),  # Default to current time if not provided
             tokenizer=tokenizer,
         )

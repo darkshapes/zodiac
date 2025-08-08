@@ -4,7 +4,7 @@
 import dspy
 from zodiac.providers.registry_entry import RegistryEntry
 
-from zodiac.providers.constants import CueType, ChipType, PkgType, MIR_DB
+from zodiac.providers.constants import CueType, PkgType, MIR_DB
 
 dspy.configure_cache(enable_disk_cache=False)
 
@@ -141,7 +141,15 @@ class Predictor(dspy.Module):
     #         self.pipe_kwargs.update({"sampling_rate": self.pipe.config.sampling_rate})
 
 
-async def ready_predictor(registry_entry: RegistryEntry, async_stream: bool = True, dspy_stream: bool = True, max_workers: int = 8, cache: bool = True):
+async def ready_predictor(
+    registry_entry: RegistryEntry,
+    async_stream: bool = True,
+    dspy_stream: bool = True,
+    max_workers: int = 8,
+    cache: bool = True,
+):
+    from zodiac.providers.constants import ChipType
+
     if registry_entry.cuetype == CueType.HUB:
         device = getattr(ChipType, next(iter(ChipType._show_ready())), "CPU")
 

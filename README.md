@@ -1,3 +1,9 @@
+---
+language:
+- en
+library_name: nnll
+license_name: MPL-2.0 + Commons Clause 1.0
+---
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="img_src/zodiac_dark_stealth.png">
@@ -28,17 +34,27 @@ Zodiac is a creative research platform for Generative AI. Guided by text, audio,
 * Bring your own models - Supports [Ollama](https://ollama.com/), [Llamafile](http://github.com/Mozilla-Ocho/llamafile), [Cortex/Jan](http://cortex.so), [VLLM](https://github.com/vllm-project/vllm), [LMStudio](http://lmstudio.ai/), [HuggingFace](https://huggingface.co/)
 * Support expanding to include: , CivitAI, ModelScope & AIO (all-in-one) local caches through [sdbx](https://github.com/darkshapes/sdbx).<br><br>
 
+
 [![Python application test status](https://github.com/darkshapes/zodiac/actions/workflows/zodiac.yml/badge.svg)](https://github.com/darkshapes/zodiac/actions/workflows/zodiac.yml) <br>
 ![commits per month](https://img.shields.io/github/commit-activity/m/darkshapes/zodiac?color=indigo)<br>
 ![code size](https://img.shields.io/github/languages/code-size/darkshapes/zodiac?color=navy)<br>
 [<img src="https://img.shields.io/discord/1266757128249675867?color=5865F2">](https://discord.gg/VVn9Ku74Dk)<br>
 [<img src="https://img.shields.io/badge/me-__?logo=kofi&logoColor=white&logoSize=auto&label=feed&labelColor=maroon&color=grey&link=https%3A%2F%2Fko-fi.com%2Fdarkshapes">](https://ko-fi.com/darkshapes)<br>
 <br>
-<details><summary>
 
-Supported models: 450
 
-### [installation instructions link](https://github.com/darkshapes/sdbx/wiki/Develop)<br>
+## Quick Guide
+
+### Install
+
+
+### Run
+```zdac```
+
+```
+### [Detailed instructions :](https://github.com/darkshapes/sdbx/wiki/Develop)
+
+Discussion topics, issue requests, reviews, and code updates are encouraged. Build with us! Talk to us in [our Discord](https://discord.gg/VVn9Ku74Dk)!
 
 </div>
 
