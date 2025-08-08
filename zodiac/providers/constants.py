@@ -1,5 +1,6 @@
-### <!-- // /*  SPDX-License-Identifier: LGPL-3.0  */ -->
-### <!-- // /*  d a r k s h a p e s */ -->### <!-- // /*  d a r k s h a p e s */ -->
+# SPDX-License-Identifier: MPL-2.0 AND LicenseRef-Commons-Clause-License-Condition-1.0
+# <!-- // /*  d a r k s h a p e s */ -->
+
 
 # pylint:disable=no-name-in-module
 
@@ -92,7 +93,7 @@ def has_api(api_name: str, data: dict = None) -> bool:
     from importlib import import_module
     from json.decoder import JSONDecodeError
 
-    hosted_apis = ["OLLAMA", "LM_STUDIO", "LLAMAFILE", "VLLM"]  # , "CORTEX"]
+    hosted_apis = ["OLLAMA", "LM_STUDIO", "LLAMAFILE", "VLLM"]  # , "CORTEX" ] #became jan
     try:
         api_data = data.get(api_name, {"module": api_name.lower()})  # pylint: disable=unsubscriptable-object
     except JSONDecodeError as error_log:
@@ -183,6 +184,7 @@ class PkgType(BaseEnum):
     KERAS: tuple = (has_api("KERAS"), "KERAS", [])
     LLAMA: tuple = (has_api("LLAMA_CPP"), "LLAMA_CPP", [])
     LUMINA_MGPT: tuple = (has_api("INFERENCE_SOLVER"), "INFERENCE_SOLVER", ["Alpha-VLLM/Lumina-mGPT"])
+    LUMINA_MGPT2: tuple = (has_api("INFERENCE_SOLVER"), "INFERENCE_SOLVER", ["Alpha-VLLM/Lumina-mGPT-2.0"])
     MFLUX: tuple = (has_api("MFLUX"), "MFLUX", [])  # "filipstrand/mflux"
     MLX_AUDIO: tuple = (CueType.check_type("MLX_AUDIO"), "MLX_AUDIO", [])  # Blaizzy/mlx-audio
     MLX_CHROMA: tuple = (has_api("CHROMA"), "CHROMA", ["exdysa/jack813-mlx-chroma"])
@@ -210,6 +212,9 @@ class ChipType(Enum):
     f"""Device constants\n
     CUDA, MPS, XPU, MTIA [Supported PkgTypes]\n
     {base_enum_docstring}"""
+
+    def __call__(cls):
+        cls.initialie_device()
 
     @classmethod
     def initialize_device(cls) -> None:
@@ -297,7 +302,7 @@ ChipType.initialize_device()
 # MFLUX: tuple = ("MPS" in ChipType._show_ready("mps"), PkgType.MFLUX, {"mir_tag": "flux"})  # pylint:disable=protected-access
 
 
-# Experimental way to abstract/declarify complex process names
+# Experimental way to abstract/declarify complex task names
 class GenTypeC(BaseModel):
     """
     Generative inference types in ***C***-dimensional order\n

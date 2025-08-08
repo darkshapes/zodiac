@@ -2,7 +2,10 @@
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 from typing import List, Tuple
+
 from toga.sources import Source
+
+nfo = print
 
 
 class ModelStream(Source):
@@ -40,12 +43,9 @@ class ModelStream(Source):
 
         self._graph.set_path(mode_in=mode_in, mode_out=mode_out)
         self._graph.set_registry_entries()
+        nfo(f"triggered recalculation : {self._graph.coord_path}")
         dbuq(f"triggered recalculation : {self._graph.coord_path} {self._graph.registry_entries}")
         self._models = self._graph.models
-        for entry in self._graph.registry_entries:
-            for _, data in entry.items():
-                if hasattr(data, "mir"):
-                    data
         return self._models
 
     async def chart_path(self) -> List[str]:

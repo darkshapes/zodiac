@@ -5,7 +5,8 @@ from typing import List, Tuple, Callable, Union
 from nnll.metadata.helpers import make_callable
 from zodiac.providers.constants import PkgType
 from zodiac.providers.registry_entry import RegistryEntry
-from zodiac.providers.constants import MIR_DB, VERSIONS_CONFIG, ChipType
+from zodiac.providers.constants import MIR_DB, VERSIONS_CONFIG
+from zodiac.providers.constants import ChipType
 
 
 async def best_package(mir_db_pkg: dict, ready_pkg_types: list[str]) -> tuple[str]:
@@ -66,16 +67,16 @@ async def stage_class(class_object: Callable) -> List[Tuple[Union[str, Callable]
     return sub_classes
 
 
-async def show_transformer_tasks(class_name: str) -> List[str]:
-    """Retrieves a list of task classes associated with a specified transformer class.\n
-    :param class_name: The name of the transformer class to inspect.
-    :param pkg_type: The dependency for the module
-    :return: A list of task classes associated with the specified transformer.
-    """
-    class_obj: Callable = make_callable(class_name, PkgType.TRANSFORMERS.value[1].lower())
-    class_module: Callable = make_callable(*class_obj.__module__.split(".", 1)[-1:], class_obj.__module__.split(".", 1)[0])
-    task_classes = getattr(class_module, "__all__")
-    return task_classes
+# async def show_transformers_tasks(class_name: str) -> List[str]:
+#     """Retrieves a list of task classes associated with a specified transformer class.\n
+#     :param class_name: The name of the transformer class to inspect.
+#     :param pkg_type: The dependency for the module
+#     :return: A list of task classes associated with the specified transformer.
+#     """
+#     class_obj: Callable = make_callable(class_name, PkgType.TRANSFORMERS.value[1].lower())
+#     class_module: Callable = make_callable(*class_obj.__module__.split(".", 1)[-1:], class_obj.__module__.split(".", 1)[0])
+#     task_classes = getattr(class_module, "__all__")
+#     return task_classes
 
 
 # from mir.mappers import make_callable

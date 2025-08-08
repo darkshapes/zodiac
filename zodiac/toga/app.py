@@ -193,7 +193,7 @@ class Interface(toga.App):
             )
         )
         await self.task_stream.set_filter_type(self.input_types.value, self.output_types.value)
-        tasks = await self.task_stream.trace_tasks(registry_entry)
+        tasks = await self.task_stream.filter_tasks(registry_entry)
 
         self.task_stack.items = tasks
 

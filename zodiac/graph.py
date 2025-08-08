@@ -10,7 +10,7 @@ from nnll.monitor.file import dbug, dbuq
 from zodiac.providers.pools import register_models  # leaving here for mocking
 
 sys.path.append(os.getcwd())
-nfo = sys.stderr.write
+nfo = print
 
 
 class IntentProcessor:
@@ -55,7 +55,7 @@ class IntentProcessor:
 
         if not registry_entries:
             registry_entries = await register_models()
-        print("Building graph...")
+        nfo("Building graph...")
 
         if registry_entries is None:
             nfo("Registry error, graph attributes not applied.")
@@ -70,10 +70,9 @@ class IntentProcessor:
                     dbug(error_log)
                     nfo("Error: Registry initialized but not populated with data. Graph could not create edges.")
 
-        print("Complete {self.intent_graph}")
+        nfo("Complete {self.intent_graph}")
         return self.intent_graph
 
-    # @debug_monitor
     def set_path(self, mode_in: str, mode_out: str) -> None:
         """Find a valid path from current state (mode_in) to designated state (mode_out)\n
         :param mode_in: Input prompt type or starting state/states
@@ -99,7 +98,7 @@ class IntentProcessor:
                     self.coord_path.append(mode_out)  # this behaviour likely to change in future
 
         else:
-            nfo("No Path available...")
+            nfo("No Path available...\n")
 
     def set_registry_entries(self) -> None:
         """Populate models list for text fields
@@ -143,7 +142,10 @@ class IntentProcessor:
                 raise KeyError()
             model = self.intent_graph[mode_in][mode_out][edge_number]["entry"].model
         except KeyError as error_log:
-            nfo(f"Failed to adjust weight of '{edge_number}' within registry contents '{self.intent_graph} {mode_in} {mode_out}'. Model or registry entry not found. ")
+            nfo(
+                f"Failed to adjust weight of '{edge_number}' within registry contents \
+                '{self.intent_graph} {mode_in} {mode_out}'. Model or registry entry not found. "
+            )
             dbug(error_log)
             return self.set_registry_entries()
 
@@ -161,7 +163,6 @@ class IntentProcessor:
             self.weight_idx.append(item)
         self.set_registry_entries()
 
-    # @debug_monitor
     def pull_path_entries(self, nx_graph: nx.Graph, traced_path: list[tuple]) -> None:
         """Create operating instructions from user input
         Trace the next hop along the path, collect all compatible models
