@@ -13,6 +13,7 @@ from nnll.mir.json_cache import TEMPLATE_PATH_NAMED, VERSIONS_PATH_NAMED, JSONCa
 from nnll.mir.maid import MIRDatabase
 from nnll.monitor.file import dbuq
 from pydantic import BaseModel, Field
+from transformers.pipelines import PIPELINE_REGISTRY
 
 MIR_DB = MIRDatabase()
 CUETYPE_PATH_NAMED = os.path.join(os.path.dirname(__file__), "cuetype.json")
@@ -83,12 +84,13 @@ def check_host(api_name: str, api_url: str) -> bool:
 
 @CUETYPE_CONFIG.decorator
 def has_api(api_name: str, data: dict = None) -> bool:
-    """Check available modules, try to import dynamically.
-    True for successful import, else False
+    """Check available modules, try to import dynamically.\n
+    True for successful import, else False\n
 
     :param api_name: Constant name for API
     :param _data: filled by config decorator, ignore, defaults to None
-    :return: _description_
+    :return: Package availability or `check_host` for servers; boolean result
+    :rtype: bool
     """
     from importlib import import_module
     from json.decoder import JSONDecodeError
@@ -128,7 +130,7 @@ class BaseEnum(Enum):
     @classmethod
     def show_all(cls) -> List:
         """Show all POSSIBLE API types of a given class"""
-        return [x for x, y in CueType.__members__.items()]
+        return [x for x, y in cls.__members__.items()]
 
     @classmethod
     def show_available(cls) -> bool:
@@ -189,6 +191,7 @@ class PkgType(BaseEnum):
     MLX_AUDIO: tuple = (CueType.check_type("MLX_AUDIO"), "MLX_AUDIO", [])  # Blaizzy/mlx-audio
     MLX_CHROMA: tuple = (has_api("CHROMA"), "CHROMA", ["exdysa/jack813-mlx-chroma"])
     MLX_LM: tuple = (has_api("MLX_LM"), "MLX_LM", [])  # "ml-explore/mlx-lm"
+    MLX_VLM: tuple = (has_api("MLX_VLM"), "MLX_VLM", [])  # Blaizzy/mlx-vlm
     MLX: tuple = (has_api("MLX_LM"), "MLX", [])
     ONNX: tuple = (has_api("ONNX"), "ONNX", ["ONNX"])
     ORPHEUS_TTS: tuple = (has_api("ORPHEUS_TTS"), "ORPHEUS_TTS", ["canopyai/Orpheus-TTS"])
@@ -381,20 +384,21 @@ class GenTypeE(BaseModel):
 # This is valid but, it offers no guarantees for difficult logic conditions that can be easily verified by graph algorithms
 # Using graphs also allows us to offload the logic elsewhere
 
-VALID_CONVERSIONS = ["text", "image", "music", "speech", "video", "3d_render", "vector_graphic", "upscale_image"]
+VALID_CONVERSIONS = ["text", "image", "music", "speech", "audio", "video", "3d", "vector_graphic", "upscale_image"]
 VALID_JUNCTIONS = [""]
 
 # note : decide on a way to keep paired tuples and sets together inside config dict
+
+tasks = PIPELINE_REGISTRY.get_supported_tasks() + ["translation_XX_to_YY"]
+
 VALID_TASKS = {
-    # CueType.CORTEX: {
-    #     ("text", "text"): ["text"],
-    # },
     CueType.VLLM: {
         ("text", "text"): ["text"],
         ("image", "text"): ["vision"],
     },
     CueType.OLLAMA: {
-        ("text", "text"): ["mllama", "llava", "vllm"],
+        ("text", "text"): ["mllama"],
+        ("image", "text"): ["llava", "vllm"],
     },
     CueType.LLAMAFILE: {
         ("text", "text"): ["text"],
@@ -404,14 +408,97 @@ VALID_TASKS = {
         ("text", "text"): ["llm"],
     },
     CueType.HUB: {
-        ("text", "image"): ["Kolors", "image-generation"],
-        ("image", "text"): ["image-generation", "image-text-to-text", "visual-question-answering"],
-        ("text", "text"): ["chat", "conversational", "text-generation", "text2text-generation"],
-        ("text", "video"): ["video generation"],
-        ("speech", "text"): ["speech-translation", "speech-summarization", "automatic-speech-recognition", "dictation"],
-        ("image", "video"): ["reference-to-video", "refernce-to-video"],
+        ("image", "image"): ["image-to-image", "inpaint", "inpainting", "depth-to-image", "i2i", "image-to-image", "any-to-any"],
+        ("text", "image"): [
+            "Kolors",
+            "image-generation",
+            "any-to-any",
+            "text-to-image",
+        ],
+        ("image", "text"): [
+            "image-classification",
+            "image-to-text",
+            "image-text-to-text",
+            "visual-question-answering",
+            "image-captioning",
+            "image-segmentation",
+            "depth-estimation",
+            "image-feature-extraction",
+            "mask-generation",
+            "object-detection",
+            "visual-question-answering",
+            "keypoint-detection",
+            "vllm",
+            "vqa",
+            "vision",
+            "zero-shot-object-detection",
+            "zero-shot-image-classification",
+            "timm",
+            "Zero-Shot Image Classification",
+            "any-to-any",
+            "vidore",
+        ],
+        ("image", "video"): ["image-to-video", "i2v", "reference-to-video", "refernce-to-video"],
+        ("video", "text"): ["video-classification"],
+        ("text", "video"): ["video generation", "t2v", "text-to-video"],
+        ("text", "text"): [
+            "any-to-any",
+            "named entity recognition",
+            "entity typing",
+            "relation classification",
+            "question answering",
+            "fill-mask",
+            "chat",
+            "conversational",
+            "text-generation",
+            "causal-lm",
+            "text2text-generation",
+            "document-question-answering",
+            "feature-extraction",
+            "question-answering",
+            "sentiment-analysis",
+            "summarization",
+            "table-question-answering",
+            "text-classification",
+            "token-classification",
+            "translation",
+            "zero-shot-classification",
+            "translation_XX_to_YY",
+            "t2t",
+            "chatglm",
+            "exbert",
+        ],
+        ("text", "audio"): [
+            "text-to-audio",
+            "t2a",
+            "any-to-any",
+            "musicgen",
+            "audiocraft",
+            "audiogen",
+        ],
+        ("audio", "text"): ["zero-shot-audio-classification", "audio-classification", "a2t", "audio-text-to-text", "any-to-any"],
+        ("text", "speech"): [
+            "text-to-speech",
+            "tts",
+            "any-to-any",
+            "annotation",
+        ],
+        ("speech", "text"): [
+            "speech-to-text",
+            "speech",
+            "speech-translation",
+            "speech-summarization",
+            "automatic-speech-recognition",
+            "dictation",
+            "stt",
+            "any-to-any",
+            "hf-asr-leaderboard",
+        ],
     },
     CueType.KAGGLE: {
         ("text", "text"): ["text"],
     },
+    # CueType.CORTEX: {
+    #     ("text", "text"): ["text"],
+    # },
 }

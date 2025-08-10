@@ -106,8 +106,8 @@ class Interface(toga.App):
         self.message_panel.value = ""
 
     async def copy_reply(self, widget, **kwargs) -> None:
-        """_summary_
-        :param widget: _description_"""
+        """Push the reply into the clipboard
+        :param widget: Triggering widget"""
         import pyperclip
 
         pyperclip.copy(self.response_panel.value)

@@ -18,7 +18,6 @@ tests/test_find_package.py
 tests/test_flow.py
 tests/test_graph.py
 tests/test_has_api.py
-tests/test_pools.py
 tests/test_register_types.py
 tests/test_registry_entry.py
 tests/test_task_source.py

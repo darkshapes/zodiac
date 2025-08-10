@@ -2,11 +2,8 @@
 #  # # <!-- // /*  d a r k s h a p e s */ -->
 
 from typing import List, Tuple, Callable, Union
-from nnll.metadata.helpers import make_callable
-from zodiac.providers.constants import PkgType
 from zodiac.providers.registry_entry import RegistryEntry
-from zodiac.providers.constants import MIR_DB, VERSIONS_CONFIG
-from zodiac.providers.constants import ChipType
+from zodiac.providers.constants import MIR_DB, VERSIONS_CONFIG, ChipType
 
 
 async def best_package(mir_db_pkg: dict, ready_pkg_types: list[str]) -> tuple[str]:
