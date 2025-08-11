@@ -43,8 +43,8 @@ class ModelStream(Source):
 
         self._graph.set_path(mode_in=mode_in, mode_out=mode_out)
         self._graph.set_registry_entries()
-        nfo(f"triggered recalculation : {self._graph.coord_path}")
-        dbuq(f"triggered recalculation : {self._graph.coord_path} {self._graph.registry_entries}")
+        nfo(f"calculated : {self._graph.coord_path}")
+        dbuq(f"calculated : {self._graph.coord_path} {self._graph.registry_entries}")
         self._models = self._graph.models
         return self._models
 

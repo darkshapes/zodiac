@@ -5,6 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
+zodiac.egg-info/
 
 # Distribution / packaging
 .Python

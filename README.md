@@ -12,7 +12,7 @@ license_name: MPL-2.0 + Commons Clause 1.0
 </picture><br><br>
 
 
-# zodiac <br><sub>self-assembling workflow automator</sub>
+# zodiac <br><sub>self-arranging workflow automator</sub>
 
 <div align="center">
 
@@ -70,10 +70,10 @@ Enter a terminal and activate the python environment in
   > Set-ExecutionPolicy Bypass -Scope Process -Force; .venv\Scripts\Activate.ps1
   > ```
 
-Run with the command:
-```zdac```
-or
-```zodiac```
+Run with the command:<br><br>
+`zdac`<br>
+or<br>
+`zodiac`
 
 ### [Detailed instructions :](https://github.com/darkshapes/sdbx/wiki/Develop)
 

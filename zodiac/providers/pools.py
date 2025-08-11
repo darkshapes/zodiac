@@ -18,10 +18,11 @@ MODE_DATA = JSONCache(MODES_PATH_NAMED)
 
 @MODE_DATA.decorator
 async def add_mode_types(mir_tag: list[str], data: dict | None = None) -> dict[str, list[str] | str]:
-    """_summary_\n
-    :param mir_tag: _description_
-    :param data: _description_, defaults to None
-    :return: _description_"""
+    """Add mode‑related metadata for a given MIR tag.\n
+    :param mir_tag: List of tag components that identify a model in the MIR database.
+    :param data: Dictionary containing MIR entries; defaults to ``None``.
+    :returns: Mapping with keys extracted from ``data`` for the fused tag."""
+
     fused_tag = ".".join(mir_tag)
 
     mir_details = {
@@ -33,11 +34,10 @@ async def add_mode_types(mir_tag: list[str], data: dict | None = None) -> dict[s
 
 
 async def add_pkg_types(pkg_data: dict, mode: str) -> dict[int | str, Any]:
-    """_summary_
-
-    :param pkg_data: _description_
-    :return: _description_
-    """
+    """Augment package data with additional entries based on pipeline class and mode.\n
+    :param pkg_data: Existing package mapping where keys are indices and values are package specs.
+    :param mode: The pipeline mode extracted from MIR metadata.
+    :returns: Updated ``pkg_data`` with GPU-specific packages"""
     package_name = pkg_data.get(next(iter(pkg_data)))
     class_name = package_name.get(next(iter(package_name)))
     class_name = list(class_name)[0]
@@ -53,12 +53,12 @@ async def add_pkg_types(pkg_data: dict, mode: str) -> dict[int | str, Any]:
 
 
 async def generate_entry(mir_tag: List[str], mir_db: dict, model_tags: list[str] | None = None, pkg_data: dict | None = None) -> dict[str, list[str] | str]:
-    """_summary_\n
-    :param mir_tag: _description_
-    :param mir_db: _description_
-    :param model_tags: _description_, defaults to None
-    :param data: _description_, defaults to None
-    :return: _description"""
+    """Create a registry entry dictionary from MIR information.\n
+    :param mir_tag: The hierarchical tag identifying a model in the MIR database.
+    :param mir_db: The MIR database instance providing access to stored metadata.
+    :param model_tags:  Additional tags to attach to the model; defaults to ``None``.
+    :param pkg_data: Existing package data; defaults to ``None``.
+    :returns: Mapping of values for registry construction."""
 
     fused_tag = ".".join(mir_tag)
     mir_info = mir_db.database.get(mir_tag[0], {}).get(mir_tag[1])
@@ -123,6 +123,7 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
             base_model = meta.base_model if hasattr("meta", "base_model") else None
             tokenizer = await model_id.get_cache_path(file_name="tokenizer.json", repo_obj=repo)
             mir_tags = await model_id.label_model(repo_id=repo.repo_id, base_model=base_model, cue_type=CueType.HUB.value[1])
+            nfo(mir_tags)
             if meta and hasattr(meta, "data"):
                 tags = meta.data.get("tags", [])
                 if pipeline_tag := meta.data.get("pipeline_tag"):
@@ -150,7 +151,8 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                     )
                     entries.append(entry)
             else:
-                entry_data = await generate_entry(mir_tag=mir_tags, mir_db=mir_db, model_tags=tags)
+                if mir_tags:
+                    entry_data = await generate_entry(mir_tag=mir_tags, mir_db=mir_db, model_tags=tags)
                 entry = RegistryEntry.create_entry(
                     model=repo.repo_id,
                     size=repo.size_on_disk,
@@ -192,7 +194,6 @@ async def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[
         gguf_data = (gguf_data.modelfile,)
         if hasattr(model, "family") and model.details.family != base_model:
             base_model = model.details.family
-            print(base_model)
         if mir_tag := await model_id.label_model(repo_id=model.model, base_model=base_model, cue_type=CueType.OLLAMA.value[1], repo_obj=gguf_data):
             entry_data = await generate_entry(mir_tag=mir_tag[0], mir_db=mir_db, model_tags=[model.details.family])
         nfo(f"no tag for {model.model}") if not mir_tag else nfo(f"{mir_tag}")
