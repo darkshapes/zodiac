@@ -123,7 +123,7 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
             base_model = meta.base_model if hasattr("meta", "base_model") else None
             tokenizer = await model_id.get_cache_path(file_name="tokenizer.json", repo_obj=repo)
             mir_tags = await model_id.label_model(repo_id=repo.repo_id, base_model=base_model, cue_type=CueType.HUB.value[1])
-            nfo(mir_tags)
+            # nfo(mir_tags)
             if meta and hasattr(meta, "data"):
                 tags = meta.data.get("tags", [])
                 if pipeline_tag := meta.data.get("pipeline_tag"):
@@ -135,36 +135,24 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                     if hasattr(PkgType, pkg_name := pkg_name.replace("-", "_").upper()):
                         pkg_type = getattr(PkgType, pkg_name)
 
-            if mir_tags and isinstance(mir_tags[0], list):
-                for mir_entry in mir_tags:
-                    entry_data = await generate_entry(mir_tag=mir_entry, mir_db=mir_db, model_tags=tags)
-                    entry = RegistryEntry.create_entry(
-                        model=repo.repo_id,
-                        size=repo.size_on_disk,
-                        model_family=base_model,
-                        cuetype=CueType.HUB,
-                        package=pkg_type,
-                        api_kwargs=api_data[CueType.HUB.value[1]],  # api_data based on package_name (diffusers/mlx_audio)
-                        timestamp=int(repo.last_modified),
-                        tokenizer=tokenizer,
-                        **entry_data,
-                    )
-                    entries.append(entry)
-            else:
-                if mir_tags:
-                    entry_data = await generate_entry(mir_tag=mir_tags, mir_db=mir_db, model_tags=tags)
+            if mir_tags and not isinstance(mir_tags[0], list):
+                mir_tags = [mir_tags]
+            nfo(f"mir tag not found for {repo.repo_id}") if not mir_tags else nfo(mir_tags)
+            if not mir_tags:
+                mir_tags = [[]]
+            for mir_entry in mir_tags:
+                entry_data = await generate_entry(mir_tag=mir_entry, mir_db=mir_db, model_tags=tags)
                 entry = RegistryEntry.create_entry(
                     model=repo.repo_id,
                     size=repo.size_on_disk,
                     model_family=base_model,
                     cuetype=CueType.HUB,
                     package=pkg_type,
-                    api_kwargs=api_data[CueType.HUB.value[1]],
+                    api_kwargs=api_data[CueType.HUB.value[1]],  # api_data based on package_name (diffusers/mlx_audio)
                     timestamp=int(repo.last_modified),
                     tokenizer=tokenizer,
                     **entry_data,
                 )
-                nfo(f"mir tag not found for {repo.repo_id}") if not mir_tags else nfo(mir_tags)
                 entries.append(entry)
     return entries
 
