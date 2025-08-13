@@ -61,7 +61,6 @@ async def generate_entry(mir_tag: List[str], mir_db: dict, model_tags: list[str]
     :returns: Mapping of values for registry construction."""
 
     fused_tag = ".".join(mir_tag)
-    print(mir_tag)
     mir_info = mir_db.database.get(mir_tag[0], {}).get(mir_tag[1])
     modalities = await add_mode_types(fused_tag)
     mode_data = modalities.get("mode")

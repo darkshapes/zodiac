@@ -11,21 +11,25 @@ async def best_package(pkg_data: dict[int | str, Any], ready_list: list[tuple[Ch
     :param mir_db_pkg: Dictionary containing package data to match
     :param ready_pkg_types: List of priority package processors to evaluate
     :return: Tuple containing (class name, package type) if match found, otherwise None"""
+
+    if isinstance(pkg_data, RegistryEntry):
+        mir_db = MIR_DB.database
+        mir_prefix = pkg_data.mir[0]
+        base_fields = ["*", "diffusers", "prior"]
+        pkg_loop = [pkg_data.modules] + [mir_db[mir_prefix][x].get("pkg") for x in base_fields if mir_db[mir_prefix].get(x, {}).get("pkg", {})]
+    else:
+        pkg_loop = [pkg_data]
+
     for processor in ready_list:
-        print(processor)
         for pkg_type in processor[2]:
             if pkg_type.value[0]:  # Determine if the package is available
                 package_name = pkg_type.value[1].lower()
-                if isinstance(pkg_data, RegistryEntry):
-                    for index, data in pkg_data.modules.items():
+                for pkg_field in pkg_loop:
+                    for index, data in pkg_field.items():
                         if package_name in data:
-                            class_name = pkg_data.modules[index][package_name]
-                            return (class_name, pkg_type)
-                else:
-                    for index, data in pkg_data.items():
-                        if package_name in data:
-                            class_name = pkg_data[index][package_name]
-                            return (class_name, pkg_type)
+                            class_name = pkg_field[index][package_name]
+                            return (index, class_name, pkg_type)
+
 
 async def find_package(entry: RegistryEntry = None, mir_entry: list[str] | None = None) -> Tuple[str]:
     """Look up class and package in MIR from RegistryEntry.\n
@@ -41,7 +45,7 @@ async def find_package(entry: RegistryEntry = None, mir_entry: list[str] | None 
     if suffixes:
         for compatibility, model_data in MIR_DB.database[mir_base].items():
             package_key = model_data.get("pkg")
-            if package_key and (any(re.match(pattern, compatibility) for pattern in suffixes) or compatibility in mir_ids):# Fallback to CPU packages if no match found in GPU packages
+            if package_key and (any(re.match(pattern, compatibility) for pattern in suffixes) or compatibility in mir_ids):  # Fallback to CPU packages if no match found in GPU packages
                 package_data = await best_package(package_key)
                 if package_data:
                     return package_data

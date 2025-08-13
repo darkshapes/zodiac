@@ -62,7 +62,7 @@ class Interface(toga.App):
             context_data, predictor_data = await ready_predictor(self.registry_entry, dspy_stream=stream, async_stream=stream, cache=cache)
             await self.stream_text(prompts, context_data, predictor_data)
         else:
-            await self.generate_media(prompts, self.registry_entry) #context_data, predictor_data)
+            await self.generate_media(prompts, self.registry_entry)  # context_data, predictor_data)
         return widget
 
     async def stream_text(self, prompts, context_data, predictor_data):
@@ -85,15 +85,16 @@ class Interface(toga.App):
         self.response_panel.value += "\n--\n\n"
         return prediction
 
-    async def generate_media(self, prompts, context_data) -> None: #, predictor_data
+    async def generate_media(self, prompts, registry_entry) -> None:  # , predictor_data
         from nnll.tensor_pipe.construct_pipe import ConstructPipeline
         from nnll.tensor_pipe.inference import run_inference
         from zodiac.streams.class_stream import best_package
         from zodiac.providers.constants import MIR_DB
-        pkg_data = await best_package(pkg_data=context_data)
+
+        pkg_data = await best_package(pkg_data=registry_entry)
         constructor = ConstructPipeline()
-        pipe_data = constructor.create_pipeline(context_data,pkg_data,MIR_DB)
-        return run_inference(pipe_data,prompts)
+        pipe_data = constructor.create_pipeline(registry_entry, pkg_data, MIR_DB)
+        return run_inference(pipe_data, prompts)
 
         # from zodiac.toga.signatures import Predictor
 
@@ -162,7 +163,6 @@ class Interface(toga.App):
         else:
             self.registry_entry = "No model..."
 
-
     async def model_graph(self):
         """Builds the model graph."""
         await self.model_stream.model_graph()
@@ -208,7 +208,7 @@ class Interface(toga.App):
         else:
             registry_entry = "No models..."
         await self.task_stream.set_filter_type(self.input_types.value, self.output_types.value)
-        if registry_entry and not isinstance(registry_entry,str):
+        if registry_entry and not isinstance(registry_entry, str):
             tasks = await self.task_stream.filter_tasks(registry_entry)
         else:
             tasks = ""
