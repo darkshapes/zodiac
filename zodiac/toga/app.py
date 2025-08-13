@@ -52,17 +52,17 @@ class Interface(toga.App):
         await self.token_stream.set_tokenizer(self.registry_entry)
         prompts = {}
         if self.message_panel.value:
-            stream = True
             cache = False
             prompts.setdefault("text", self.message_panel.value)
+        stream = True if self.output_types.value == "text" else False
         # prompts.setdefault("audio",[0]) if else []
         # prompts.setdefault("image",[]) if image": []
 
-        context_data, predictor_data = await ready_predictor(self.registry_entry, dspy_stream=stream, async_stream=stream, cache=cache)
         if stream:
+            context_data, predictor_data = await ready_predictor(self.registry_entry, dspy_stream=stream, async_stream=stream, cache=cache)
             await self.stream_text(prompts, context_data, predictor_data)
         else:
-            await self.generate_media(prompts, context_data, predictor_data)
+            await self.generate_media(prompts, self.registry_entry) #context_data, predictor_data)
         return widget
 
     async def stream_text(self, prompts, context_data, predictor_data):
@@ -85,10 +85,19 @@ class Interface(toga.App):
         self.response_panel.value += "\n--\n\n"
         return prediction
 
-    async def generate_media(self, prompts, context_data, predictor_data):
-        from zodiac.toga.signatures import Predictor
+    async def generate_media(self, prompts, context_data) -> None: #, predictor_data
+        from nnll.tensor_pipe.construct_pipe import ConstructPipeline
+        from nnll.tensor_pipe.inference import run_inference
+        from zodiac.streams.class_stream import best_package
+        from zodiac.providers.constants import MIR_DB
+        pkg_data = await best_package(pkg_data=context_data)
+        constructor = ConstructPipeline()
+        pipe_data = constructor.create_pipeline(context_data,pkg_data,MIR_DB)
+        return run_inference(pipe_data,prompts)
 
-        return prediction
+        # from zodiac.toga.signatures import Predictor
+
+        # return prediction
 
     async def halt(self, widget, **kwargs) -> None:
         """Stop processing prompt\n
@@ -146,10 +155,13 @@ class Interface(toga.App):
         """React to input/output choice\n
         :param widget: The widget that triggered the event."""
         selection = widget.value
-        registry_entry = next(iter(registry["entry"] for registry in self.model_stream._graph.registry_entries if selection in registry["entry"].model))
-        self.registry_entry = registry_entry
-        await self.populate_task_stack()
-        await self.token_stream.set_tokenizer(self.registry_entry)
+        if self.model_stream._graph.registry_entries is not None:
+            self.registry_entry = next(iter(registry["entry"] for registry in self.model_stream._graph.registry_entries if selection in registry["entry"].model))
+            await self.populate_task_stack()
+            await self.token_stream.set_tokenizer(self.registry_entry)
+        else:
+            self.registry_entry = "No model..."
+
 
     async def model_graph(self):
         """Builds the model graph."""
@@ -185,15 +197,21 @@ class Interface(toga.App):
     async def populate_task_stack(self, widget: toga.Widget = None, **kwargs) -> None:
         """Builds the task stack selection dropdown."""
         selection = self.model_stack.value
-        registry_entry = next(
-            iter(
-                registry["entry"]  # formatting
-                for registry in self.model_stream._graph.registry_entries  # formatting
-                if selection in registry["entry"].model
+        if self.model_stream._graph.registry_entries:
+            registry_entry = next(
+                iter(
+                    registry["entry"]  # formatting
+                    for registry in self.model_stream._graph.registry_entries  # formatting
+                    if selection in registry["entry"].model
+                )
             )
-        )
+        else:
+            registry_entry = "No models..."
         await self.task_stream.set_filter_type(self.input_types.value, self.output_types.value)
-        tasks = await self.task_stream.filter_tasks(registry_entry)
+        if registry_entry and not isinstance(registry_entry,str):
+            tasks = await self.task_stream.filter_tasks(registry_entry)
+        else:
+            tasks = ""
 
         self.task_stack.items = tasks
 

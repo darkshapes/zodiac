@@ -1,7 +1,7 @@
 ---
 language:
 - en
-library_name: nnll
+library_name: zodiac
 license_name: MPL-2.0 + Commons Clause 1.0
 ---
 

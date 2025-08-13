@@ -61,6 +61,7 @@ async def generate_entry(mir_tag: List[str], mir_db: dict, model_tags: list[str]
     :returns: Mapping of values for registry construction."""
 
     fused_tag = ".".join(mir_tag)
+    print(mir_tag)
     mir_info = mir_db.database.get(mir_tag[0], {}).get(mir_tag[1])
     modalities = await add_mode_types(fused_tag)
     mode_data = modalities.get("mode")
@@ -140,8 +141,10 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
             nfo(f"mir tag not found for {repo.repo_id}") if not mir_tags else nfo(mir_tags)
             if not mir_tags:
                 mir_tags = [[]]
+                entry_data = {"tags": [], "keys":[]}
             for mir_entry in mir_tags:
-                entry_data = await generate_entry(mir_tag=mir_entry, mir_db=mir_db, model_tags=tags)
+                if mir_entry:
+                    entry_data = await generate_entry(mir_tag=mir_entry, mir_db=mir_db, model_tags=tags)
                 entry = RegistryEntry.create_entry(
                     model=repo.repo_id,
                     size=repo.size_on_disk,

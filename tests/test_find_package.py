@@ -15,8 +15,8 @@ class MockPackage(Enum):
 # @pytest.fixture
 # def mock_package_available():
 
-#     with patch("zodiac.streams.class_stream.PkgType") as mock_pkg_type:
-#         mock_pkg_type.return_value = MockPackage
+#     with patch("zodiac.streams.class_stream.ChipType") as mock_pkg_type:
+#         mock_pkg_type.return_value = True, "MockPackage
 #         yield mock_pkg_type
 
 
@@ -25,7 +25,7 @@ def mock_cpu_available():
     class MockDevice(Enum):
         """"""
 
-    with patch("zodiac.streams.class_stream.ChipType") as mock_chip_type:
+    with patch("zodiac.providers.constants.ChipType") as mock_chip_type:
         mock_chip_type._show_ready.return_value = ["CPU"]
         mock_chip_type.CPU = (True, "CPU", [MockPackage.TRANSFORMERS, MockPackage.DIFFUSERS])
         mock_chip_type.MPS = (False, "MFLUX", [MockPackage.MFLUX])
@@ -37,16 +37,16 @@ def mock_gpu_available():
     class MockDevice(Enum):
         """"""
 
-    with patch("zodiac.streams.class_stream.ChipType") as mock_chip_type:
-        mock_chip_type._show_ready.return_value = ["CUDA"]
-        mock_chip_type.MPS = (False, "MFLUX", [MockPackage.MFLUX])
-        mock_chip_type.CPU = (True, "CUDA", [MockPackage.VLLM, MockPackage.TRANSFORMERS, MockPackage.DIFFUSERS])
+    with patch("zodiac.providers.constants.ChipType") as mock_chip_type:
+        mock_chip_type.MPS = False, "MFLUX", [MockPackage.MFLUX]
+        mock_chip_type.CUDA = True, "CUDA", [MockPackage.VLLM, MockPackage.TRANSFORMERS, MockPackage.DIFFUSERS]
+        mock_chip_type.CPU = True,"CPU",[MockPackage.DIFFUSERS]
+        mock_chip_type._show_ready.return_value = [mock_chip_type.CUDA, mock_chip_type.CPU]
         yield mock_chip_type
 
 
-# @patch("zodiac.streams.class_stream.has_api", return_value=True)
-async def test_lookup(mock_cpu_available, mock_package_available):
-    from zodiac.streams.class_stream import find_package
+
+async def test_lookup(mock_gpu_available):
     # from zodiac.task_stream import ChipType, PkgType
 
     class Entry:
@@ -61,12 +61,13 @@ async def test_lookup(mock_cpu_available, mock_package_available):
             "info.vit.blip-vqa": {"base": {"pkg": {0: {"transformers": "BlipModel"}}}},
         },
     ):
+        from zodiac.streams.class_stream import find_package
         result = await find_package(entry)
         assert result == ("FluxPipeline", MockPackage.DIFFUSERS)
 
 
 # @patch("zodiac.providers.constants.has_api", return_value=True)
-async def test_lookup_transformers(mock_cpu_available, mock_package_available):
+async def test_lookup_transformers(mock_cpu_available):
     from zodiac.streams.class_stream import find_package
 
     class Entry:
@@ -78,7 +79,7 @@ async def test_lookup_transformers(mock_cpu_available, mock_package_available):
         assert result == ("BlipModel", MockPackage.TRANSFORMERS)  # This should pass with correct mock data
 
 
-async def test_lookup_with_reverse_position(mock_cpu_available, mock_package_available):
+async def test_lookup_with_reverse_position(mock_cpu_available):
     from zodiac.streams.class_stream import find_package
 
     # from zodiac.streams.class_stream import ChipType, PkgType

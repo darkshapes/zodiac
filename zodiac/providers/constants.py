@@ -281,8 +281,8 @@ class ChipType(Enum):
         """
         atypes = cls._show_all()
         if api_name:
-            return api_name.upper() in [getattr(cls, x)[1] for x in atypes if getattr(cls, x)[0] is True]
-        return [getattr(cls, x)[1] for x in atypes if getattr(cls, x)[0] is True]
+            return api_name.upper() in [x for x in atypes if getattr(cls,x)[0]]
+        return [getattr(cls, x) for x in atypes if getattr(cls, x)[0] is True]
 
     @classmethod
     def _show_pkgs(cls) -> Union[List[PkgType], str]:
@@ -292,8 +292,10 @@ class ChipType(Enum):
         """
         pkg_names = getattr(cls, "CPU")[-1]
         atypes = cls._show_ready()
-        if atypes not in ["CPU", "XPU", "MTIA"]:
-            pkg_names = getattr(cls, next(iter(atypes)))[-1] + pkg_names
+        available = [pkg[1] for pkg in atypes if pkg[0] is True]
+        priority = next(iter(available),"CPU") if available else "CPU"
+        if priority not in [pkg[1] for pkg in cls._show_all() if not pkg[2]] and priority != "CPU":
+            pkg_names = atypes[0][2] + pkg_names
         return pkg_names
 
 
