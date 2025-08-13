@@ -14,52 +14,57 @@ class MockDevice:
     def __repr__(self):
         return f"device(type='{self.type}')"
 
+class TestChipTypeXPU:
 
-class TestChipType:
-    @pytest.fixture
-    def mock_cuda_available(self):
-        with patch("zodiac.providers.constants.first_available", autospec=True) as mock_gpu:
-            mock_gpu.return_value = MockDevice("cuda")
-            yield mock_gpu
-
-    @pytest.fixture
+    @pytest.fixture(scope="function")
     def mock_xpu_available(self):
         with patch("zodiac.providers.constants.first_available", autospec=True) as mock_gpu:
             mock_gpu.return_value = MockDevice("xpu")
             yield mock_gpu
 
-    def test_show_all(self):
+    def test_show_ready(self,mock_xpu_available):
         from zodiac.providers.constants import ChipType
 
         chip_type = ChipType
         chip_type.initialize_device()
-        assert chip_type._show_all() == ["CUDA", "MPS", "XPU", "MTIA", "CPU"]
+        assert chip_type._show_ready() == [(True, 'XPU',ChipType.XPU[2]),(True, "CPU",ChipType.CPU[2])]
 
-    def test_show_ready(self, mock_xpu_available):
-        from zodiac.providers.constants import ChipType
-
-        chip_type = ChipType
-        chip_type.initialize_device()
-        assert chip_type._show_ready() == ["XPU", "CPU"]
+class TestChipTypeCUDA:
+    @pytest.fixture(scope="class")
+    def mock_cuda_available(self):
+        with patch("zodiac.providers.constants.first_available") as mock_gpu:
+            mock_gpu.return_value = MockDevice("cuda")
+            yield mock_gpu
 
     def test_show_pkgs(self, mock_cuda_available):
         from zodiac.providers.constants import ChipType
-
-        chip_type = ChipType
-        chip_type.initialize_device()
+        ChipType.initialize_device()
         # Assuming PkgType is defined and ChipType.initialize_device() sets up the correct state
-        assert isinstance(chip_type._show_pkgs(), list)
+        packages = ChipType._show_pkgs()
+        assert isinstance(packages, list)
+        assert packages == ChipType.CUDA[2] + ChipType.CPU[2]
 
-    def test_api_name_check(self, mock_cuda_available):
+    @pytest.fixture(scope="class")
+    def mock_cuda_available_again(self):
+        with patch("zodiac.providers.constants.first_available") as mock_gpu:
+            mock_gpu.return_value = MockDevice("cuda")
+            yield mock_gpu
+
+    def test_api_name_check(self, mock_cuda_available_again):
         from zodiac.providers.constants import ChipType
 
-        chip_type = ChipType
-        chip_type.initialize_device()
-        assert chip_type._show_ready(api_name="CUDA") is True
-        assert chip_type._show_ready(api_name="MPS") is False
-        assert chip_type._show_ready(api_name="XPU") is False
-        assert chip_type._show_ready(api_name="CPU") is True
+        # print(ChipType._show_ready(api_name="CUDA"))
+        ChipType.initialize_device()
+        assert ChipType._show_ready(api_name="CUDA") is True
+        assert ChipType._show_ready(api_name="MPS") is False
+        assert ChipType._show_ready(api_name="XPU") is False
+        assert ChipType._show_ready(api_name="CPU") is True
 
+    def test_show_all(self, mock_cuda_available):
+        from zodiac.providers.constants import ChipType
+
+        ChipType.initialize_device()
+        assert ChipType._show_all() == ["CUDA", "MPS", "XPU", "MTIA", "CPU"]
 
 # Run the tests
 if __name__ == "__main__":

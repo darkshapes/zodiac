@@ -31,7 +31,7 @@ def registry_entry_hub():
 
 
 def test_ollama_available_tasks(registry_entry_ollama: RegistryEntry):
-    assert registry_entry_ollama.available_tasks == [("text", "text")]
+    assert registry_entry_ollama.available_tasks == [("text", "text"),("image", "text")]
 
 
 def test_hub_available_tasks(registry_entry_hub: RegistryEntry):  # ensure that the system does not duplicate entries

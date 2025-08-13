@@ -1,7 +1,7 @@
 ---
 language:
 - en
-library_name: nnll
+library_name: zodiac
 license_name: MPL-2.0 + Commons Clause 1.0
 ---
 
@@ -12,7 +12,7 @@ license_name: MPL-2.0 + Commons Clause 1.0
 </picture><br><br>
 
 
-# zodiac <br><sub>self-assembling workflow automator</sub>
+# zodiac <br><sub>self-arranging workflow automator</sub>
 
 <div align="center">
 
@@ -45,13 +45,36 @@ Zodiac is a creative research platform for Generative AI. Guided by text, audio,
 
 ## Quick Guide
 
+
 ### Install
 
+Install [uv](https://github.com/astral-sh/uv#installation), then run these terminal commands
+- >
+  >```
+  > git clone https://github.com/darkshapes/zodiac
+  > cd zodiac
+  > uv sync --group dev
+  > ```
 
-### Run
-```zdac```
+### Use
 
-```
+Enter a terminal and activate the python environment in
+- >
+  > Linux/Macos:
+  > ```
+  > source .venv/bin/activate
+  > ```
+
+  > Windows Powershell:
+  > ```
+  > Set-ExecutionPolicy Bypass -Scope Process -Force; .venv\Scripts\Activate.ps1
+  > ```
+
+Run with the command:<br><br>
+`zdac`<br>
+or<br>
+`zodiac`
+
 ### [Detailed instructions :](https://github.com/darkshapes/sdbx/wiki/Develop)
 
 Discussion topics, issue requests, reviews, and code updates are encouraged. Build with us! Talk to us in [our Discord](https://discord.gg/VVn9Ku74Dk)!

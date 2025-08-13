@@ -23,6 +23,7 @@ class RegistryEntry(BaseModel):
     size: int
     tags: List[str]
     timestamp: int
+    mode: str | None = None
     api_kwargs: Optional[dict] = None
     keys: Iterable = (None,)
     mir: Optional[List[str]] = None
@@ -60,12 +61,12 @@ class RegistryEntry(BaseModel):
             dbuq(self.cuetype)  # pair tags from the hub such 'x-to-y' such as 'text-to-text' etc
             pattern = re.compile(r"(\w+)-to-(\w+)")
             for tag in self.tags:
-                match = pattern.search(tag)
+                match = pattern.search(tag.lower())
                 if match and all(group in VALID_CONVERSIONS for group in match.groups()) and (match.group(1), match.group(2)) not in processed_tasks:
                     processed_tasks.append((match.group(1), match.group(2)))
         for tag in self.tags:  # when pair-tagged elements are not available, potential to duplicate HUB tags here
             for (graph_src, graph_dest), tags in VALID_TASKS[self.cuetype].items():
-                if tag in tags and (graph_src, graph_dest) not in processed_tasks:
+                if tag.lower() in tags and (graph_src, graph_dest) not in processed_tasks:
                     processed_tasks.append((graph_src, graph_dest))
         if default_task and default_task not in processed_tasks:
             processed_tasks.append(default_task)
@@ -81,6 +82,7 @@ class RegistryEntry(BaseModel):
         api_kwargs: dict = None,
         keys: type[dict.keys] = None,
         mir: Optional[List[str]] = None,
+        mode: str | None = None,
         model_family: Optional[List[str]] = None,
         modules: Optional[dict[str, dict]] = None,
         package: Optional[Union[PkgType, CueType]] = None,
@@ -115,6 +117,7 @@ class RegistryEntry(BaseModel):
             cuetype=cuetype,
             keys=keys,
             mir=mir,
+            mode=mode,
             model_family=model_family,
             model=model,
             modules=modules,

@@ -135,9 +135,9 @@ async def mock_hub_data():
                         last_modified=1741908821.5103855,
                     ),
                     CachedRepoInfo(
-                        repo_id="THUDM/CogView3-Plus-3B",
+                        repo_id="zai-org/CogView3-Plus-3B",
                         repo_type="model",
-                        repo_path=PosixPath("/Users/unauthorized/.cache/huggingface/hub/models--THUDM--CogView3-Plus-3B"),
+                        repo_path=PosixPath("/Users/unauthorized/.cache/huggingface/hub/models--zai-org--CogView3-Plus-3B"),
                         size_on_disk=25560123724,
                         nb_files=20,
                         revisions=None,

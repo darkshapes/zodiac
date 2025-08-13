@@ -1,4 +1,0 @@
-[console_scripts]
-zdac = zodiac.toga.__main__:main
-zdac-pool = zodiac.providers.pools:generate_pool
-zodiac = zodiac.toga.__main__:main

@@ -7,11 +7,82 @@
 from typing import Any, Callable, Dict, List, Optional
 
 from nnll.model_detect.identity import ModelIdentity
-
-from zodiac.providers.constants import CUETYPE_CONFIG, MIR_DB, CueType, PkgType
+from nnll.mir.json_cache import MODES_PATH_NAMED, JSONCache
+from zodiac.providers.constants import CUETYPE_CONFIG, MIR_DB, CueType, PkgType, VALID_TASKS
 from zodiac.providers.registry_entry import RegistryEntry
 
 nfo = print
+
+MODE_DATA = JSONCache(MODES_PATH_NAMED)
+
+
+@MODE_DATA.decorator
+async def add_mode_types(mir_tag: list[str], data: dict | None = None) -> dict[str, list[str] | str]:
+    """Add mode‑related metadata for a given MIR tag.\n
+    :param mir_tag: List of tag components that identify a model in the MIR database.
+    :param data: Dictionary containing MIR entries; defaults to ``None``.
+    :returns: Mapping with keys extracted from ``data`` for the fused tag."""
+
+    fused_tag = ".".join(mir_tag)
+
+    mir_details = {
+        "mode": data.get(fused_tag, {}).get("pipeline_tag"),
+        "pkg_type": data.get(fused_tag, {}).get("library_type"),
+        "tags": data.get(fused_tag, {}).get("tags"),
+    }
+    return mir_details
+
+
+async def add_pkg_types(pkg_data: dict, mode: str) -> dict[int | str, Any]:
+    """Augment package data with additional entries based on pipeline class and mode.\n
+    :param pkg_data: Existing package mapping where keys are indices and values are package specs.
+    :param mode: The pipeline mode extracted from MIR metadata.
+    :returns: Updated ``pkg_data`` with GPU-specific packages"""
+    package_name = pkg_data.get(next(iter(pkg_data)))
+    class_name = package_name.get(next(iter(package_name)))
+    class_name = list(class_name)[0]
+    if class_name == "FluxPipeline" and PkgType.MFLUX.value[0]:
+        pkg_data.setdefault(len(pkg_data), {f"{PkgType.MFLUX.value[1].lower()}.flux.flux": "Flux1"})
+    if class_name == "ChromaPipeline" and PkgType.MLX_CHROMA.value[0]:
+        pkg_data.setdefault(len(pkg_data), {PkgType.MLX_CHROMA.value[1].lower(): "ChromaPipeline"})
+    if mode in VALID_TASKS[CueType.HUB][("text", "text")] and PkgType.MLX_LM.value[0]:
+        pkg_data.setdefault(len(pkg_data), {PkgType.MLX_LM.value[1].lower(): "load"})
+    if mode in VALID_TASKS[CueType.HUB][("image", "text")] and PkgType.MLX_VLM.value[0]:
+        pkg_data.setdefault(len(pkg_data), {PkgType.MLX_LM.value[1].lower(): "load"})
+    return pkg_data
+
+
+async def generate_entry(mir_tag: List[str], mir_db: dict, model_tags: list[str] | None = None, pkg_data: dict | None = None) -> dict[str, list[str] | str]:
+    """Create a registry entry dictionary from MIR information.\n
+    :param mir_tag: The hierarchical tag identifying a model in the MIR database.
+    :param mir_db: The MIR database instance providing access to stored metadata.
+    :param model_tags:  Additional tags to attach to the model; defaults to ``None``.
+    :param pkg_data: Existing package data; defaults to ``None``.
+    :returns: Mapping of values for registry construction."""
+
+    fused_tag = ".".join(mir_tag)
+    print(mir_tag)
+    mir_info = mir_db.database.get(mir_tag[0], {}).get(mir_tag[1])
+    modalities = await add_mode_types(fused_tag)
+    mode_data = modalities.get("mode")
+    if tags := modalities.get("tags"):
+        model_tags = tags if not model_tags else model_tags + tags
+    if not mir_info:
+        mir_info = {}
+    else:
+        pkg_data = mir_info.get("pkg")
+        pkg_data = await add_pkg_types(pkg_data, mode_data)
+    entry_data = {
+        "mir": mir_tag,
+        "keys": list(mir_info.keys()),
+        "tasks": mir_info.get("tasks"),
+        "modules": pkg_data,
+        "pipe": mir_info.get("pipe_names"),
+        "mode": mode_data,
+        "tags": model_tags,
+    }
+
+    return entry_data
 
 
 async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[RegistryEntry]) -> list[RegistryEntry] | None:
@@ -21,11 +92,13 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
     :param entries: Previous registry entries to append
     :return: A list of RegistryEntry elements, or None"""
 
-    from huggingface_hub import CacheNotFound, HFCacheInfo, repocard, scan_cache_dir
+    from huggingface_hub import CacheNotFound, repocard, scan_cache_dir
     from huggingface_hub.errors import EntryNotFoundError, LocalEntryNotFoundError, OfflineModeIsEnabled
     from requests import HTTPError
 
-    async def generate_cache_data() -> HFCacheInfo:
+    entry_data = {}
+
+    async def generate_cache_data() -> Any:
         try:
             cache_dir = scan_cache_dir()
         except CacheNotFound:
@@ -48,14 +121,11 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
             tokenizer = None
             pkg_type = None
             mir_tags = None
-            tasks = None
-            modules = None
-            keys = []
-            pipe = None
             base_model = meta.base_model if hasattr("meta", "base_model") else None
-
+            tokenizer = await model_id.get_cache_path(file_name="tokenizer.json", repo_obj=repo)
+            mir_tags = await model_id.label_model(repo_id=repo.repo_id, base_model=base_model, cue_type=CueType.HUB.value[1])
+            # nfo(mir_tags)
             if meta and hasattr(meta, "data"):
-                tags = []
                 tags = meta.data.get("tags", [])
                 if pipeline_tag := meta.data.get("pipeline_tag"):
                     if tags:
@@ -65,58 +135,27 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                 if pkg_name := meta.data.get("library_name"):
                     if hasattr(PkgType, pkg_name := pkg_name.replace("-", "_").upper()):
                         pkg_type = getattr(PkgType, pkg_name)
-            tokenizer = await model_id.get_cache_path(file_name="tokenizer.json", repo_obj=repo)
-            mir_tags = await model_id.label_model(repo_id=repo.repo_id, base_model=base_model, cue_type=CueType.HUB.value[1])
-            if mir_tags and isinstance(mir_tags[0], list):
-                for mir_entry in mir_tags:
-                    mir_data = mir_db.database[mir_entry[0]][mir_entry[1]]
-                    if mir_data:
-                        keys = list(mir_data)
-                        tasks = mir_data.get("tasks")
-                        modules = mir_data.get("pkg")
-                        pipe = mir_data.get("pipe_names")
-                    entry = RegistryEntry.create_entry(
-                        model=repo.repo_id,
-                        size=repo.size_on_disk,
-                        # path=model_path,
-                        tags=tags,
-                        mir=mir_entry,
-                        keys=keys,
-                        tasks=tasks,
-                        pipe=pipe,
-                        modules=modules,
-                        model_family=base_model,
-                        cuetype=CueType.HUB,
-                        package=pkg_type,
-                        api_kwargs=api_data[CueType.HUB.value[1]],  # api_data based on package_name (diffusers/mlx_audio)
-                        timestamp=int(repo.last_modified),
-                        tokenizer=tokenizer,
-                    )
-                    entries.append(entry)
-            else:
-                mir_data = mir_db.database[mir_tags[0]][mir_tags[1]]
-                if mir_data:
-                    keys = list(mir_data)
-                    tasks = mir_data.get("tasks")
-                    modules = mir_data.get("pkg")
-                    pipe = mir_data.get("pipe_names")
+
+            if mir_tags and not isinstance(mir_tags[0], list):
+                mir_tags = [mir_tags]
+            nfo(f"mir tag not found for {repo.repo_id}") if not mir_tags else nfo(mir_tags)
+            if not mir_tags:
+                mir_tags = [[]]
+                entry_data = {"tags": [], "keys":[]}
+            for mir_entry in mir_tags:
+                if mir_entry:
+                    entry_data = await generate_entry(mir_tag=mir_entry, mir_db=mir_db, model_tags=tags)
                 entry = RegistryEntry.create_entry(
                     model=repo.repo_id,
                     size=repo.size_on_disk,
-                    tags=tags,
-                    mir=mir_tags,
-                    keys=keys,
-                    tasks=tasks,
-                    pipe=pipe,
-                    modules=modules,
                     model_family=base_model,
                     cuetype=CueType.HUB,
                     package=pkg_type,
-                    api_kwargs=api_data[CueType.HUB.value[1]],
+                    api_kwargs=api_data[CueType.HUB.value[1]],  # api_data based on package_name (diffusers/mlx_audio)
                     timestamp=int(repo.last_modified),
                     tokenizer=tokenizer,
+                    **entry_data,
                 )
-                nfo(f"mir tag not found for {repo.repo_id}") if not mir_tags else nfo(mir_tags)
                 entries.append(entry)
     return entries
 
@@ -137,10 +176,7 @@ async def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[
                 gguf_data = show(model.model)
                 yield model, gguf_data
 
-    keys = []
-    tasks = None
-    pipe = None
-    modules = None
+    entry_data = {}
     model_id = ModelIdentity()
     entries = [] if not entries else entries
     config = api_data[CueType.OLLAMA.value[1]]
@@ -149,31 +185,19 @@ async def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[
         gguf_data = (gguf_data.modelfile,)
         if hasattr(model, "family") and model.details.family != base_model:
             base_model = model.details.family
-            print(base_model)
         if mir_tag := await model_id.label_model(repo_id=model.model, base_model=base_model, cue_type=CueType.OLLAMA.value[1], repo_obj=gguf_data):
-            mir_tag = mir_tag[0]
-            mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
-            if mir_data:
-                keys = list(mir_data)
-                tasks = mir_data.get("tasks")
-                modules = mir_data.get("pkg")
-                pipe = mir_data.get("pipe_names")
+            entry_data = await generate_entry(mir_tag=mir_tag[0], mir_db=mir_db, model_tags=[model.details.family])
         nfo(f"no tag for {model.model}") if not mir_tag else nfo(f"{mir_tag}")
         entry = RegistryEntry.create_entry(
             model=f"{api_data[CueType.OLLAMA.value[1]].get('prefix')}{model.model}",
             size=model.size.real,
-            tags=[model.details.family],
-            mir=mir_tag,
-            keys=keys,
-            tasks=tasks,
-            pipe=pipe,
-            modules=modules,
             model_family=[base_model],
             cuetype=CueType.OLLAMA,
             package=PkgType.LLAMA,
             api_kwargs=config["api_kwargs"],
             timestamp=int(model.modified_at.timestamp()),
             tokenizer=None,
+            **entry_data,
         )
         entries.append(entry)
     return entries
@@ -188,39 +212,24 @@ async def vllm_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Re
 
     from openai import OpenAI
 
-    keys = []
-    tasks = None
-    pipe = None
-    modules = None
+    entry_data = {}
     model_id = ModelIdentity()
     entries = [] if not entries else entries
     config = api_data[CueType.VLLM.value[1]]
     cache_dir = OpenAI(base_url=api_data["VLLM"]["api_kwargs"]["api_base"], api_key=api_data["VLLM"]["api_kwargs"]["api_key"])
     for model in cache_dir.models.list().data:
         id_name = model["data"].get("id")
-        mir_data = None
         mir_tag = None
         if id_name:
             if mir_tag := await model_id.label_model(repo_id=id_name, base_model=None, cue_type=CueType.VLLM.value[1]):
-                mir_tag = mir_tag[0]
-                mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
-                if mir_data:
-                    keys = list(mir_data)
-                    tasks = mir_data.get("tasks")
-                    modules = mir_data.get("pkg")
-                    pipe = mir_data.get("pipe_names")
+                entry_data = await generate_entry(mir_tag=mir_tag[0], mir_db=mir_db, tags=["text"])
         entry = RegistryEntry.create_entry(
             model=f"{api_data[CueType.VLLM.value[1]].get('prefix')}{id_name}",
             size=model._data.size_bytes,
-            tags=["text"],
-            mir=mir_tag,
-            keys=keys,
-            tasks=tasks,
-            pipe=pipe,
-            modules=modules,
             cuetype=CueType.VLLM,
             api_kwargs={**config["api_kwargs"]},
             timestamp=int(model.modified_at.timestamp()),
+            **entry_data,
         )
         entries.append(entry)
     return entries
@@ -234,10 +243,7 @@ async def llamafile_pool(mir_db: Callable, api_data: Dict[str, Any], entries: Li
     :return: A list of RegistryEntry elements, or None"""
     from openai import OpenAI
 
-    keys = []
-    tasks = None
-    pipe = None
-    modules = None
+    entry_data = {}
     mir_tag = None
     model_id = ModelIdentity()
     entries = [] if not entries else entries
@@ -246,26 +252,8 @@ async def llamafile_pool(mir_db: Callable, api_data: Dict[str, Any], entries: Li
     for model in cache_dir.models.list().data:
         if hasattr(model, id):
             if mir_tag := await model_id.label_model(model.id, CueType.LLAMAFILE.value[1]):
-                mir_tag = mir_tag[0]
-                mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
-                if mir_data:
-                    keys = list(mir_data)
-                    tasks = mir_data.get("tasks")
-                    modules = mir_data.get("pkg")
-                    pipe = mir_data.get("pipe_names")
-        entry = RegistryEntry.create_entry(
-            model=f"{api_data[CueType.LLAMAFILE.value[1]].get('prefix')}{model.id}",
-            size=0,
-            tags=["text"],
-            mir=mir_tag,
-            keys=keys,
-            tasks=tasks,
-            pipe=pipe,
-            modules=modules,
-            cuetype=CueType.LLAMAFILE,
-            api_kwargs=config["api_kwargs"],
-            timestamp=int(model.created),
-        )
+                entry_data = await generate_entry(mir_tag=mir_tag[0], mir_db=mir_db, tags=["text"])
+        entry = RegistryEntry.create_entry(model=f"{api_data[CueType.LLAMAFILE.value[1]].get('prefix')}{model.id}", size=0, cuetype=CueType.LLAMAFILE, api_kwargs=config["api_kwargs"], timestamp=int(model.created), **entry_data)
         entries.append(entry)
     return entries
 
@@ -279,10 +267,7 @@ async def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: Li
 
     from lmstudio import LMStudioClient
 
-    keys = []
-    tasks = None
-    pipe = None
-    modules = None
+    entry_data = {}
     model_id = ModelIdentity()
     entries = [] if not entries else entries
     client = LMStudioClient()
@@ -294,29 +279,17 @@ async def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: Li
             tags.extend(["vision", model.vision])
         if hasattr(model, "tool_use"):
             tags.append(["tool", model.tool_use])
-        mir_data = None
         mir_tag = None
         if hasattr(model, "architecture"):
             if mir_tag := await model_id.label_model(model.architecture, None, CueType.LM_STUDIO.value[1]):
-                mir_tag = mir_tag[0]
-                mir_data = mir_db.database[mir_tag[0]][mir_tag[1]]
-                if mir_data:
-                    keys = list(mir_data)
-                    tasks = mir_data.get("tasks")
-                    modules = mir_data.get("pkg")
-                    pipe = mir_data.get("pipe_names")
+                entry_data = await generate_entry(mir_tag=mir_tag[0], mir_db=mir_db, tags=tags)
         entry = RegistryEntry.create_entry(
             model=f"{api_data[CueType.LM_STUDIO.value[1]].get('prefix')}{model.model_key}",
             size=model._data.size_bytes,
-            tags=tags,
-            mir=mir_tag,
-            keys=keys,
-            tasks=tasks,
-            pipe=pipe,
-            modules=modules,
             cuetype=CueType.LM_STUDIO,
             api_kwargs={**config["api_kwargs"]},
             timestamp=int(model.modified_at.timestamp()),
+            **entry_data,
         )
         entries.append(entry)
     return entries
@@ -370,3 +343,6 @@ if __name__ == "__main__":
 
     models = asyncio.run(register_models())
     dbuq(models)
+    from pprint import pprint
+
+    pprint(models)
