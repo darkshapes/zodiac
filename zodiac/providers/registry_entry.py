@@ -25,12 +25,12 @@ class RegistryEntry(BaseModel):
     timestamp: int
     mode: str | None = None
     api_kwargs: Optional[dict] = None
-    keys: Iterable = (None,)
     mir: Optional[List[str]] = None
+    bundle: Optional[List[List[str]]] = None
     model_family: Optional[List[str]] = None
     modules: Optional[dict[str, dict]] = None
     package: Optional[Union[PkgType, CueType]] = None
-    path: Optional[str] = None
+    path: Optional[Union[str, Path, List[Union[str, Path]]]] = None
     pipe: Optional[dict[str, Union[List[List[str]], List[str], str]]] = (None,)
     tasks: Optional[List[Union[str, List[str]]]] = (None,)
     tokenizer: Optional[Path] = None
@@ -80,13 +80,13 @@ class RegistryEntry(BaseModel):
         size: int,
         tags: List[str],
         api_kwargs: dict = None,
-        keys: type[dict.keys] = None,
         mir: Optional[List[str]] = None,
+        bundle: Optional[List[List[str]]] = None,
         mode: str | None = None,
         model_family: Optional[List[str]] = None,
         modules: Optional[dict[str, dict]] = None,
         package: Optional[Union[PkgType, CueType]] = None,
-        path: Optional[str] = None,
+        path: Optional[Union[str, Path, List[Union[str, Path]]]] = None,
         pipe: Optional[dict[str, Union[List[List[str]], List[str], str]]] = None,
         tasks: Optional[List[Union[str, List[str]]]] = None,
         timestamp: Optional[int] = None,
@@ -114,8 +114,8 @@ class RegistryEntry(BaseModel):
 
         entry = cls(
             api_kwargs=api_kwargs,
+            bundle=bundle,
             cuetype=cuetype,
-            keys=keys,
             mir=mir,
             mode=mode,
             model_family=model_family,
