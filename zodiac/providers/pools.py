@@ -10,6 +10,7 @@ from nnll.model_detect.identity import ModelIdentity
 from nnll.mir.json_cache import MODES_PATH_NAMED, JSONCache
 from zodiac.providers.constants import CUETYPE_CONFIG, MIR_DB, CueType, PkgType, VALID_TASKS
 from zodiac.providers.registry_entry import RegistryEntry
+from nnll.monitor.file import dbuq
 
 nfo = print
 
@@ -63,6 +64,7 @@ async def generate_entry(mir_tag: List[str], mir_db: dict, model_tags: list[str]
     :param model_tags:  Additional tags to attach to the model; defaults to ``None``.
     :param pkg_data: Existing package data; defaults to ``None``.
     :returns: Mapping of values for registry construction."""
+    from zodiac.streams.class_stream import ancestor_data
 
     fused_tag = ".".join(mir_tag)
     mir_info = mir_db.database.get(mir_tag[0], {}).get(mir_tag[1])
@@ -74,13 +76,19 @@ async def generate_entry(mir_tag: List[str], mir_db: dict, model_tags: list[str]
         mir_info = {}
     else:
         pkg_data = mir_info.get("pkg")
-        pkg_data = await add_pkg_types(pkg_data, mode_data, mir_tag)
+        pkg_data: dict = await add_pkg_types(pkg_data, mode_data, mir_tag)
+    pipe_data = mir_info.get("pipe_names")
+    if not pipe_data:
+        pipe_data: list[dict] = await ancestor_data(mir_tag, field_name="pipe_names")
+        pipe_data: dict | None = next(iter(pipe_data), {})
+    task_data = mir_info.get("tasks")
+    if not task_data:
+        task_data: list[dict] = await ancestor_data(mir_tag, field_name="tasks")
     entry_data = {
         "mir": mir_tag,
-        "keys": list(mir_info.keys()),
-        "tasks": mir_info.get("tasks"),
+        "tasks": task_data,
         "modules": pkg_data,
-        "pipe": mir_info.get("pipe_names"),
+        "pipe": pipe_data,
         "mode": mode_data,
         "tags": model_tags,
     }
@@ -148,20 +156,28 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
 
             if mir_tags:
                 if isinstance(mir_tags, list) and isinstance(mir_tags[0], list):
-                    mir_tag = next(iter(mir_id for mir_id in mir_tags if "dit" in mir_id or "unet" in mir_id), mir_tags[0])
+                    mir_bundle = mir_tags if len(mir_tags) > 1 else None
+                    dbuq(mir_tags)
+                    mir_tag = next(iter(mir_id for mir_id in mir_tags if any(arch for arch in [".dit.", "unet"] if arch in mir_id[0])), mir_tags[0])
                 else:
+                    mir_bundle = None
                     mir_tag = mir_tags
+                base_model = base_model.append(mir_tag[0]) if base_model else [mir_tag[0]]
                 entry_data = await generate_entry(mir_tag=mir_tag, mir_db=mir_db, model_tags=tags)
+                entry_data.setdefault("bundle", mir_bundle)
             else:
                 mir_tags = [[]]
-                entry_data = {"tags": [], "keys": []}
-            nfo(f"mir tag not found for {repo.repo_id}") if not mir_tags else nfo(mir_tag)
+                entry_data = {
+                    "tags": [],
+                }
+            nfo(f"mir tag not found for {repo.repo_id}") if not mir_tags else nfo(mir_tags)
             entry = RegistryEntry.create_entry(
                 model=repo.repo_id,
                 size=repo.size_on_disk,
-                model_family=base_model,
                 cuetype=CueType.HUB,
                 package=pkg_type,
+                model_family=base_model if base_model else [mir_tag[0]],
+                path=str(repo.repo_path),
                 api_kwargs=api_data[CueType.HUB.value[1]],  # api_data based on package_name (diffusers/mlx_audio)
                 timestamp=int(repo.last_modified),
                 tokenizer=tokenizer,
@@ -308,6 +324,7 @@ async def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: Li
 
 async def register_models(data: Optional[Dict[str, Any]] = None) -> list[RegistryEntry] | None:
     """Retrieve models from ollama server, local huggingface hub cache, local lmstudio cache & vllm.\n
+    :param: data: Testing -  Override for API CueType data dictionary
     我們不應該繼續為LMStudio編碼。 歡迎貢獻者來改進它。 LMStudio is not OSS, but contributions are welcome."""
 
     @CUETYPE_CONFIG.decorator

@@ -184,6 +184,8 @@ async def test_create_graph(mock_ollama_data, mock_hub_data, mock_ollama_show):
     from zodiac.graph import IntentProcessor
     import asyncio
 
+    result = mock_ollama_data()
+
     int_proc = IntentProcessor()
     data = await register_models()
     if not data:
