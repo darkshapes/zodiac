@@ -70,10 +70,27 @@ Enter a terminal and activate the python environment in
   > Set-ExecutionPolicy Bypass -Scope Process -Force; .venv\Scripts\Activate.ps1
   > ```
 
-Run with the command:<br><br>
-`zdac`<br>
-or<br>
-`zodiac`
+> [!IMPORTANT]
+> ## Classes, Methods & Constants :
+> ```
+> RegistryEntry
+>            `---------------------------Local model registry class, collects and identifies
+> IntentProcessor
+>              `-------------------------Graph of local models and execution estimator
+> ModelStream/TaskStream/TokenStream
+>                                 `------Feed methods for interface operation
+> CueType/PkgType/ChipType Constants
+>                                  `-----Enumuerations of available hardware, services, and dependencies
+> Signatures
+>         `------------------------------DSPY signatures, custom routines for models
+> Interface
+>        `-------------------------------Toga GUI components
+> ```
+> ##  Available terminal commands:<br>
+> Launch program with<br>
+> - `zdac`<br>
+> - or<br>
+> - `zodiac`
 
 ### [Detailed instructions :](https://github.com/darkshapes/sdbx/wiki/Develop)
 

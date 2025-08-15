@@ -170,7 +170,6 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                 entry_data = {
                     "tags": [],
                 }
-            nfo(f"mir tag not found for {repo.repo_id}") if not mir_tags else nfo(mir_tags)
             entry = RegistryEntry.create_entry(
                 model=repo.repo_id,
                 size=repo.size_on_disk,
@@ -183,6 +182,7 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                 tokenizer=tokenizer,
                 **entry_data,
             )
+            nfo(mir_tags or f"mir tag not found for {repo.repo_id}")
             entries.append(entry)
     return entries
 
