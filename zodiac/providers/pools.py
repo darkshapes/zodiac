@@ -70,7 +70,7 @@ async def generate_entry(mir_tag: List[str], mir_db: dict, model_tags: list[str]
     mir_info = mir_db.database.get(mir_tag[0], {}).get(mir_tag[1])
     modalities = await add_mode_types(fused_tag)
     mode_data = modalities.get("mode")
-    if tags := modalities.get("tags"):
+    if tags := modalities.get("tags", []):
         model_tags = tags if not model_tags else model_tags + tags
     if not mir_info:
         mir_info = {}
