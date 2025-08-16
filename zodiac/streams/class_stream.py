@@ -20,28 +20,29 @@ async def ancestor_data(mir_tag_or_registry_entry: RegistryEntry | list, field_n
     return [mir_db[mir_prefix][x].get(field_name) for x in base_fields if mir_db[mir_prefix].get(x, {}).get(field_name, {})]
 
 
-async def best_package(pkg_data: dict[int | str, Any], ready_list: list[tuple[ChipType]] = ChipType._show_ready()) -> tuple[str]:
+async def best_package(pkg_data: RegistryEntry | dict[int | str, Any], ready_list: list[tuple[ChipType]] = ChipType._show_ready()) -> tuple[str]:
     """Identify the best package based on model data and package sets.\n
     :param mir_db_pkg: Dictionary containing package data to match
     :param ready_pkg_types: List of priority package processors to evaluate
     :return: Tuple containing (class name, package type) if match found, otherwise None"""
 
     if isinstance(pkg_data, RegistryEntry):
-        pkg_loop = await ancestor_data(pkg_data)
-    else:
-        pkg_loop = [pkg_data]
+        pkg_loop: list = await ancestor_data(pkg_data)
+        print(pkg_loop)
+        pkg_loop.insert(0, pkg_data.modules | pkg_loop[0])
 
+        print(pkg_data.modules)
+    else:
+        pkg_loop = [pkg_data]  # normalize to list
+    print(pkg_loop)
     for processor in ready_list:
         for pkg_type in processor[2]:
             if pkg_type.value[0]:  # Determine if the package is available
                 package_name = pkg_type.value[1].lower()
-                if hasattr(pkg_data, "modules"):
-                    pkg_loop += pkg_data.modules
-                for pkg_field in pkg_loop:
-                    for index, data in pkg_field.items():
-                        if package_name in data:
-                            class_name = pkg_field[index][package_name]
-                            return (index, class_name, pkg_type)
+                for index, data in next(iter(pkg_loop)).items():
+                    if package_name in data:
+                        class_name = data[package_name]
+                        return (index, class_name, pkg_type)
 
 
 async def find_package(entry: RegistryEntry = None, mir_entry: list[str] | None = None) -> Tuple[str]:
