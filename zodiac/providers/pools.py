@@ -124,9 +124,8 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                     yield None, None
                 yield repo, card
 
-    model_id = ModelIdentity()
-
     async for repo, card in generate_cache_data():
+        model_id = ModelIdentity()
         if repo:
             tags = []
             base_model = None
@@ -170,6 +169,7 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                 entry_data = {
                     "tags": [],
                 }
+            nfo(mir_tags if mir_tags[0] else f"mir tag not found for {repo.repo_id}")
             entry = RegistryEntry.create_entry(
                 model=repo.repo_id,
                 size=repo.size_on_disk,
@@ -182,7 +182,6 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                 tokenizer=tokenizer,
                 **entry_data,
             )
-            nfo(mir_tags or f"mir tag not found for {repo.repo_id}")
             entries.append(entry)
     return entries
 
@@ -204,10 +203,10 @@ async def ollama_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[
                 yield model, gguf_data
 
     entry_data = {}
-    model_id = ModelIdentity()
     entries = [] if not entries else entries
     config = api_data[CueType.OLLAMA.value[1]]
     async for model, gguf_data in generate_cache_data():
+        model_id = ModelIdentity()
         base_model = gguf_data.modelinfo.get("general.architecture")
         gguf_data = (gguf_data.modelfile,)
         if hasattr(model, "family") and model.details.family != base_model:
@@ -240,11 +239,11 @@ async def vllm_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Re
     from openai import OpenAI
 
     entry_data = {}
-    model_id = ModelIdentity()
     entries = [] if not entries else entries
     config = api_data[CueType.VLLM.value[1]]
     cache_dir = OpenAI(base_url=api_data["VLLM"]["api_kwargs"]["api_base"], api_key=api_data["VLLM"]["api_kwargs"]["api_key"])
     for model in cache_dir.models.list().data:
+        model_id = ModelIdentity()
         id_name = model["data"].get("id")
         mir_tag = None
         if id_name:
@@ -272,11 +271,11 @@ async def llamafile_pool(mir_db: Callable, api_data: Dict[str, Any], entries: Li
 
     entry_data = {}
     mir_tag = None
-    model_id = ModelIdentity()
     entries = [] if not entries else entries
     cache_dir: OpenAI = OpenAI(base_url=api_data["LLAMAFILE"]["api_kwargs"]["api_base"], api_key="sk-no-key-required")
     config = api_data[CueType.LLAMAFILE.value[1]]
     for model in cache_dir.models.list().data:
+        model_id = ModelIdentity()
         if hasattr(model, id):
             if mir_tag := await model_id.label_model(model.id, CueType.LLAMAFILE.value[1]):
                 entry_data = await generate_entry(mir_tag=mir_tag[0], mir_db=mir_db, tags=["text"])
@@ -295,12 +294,12 @@ async def lm_studio_pool(mir_db: Callable, api_data: Dict[str, Any], entries: Li
     from lmstudio import LMStudioClient
 
     entry_data = {}
-    model_id = ModelIdentity()
     entries = [] if not entries else entries
     client = LMStudioClient()
     models = client.list_models()
     config = api_data[CueType.LM_STUDIO.value[1]]
     for model in models:
+        model_id = ModelIdentity()
         tags = []
         if hasattr(model, "vision"):
             tags.extend(["vision", model.vision])
