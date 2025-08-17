@@ -48,22 +48,16 @@ class RegistryEntry(BaseModel):
         default_task = None
         processed_tasks = []
         dbuq(self.model)
-        if self.mir:
-            arch = self.mir[0].split(".")[1]
-            if arch in ["detr", "vit"]:
-                processed_tasks = [("image", "text")]
-            elif arch in ["controlnet", "unet", "dit"]:
-                processed_tasks = [("text", "image")]
-                processed_tasks = [("image", "image")]
         if self.cuetype in [x for x in list(CueType) if x != CueType.HUB]:  # Literal list of CueType, must use list()
             default_task = ("text", "text")  # usually these are txt gen libraries
         elif self.cuetype == CueType.HUB:
             dbuq(self.cuetype)  # pair tags from the hub such 'x-to-y' such as 'text-to-text' etc
             pattern = re.compile(r"(\w+)-to-(\w+)")
-            for tag in self.tags:
-                match = pattern.search(tag.lower())
-                if match and all(group in VALID_CONVERSIONS for group in match.groups()) and (match.group(1), match.group(2)) not in processed_tasks:
-                    processed_tasks.append((match.group(1), match.group(2)))
+            for tag in [*self.tags, self.mode]:
+                if tag:
+                    match = pattern.search(tag.lower())
+                    if match and all(group in VALID_CONVERSIONS for group in match.groups()) and (match.group(1), match.group(2)) not in processed_tasks:
+                        processed_tasks.append((match.group(1), match.group(2)))
         for tag in self.tags:  # when pair-tagged elements are not available, potential to duplicate HUB tags here
             for (graph_src, graph_dest), tags in VALID_TASKS[self.cuetype].items():
                 if tag.lower() in tags and (graph_src, graph_dest) not in processed_tasks:

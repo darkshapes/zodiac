@@ -1,44 +1,11 @@
-#  # # <!-- // /*  SPDX-License-Identifier: MPL-2.0*/ -->
-#  # # <!-- // /*  d a r k s h a p e s */ -->
+# SPDX-License-Identifier: MPL-2.0 AND LicenseRef-Commons-Clause-License-Condition-1.0
+# <!-- // /*  d a r k s h a p e s */ -->
 
-import os
-import asyncio
-import requests
-from requests.exceptions import ConnectionError, ConnectTimeout
-from urllib3.exceptions import MaxRetryError, NewConnectionError
 from typing import Callable
-
 import toga
-import toga.app
-from toga import Key
-from toga.constants import Direction
-from toga.style import Pack
-
-from zodiac.streams.model_stream import ModelStream
-from zodiac.streams.task_stream import TaskStream
-from zodiac.streams.token_stream import TokenStream
-import platform
-from dspy import Prediction, streamify, context as dspy_context, inspect_history
-
-OS_NAME = platform.system  # replace with config from sdbx later
 
 
-class Interface(toga.App):
-    formatted_units = [" ❖ chr", " ⟐ tok", ' " sec ']
-    bg_graph = "#070708"
-    bg_text = "#1B1B1B"  # "#1B1B1B"  # "#09090B"
-    bg = bg_text
-    bg_static = "#5D5E62"
-    activity = "#8122C4"
-
-    static = Pack(color="#727378")
-    fg_static = Pack(color="#8D8E94")
-    scroll_buffer = 5000  # chunks required to scroll down
-    graph_disabled = "http://localhost"
-    graph_server = "http://127.0.0.1:8188"
-    status_info = ("Connecting...", "Server?", "Ready.", "Done.", "No File.", "Read Failed.", "Attached.", "Copied.")
-    _is_cancelled = False
-
+class CommandPalette:
     async def ticker(self, widget: Callable, external: bool = False, **kwargs) -> toga.Widget:
         """Process and synthesize input data based on selected model.\n
         :param widget: The UI widget that triggered this action, typically used for state management.\n
@@ -48,14 +15,17 @@ class Interface(toga.App):
         from zodiac.toga.signatures import ready_predictor
 
         self.response_panel.value += f"{os.path.basename(self.registry_entry.model)} :\n"
+
         await self.token_stream.set_tokenizer(self.registry_entry)
         prompts = {}
         if self.message_panel.value:
             cache = False
             prompts.setdefault("text", self.message_panel.value)
+        stream = True if self.output_types.value == "text" else False
         # prompts.setdefault("audio",[0]) if else []
         # prompts.setdefault("image",[]) if image": []
-        if stream := self.output_types.value == "text":
+
+        if stream:
             context_data, predictor_data = await ready_predictor(self.registry_entry, dspy_stream=stream, async_stream=stream, cache=cache)
             await self.stream_text(prompts, context_data, predictor_data)
         else:
@@ -91,7 +61,7 @@ class Interface(toga.App):
         pkg_data = await best_package(pkg_data=registry_entry)
         constructor = ConstructPipeline()
         pipe_data = constructor.create_pipeline(registry_entry, pkg_data, MIR_DB)
-        return run_inference(pipe_data, prompts, out_type=self.output_types.value)
+        return run_inference(pipe_data, prompts)
 
         # from zodiac.toga.signatures import Predictor
 
@@ -163,14 +133,6 @@ class Interface(toga.App):
     async def model_graph(self):
         """Builds the model graph."""
         await self.model_stream.model_graph()
-
-    async def token_estimate(self, widget, **kwargs) -> None:
-        """Updates character and token count based on user input.
-        :param widget: Input widget providing text"""
-        token_count, character_count = await self.token_stream.token_count(message=self.message_panel.value)
-        self.character_stats.text = "{:02}".format(character_count) + "".join(self.formatted_units[0])
-        self.token_stats.text = "{:02}".format(token_count) + "".join(self.formatted_units[1])
-        self.time_stats.text = "{:02}".format(0.0) + "".join(self.formatted_units[2])
 
     async def populate_in_types(self) -> None:
         """Builds the input types selection."""
@@ -256,182 +218,3 @@ class Interface(toga.App):
         for info in self.status_info:
             self.status_display.text = self.status_display.text.replace(info, "")
         self.status_display.text += status_info
-
-    def initialize_inputs(self):
-        """Initializes UI elements for input handling."""
-        self.character_stats = toga.Label("{:02}".format(0) + "".join(self.formatted_units[0]), **self.fg_static)
-        self.token_stats = toga.Label("{:02}".format(0) + "".join(self.formatted_units[1]), **self.fg_static)
-        self.time_stats = toga.Label("{:02}".format(0.0) + "".join(self.formatted_units[2]), **self.fg_static)
-        self.input_types = toga.Selection(items=[], on_change=self.populate_model_stack)
-        self.output_types = toga.Selection(items=[], on_change=self.populate_model_stack)
-        self.model_stack = toga.Selection(items=[], on_change=self.on_select_handler)
-        self.task_stack = toga.Selection(items=[], style=Pack(align_items="end"))
-        self.message_panel = toga.MultilineTextInput(placeholder="Prompt", on_change=self.token_estimate, style=Pack(flex=0.66, margin=10))
-        self.browser_panel = toga.WebView(url=self.graph_server, id="Graph ")
-        self.audio_panel = toga.Canvas()
-        self.response_panel = toga.MultilineTextInput(readonly=True, placeholder="Response", style=Pack(flex=5), on_change=self.reset_position)
-
-    def initialize_static(self) -> None:
-        """Create the main input fields"""
-
-        status_bar = toga.Row(
-            children=[
-                toga.Column(
-                    children=[
-                        toga.Row(
-                            children=[self.input_types, toga.Label("➾"), self.output_types, self.task_stack],
-                            style=Pack(align_items="end", gap=5),
-                        ),
-                        toga.Row(
-                            children=[self.model_stack, toga.Label("↪︎")],  # , live_stats
-                            style=Pack(align_items="end", text_direction="rtl", gap=5),
-                        ),
-                    ],
-                    style=Pack(vertical_align_items="center", gap=5, justify_content="end", align_items="end"),
-                ),
-                toga.Row(
-                    children=[
-                        toga.Column(children=[self.character_stats, self.token_stats, self.time_stats]),
-                        toga.Column(
-                            children=[
-                                toga.Button("▶︎", on_press=self.ticker, style=Pack(width=30, height=20, font_size="12")),
-                                toga.Button("⧉", on_press=self.copy_reply, style=Pack(width=30, height=20, font_size=15, vertical_align_items="start")),
-                            ],
-                            style=Pack(gap=5),
-                        ),
-                        toga.Column(
-                            children=[
-                                toga.Button(
-                                    """📎
-                                _""",
-                                    on_press=self.attach_file,
-                                    style=Pack(width=30, height=20, font_size="10", align_items="start", justify_content="start"),
-                                ),
-                                toga.Button("⌫", on_press=self.empty_prompt, style=Pack(width=30, height=20, font_size="14")),
-                            ],
-                            style=Pack(font_size="15", gap=5),
-                        ),
-                    ],
-                    style=Pack(vertical_align_items="center", gap=5, justify_content="start", align_items="start"),
-                ),
-            ],
-            style=Pack(margin=10, gap=5, vertical_align_items="center", justify_content="start", align_items="start"),
-        )
-        self.status_log = toga.Label(f"{inspect_history()}")  # show llm history
-        self.status_tab = toga.OptionItem(text="|  Connecting...", content=self.status_log, enabled=False)
-        # self.response_array = toga.Box(children=[self.response_panel], style=Pack(flex=1))
-        # self.endless_response = toga.ScrollContainer(content=self.response_array)
-        resize_area = toga.SplitContainer(
-            content=[
-                toga.OptionContainer(
-                    content=[
-                        ("Output", self.response_panel),
-                        ("Graph", self.browser_panel),
-                        self.status_tab,
-                    ],
-                    on_select=self.switch_tabs,
-                    style=Pack(background_color="#000000", flex=2),
-                    id="tab_panel",
-                ),
-                toga.Row(
-                    children=[
-                        toga.Column(justify_content="start", style=Pack(flex=0.33)),
-                        toga.Box(children=[self.message_panel], style=Pack(flex=1)),
-                        toga.Column(style=Pack(flex=0.33, justify_content="start")),
-                    ]
-                ),
-            ],
-            direction=Direction.HORIZONTAL,
-            style=Pack(flex=3),
-        )
-
-        self.final_layout = toga.Column(children=[status_bar, resize_area], style=Pack(background_color=self.bg_text, flex=1))
-
-    def initialize_layout(self) -> None:
-        """Create the layout of the application."""
-        self.main_window.content = self.final_layout
-
-    def startup(self) -> None:
-        """Startup Logic. Initialize widgets and layout, then asynchronous tasks for populating datagets"""
-        self.main_window = toga.MainWindow()
-        self.model_stream = ModelStream()
-        self.task_stream = TaskStream()
-        self.token_stream = TokenStream()
-        self.token_stream = TokenStream()
-
-        start = toga.Command(
-            self.ticker,
-            text="Start",
-            tooltip="Run the current available prompts.",
-            shortcut=Key.MOD_1 + Key.ENTER,
-            group=toga.Group.APP,
-            section=-1,
-        )
-        attach = toga.Command.standard(
-            self,
-            toga.Command.OPEN,
-            text="Attach File...",
-            tooltip="Attach a file to the prompt.",
-            shortcut=Key.MOD_1 + Key.O,
-            action=self.attach_file,
-            group=toga.Group.APP,
-            section=0,
-        )
-        copy_reply = toga.Command(
-            self.copy_reply,
-            text="Copy Response",
-            tooltip="Copy the response provided by the system",
-            group=toga.Group.APP,
-            section=0,
-        )
-        clear = toga.Command(
-            self.empty_prompt,
-            text="Clear Prompt",
-            tooltip="Empty the user prompt field.",
-            shortcut=Key.MOD_3 + Key.BACKSPACE,
-            group=toga.Group.APP,
-            section=1,
-        )
-        stop = toga.Command(
-            self.halt,
-            text="Stop",
-            tooltip="Cancel the current sequence generation.",
-            shortcut=Key.MOD_1 + Key.ESCAPE,  #
-            group=toga.Group.APP,
-            section=1,
-        )
-        self.commands.add(start, attach, copy_reply, clear, stop)
-
-        self.initialize_inputs()
-        self.initialize_static()
-        self.initialize_layout()
-        asyncio.create_task(self.model_graph())
-        asyncio.create_task(self.token_estimate(self))
-        asyncio.create_task(self.populate_in_types())
-        asyncio.create_task(self.populate_out_types())
-        asyncio.create_task(self.populate_model_stack())
-        asyncio.create_task(self.populate_task_stack())
-        self.main_window.show()
-        self.status_display = self.status_tab
-        self.bg = self.bg_graph
-        self.status_text_prefix = "|  "
-
-        asyncio.create_task(self.switch_tabs())
-
-
-def main(url: str = "http://127.0.0.1:8188"):
-    """The entry point for the application."""
-    app = Interface(
-        formal_name="Shadowbox",
-        app_id="org.darkshapes.shadowbox",
-        app_name="sdbx",
-        author="Darkshapes",
-        home_page="https://darkshapes.org",
-        description=" A generative AI instrument. ",
-    )
-
-    app.icon = toga.Icon(path="resources/anomaly_128x")
-    try:
-        app.main_loop()
-    except Exception as error_log:
-        print(error_log)
