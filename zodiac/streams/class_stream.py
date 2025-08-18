@@ -16,7 +16,10 @@ async def ancestor_data(mir_tag_or_registry_entry: RegistryEntry | list, field_n
         mir_prefix = mir_tag_or_registry_entry.mir[0]
     else:
         mir_prefix = mir_tag_or_registry_entry[0]
-    base_fields = ["*", "diffusers", "prior"]
+    base_fields = [
+        "diffusers",
+        "*",
+    ]  # "prior"
     return [mir_db[mir_prefix][x].get(field_name) for x in base_fields if mir_db[mir_prefix].get(x, {}).get(field_name, {})]
 
 
@@ -31,7 +34,6 @@ async def best_package(pkg_data: RegistryEntry | dict[int | str, Any], ready_lis
         print(pkg_loop)
         pkg_loop.insert(0, pkg_data.modules | pkg_loop[0])
 
-        print(pkg_data.modules)
     else:
         pkg_loop = [pkg_data]  # normalize to list
     print(pkg_loop)

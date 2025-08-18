@@ -176,7 +176,7 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                 size=repo.size_on_disk,
                 cuetype=CueType.HUB,
                 package=pkg_type,
-                model_family=base_model if base_model else [mir_tag[0]],
+                model_family=base_model if base_model else [""],
                 path=str(repo.repo_path),
                 api_kwargs=api_data[CueType.HUB.value[1]],  # api_data based on package_name (diffusers/mlx_audio)
                 timestamp=int(repo.last_modified),
