@@ -16,7 +16,10 @@ async def ancestor_data(mir_tag_or_registry_entry: RegistryEntry | list, field_n
         mir_prefix = mir_tag_or_registry_entry.mir[0]
     else:
         mir_prefix = mir_tag_or_registry_entry[0]
-    base_fields = ["*", "diffusers", "prior"]
+    base_fields = [
+        "diffusers",
+        "*",
+    ]  # "prior"
     return [mir_db[mir_prefix][x].get(field_name) for x in base_fields if mir_db[mir_prefix].get(x, {}).get(field_name, {})]
 
 

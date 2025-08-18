@@ -21,14 +21,13 @@ MODE_DATA = JSONCache(MODES_PATH_NAMED)
 async def add_mode_types(mir_tag: list[str], data: dict | None = None) -> dict[str, list[str] | str]:
     """Add mode‑related metadata for a given MIR tag.\n
     :param mir_tag: List of tag components that identify a model in the MIR database.
-    :param data: Dictionary containing MIR entries; defaults to ``None``.
+    :param data: Dictionary containing mode entries; defaults to ``None``.
     :returns: Mapping with keys extracted from ``data`` for the fused tag."""
 
-    fused_tag = ".".join(mir_tag)
-
+    fused_tag = mir_tag
     mir_details = {
-        "mode": data.get(fused_tag, {}).get("pipeline_tag"),
-        "pkg_type": data.get(fused_tag, {}).get("library_type"),
+        "mode": data.get(fused_tag, {}).get("pipeline"),
+        "pkg_type": data.get(fused_tag, {}).get("library"),
         "tags": data.get(fused_tag, {}).get("tags"),
     }
     return mir_details
@@ -47,13 +46,13 @@ async def add_pkg_types(pkg_data: dict, mode: str, mir_tag: list[str]) -> dict[i
         class_data = {
             f"{PkgType.MFLUX.value[1].lower()}": {"flux.flux.Flux1": {"alias": alias}},
         }
-        pkg_data.setdefault(len(pkg_data), class_data)
+        pkg_data.setdefault(str(len(pkg_data)), class_data)
     if class_name == "ChromaPipeline" and PkgType.MLX_CHROMA.value[0]:
-        pkg_data.setdefault(len(pkg_data), {PkgType.MLX_CHROMA.value[1].lower(): "ChromaPipeline"})
+        pkg_data.setdefault(str(len(pkg_data)), {PkgType.MLX_CHROMA.value[1].lower(): "ChromaPipeline"})
     if mode in VALID_TASKS[CueType.HUB][("text", "text")] and PkgType.MLX_LM.value[0]:
-        pkg_data.setdefault(len(pkg_data), {PkgType.MLX_LM.value[1].lower(): "load"})
+        pkg_data.setdefault(str(len(pkg_data)), {PkgType.MLX_LM.value[1].lower(): "load"})
     if mode in VALID_TASKS[CueType.HUB][("image", "text")] and PkgType.MLX_VLM.value[0]:
-        pkg_data.setdefault(len(pkg_data), {PkgType.MLX_LM.value[1].lower(): "load"})
+        pkg_data.setdefault(str(len(pkg_data)), {PkgType.MLX_LM.value[1].lower(): "load"})
     return pkg_data
 
 
@@ -92,7 +91,6 @@ async def generate_entry(mir_tag: List[str], mir_db: dict, model_tags: list[str]
         "mode": mode_data,
         "tags": model_tags,
     }
-
     return entry_data
 
 
@@ -152,7 +150,6 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                 cue_type=CueType.HUB.value[1],
             )
             tags = card_data.get("tags", []) if card_data else None
-
             if mir_tags:
                 if isinstance(mir_tags, list) and isinstance(mir_tags[0], list):
                     mir_bundle = mir_tags if len(mir_tags) > 1 else None
@@ -175,7 +172,7 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                 size=repo.size_on_disk,
                 cuetype=CueType.HUB,
                 package=pkg_type,
-                model_family=base_model if base_model else [mir_tag[0]],
+                model_family=base_model if base_model else [""],
                 path=str(repo.repo_path),
                 api_kwargs=api_data[CueType.HUB.value[1]],  # api_data based on package_name (diffusers/mlx_audio)
                 timestamp=int(repo.last_modified),

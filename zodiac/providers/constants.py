@@ -281,7 +281,7 @@ class ChipType(Enum):
         """
         atypes = cls._show_all()
         if api_name:
-            return api_name.upper() in [x for x in atypes if getattr(cls,x)[0]]
+            return api_name.upper() in [x for x in atypes if getattr(cls, x)[0]]
         return [getattr(cls, x) for x in atypes if getattr(cls, x)[0] is True]
 
     @classmethod
@@ -293,7 +293,7 @@ class ChipType(Enum):
         pkg_names = getattr(cls, "CPU")[-1]
         atypes = cls._show_ready()
         available = [pkg[1] for pkg in atypes if pkg[0] is True]
-        priority = next(iter(available),"CPU") if available else "CPU"
+        priority = next(iter(available), "CPU") if available else "CPU"
         if priority not in [pkg[1] for pkg in cls._show_all() if not pkg[2]] and priority != "CPU":
             pkg_names = atypes[0][2] + pkg_names
         return pkg_names
@@ -393,7 +393,7 @@ VALID_JUNCTIONS = [""]
 
 tasks = PIPELINE_REGISTRY.get_supported_tasks() + ["translation_XX_to_YY"]
 
-VALID_TASKS = {
+VALID_TASKS = {  # normalized to lowercase
     CueType.VLLM: {
         ("text", "text"): ["text"],
         ("image", "text"): ["vision"],
@@ -410,9 +410,18 @@ VALID_TASKS = {
         ("text", "text"): ["llm"],
     },
     CueType.HUB: {
-        ("image", "image"): ["image-to-image", "inpaint", "inpainting", "depth-to-image", "i2i", "image-to-image", "any-to-any"],
+        ("image", "image"): [
+            "image-to-image",
+            "inpaint",
+            "inpainting",
+            "depth-to-image",
+            "i2i",
+            "image-to-image",
+            "any-to-any",
+        ],
         ("text", "image"): [
-            "Kolors",
+            "kolors",
+            "kolorspipeline",
             "image-generation",
             "any-to-any",
             "text-to-image",
@@ -436,7 +445,7 @@ VALID_TASKS = {
             "zero-shot-object-detection",
             "zero-shot-image-classification",
             "timm",
-            "Zero-Shot Image Classification",
+            "zero-shot image classification",
             "any-to-any",
             "vidore",
         ],
@@ -465,19 +474,12 @@ VALID_TASKS = {
             "token-classification",
             "translation",
             "zero-shot-classification",
-            "translation_XX_to_YY",
+            "translation_xx_to_yy",
             "t2t",
             "chatglm",
             "exbert",
         ],
-        ("text", "audio"): [
-            "text-to-audio",
-            "t2a",
-            "any-to-any",
-            "musicgen",
-            "audiocraft",
-            "audiogen",
-        ],
+        ("text", "audio"): ["text-to-audio", "t2a", "any-to-any", "musicgen", "audiocraft", "audiogen", "audioldmpipeline", "audioldm2pipeline"],
         ("audio", "text"): ["zero-shot-audio-classification", "audio-classification", "a2t", "audio-text-to-text", "any-to-any"],
         ("text", "speech"): [
             "text-to-speech",
