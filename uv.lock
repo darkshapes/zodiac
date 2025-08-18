@@ -3,37 +3,21 @@ revision = 2
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version >= '3.13' and sys_platform == 'darwin'",
-    "python_full_version >= '3.13' and sys_platform == 'Linux'",
-    "python_full_version >= '3.13' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' in sys_platform",
-    "python_full_version >= '3.13' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version >= '3.13' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version >= '3.13' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version >= '3.13' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version >= '3.13' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'windows'",
+    "python_full_version >= '3.13' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
     "python_full_version == '3.12.*' and sys_platform == 'darwin'",
     "python_full_version < '3.12' and sys_platform == 'darwin'",
-    "python_full_version == '3.12.*' and sys_platform == 'Linux'",
-    "python_full_version < '3.12' and sys_platform == 'Linux'",
-    "python_full_version == '3.12.*' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' in sys_platform",
-    "python_full_version < '3.12' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' in sys_platform",
-    "python_full_version == '3.12.*' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version < '3.12' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version < '3.12' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version < '3.12' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version < '3.12' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version < '3.12' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'windows'",
+    "python_full_version < '3.12' and sys_platform == 'windows'",
+    "python_full_version == '3.12.*' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version < '3.12' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
 ]
-conflicts = [[
-    { package = "zodiac", extra = "cuda" },
-    { package = "zodiac", extra = "mps" },
-    { package = "zodiac", extra = "rocm" },
-    { package = "zodiac", extra = "torch" },
-    { package = "zodiac", extra = "xpu" },
-]]
 
 [options]
 prerelease-mode = "allow"
@@ -315,9 +299,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/f9/5e/435ce8d5642f1f7679540d1e73c1c42d933331c0976eb397d1717d7f01a3/audioop_lts-0.2.2-cp313-abi3-musllinux_1_2_riscv64.whl", hash = "sha256:3fc38008969796f0f689f1453722a0f463da1b8a6fbee11987830bfbb664f623", size = 78766, upload-time = "2025-08-05T16:42:33.302Z" },
     { url = "https://files.pythonhosted.org/packages/ae/3b/b909e76b606cbfd53875693ec8c156e93e15a1366a012f0b7e4fb52d3c34/audioop_lts-0.2.2-cp313-abi3-musllinux_1_2_s390x.whl", hash = "sha256:15ab25dd3e620790f40e9ead897f91e79c0d3ce65fe193c8ed6c26cffdd24be7", size = 87640, upload-time = "2025-08-05T16:42:34.854Z" },
     { url = "https://files.pythonhosted.org/packages/30/e7/8f1603b4572d79b775f2140d7952f200f5e6c62904585d08a01f0a70393a/audioop_lts-0.2.2-cp313-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:03f061a1915538fd96272bac9551841859dbb2e3bf73ebe4a23ef043766f5449", size = 86052, upload-time = "2025-08-05T16:42:35.839Z" },
-    { url = "https://files.pythonhosted.org/packages/b5/96/c37846df657ccdda62ba1ae2b6534fa90e2e1b1742ca8dcf8ebd38c53801/audioop_lts-0.2.2-cp313-abi3-win32.whl", hash = "sha256:3bcddaaf6cc5935a300a8387c99f7a7fbbe212a11568ec6cf6e4bc458c048636", size = 26185, upload-time = "2025-08-05T16:42:37.04Z" },
-    { url = "https://files.pythonhosted.org/packages/34/a5/9d78fdb5b844a83da8a71226c7bdae7cc638861085fff7a1d707cb4823fa/audioop_lts-0.2.2-cp313-abi3-win_amd64.whl", hash = "sha256:a2c2a947fae7d1062ef08c4e369e0ba2086049a5e598fda41122535557012e9e", size = 30503, upload-time = "2025-08-05T16:42:38.427Z" },
-    { url = "https://files.pythonhosted.org/packages/34/25/20d8fde083123e90c61b51afb547bb0ea7e77bab50d98c0ab243d02a0e43/audioop_lts-0.2.2-cp313-abi3-win_arm64.whl", hash = "sha256:5f93a5db13927a37d2d09637ccca4b2b6b48c19cd9eda7b17a2e9f77edee6a6f", size = 24173, upload-time = "2025-08-05T16:42:39.704Z" },
     { url = "https://files.pythonhosted.org/packages/58/a7/0a764f77b5c4ac58dc13c01a580f5d32ae8c74c92020b961556a43e26d02/audioop_lts-0.2.2-cp313-cp313t-macosx_10_13_universal2.whl", hash = "sha256:73f80bf4cd5d2ca7814da30a120de1f9408ee0619cc75da87d0641273d202a09", size = 47096, upload-time = "2025-08-05T16:42:40.684Z" },
     { url = "https://files.pythonhosted.org/packages/aa/ed/ebebedde1a18848b085ad0fa54b66ceb95f1f94a3fc04f1cd1b5ccb0ed42/audioop_lts-0.2.2-cp313-cp313t-macosx_10_13_x86_64.whl", hash = "sha256:106753a83a25ee4d6f473f2be6b0966fc1c9af7e0017192f5531a3e7463dce58", size = 27748, upload-time = "2025-08-05T16:42:41.992Z" },
     { url = "https://files.pythonhosted.org/packages/cb/6e/11ca8c21af79f15dbb1c7f8017952ee8c810c438ce4e2b25638dfef2b02c/audioop_lts-0.2.2-cp313-cp313t-macosx_11_0_arm64.whl", hash = "sha256:fbdd522624141e40948ab3e8cdae6e04c748d78710e9f0f8d4dae2750831de19", size = 27329, upload-time = "2025-08-05T16:42:42.987Z" },
@@ -331,9 +312,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/b2/67/a9f4fb3e250dda9e9046f8866e9fa7d52664f8985e445c6b4ad6dfb55641/audioop_lts-0.2.2-cp313-cp313t-musllinux_1_2_riscv64.whl", hash = "sha256:c9c8e68d8b4a56fda8c025e538e639f8c5953f5073886b596c93ec9b620055e7", size = 84788, upload-time = "2025-08-05T16:42:52.198Z" },
     { url = "https://files.pythonhosted.org/packages/70/f7/3de86562db0121956148bcb0fe5b506615e3bcf6e63c4357a612b910765a/audioop_lts-0.2.2-cp313-cp313t-musllinux_1_2_s390x.whl", hash = "sha256:96f19de485a2925314f5020e85911fb447ff5fbef56e8c7c6927851b95533a1c", size = 94472, upload-time = "2025-08-05T16:42:53.59Z" },
     { url = "https://files.pythonhosted.org/packages/f1/32/fd772bf9078ae1001207d2df1eef3da05bea611a87dd0e8217989b2848fa/audioop_lts-0.2.2-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:e541c3ef484852ef36545f66209444c48b28661e864ccadb29daddb6a4b8e5f5", size = 92279, upload-time = "2025-08-05T16:42:54.632Z" },
-    { url = "https://files.pythonhosted.org/packages/4f/41/affea7181592ab0ab560044632571a38edaf9130b84928177823fbf3176a/audioop_lts-0.2.2-cp313-cp313t-win32.whl", hash = "sha256:d5e73fa573e273e4f2e5ff96f9043858a5e9311e94ffefd88a3186a910c70917", size = 26568, upload-time = "2025-08-05T16:42:55.627Z" },
-    { url = "https://files.pythonhosted.org/packages/28/2b/0372842877016641db8fc54d5c88596b542eec2f8f6c20a36fb6612bf9ee/audioop_lts-0.2.2-cp313-cp313t-win_amd64.whl", hash = "sha256:9191d68659eda01e448188f60364c7763a7ca6653ed3f87ebb165822153a8547", size = 30942, upload-time = "2025-08-05T16:42:56.674Z" },
-    { url = "https://files.pythonhosted.org/packages/ee/ca/baf2b9cc7e96c179bb4a54f30fcd83e6ecb340031bde68f486403f943768/audioop_lts-0.2.2-cp313-cp313t-win_arm64.whl", hash = "sha256:c174e322bb5783c099aaf87faeb240c8d210686b04bd61dfd05a8e5a83d88969", size = 24603, upload-time = "2025-08-05T16:42:57.571Z" },
     { url = "https://files.pythonhosted.org/packages/5c/73/413b5a2804091e2c7d5def1d618e4837f1cb82464e230f827226278556b7/audioop_lts-0.2.2-cp314-cp314t-macosx_10_13_universal2.whl", hash = "sha256:f9ee9b52f5f857fbaf9d605a360884f034c92c1c23021fb90b2e39b8e64bede6", size = 47104, upload-time = "2025-08-05T16:42:58.518Z" },
     { url = "https://files.pythonhosted.org/packages/ae/8c/daa3308dc6593944410c2c68306a5e217f5c05b70a12e70228e7dd42dc5c/audioop_lts-0.2.2-cp314-cp314t-macosx_10_13_x86_64.whl", hash = "sha256:49ee1a41738a23e98d98b937a0638357a2477bc99e61b0f768a8f654f45d9b7a", size = 27754, upload-time = "2025-08-05T16:43:00.132Z" },
     { url = "https://files.pythonhosted.org/packages/4e/86/c2e0f627168fcf61781a8f72cab06b228fe1da4b9fa4ab39cfb791b5836b/audioop_lts-0.2.2-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:5b00be98ccd0fc123dcfad31d50030d25fcf31488cde9e61692029cd7394733b", size = 27332, upload-time = "2025-08-05T16:43:01.666Z" },
@@ -347,9 +325,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/de/f8/c874ca9bb447dae0e2ef2e231f6c4c2b0c39e31ae684d2420b0f9e97ee68/audioop_lts-0.2.2-cp314-cp314t-musllinux_1_2_riscv64.whl", hash = "sha256:8fefe5868cd082db1186f2837d64cfbfa78b548ea0d0543e9b28935ccce81ce9", size = 84843, upload-time = "2025-08-05T16:43:10.749Z" },
     { url = "https://files.pythonhosted.org/packages/3e/c0/0323e66f3daebc13fd46b36b30c3be47e3fc4257eae44f1e77eb828c703f/audioop_lts-0.2.2-cp314-cp314t-musllinux_1_2_s390x.whl", hash = "sha256:58cf54380c3884fb49fdd37dfb7a772632b6701d28edd3e2904743c5e1773602", size = 94490, upload-time = "2025-08-05T16:43:12.131Z" },
     { url = "https://files.pythonhosted.org/packages/98/6b/acc7734ac02d95ab791c10c3f17ffa3584ccb9ac5c18fd771c638ed6d1f5/audioop_lts-0.2.2-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:088327f00488cdeed296edd9215ca159f3a5a5034741465789cad403fcf4bec0", size = 92297, upload-time = "2025-08-05T16:43:13.139Z" },
-    { url = "https://files.pythonhosted.org/packages/13/c3/c3dc3f564ce6877ecd2a05f8d751b9b27a8c320c2533a98b0c86349778d0/audioop_lts-0.2.2-cp314-cp314t-win32.whl", hash = "sha256:068aa17a38b4e0e7de771c62c60bbca2455924b67a8814f3b0dee92b5820c0b3", size = 27331, upload-time = "2025-08-05T16:43:14.19Z" },
-    { url = "https://files.pythonhosted.org/packages/72/bb/b4608537e9ffcb86449091939d52d24a055216a36a8bf66b936af8c3e7ac/audioop_lts-0.2.2-cp314-cp314t-win_amd64.whl", hash = "sha256:a5bf613e96f49712073de86f20dbdd4014ca18efd4d34ed18c75bd808337851b", size = 31697, upload-time = "2025-08-05T16:43:15.193Z" },
-    { url = "https://files.pythonhosted.org/packages/f6/22/91616fe707a5c5510de2cac9b046a30defe7007ba8a0c04f9c08f27df312/audioop_lts-0.2.2-cp314-cp314t-win_arm64.whl", hash = "sha256:b492c3b040153e68b9fdaff5913305aaaba5bb433d8a7f73d5cf6a64ed3cc1dd", size = 25206, upload-time = "2025-08-05T16:43:16.444Z" },
 ]
 
 [[package]]
@@ -604,6 +579,15 @@ wheels = [
 ]
 
 [[package]]
+name = "cbor2"
+version = "5.6.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e4/aa/ba55b47d51d27911981a18743b4d3cebfabccbb0598c09801b734cec4184/cbor2-5.6.5.tar.gz", hash = "sha256:b682820677ee1dbba45f7da11898d2720f92e06be36acec290867d5ebf3d7e09", size = 100886, upload-time = "2024-10-09T12:26:24.106Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9b/ef/1c4698cac96d792005ef0611832f38eaee477c275ab4b02cbfc4daba7ad3/cbor2-5.6.5-py3-none-any.whl", hash = "sha256:3038523b8fc7de312bb9cdcbbbd599987e64307c4db357cd2030c472a6c7d468", size = 23752, upload-time = "2024-10-09T12:26:23.167Z" },
+]
+
+[[package]]
 name = "certifi"
 version = "2025.8.3"
 source = { registry = "https://pypi.org/simple" }
@@ -740,13 +724,14 @@ name = "chex"
 version = "0.1.90"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "absl-py" },
-    { name = "jax" },
-    { name = "jaxlib" },
-    { name = "numpy" },
-    { name = "setuptools", marker = "python_full_version >= '3.12'" },
-    { name = "toolz" },
-    { name = "typing-extensions" },
+    { name = "absl-py", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "jax", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "jaxlib", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "numpy", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "setuptools", version = "79.0.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and sys_platform == 'windows'" },
+    { name = "setuptools", version = "80.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and sys_platform == 'darwin') or (python_full_version >= '3.12' and sys_platform == 'linux')" },
+    { name = "toolz", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "typing-extensions", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/77/70/53c7d404ce9e2a94009aea7f77ef6e392f6740e071c62683a506647c520f/chex-0.1.90.tar.gz", hash = "sha256:d3c375aeb6154b08f1cccd2bee4ed83659ee2198a6acf1160d2fe2e4a6c87b5c", size = 92363, upload-time = "2025-07-23T19:50:47.945Z" }
 wheels = [
@@ -788,11 +773,33 @@ name = "clr-loader"
 version = "0.2.7.post0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "cffi", marker = "(sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "cffi", marker = "sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/d5/b3/8ae917e458394e2cebdbf17bed0a8204f8d4ffc79a093a7b1141c7731d3c/clr_loader-0.2.7.post0.tar.gz", hash = "sha256:b7a8b3f8fbb1bcbbb6382d887e21d1742d4f10b5ea209e4ad95568fe97e1c7c6", size = 56701, upload-time = "2024-12-12T20:15:15.555Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9c/c0/06e64a54bced4e8b885c1e7ec03ee1869e52acf69e87da40f92391a214ad/clr_loader-0.2.7.post0-py3-none-any.whl", hash = "sha256:e0b9fcc107d48347a4311a28ffe3ae78c4968edb216ffb6564cb03f7ace0bb47", size = 50649, upload-time = "2024-12-12T20:15:13.714Z" },
+]
+
+[[package]]
+name = "cmake"
+version = "4.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/2f/e3/0a11eddf5812ab39f96c2b77895a390acfd469cb64052c6a9c2d8d21b88c/cmake-4.1.0.tar.gz", hash = "sha256:bacdd21aebdf9a42e5631cfb365beb8221783fcd27c4e04f7db8b79c43fb12df", size = 34981, upload-time = "2025-08-11T17:54:05.138Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d1/8b/a873f9dbd7983d3a8981cee68246ef690b18aa41ec25281cce54c01e9a5b/cmake-4.1.0-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:4e3a30a4f72a8a6d8d593dc289e791f1d84352c1f629543ac8e22c62dbadb20a", size = 30369809, upload-time = "2025-08-11T17:53:03.866Z" },
+    { url = "https://files.pythonhosted.org/packages/7c/12/43e4b2ef7a9a54aa8429715e671cea53e7823e894e98c6d26e3f3a3ebd4e/cmake-4.1.0-py3-none-manylinux2014_i686.manylinux_2_17_i686.whl", hash = "sha256:0e2fea746d746f52aa52b8498777ff665a0627d9b136bec4ae0465c38b75e799", size = 30761286, upload-time = "2025-08-11T17:53:11.876Z" },
+    { url = "https://files.pythonhosted.org/packages/dd/40/41f8990484b221c8230efa801de522c9d7690279e4308ac8260313eaf363/cmake-4.1.0-py3-none-manylinux2014_ppc64le.manylinux_2_17_ppc64le.whl", hash = "sha256:5a28a87601fa5e775017bf4f5836e8e75091d08f3e5aac411256754ba54fe5c4", size = 32602648, upload-time = "2025-08-11T17:53:15.013Z" },
+    { url = "https://files.pythonhosted.org/packages/f7/eb/824d1735821aff0857e57d4455eaf94a4ccc77f7711b9ec3e02eaf34f9f0/cmake-4.1.0-py3-none-manylinux2014_s390x.manylinux_2_17_s390x.whl", hash = "sha256:2a8790473afbb895b8e684e479f26773e4fc5c86845e3438e8488d38de9db807", size = 28568562, upload-time = "2025-08-11T17:53:17.983Z" },
+    { url = "https://files.pythonhosted.org/packages/34/da/0217073d5b3fb8655b3de8af4e9e797a25ae28a2932b1138452a0dc89e9f/cmake-4.1.0-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:dab375932f5962e078da8cf76ca228c21bf4bea9ddeb1308e2b35797fa30f784", size = 29681029, upload-time = "2025-08-11T17:53:21.073Z" },
+    { url = "https://files.pythonhosted.org/packages/73/f6/daf3bad6f1a0d069befaebc3dd58ac7ae191fd772e80db0b7f1a94e51d45/cmake-4.1.0-py3-none-manylinux_2_31_armv7l.whl", hash = "sha256:f2eaa6f0a25e31fe09fb0b7f40fbf208eea5f1313093ff441ecfff7dc1b80adf", size = 26509365, upload-time = "2025-08-11T17:53:23.562Z" },
+    { url = "https://files.pythonhosted.org/packages/41/91/6ce3d9d5ab5f039cc207678e2ac1c5b8575b141beba6e51e2ea9535c4edd/cmake-4.1.0-py3-none-manylinux_2_35_riscv64.whl", hash = "sha256:3ee38de00cad0501c7dd2b94591522381e3ef9c8468094f037a17ed9e478ef13", size = 28849869, upload-time = "2025-08-11T17:53:29.624Z" },
+    { url = "https://files.pythonhosted.org/packages/ab/2d/da9ce3ec46a3af8f35c659914ba444de8724ed5d3e3daf2fa2bf6f64879b/cmake-4.1.0-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:2d9f14b7d58e447865c111b3b90945b150724876866f5801c80970151718f710", size = 41734467, upload-time = "2025-08-11T17:53:32.917Z" },
+    { url = "https://files.pythonhosted.org/packages/91/30/0408c49409dd6e122ed63917d7c34f5bc658c2fffd10e5059965e8770c25/cmake-4.1.0-py3-none-musllinux_1_2_armv7l.whl", hash = "sha256:574448a03acdf34c55a7c66485e7a8260709e8386e9145708e18e2abe5fc337b", size = 35021362, upload-time = "2025-08-11T17:53:35.791Z" },
+    { url = "https://files.pythonhosted.org/packages/e1/b3/66764abbd3032c051619c4fc8b6a839c2666da27feeb53ec784b8690417a/cmake-4.1.0-py3-none-musllinux_1_2_i686.whl", hash = "sha256:b8c2538fb557b9edd74d48c189fcde42a55ad7e2c39e04254f8c5d248ca1af4c", size = 45779676, upload-time = "2025-08-11T17:53:38.932Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/ee/8b00d179e1a0f7ac22faaae1bec84577415b3664156e9b233f4ef3beeead/cmake-4.1.0-py3-none-musllinux_1_2_ppc64le.whl", hash = "sha256:7c7999c5a1d5a3a66adacc61056765557ed253dc7b8e9deab5cae546f4f9361c", size = 45844041, upload-time = "2025-08-11T17:53:42.347Z" },
+    { url = "https://files.pythonhosted.org/packages/24/0d/8e3de2d6faa7aacc8bfa3426ac873eaa8afd10c7cf96673651f1010d930c/cmake-4.1.0-py3-none-musllinux_1_2_riscv64.whl", hash = "sha256:e77ac2554a7b8a94745add465413e3266b714766e9a5d22ac8e5b36a900a1136", size = 39910078, upload-time = "2025-08-11T17:53:45.925Z" },
+    { url = "https://files.pythonhosted.org/packages/e7/28/7bfbe0412ed6636b12025f6fa08aa8110deacaf080ed7071429783028c6c/cmake-4.1.0-py3-none-musllinux_1_2_s390x.whl", hash = "sha256:d54e68d5439193265fd7211671420601f6a672b8ca220f19e6c72238b41a84c2", size = 43995109, upload-time = "2025-08-11T17:53:48.933Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/0e/aaac412ad02ca799e2113cbca12aa960d9f80beada67769e49ac8c67dace/cmake-4.1.0-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:c6bd346fe4d9c205310ef9a6e09ced7e610915fa982d7b649f9b12caa6fa0605", size = 43338603, upload-time = "2025-08-11T17:53:52.634Z" },
 ]
 
 [[package]]
@@ -1102,7 +1109,7 @@ wheels = [
 [[package]]
 name = "diffusers"
 version = "0.35.0.dev0"
-source = { git = "https://github.com/huggingface/diffusers#76c809e2ef0cdf8f7cf0217f203f70d8b0cc9b49" }
+source = { git = "https://github.com/huggingface/diffusers#bc2762cce9c42ff7a7c3e4814ae4d5f0385e35e4" }
 dependencies = [
     { name = "filelock" },
     { name = "huggingface-hub" },
@@ -1189,7 +1196,8 @@ dependencies = [
     { name = "gepa" },
     { name = "joblib" },
     { name = "json-repair" },
-    { name = "litellm" },
+    { name = "litellm", version = "1.75.3", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "litellm", version = "1.75.5.post1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform != 'windows'" },
     { name = "magicattr" },
     { name = "numpy" },
     { name = "openai" },
@@ -1230,6 +1238,33 @@ sdist = { url = "https://files.pythonhosted.org/packages/95/af/2a2f83f981e969ae3
 wheels = [
     { url = "https://files.pythonhosted.org/packages/90/04/4a730d74fd908daad86d6b313f235cdf8e0cf1c255b392b7174ff63ea81a/einx-0.3.0-py3-none-any.whl", hash = "sha256:367d62bab8dbb8c4937308512abb6f746cc0920990589892ba0d281356d39345", size = 102958, upload-time = "2024-06-11T13:49:36.441Z" },
 ]
+
+[[package]]
+name = "email-validator"
+version = "2.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dnspython", marker = "sys_platform == 'windows'" },
+    { name = "idna", marker = "sys_platform == 'windows'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/48/ce/13508a1ec3f8bb981ae4ca79ea40384becc868bfae97fd1c942bb3a001b1/email_validator-2.2.0.tar.gz", hash = "sha256:cb690f344c617a714f22e66ae771445a1ceb46821152df8e165c5f9a364582b7", size = 48967, upload-time = "2024-06-20T11:30:30.034Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d7/ee/bf0adb559ad3c786f12bcbc9296b3f5675f529199bef03e2df281fa1fadb/email_validator-2.2.0-py3-none-any.whl", hash = "sha256:561977c2d73ce3611850a06fa56b414621e0c8faa9d66f2611407d87465da631", size = 33521, upload-time = "2024-06-20T11:30:28.248Z" },
+]
+
+[[package]]
+name = "encodec"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "einops", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "numpy", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "torch", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'windows'" },
+    { name = "torch", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'linux'" },
+    { name = "torchaudio", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'windows'" },
+    { name = "torchaudio", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'linux'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/62/59/e47bbd0542d0e6f4ce9983d5eb458a01d4b42c81e5c410cb9e159b1061ae/encodec-0.1.1.tar.gz", hash = "sha256:36dde98ccfe6c51a15576476cadfcb3b35a63507b8b8555abd69889a6fba6772", size = 3736037, upload-time = "2022-10-25T16:13:21.471Z" }
 
 [[package]]
 name = "espeakng-loader"
@@ -1335,8 +1370,18 @@ version = "3.19.1"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/40/bb/0ab3e58d22305b6f5440629d20683af28959bf793d98d11950e305c1c326/filelock-3.19.1.tar.gz", hash = "sha256:66eda1888b0171c998b35be2bcc0f6d75c388a7ce20c3f3f37aa8e96c2dddf58", size = 17687, upload-time = "2025-08-14T16:56:03.016Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/42/14/42b2651a2f46b022ccd948bca9f2d5af0fd8929c4eec235b8d6d844fbe67/filelock-3.19.1-py3-none-any.whl", hash = "sha256:d38e30481def20772f5baf097c122c3babc4fcdb7e14e57049eb9d88c6dc017d", size = 15988, upload-time = "2025-08-14T16:56:01.633Z" },
+    { url = "https://files.pythonhosted.org/packages/4d/36/2a115987e2d8c300a974597416d9de88f2444426de9571f4b59b2cca3acc/filelock-3.18.0-py3-none-any.whl", hash = "sha256:c401f4f8377c4464e6db25fff06205fd89bdd83b65eb0488ed1b160f780e21de", size = 16215, upload-time = "2025-03-14T07:11:39.145Z" },
 ]
+
+[[package]]
+name = "flash-attn"
+version = "2.8.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "einops", marker = "sys_platform == 'linux'" },
+    { name = "torch", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'linux'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/63/91/91bcbd7424877fa8da4e7cc04b8a777247a33037b9c1fd976a5ad426c047/flash_attn-2.8.2.tar.gz", hash = "sha256:740a5370f406cbe16155cc6d078ec543a97a137501f32cba89198295e6b80e54", size = 8167111, upload-time = "2025-07-24T16:06:45.953Z" }
 
 [[package]]
 name = "flatbuffers"
@@ -1516,19 +1561,7 @@ wheels = [
 
 [package.optional-dependencies]
 http = [
-    { name = "aiohttp", marker = "sys_platform == 'darwin'" },
-]
-
-[[package]]
-name = "ftfy"
-version = "6.3.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "wcwidth" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/a5/d3/8650919bc3c7c6e90ee3fa7fd618bf373cbbe55dff043bd67353dbb20cd8/ftfy-6.3.1.tar.gz", hash = "sha256:9b3c3d90f84fb267fe64d375a07b7f8912d817cf86009ae134aa03e1819506ec", size = 308927, upload-time = "2024-10-26T00:50:35.149Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ab/6e/81d47999aebc1b155f81eca4477a616a70f238a2549848c38983f3c22a82/ftfy-6.3.1-py3-none-any.whl", hash = "sha256:7c70eb532015cd2f9adb53f101fb6c7945988d023a085d127d1573dc49dd0083", size = 44821, upload-time = "2024-10-26T00:50:33.425Z" },
+    { name = "aiohttp", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows') or sys_platform == 'darwin'" },
 ]
 
 [[package]]
@@ -1746,13 +1779,22 @@ version = "1.1.8rc0"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/8a/d9/c724a69f3ae50cb7b8dca6a8262c59fda716bebdf84291a04b8f1a50395f/hf_xet-1.1.8rc0.tar.gz", hash = "sha256:e0855cbcc96f896b571a062df8cf06f96d2257ac658754db96bc479a3c2aa530", size = 484199, upload-time = "2025-08-13T20:52:56.328Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/02/4a/113a53c1e0c4d93ffe68d406b3078f3ce10766a417ef185e73255df19189/hf_xet-1.1.8rc0-cp37-abi3-macosx_10_12_x86_64.whl", hash = "sha256:aff056a792d4321b1e5e268a369d7663951a84ff94fbd141afe9ea0c192f7085", size = 2770482, upload-time = "2025-08-13T20:52:52.092Z" },
-    { url = "https://files.pythonhosted.org/packages/7a/bf/7abb2daba9e91ec5fcbe045b52a9310a0b6d183f6af16444b72ec9f9f5f5/hf_xet-1.1.8rc0-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:25cc9d2f7943af2e528e7c700d40052d3da18644e76eebbe1dc01a311bc40b23", size = 2635036, upload-time = "2025-08-13T20:52:50.657Z" },
-    { url = "https://files.pythonhosted.org/packages/4f/be/042725855793a281bd5bd90353041bde7b3e3dc6f8053b956329c2252bf4/hf_xet-1.1.8rc0-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:61a593af44ab8a1ee4cc7a62234af7cc53f97d31a042bf69e993861e92d6238d", size = 3189079, upload-time = "2025-08-13T20:52:49.251Z" },
-    { url = "https://files.pythonhosted.org/packages/90/4c/a16690dd509e1ad98a9aedd8f79acbd01b098ebf6fd4f99f4dc190b5ae36/hf_xet-1.1.8rc0-cp37-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:07046d375bcf637805612c56d7432a8f66a46b3be598035005fd83f9e84383e1", size = 3087073, upload-time = "2025-08-13T20:52:47.739Z" },
-    { url = "https://files.pythonhosted.org/packages/b1/95/603d1f9fff0493ff17493a1ac36a228ffaf6a9807d84bf9d1183facb62f7/hf_xet-1.1.8rc0-cp37-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:2c845093af24109eb8a5cd405cdc693122a52c3c984da185f8e6a9ee006f13b5", size = 3246194, upload-time = "2025-08-13T20:52:53.516Z" },
-    { url = "https://files.pythonhosted.org/packages/8a/35/627a37f353328711500700674d29d09d491e0e6024e89bf25f6119e57a04/hf_xet-1.1.8rc0-cp37-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:6427bf26c67a94853637d6694b66d15d56929ddc313af1784c2a36fd3f3251f5", size = 3354095, upload-time = "2025-08-13T20:52:54.883Z" },
-    { url = "https://files.pythonhosted.org/packages/0b/fc/1d860cce8d99d41b0dcc8bf310fdd64666c30181e733f56e7917a23777e3/hf_xet-1.1.8rc0-cp37-abi3-win_amd64.whl", hash = "sha256:6ab5941866680f55f7ab148b9d039982ca71f3391d3be7e12f3a53dcc8441802", size = 2828121, upload-time = "2025-08-13T20:52:57.253Z" },
+    { url = "https://files.pythonhosted.org/packages/b1/7c/8d7803995caf14e7d19a392a486a040f923e2cfeff824e9b800b92072f76/hf_xet-1.1.7-cp37-abi3-macosx_10_12_x86_64.whl", hash = "sha256:60dae4b44d520819e54e216a2505685248ec0adbdb2dd4848b17aa85a0375cde", size = 2761743, upload-time = "2025-08-06T00:30:50.634Z" },
+    { url = "https://files.pythonhosted.org/packages/51/a3/fa5897099454aa287022a34a30e68dbff0e617760f774f8bd1db17f06bd4/hf_xet-1.1.7-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:b109f4c11e01c057fc82004c9e51e6cdfe2cb230637644ade40c599739067b2e", size = 2624331, upload-time = "2025-08-06T00:30:49.212Z" },
+    { url = "https://files.pythonhosted.org/packages/86/50/2446a132267e60b8a48b2e5835d6e24fd988000d0f5b9b15ebd6d64ef769/hf_xet-1.1.7-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6efaaf1a5a9fc3a501d3e71e88a6bfebc69ee3a716d0e713a931c8b8d920038f", size = 3183844, upload-time = "2025-08-06T00:30:47.582Z" },
+    { url = "https://files.pythonhosted.org/packages/20/8f/ccc670616bb9beee867c6bb7139f7eab2b1370fe426503c25f5cbb27b148/hf_xet-1.1.7-cp37-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:751571540f9c1fbad9afcf222a5fb96daf2384bf821317b8bfb0c59d86078513", size = 3074209, upload-time = "2025-08-06T00:30:45.509Z" },
+    { url = "https://files.pythonhosted.org/packages/21/0a/4c30e1eb77205565b854f5e4a82cf1f056214e4dc87f2918ebf83d47ae14/hf_xet-1.1.7-cp37-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:18b61bbae92d56ae731b92087c44efcac216071182c603fc535f8e29ec4b09b8", size = 3239602, upload-time = "2025-08-06T00:30:52.41Z" },
+    { url = "https://files.pythonhosted.org/packages/f5/1e/fc7e9baf14152662ef0b35fa52a6e889f770a7ed14ac239de3c829ecb47e/hf_xet-1.1.7-cp37-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:713f2bff61b252f8523739969f247aa354ad8e6d869b8281e174e2ea1bb8d604", size = 3348184, upload-time = "2025-08-06T00:30:54.105Z" },
+    { url = "https://files.pythonhosted.org/packages/a3/73/e354eae84ceff117ec3560141224724794828927fcc013c5b449bf0b8745/hf_xet-1.1.7-cp37-abi3-win_amd64.whl", hash = "sha256:2e356da7d284479ae0f1dea3cf5a2f74fdf925d6dca84ac4341930d892c7cb34", size = 2820008, upload-time = "2025-08-06T00:30:57.056Z" },
+]
+
+[[package]]
+name = "hidiffusion"
+version = "0.1.10"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/fd/2b/422acb8106f1295e94a8f98363e2b9b0d6be6f90f672d353f8b2c38654fe/hidiffusion-0.1.10.tar.gz", hash = "sha256:e8a7cfab49a3a29d83b33f3c6c4adcaf32377cb535d3a279bbf53125e5a57bcd", size = 41303, upload-time = "2024-06-16T17:23:58.739Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/64/fb/ebee9c90768db7c8368922d1387c64311051c4423de88aecfe1dcb8387ad/hidiffusion-0.1.10-py3-none-any.whl", hash = "sha256:9498c8fcc07f60645e533feeaaf66aeb6c74b289788be333f59507980556e9e4", size = 37727, upload-time = "2024-06-16T17:23:56.478Z" },
 ]
 
 [[package]]
@@ -2330,7 +2372,43 @@ dependencies = [
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/8d/4e/48e3d6de19afe713223e3bc7009a2003501420de2a5d823c569cefbd9731/litellm-1.75.8.tar.gz", hash = "sha256:92061bd263ff8c33c8fff70ba92cd046adb7ea041a605826a915d108742fe59e", size = 10140384, upload-time = "2025-08-16T21:42:24.23Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5e/82/c4d00fbeafd93c00dab6ea03f33cadd6a97adeb720ba1d89fc319e5cb10b/litellm-1.75.8-py3-none-any.whl", hash = "sha256:0bf004488df8506381ec6e35e1486e2870e8d578a7c3f2427cd497558ce07a2e", size = 8916305, upload-time = "2025-08-16T21:42:21.387Z" },
+    { url = "https://files.pythonhosted.org/packages/dd/1e/8ef7e7ac7d33f900ae44e9e3a33d668783034e414aa4d7191ae3e4068ec5/litellm-1.75.3-py3-none-any.whl", hash = "sha256:0ff3752b1f1c07f8a4b9a364b1595e2147ae640f1e77cd8312e6f6a5ca0f34ec", size = 8870578, upload-time = "2025-08-08T14:58:06.766Z" },
+]
+
+[[package]]
+name = "litellm"
+version = "1.75.5.post1"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.13' and sys_platform == 'darwin'",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version >= '3.13' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version == '3.12.*' and sys_platform == 'darwin'",
+    "python_full_version < '3.12' and sys_platform == 'darwin'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version < '3.12' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+]
+dependencies = [
+    { name = "aiohttp", marker = "sys_platform != 'windows'" },
+    { name = "click", marker = "sys_platform != 'windows'" },
+    { name = "httpx", marker = "sys_platform != 'windows'" },
+    { name = "importlib-metadata", marker = "sys_platform != 'windows'" },
+    { name = "jinja2", marker = "sys_platform != 'windows'" },
+    { name = "jsonschema", marker = "sys_platform != 'windows'" },
+    { name = "openai", version = "1.99.9", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform != 'windows'" },
+    { name = "pydantic", marker = "sys_platform != 'windows'" },
+    { name = "python-dotenv", marker = "sys_platform != 'windows'" },
+    { name = "tiktoken", marker = "sys_platform != 'windows'" },
+    { name = "tokenizers", marker = "sys_platform != 'windows'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/10/97/6091a020895102a20f1da204ebe68c1293123555476b38e749f95ba5981c/litellm-1.75.5.post1.tar.gz", hash = "sha256:e40a0e4b25032755dc5df7f02742abe9e3b8836236363f605f3bdd363cb5a0d0", size = 10127846, upload-time = "2025-08-10T16:30:23.788Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8f/76/780f68a3b26227136a5147c76860aacedcae9bf1b7afc1c991ec9cad11bc/litellm-1.75.5.post1-py3-none-any.whl", hash = "sha256:1c72809a9c8f6e132ad06eb7e628f674c775b0ce6bfb58cbd37e8b585d929cb7", size = 8895997, upload-time = "2025-08-10T16:30:21.325Z" },
 ]
 
 [[package]]
@@ -2343,7 +2421,13 @@ dependencies = [
     { name = "numpy" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e4/b4/c8cd17629ced0b9644a71d399a91145aedef109c0333443bef015e45b704/llama_cpp_python-0.3.16.tar.gz", hash = "sha256:34ed0f9bd9431af045bb63d9324ae620ad0536653740e9bb163a2e1fcb973be6", size = 50688636, upload-time = "2025-08-15T04:58:29.212Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ce/fa/8917d9655d105f7675106a6076c489ed23d79d42b79bad56a444c9458735/llama_cpp_python-0.3.15.tar.gz", hash = "sha256:a2cf42935a9ff9e55804db01d6827b4862d7ab10ae72ea8e38b7d180d2c640f3", size = 50649779, upload-time = "2025-08-07T13:56:54.856Z" }
+
+[[package]]
+name = "llguidance"
+version = "0.7.30"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/bf/38/d1ef3ae08d8d857e5e0690c5b1e07bf7eb4a1cae5881d87215826dc6cadb/llguidance-0.7.30.tar.gz", hash = "sha256:e93bf75f2b6e48afb86a5cee23038746975e1654672bf5ba0ae75f7d4d4a2248", size = 1055528, upload-time = "2025-06-23T00:23:49.247Z" }
 
 [[package]]
 name = "llvmlite"
@@ -2365,7 +2449,21 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/01/cf/1dd5a60ba6aee7122ab9243fd614abcf22f36b0437cbbe1ccf1e3391461c/llvmlite-0.44.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:9c58867118bad04a0bb22a2e0068c693719658105e40009ffe95c7000fcde88e", size = 26201090, upload-time = "2025-01-20T11:14:15.401Z" },
     { url = "https://files.pythonhosted.org/packages/d2/1b/656f5a357de7135a3777bd735cc7c9b8f23b4d37465505bd0eaf4be9befe/llvmlite-0.44.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:46224058b13c96af1365290bdfebe9a6264ae62fb79b2b55693deed11657a8bf", size = 42361904, upload-time = "2025-01-20T11:14:22.949Z" },
     { url = "https://files.pythonhosted.org/packages/d8/e1/12c5f20cb9168fb3464a34310411d5ad86e4163c8ff2d14a2b57e5cc6bac/llvmlite-0.44.0-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:aa0097052c32bf721a4efc03bd109d335dfa57d9bffb3d4c24cc680711b8b4fc", size = 41184245, upload-time = "2025-01-20T11:14:31.731Z" },
-    { url = "https://files.pythonhosted.org/packages/d0/81/e66fc86539293282fd9cb7c9417438e897f369e79ffb62e1ae5e5154d4dd/llvmlite-0.44.0-cp313-cp313-win_amd64.whl", hash = "sha256:2fb7c4f2fb86cbae6dca3db9ab203eeea0e22d73b99bc2341cdf9de93612e930", size = 30331193, upload-time = "2025-01-20T11:14:38.578Z" },
+]
+
+[[package]]
+name = "lm-format-enforcer"
+version = "0.10.12"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "interegular", marker = "sys_platform == 'windows'" },
+    { name = "packaging", marker = "sys_platform == 'windows'" },
+    { name = "pydantic", marker = "sys_platform == 'windows'" },
+    { name = "pyyaml", marker = "sys_platform == 'windows'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/eb/e0/bdbfad8f5d319de5d05cc2b70d579b49eb8ce3a09989cd0999b8c138c068/lm_format_enforcer-0.10.12.tar.gz", hash = "sha256:130bd7ce8a6b224f25b6314ba9ae78ee4b48594db1767c74391c9182e2902a6c", size = 39481, upload-time = "2025-08-04T21:13:45.727Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/57/1c/7bb80fe2dff9a9c38b180571ca867f518eb9110f79d4b670ea124e153680/lm_format_enforcer-0.10.12-py3-none-any.whl", hash = "sha256:267c2b421c77f7cd51ac2e0e3af8db278a373704d834b49ff55f18a2c05e9800", size = 44327, upload-time = "2025-08-04T21:13:44.492Z" },
 ]
 
 [[package]]
@@ -2621,6 +2719,45 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d6/54/cfe61301667036ec958cb99bd3efefba235e65cdeb9c84d24a8293ba1d90/mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba", size = 8729, upload-time = "2022-08-14T12:40:10.846Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b3/38/89ba8ad64ae25be8de66a6d463314cf1eb366222074cfda9ee839c56a4b4/mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8", size = 9979, upload-time = "2022-08-14T12:40:09.779Z" },
+]
+
+[[package]]
+name = "mecab-python3"
+version = "1.0.11.dev9"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8d/77/7ec44710a15643f6c9787e6b405efce36827335d88447af09400b9e308ac/mecab_python3-1.0.11.dev9.tar.gz", hash = "sha256:3bbc6ab45408899bbd1525b0ee9c674b1a9f7401ebd1a2568445ce4f00f21521", size = 78712, upload-time = "2024-11-02T16:17:51.605Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2f/1c/18aae79c6d50a55d8bc33e2e440a193b3431aab78fa59b20683ca0913c5e/mecab_python3-1.0.11.dev9-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ebe503e1541d886ac8da37efe9ad97cb22bb12ae8ba4b1d3484a0cc2d18d0cc4", size = 567606, upload-time = "2024-11-02T16:24:11.778Z" },
+    { url = "https://files.pythonhosted.org/packages/c1/17/d8b9e056fbb76be8f47312e928a82c1eff0eefe656ddf428b36e43d2a54b/mecab_python3-1.0.11.dev9-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4e8684a16f660ce1617df557e82b13ae7f92fc79a721efde97d88d672e0149b8", size = 588931, upload-time = "2024-11-02T16:18:56.202Z" },
+    { url = "https://files.pythonhosted.org/packages/44/1d/ff8df65438e42f4bcf0425291f2e174556e1acbc0552447a79e930ea7958/mecab_python3-1.0.11.dev9-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f8ba64cf5831e177ca93818e6daf00b211195fcace49b0b39d849893ad85c827", size = 569121, upload-time = "2024-11-02T16:24:13.896Z" },
+    { url = "https://files.pythonhosted.org/packages/83/24/bc7dc1fdbf59be0969fa38e3483403cd0f492826cc928ef511c1dd165ed1/mecab_python3-1.0.11.dev9-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b7cdddede78f8532e8db397b4f98628aa543ac7539c68378a39f57b625963d6c", size = 591255, upload-time = "2024-11-02T16:18:57.782Z" },
+    { url = "https://files.pythonhosted.org/packages/66/35/5af52319a5a734f746694c72d8ea0913908c645d9d8096c262fc0bbe1d93/mecab_python3-1.0.11.dev9-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0a7162dc46e9aba25c7829f765b34cd6f543a54c32be5b39633859cd903ca774", size = 568939, upload-time = "2024-11-02T16:24:15.979Z" },
+    { url = "https://files.pythonhosted.org/packages/97/d5/96b749490428ce61d9467d51d4178ec34eb04ac8143420055369215fc8ae/mecab_python3-1.0.11.dev9-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1bd8186a9efeca76791977f6544addf7f89e97acf7557b1b8b40ceec733cc7a0", size = 591096, upload-time = "2024-11-02T16:18:59.836Z" },
+]
+
+[[package]]
+name = "mflux"
+version = "0.2.1"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version == '3.12.*' and sys_platform == 'darwin'",
+    "python_full_version < '3.12' and sys_platform == 'darwin'",
+]
+dependencies = [
+    { name = "huggingface-hub", marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "mlx", marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "numpy", marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "piexif", marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "pillow", marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "safetensors", marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "sentencepiece", version = "0.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "torch", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "tqdm", marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "transformers", marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fe/4b/fb28209d8fe2a03b86914be607a5e651dd81bd5a2d3bc2a0fe8a13da6bee/mflux-0.2.1.tar.gz", hash = "sha256:2e405fc06e356d167d808c309adb924133368f81d7e73125fe842203b21196e8", size = 38149, upload-time = "2024-09-14T12:56:22.16Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/13/6b/a145df47c58c988cb735d784cb21058ac4ddeb9a3b1075689ed7dbad28ad/mflux-0.2.1-py3-none-any.whl", hash = "sha256:793116b8a89bf610140a80398cc9b9605edd860e741ee7caa9c4d64a18569af3", size = 54592, upload-time = "2024-09-14T12:56:19.902Z" },
 ]
 
 [[package]]
@@ -3051,11 +3188,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/fe/8d/b01d3ee1f1cf3957250223b7c6ce35454f38fbf4abe236bf04a3f769341d/murmurhash-1.0.13-cp312-cp312-win_amd64.whl", hash = "sha256:a8e79627d44a6e20a6487effc30bfe1c74754c13d179106e68cc6d07941b022c", size = 24869, upload-time = "2025-05-22T12:35:40.035Z" },
     { url = "https://files.pythonhosted.org/packages/00/b4/8919dfdc4a131ad38a57b2c5de69f4bd74538bf546637ee59ebaebe6e5a4/murmurhash-1.0.13-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:b8a7f8befd901379b6dc57a9e49c5188454113747ad6aa8cdd951a6048e10790", size = 26852, upload-time = "2025-05-22T12:35:41.061Z" },
     { url = "https://files.pythonhosted.org/packages/b4/32/ce78bef5d6101568bcb12f5bb5103fabcbe23723ec52e76ff66132d5dbb7/murmurhash-1.0.13-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:f741aab86007510199193eee4f87c5ece92bc5a6ca7d0fe0d27335c1203dface", size = 26900, upload-time = "2025-05-22T12:35:42.097Z" },
-    { url = "https://files.pythonhosted.org/packages/0c/4c/0f47c0b4f6b31a1de84d65f9573832c78cd47b4b8ce25ab5596a8238d150/murmurhash-1.0.13-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:82614f18fa6d9d83da6bb0918f3789a3e1555d0ce12c2548153e97f79b29cfc9", size = 130033, upload-time = "2025-05-22T12:35:43.113Z" },
-    { url = "https://files.pythonhosted.org/packages/e0/cb/e47233e32fb792dcc9fb18a2cf65f795d47179b29c2b4a2034689f14c707/murmurhash-1.0.13-cp313-cp313-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:91f22a48b9454712e0690aa0b76cf0156a5d5a083d23ec7e209cfaeef28f56ff", size = 130619, upload-time = "2025-05-22T12:35:44.229Z" },
-    { url = "https://files.pythonhosted.org/packages/8f/f1/f89911bf304ba5d385ccd346cc7fbb1c1450a24f093b592c3bfe87768467/murmurhash-1.0.13-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:c4bc7938627b8fcb3d598fe6657cc96d1e31f4eba6a871b523c1512ab6dacb3e", size = 127643, upload-time = "2025-05-22T12:35:45.369Z" },
-    { url = "https://files.pythonhosted.org/packages/a4/24/262229221f6840c1a04a46051075e99675e591571abcca6b9a8b6aa1602b/murmurhash-1.0.13-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:58a61f1fc840f9ef704e638c39b8517bab1d21f1a9dbb6ba3ec53e41360e44ec", size = 127981, upload-time = "2025-05-22T12:35:46.503Z" },
-    { url = "https://files.pythonhosted.org/packages/18/25/addbc1d28f83252732ac3e57334d42f093890b4c2cce483ba01a42bc607c/murmurhash-1.0.13-cp313-cp313-win_amd64.whl", hash = "sha256:c451a22f14c2f40e7abaea521ee24fa0e46fbec480c4304c25c946cdb6e81883", size = 24880, upload-time = "2025-05-22T12:35:47.625Z" },
+]
+
+[[package]]
+name = "natsort"
+version = "8.4.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e2/a9/a0c57aee75f77794adaf35322f8b6404cbd0f89ad45c87197a937764b7d0/natsort-8.4.0.tar.gz", hash = "sha256:45312c4a0e5507593da193dedd04abb1469253b601ecaf63445ad80f0a1ea581", size = 76575, upload-time = "2023-06-20T04:17:19.925Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ef/82/7a9d0550484a62c6da82858ee9419f3dd1ccc9aa1c26a1e43da3ecd20b0d/natsort-8.4.0-py3-none-any.whl", hash = "sha256:4732914fb471f56b5cce04d7bae6f164a592c7712e1c85f9ef585e197299521c", size = 38268, upload-time = "2023-06-20T04:17:17.522Z" },
 ]
 
 [[package]]
@@ -3111,22 +3252,30 @@ wheels = [
 
 [[package]]
 name = "nnll"
-version = "0.1.dev800+g03e380e91"
-source = { git = "https://github.com/darkshapes/nnll?rev=main#03e380e9183488f1ef0c33736b0920374f3d0490" }
+version = "0.1.dev744+ga15eb74"
+source = { git = "https://github.com/darkshapes/nnll?rev=main#a15eb74bea729e6e6d6180ae4792225b4c306dfc" }
 dependencies = [
     { name = "accelerate" },
     { name = "aiofiles" },
     { name = "aiohttp" },
     { name = "blake3" },
     { name = "diffusers" },
-    { name = "ftfy" },
+    { name = "flash-attn", marker = "sys_platform == 'linux'" },
     { name = "gguf" },
     { name = "huggingface-hub", extra = ["cli", "hf-transfer", "hf-xet"] },
     { name = "llama-cpp-python" },
     { name = "peft" },
+    { name = "pillow" },
+    { name = "pip", marker = "sys_platform == 'darwin'" },
+    { name = "protobuf" },
+    { name = "psutil" },
+    { name = "pydantic" },
+    { name = "pytorch-triton-rocm", marker = "sys_platform == 'linux'" },
     { name = "rich" },
     { name = "structlog" },
     { name = "transformers" },
+    { name = "triton", marker = "sys_platform == 'linux'" },
+    { name = "triton-windows", marker = "sys_platform == 'windows'" },
 ]
 
 [package.optional-dependencies]
@@ -3154,67 +3303,79 @@ cuda = [
 ]
 dev = [
     { name = "aioresponses" },
-    { name = "bitsandbytes", marker = "sys_platform != 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "flax" },
-    { name = "jax" },
-    { name = "llvmlite" },
-    { name = "lmstudio" },
-    { name = "mflux", marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "misaki", version = "0.9.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and sys_platform == 'darwin') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "misaki", version = "0.9.4", source = { git = "https://github.com/hexgrad/misaki#fba1236595f2d2bf21d414ba6e57d25256afada3" }, extra = ["en"], marker = "(python_full_version >= '3.13' and sys_platform == 'darwin') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "mlx-audio", marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "mlx-lm", marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "mlx-vlm", marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "numba" },
-    { name = "numpy", marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "ollama" },
-    { name = "onnx" },
-    { name = "openai" },
-    { name = "openai-whisper" },
-    { name = "pip", marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "flash-attn", marker = "sys_platform == 'linux'" },
+    { name = "flax", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "hidiffusion", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "jax", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "llvmlite", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "lmstudio", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "mflux", version = "0.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "mflux", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'darwin'" },
+    { name = "misaki", version = "0.9.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "misaki", version = "0.9.4", source = { git = "https://github.com/hexgrad/misaki#fba1236595f2d2bf21d414ba6e57d25256afada3" }, extra = ["en"], marker = "python_full_version >= '3.13' and sys_platform == 'darwin'" },
+    { name = "mlx-audio", marker = "sys_platform == 'darwin'" },
+    { name = "mlx-lm", marker = "sys_platform == 'darwin'" },
+    { name = "mlx-vlm", marker = "sys_platform == 'darwin'" },
+    { name = "numba", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "numpy", marker = "sys_platform == 'darwin'" },
+    { name = "ollama", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "onnx", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "openai", version = "1.90.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "openai", version = "1.99.9", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+    { name = "openai-whisper", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "outetts", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "pip", marker = "sys_platform == 'darwin'" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-mock" },
     { name = "pytest-tornasync" },
     { name = "pytest-trio" },
+    { name = "pytorch-triton-rocm", marker = "sys_platform == 'Linux'" },
     { name = "ruff" },
-    { name = "torch", version = "2.8.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torch", version = "2.8.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "sys_platform != 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torchaudio", version = "2.8.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torchaudio", version = "2.8.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "sys_platform != 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torchsde" },
-    { name = "torchvision", version = "0.23.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torchvision", version = "0.23.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torchvision", version = "0.23.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(platform_machine != 'aarch64' and sys_platform == 'linux') or (sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "triton", marker = "(sys_platform != 'darwin' and sys_platform != 'win32') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'win32' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'win32' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'win32' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'win32' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'win32' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'win32' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'win32' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'win32' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'win32' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'win32' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "triton-windows", marker = "sys_platform == 'win32' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "sageattention", marker = "sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "torch", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "torch", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+    { name = "torchaudio", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "torchaudio", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+    { name = "torchvision", version = "0.22.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "torchvision", version = "0.23.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+    { name = "triton", marker = "sys_platform == 'linux'" },
+    { name = "triton-windows", marker = "sys_platform == 'windows'" },
+    { name = "vllm", marker = "sys_platform == 'windows'" },
 ]
-mps = [
-    { name = "flax" },
-    { name = "jax" },
-    { name = "llvmlite" },
-    { name = "lmstudio" },
-    { name = "mflux", marker = "sys_platform == 'darwin'" },
-    { name = "misaki", version = "0.9.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (python_full_version >= '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "misaki", version = "0.9.4", source = { git = "https://github.com/hexgrad/misaki#fba1236595f2d2bf21d414ba6e57d25256afada3" }, extra = ["en"], marker = "(python_full_version >= '3.13' and sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (python_full_version < '3.13' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+full = [
+    { name = "flash-attn", marker = "sys_platform == 'linux'" },
+    { name = "flax", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "hidiffusion", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "jax", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "llvmlite", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "lmstudio", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "mflux", version = "0.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "mflux", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'darwin'" },
+    { name = "misaki", version = "0.9.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13' and sys_platform == 'darwin'" },
+    { name = "misaki", version = "0.9.4", source = { git = "https://github.com/hexgrad/misaki#fba1236595f2d2bf21d414ba6e57d25256afada3" }, extra = ["en"], marker = "python_full_version >= '3.13' and sys_platform == 'darwin'" },
     { name = "mlx-audio", marker = "sys_platform == 'darwin'" },
     { name = "mlx-lm", marker = "sys_platform == 'darwin'" },
     { name = "mlx-vlm", marker = "sys_platform == 'darwin'" },
     { name = "numba" },
     { name = "numpy", marker = "sys_platform == 'darwin'" },
-    { name = "ollama" },
-    { name = "onnx" },
-    { name = "openai" },
-    { name = "openai-whisper" },
-    { name = "pip" },
-    { name = "torch", version = "2.8.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torch", version = "2.8.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torchaudio", version = "2.8.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torchaudio", version = "2.8.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(sys_platform != 'darwin' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torchsde" },
-    { name = "torchvision", version = "0.23.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(platform_machine == 'aarch64' and sys_platform == 'linux' and extra == 'extra-6-zodiac-mps') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torchvision", version = "0.23.0", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torchvision", version = "0.23.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(platform_machine != 'aarch64' and sys_platform == 'linux' and extra == 'extra-6-zodiac-mps') or (sys_platform != 'darwin' and sys_platform != 'linux' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra != 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "ollama", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "onnx", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "openai", version = "1.90.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "openai", version = "1.99.9", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+    { name = "openai-whisper", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "outetts", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "pip", marker = "sys_platform == 'darwin'" },
+    { name = "sageattention", marker = "sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "torch", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "torch", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+    { name = "torchaudio", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "torchaudio", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+    { name = "torchvision", version = "0.22.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "torchvision", version = "0.23.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+    { name = "triton", marker = "sys_platform == 'linux'" },
+    { name = "triton-windows", marker = "sys_platform == 'windows'" },
+    { name = "vllm", marker = "sys_platform == 'windows'" },
 ]
 
 [[package]]
@@ -3557,6 +3718,20 @@ wheels = [
 name = "openai"
 version = "1.99.9"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.13' and sys_platform == 'darwin'",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version >= '3.13' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version == '3.12.*' and sys_platform == 'darwin'",
+    "python_full_version < '3.12' and sys_platform == 'darwin'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version < '3.12' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+]
 dependencies = [
     { name = "anyio" },
     { name = "distro" },
@@ -3577,14 +3752,14 @@ name = "openai-whisper"
 version = "20250625"
 source = { git = "https://github.com/openai/whisper.git#c0d2f624c09dc18e709e37c2ad90c039a4eb72a2" }
 dependencies = [
-    { name = "more-itertools" },
-    { name = "numba" },
-    { name = "numpy" },
-    { name = "tiktoken" },
-    { name = "torch", version = "2.8.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torch", version = "2.8.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "sys_platform != 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "tqdm" },
-    { name = "triton", marker = "(platform_machine == 'x86_64' and sys_platform == 'linux') or sys_platform == 'linux2'" },
+    { name = "more-itertools", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "numba", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "numpy", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "tiktoken", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "torch", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "torch", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+    { name = "tqdm", marker = "sys_platform == 'darwin' or sys_platform == 'linux' or sys_platform == 'windows'" },
+    { name = "triton", marker = "platform_machine == 'x86_64' and sys_platform == 'linux'" },
 ]
 
 [[package]]
@@ -3746,6 +3921,50 @@ sdist = { url = "https://files.pythonhosted.org/packages/98/df/77698abfac98571e6
 wheels = [
     { url = "https://files.pythonhosted.org/packages/55/8b/5ab7257531a5d830fc8000c476e63c935488d74609b50f9384a643ec0a62/outcome-1.3.0.post0-py2.py3-none-any.whl", hash = "sha256:e771c5ce06d1415e356078d3bdd68523f284b4ce5419828922b6871e65eda82b", size = 10692, upload-time = "2023-10-26T04:26:02.532Z" },
 ]
+
+[[package]]
+name = "outetts"
+version = "0.3.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "einops", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "encodec", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "huggingface-hub", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "inflect", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "jsonargparse", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "librosa", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "loguru", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "matplotlib", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "mecab-python3", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "natsort", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "numpy", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "openai-whisper", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "pesq", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "polars", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "pygame", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "pytorch-lightning", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "pyyaml", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "requests", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "scipy", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "sounddevice", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "soundfile", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "tensorboardx", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "torchcrepe", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "tqdm", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "transformers", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "unidic-lite", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "uroman", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/81/f3/b140530e929a3aa42748444e5dffb728af8fc36c4f6f37b00aa44adbc79b/outetts-0.3.3.tar.gz", hash = "sha256:bc2d961a0940674756c82ea2ff3f3d778f31b038c42b18b8592e67646bba619b", size = 345845, upload-time = "2025-02-14T13:38:57.142Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8b/18/00b6f1c1d7473a5ff8f6d6ffb9e929b20835bc11c305edd4d47ea19eb2bb/outetts-0.3.3-py3-none-any.whl", hash = "sha256:3741640cf9f36c54883ac80dbd3fb0cedece50af503f9d3135c1e57a2e5b7529", size = 454252, upload-time = "2025-02-14T13:38:54.41Z" },
+]
+
+[[package]]
+name = "outlines-core"
+version = "0.2.10"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/13/e2/de74a5fd00299215270a750f356ba7cb427ba5d3e495cab07cfc3110ca86/outlines_core-0.2.10.tar.gz", hash = "sha256:c9ee7be195ac18dda5acce41d8805c2fb550a4affd525414511662cfa7097dfe", size = 197140, upload-time = "2025-05-12T18:20:27.301Z" }
 
 [[package]]
 name = "packaging"
@@ -4382,7 +4601,7 @@ name = "pygobject"
 version = "3.52.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "pycairo", marker = "'freebsd' in sys_platform or sys_platform == 'Linux' or sys_platform == 'darwin' or sys_platform == 'linux' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "pycairo" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/4a/36/fec530a313d3d48f12e112ac0a65ee3ccc87f385123a0493715609e8e99c/pygobject-3.52.3.tar.gz", hash = "sha256:00e427d291e957462a8fad659a9f9c8be776ff82a8b76bdf402f1eaeec086d82", size = 1235825, upload-time = "2025-03-16T18:22:57.1Z" }
 
@@ -4551,11 +4770,45 @@ name = "pythonnet"
 version = "3.0.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "clr-loader", marker = "(sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "clr-loader", marker = "sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/9a/d6/1afd75edd932306ae9bd2c2d961d603dc2b52fcec51b04afea464f1f6646/pythonnet-3.0.5.tar.gz", hash = "sha256:48e43ca463941b3608b32b4e236db92d8d40db4c58a75ace902985f76dac21cf", size = 239212, upload-time = "2024-12-13T08:30:44.393Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/cd/f1/bfb6811df4745f92f14c47a29e50e89a36b1533130fcc56452d4660bd2d6/pythonnet-3.0.5-py3-none-any.whl", hash = "sha256:f6702d694d5d5b163c9f3f5cc34e0bed8d6857150237fae411fefb883a656d20", size = 297506, upload-time = "2024-12-13T08:30:40.661Z" },
+]
+
+[[package]]
+name = "pytorch-lightning"
+version = "2.5.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "fsspec", extra = ["http"], marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "lightning-utilities", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "packaging", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "pyyaml", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "torch", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'windows'" },
+    { name = "torch", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'linux'" },
+    { name = "torchmetrics", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "tqdm", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "typing-extensions", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/01/3e/728fbdc671d07727ad447f9401d98a43570573965beb3cb2060f9a330b4f/pytorch_lightning-2.5.2.tar.gz", hash = "sha256:f817087d611be8d43b777dd4e543d72703e235510936677a13e6c29f7fd790e3", size = 636859, upload-time = "2025-06-20T15:58:27.062Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e2/42/47c186c8f9e956e559c89e6c764d5d5d0d0af517c04ca0ad39bd0a357d3a/pytorch_lightning-2.5.2-py3-none-any.whl", hash = "sha256:17cfdf89bd98074e389101f097cdf34c486a1f5c6d3fdcefbaf4dea7f97ff0bf", size = 825366, upload-time = "2025-06-20T15:58:25.534Z" },
+]
+
+[[package]]
+name = "pytorch-triton-rocm"
+version = "2.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cmake", marker = "sys_platform == 'linux'" },
+    { name = "filelock", marker = "sys_platform == 'linux'" },
+    { name = "lit", marker = "sys_platform == 'linux'" },
+    { name = "torch", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'linux'" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e3/d5/1f5e65837de23ec950c1fed25821fcac097d769876ed031234260e9c70eb/pytorch_triton_rocm-2.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ec63623c16eebe356d40460a09374a2546591dd2b0cb2122622111fc4d0f7f25", size = 169397352, upload-time = "2023-04-19T04:07:36.005Z" },
 ]
 
 [[package]]
@@ -4948,22 +5201,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/8d/a1/d3a7628630a711e2ac0d1a482910da174b629f44e7dd8cfcd6924a4ef81a/scikit_learn-1.7.1-cp311-cp311-macosx_12_0_arm64.whl", hash = "sha256:bb870c0daf3bf3be145ec51df8ac84720d9972170786601039f024bf6d61a518", size = 8651241, upload-time = "2025-07-18T08:01:13.234Z" },
     { url = "https://files.pythonhosted.org/packages/26/92/85ec172418f39474c1cd0221d611345d4f433fc4ee2fc68e01f524ccc4e4/scikit_learn-1.7.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:40daccd1b5623f39e8943ab39735cadf0bdce80e67cdca2adcb5426e987320a8", size = 9718677, upload-time = "2025-07-18T08:01:15.649Z" },
     { url = "https://files.pythonhosted.org/packages/df/ce/abdb1dcbb1d2b66168ec43b23ee0cee356b4cc4100ddee3943934ebf1480/scikit_learn-1.7.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:30d1f413cfc0aa5a99132a554f1d80517563c34a9d3e7c118fde2d273c6fe0f7", size = 9511189, upload-time = "2025-07-18T08:01:18.013Z" },
-    { url = "https://files.pythonhosted.org/packages/b2/3b/47b5eaee01ef2b5a80ba3f7f6ecf79587cb458690857d4777bfd77371c6f/scikit_learn-1.7.1-cp311-cp311-win_amd64.whl", hash = "sha256:c711d652829a1805a95d7fe96654604a8f16eab5a9e9ad87b3e60173415cb650", size = 8914794, upload-time = "2025-07-18T08:01:20.357Z" },
     { url = "https://files.pythonhosted.org/packages/cb/16/57f176585b35ed865f51b04117947fe20f130f78940c6477b6d66279c9c2/scikit_learn-1.7.1-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:3cee419b49b5bbae8796ecd690f97aa412ef1674410c23fc3257c6b8b85b8087", size = 9260431, upload-time = "2025-07-18T08:01:22.77Z" },
     { url = "https://files.pythonhosted.org/packages/67/4e/899317092f5efcab0e9bc929e3391341cec8fb0e816c4789686770024580/scikit_learn-1.7.1-cp312-cp312-macosx_12_0_arm64.whl", hash = "sha256:2fd8b8d35817b0d9ebf0b576f7d5ffbbabdb55536b0655a8aaae629d7ffd2e1f", size = 8637191, upload-time = "2025-07-18T08:01:24.731Z" },
     { url = "https://files.pythonhosted.org/packages/f3/1b/998312db6d361ded1dd56b457ada371a8d8d77ca2195a7d18fd8a1736f21/scikit_learn-1.7.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:588410fa19a96a69763202f1d6b7b91d5d7a5d73be36e189bc6396bfb355bd87", size = 9486346, upload-time = "2025-07-18T08:01:26.713Z" },
     { url = "https://files.pythonhosted.org/packages/ad/09/a2aa0b4e644e5c4ede7006748f24e72863ba2ae71897fecfd832afea01b4/scikit_learn-1.7.1-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:e3142f0abe1ad1d1c31a2ae987621e41f6b578144a911ff4ac94781a583adad7", size = 9290988, upload-time = "2025-07-18T08:01:28.938Z" },
-    { url = "https://files.pythonhosted.org/packages/15/fa/c61a787e35f05f17fc10523f567677ec4eeee5f95aa4798dbbbcd9625617/scikit_learn-1.7.1-cp312-cp312-win_amd64.whl", hash = "sha256:3ddd9092c1bd469acab337d87930067c87eac6bd544f8d5027430983f1e1ae88", size = 8735568, upload-time = "2025-07-18T08:01:30.936Z" },
     { url = "https://files.pythonhosted.org/packages/52/f8/e0533303f318a0f37b88300d21f79b6ac067188d4824f1047a37214ab718/scikit_learn-1.7.1-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:b7839687fa46d02e01035ad775982f2470be2668e13ddd151f0f55a5bf123bae", size = 9213143, upload-time = "2025-07-18T08:01:32.942Z" },
     { url = "https://files.pythonhosted.org/packages/71/f3/f1df377d1bdfc3e3e2adc9c119c238b182293e6740df4cbeac6de2cc3e23/scikit_learn-1.7.1-cp313-cp313-macosx_12_0_arm64.whl", hash = "sha256:a10f276639195a96c86aa572ee0698ad64ee939a7b042060b98bd1930c261d10", size = 8591977, upload-time = "2025-07-18T08:01:34.967Z" },
     { url = "https://files.pythonhosted.org/packages/99/72/c86a4cd867816350fe8dee13f30222340b9cd6b96173955819a5561810c5/scikit_learn-1.7.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:13679981fdaebc10cc4c13c43344416a86fcbc61449cb3e6517e1df9d12c8309", size = 9436142, upload-time = "2025-07-18T08:01:37.397Z" },
     { url = "https://files.pythonhosted.org/packages/e8/66/277967b29bd297538dc7a6ecfb1a7dce751beabd0d7f7a2233be7a4f7832/scikit_learn-1.7.1-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:4f1262883c6a63f067a980a8cdd2d2e7f2513dddcef6a9eaada6416a7a7cbe43", size = 9282996, upload-time = "2025-07-18T08:01:39.721Z" },
-    { url = "https://files.pythonhosted.org/packages/e2/47/9291cfa1db1dae9880420d1e07dbc7e8dd4a7cdbc42eaba22512e6bde958/scikit_learn-1.7.1-cp313-cp313-win_amd64.whl", hash = "sha256:ca6d31fb10e04d50bfd2b50d66744729dbb512d4efd0223b864e2fdbfc4cee11", size = 8707418, upload-time = "2025-07-18T08:01:42.124Z" },
     { url = "https://files.pythonhosted.org/packages/61/95/45726819beccdaa34d3362ea9b2ff9f2b5d3b8bf721bd632675870308ceb/scikit_learn-1.7.1-cp313-cp313t-macosx_10_13_x86_64.whl", hash = "sha256:781674d096303cfe3d351ae6963ff7c958db61cde3421cd490e3a5a58f2a94ae", size = 9561466, upload-time = "2025-07-18T08:01:44.195Z" },
     { url = "https://files.pythonhosted.org/packages/ee/1c/6f4b3344805de783d20a51eb24d4c9ad4b11a7f75c1801e6ec6d777361fd/scikit_learn-1.7.1-cp313-cp313t-macosx_12_0_arm64.whl", hash = "sha256:10679f7f125fe7ecd5fad37dd1aa2daae7e3ad8df7f3eefa08901b8254b3e12c", size = 9040467, upload-time = "2025-07-18T08:01:46.671Z" },
     { url = "https://files.pythonhosted.org/packages/6f/80/abe18fe471af9f1d181904203d62697998b27d9b62124cd281d740ded2f9/scikit_learn-1.7.1-cp313-cp313t-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:1f812729e38c8cb37f760dce71a9b83ccfb04f59b3dca7c6079dcdc60544fa9e", size = 9532052, upload-time = "2025-07-18T08:01:48.676Z" },
     { url = "https://files.pythonhosted.org/packages/14/82/b21aa1e0c4cee7e74864d3a5a721ab8fcae5ca55033cb6263dca297ed35b/scikit_learn-1.7.1-cp313-cp313t-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:88e1a20131cf741b84b89567e1717f27a2ced228e0f29103426102bc2e3b8ef7", size = 9361575, upload-time = "2025-07-18T08:01:50.639Z" },
-    { url = "https://files.pythonhosted.org/packages/f2/20/f4777fcd5627dc6695fa6b92179d0edb7a3ac1b91bcd9a1c7f64fa7ade23/scikit_learn-1.7.1-cp313-cp313t-win_amd64.whl", hash = "sha256:b1bd1d919210b6a10b7554b717c9000b5485aa95a1d0f177ae0d7ee8ec750da5", size = 9277310, upload-time = "2025-07-18T08:01:52.547Z" },
 ]
 
 [[package]]
@@ -5057,6 +5306,18 @@ wheels = [
 name = "sentencepiece"
 version = "0.2.1"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version == '3.12.*' and sys_platform == 'darwin'",
+    "python_full_version < '3.12' and sys_platform == 'darwin'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'windows'",
+    "python_full_version < '3.12' and sys_platform == 'windows'",
+    "python_full_version == '3.12.*' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version < '3.12' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+]
 sdist = { url = "https://files.pythonhosted.org/packages/15/15/2e7a025fc62d764b151ae6d0f2a92f8081755ebe8d4a64099accc6f77ba6/sentencepiece-0.2.1.tar.gz", hash = "sha256:8138cec27c2f2282f4a34d9a016e3374cd40e5c6e9cb335063db66a0a3b71fad", size = 3228515, upload-time = "2025-08-12T07:00:51.718Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d8/15/46afbab00733d81788b64be430ca1b93011bb9388527958e26cc31832de5/sentencepiece-0.2.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:6356d0986b8b8dc351b943150fcd81a1c6e6e4d439772e8584c64230e58ca987", size = 1942560, upload-time = "2025-08-12T06:59:25.82Z" },
@@ -5110,9 +5371,62 @@ wheels = [
 ]
 
 [[package]]
+name = "sentencepiece"
+version = "0.2.1"
+source = { git = "https://github.com/google/sentencepiece.git?subdirectory=python#9a1e34ac59118ae87b795d86b78fc7c77fde3fff" }
+resolution-markers = [
+    "python_full_version >= '3.13' and sys_platform == 'darwin'",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'windows'",
+    "python_full_version >= '3.13' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+]
+
+[[package]]
+name = "sentry-sdk"
+version = "3.0.0a5"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi", marker = "sys_platform == 'windows'" },
+    { name = "opentelemetry-sdk", marker = "sys_platform == 'windows'" },
+    { name = "urllib3", marker = "sys_platform == 'windows'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/aa/27/a8d699e7841c6c54886f7c68d3b00414bf959b2b310d2adcd748c78fd0bb/sentry_sdk-3.0.0a5.tar.gz", hash = "sha256:f6ccb2a35cea0b342a22c26647f115d2155b3d7cb0a8f6cec425c6a24a2fda28", size = 319985, upload-time = "2025-08-07T12:34:48.568Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0f/09/e3376a6c6b2193f012536136c32cff6275cfe9e130c35bbaeefd42ae42e5/sentry_sdk-3.0.0a5-py2.py3-none-any.whl", hash = "sha256:6e91d9783b3295a2fd431b7987332bd6fd6175f2493b1184ee09e7b7a4167fd0", size = 346558, upload-time = "2025-08-07T12:34:46.683Z" },
+]
+
+[[package]]
+name = "setuptools"
+version = "79.0.1"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.13' and sys_platform == 'windows'",
+    "python_full_version == '3.12.*' and sys_platform == 'windows'",
+]
+sdist = { url = "https://files.pythonhosted.org/packages/bb/71/b6365e6325b3290e14957b2c3a804a529968c77a049b2ed40c095f749707/setuptools-79.0.1.tar.gz", hash = "sha256:128ce7b8f33c3079fd1b067ecbb4051a66e8526e7b65f6cec075dfc650ddfa88", size = 1367909, upload-time = "2025-04-23T22:20:59.241Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0d/6d/b4752b044bf94cb802d88a888dc7d288baaf77d7910b7dedda74b5ceea0c/setuptools-79.0.1-py3-none-any.whl", hash = "sha256:e147c0549f27767ba362f9da434eab9c5dc0045d5304feb602a0af001089fc51", size = 1256281, upload-time = "2025-04-23T22:20:56.768Z" },
+]
+
+[[package]]
 name = "setuptools"
 version = "80.9.0"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.13' and sys_platform == 'darwin'",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version >= '3.13' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version == '3.12.*' and sys_platform == 'darwin'",
+    "python_full_version < '3.12' and sys_platform == 'darwin'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'windows'",
+    "python_full_version == '3.12.*' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+]
 sdist = { url = "https://files.pythonhosted.org/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca/setuptools-80.9.0.tar.gz", hash = "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c", size = 1319958, upload-time = "2025-05-27T00:56:51.443Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a3/dc/17031897dae0efacfea57dfd3a82fdd2a2aeb58e0ff71b77b87e44edc772/setuptools-80.9.0-py3-none-any.whl", hash = "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922", size = 1201486, upload-time = "2025-05-27T00:56:49.664Z" },
@@ -5253,7 +5567,7 @@ name = "soxr"
 version = "0.5.0.post1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", marker = "sys_platform == 'darwin'" },
+    { name = "numpy", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or sys_platform == 'darwin' or sys_platform == 'windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/02/c0/4429bf9b3be10e749149e286aa5c53775399ec62891c6b970456c6dca325/soxr-0.5.0.post1.tar.gz", hash = "sha256:7092b9f3e8a416044e1fa138c8172520757179763b85dc53aa9504f4813cff73", size = 170853, upload-time = "2024-08-31T03:43:33.058Z" }
 wheels = [
@@ -5261,12 +5575,10 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/0e/48/3e88329a695f6e0e38a3b171fff819d75d7cc055dae1ec5d5074f34d61e3/soxr-0.5.0.post1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:39e0f791ba178d69cd676485dbee37e75a34f20daa478d90341ecb7f6d9d690f", size = 159933, upload-time = "2024-08-31T03:43:10.053Z" },
     { url = "https://files.pythonhosted.org/packages/9c/a5/6b439164be6871520f3d199554568a7656e96a867adbbe5bac179caf5776/soxr-0.5.0.post1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4f0b558f445ba4b64dbcb37b5f803052eee7d93b1dbbbb97b3ec1787cb5a28eb", size = 221010, upload-time = "2024-08-31T03:43:11.839Z" },
     { url = "https://files.pythonhosted.org/packages/9f/e5/400e3bf7f29971abad85cb877e290060e5ec61fccd2fa319e3d85709c1be/soxr-0.5.0.post1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ca6903671808e0a6078b0d146bb7a2952b118dfba44008b2aa60f221938ba829", size = 252471, upload-time = "2024-08-31T03:43:13.347Z" },
-    { url = "https://files.pythonhosted.org/packages/86/94/6a7e91bea7e6ca193ee429869b8f18548cd79759e064021ecb5756024c7c/soxr-0.5.0.post1-cp311-cp311-win_amd64.whl", hash = "sha256:c4d8d5283ed6f5efead0df2c05ae82c169cfdfcf5a82999c2d629c78b33775e8", size = 166723, upload-time = "2024-08-31T03:43:15.212Z" },
     { url = "https://files.pythonhosted.org/packages/5d/e3/d422d279e51e6932e7b64f1170a4f61a7ee768e0f84c9233a5b62cd2c832/soxr-0.5.0.post1-cp312-abi3-macosx_10_14_x86_64.whl", hash = "sha256:fef509466c9c25f65eae0ce1e4b9ac9705d22c6038c914160ddaf459589c6e31", size = 199993, upload-time = "2024-08-31T03:43:17.24Z" },
     { url = "https://files.pythonhosted.org/packages/20/f1/88adaca3c52e03bcb66b63d295df2e2d35bf355d19598c6ce84b20be7fca/soxr-0.5.0.post1-cp312-abi3-macosx_11_0_arm64.whl", hash = "sha256:4704ba6b13a3f1e41d12acf192878384c1c31f71ce606829c64abdf64a8d7d32", size = 156373, upload-time = "2024-08-31T03:43:18.633Z" },
     { url = "https://files.pythonhosted.org/packages/b8/38/bad15a9e615215c8219652ca554b601663ac3b7ac82a284aca53ec2ff48c/soxr-0.5.0.post1-cp312-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bd052a66471a7335b22a6208601a9d0df7b46b8d087dce4ff6e13eed6a33a2a1", size = 216564, upload-time = "2024-08-31T03:43:20.789Z" },
     { url = "https://files.pythonhosted.org/packages/e1/1a/569ea0420a0c4801c2c8dd40d8d544989522f6014d51def689125f3f2935/soxr-0.5.0.post1-cp312-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a3f16810dd649ab1f433991d2a9661e9e6a116c2b4101039b53b3c3e90a094fc", size = 248455, upload-time = "2024-08-31T03:43:22.165Z" },
-    { url = "https://files.pythonhosted.org/packages/bc/10/440f1ba3d4955e0dc740bbe4ce8968c254a3d644d013eb75eea729becdb8/soxr-0.5.0.post1-cp312-abi3-win_amd64.whl", hash = "sha256:b1be9fee90afb38546bdbd7bde714d1d9a8c5a45137f97478a83b65e7f3146f6", size = 164937, upload-time = "2024-08-31T03:43:23.671Z" },
 ]
 
 [[package]]
@@ -5710,7 +6022,7 @@ name = "toga-android"
 version = "0.5.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "toga-core", marker = "(sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "toga-core", marker = "sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/1d/1c/9e3d9f68ae4b2b4da9a5f21c6b3651da197faa14a22a86912817ec8e0184/toga_android-0.5.2.tar.gz", hash = "sha256:98c5f0a0ef4d52e380b706e54473049c737144d28b278ace58f6e5cbc39b25f2", size = 75418, upload-time = "2025-07-10T07:27:20.005Z" }
 wheels = [
@@ -5748,9 +6060,9 @@ name = "toga-gtk"
 version = "0.5.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "pycairo", marker = "'freebsd' in sys_platform or sys_platform == 'Linux' or sys_platform == 'darwin' or sys_platform == 'linux' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "pygobject", marker = "'freebsd' in sys_platform or sys_platform == 'Linux' or sys_platform == 'darwin' or sys_platform == 'linux' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "toga-core", marker = "'freebsd' in sys_platform or sys_platform == 'Linux' or sys_platform == 'darwin' or sys_platform == 'linux' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "pycairo" },
+    { name = "pygobject" },
+    { name = "toga-core" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/1d/f8/6230cb3371472bc109f1c2d681a06d20f2d640bb9d5d07e1151461dd8286/toga_gtk-0.5.2.tar.gz", hash = "sha256:9212db774dd5f47820d2242bb09c9f44e12e87e3db49ccb967016c6bb311139b", size = 75816, upload-time = "2025-07-10T07:27:51.989Z" }
 wheels = [
@@ -5762,9 +6074,9 @@ name = "toga-ios"
 version = "0.5.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "fonttools", marker = "(sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "rubicon-objc", marker = "(sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "toga-core", marker = "(sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "fonttools", marker = "sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'" },
+    { name = "rubicon-objc", marker = "sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'" },
+    { name = "toga-core", marker = "sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/2d/8f/62b0f527d2bf91f3f2444250419d2c2a465d69b8041ed3093d257d30bb8b/toga_ios-0.5.2.tar.gz", hash = "sha256:ff806df5acc13185fe2ef6d0c848e84719041fb050e29beb6de63524cfd7f0ac", size = 442486, upload-time = "2025-07-10T07:27:50.982Z" }
 wheels = [
@@ -5776,7 +6088,7 @@ name = "toga-web"
 version = "0.5.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "toga-core", marker = "(sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "toga-core", marker = "sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/fc/c4/02c378dc622d5fd890fa05582105d9d642e13f47f55af9c7ef740c392b18/toga_web-0.5.2.tar.gz", hash = "sha256:5f9b988ae229b63f22be63997745207fc916f792b4ec4ef58f998b4c85ff9576", size = 18858, upload-time = "2025-07-10T07:28:04.011Z" }
 wheels = [
@@ -5788,9 +6100,9 @@ name = "toga-winforms"
 version = "0.5.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "pillow", version = "11.3.0", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "pythonnet", marker = "(sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "toga-core", marker = "(sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'Linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
+    { name = "pillow", marker = "sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'" },
+    { name = "pythonnet", marker = "sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'" },
+    { name = "toga-core", marker = "sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/19/5d/b6ba2fb7633b64c9afe980a2f1a2d85feac6632f4f7326c1df6208754485/toga_winforms-0.5.2.tar.gz", hash = "sha256:7e65ee9a31db6588c41c01cc49c12df1b2019581410be6ba7c685e7ac75f7c4a", size = 473736, upload-time = "2025-07-10T07:27:53.534Z" }
 wheels = [
@@ -5879,27 +6191,18 @@ name = "torch"
 version = "2.8.0+cu128"
 source = { registry = "https://download.pytorch.org/whl/cu128" }
 resolution-markers = [
-    "python_full_version >= '3.13' and sys_platform == 'Linux'",
-    "python_full_version >= '3.13' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' in sys_platform",
-    "python_full_version >= '3.13' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version >= '3.13' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version >= '3.13' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version >= '3.13' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version >= '3.13' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version == '3.12.*' and sys_platform == 'Linux'",
-    "python_full_version < '3.12' and sys_platform == 'Linux'",
-    "python_full_version == '3.12.*' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' in sys_platform",
-    "python_full_version < '3.12' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' in sys_platform",
-    "python_full_version == '3.12.*' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version < '3.12' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version < '3.12' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version < '3.12' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version < '3.12' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version < '3.12' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'darwin'",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version >= '3.13' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version == '3.12.*' and sys_platform == 'darwin'",
+    "python_full_version < '3.12' and sys_platform == 'darwin'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version < '3.12' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
 ]
 dependencies = [
     { name = "filelock", marker = "sys_platform != 'darwin'" },
@@ -5942,8 +6245,17 @@ version = "2.8.0"
 source = { registry = "https://download.pytorch.org/whl/cpu" }
 resolution-markers = [
     "python_full_version >= '3.13' and sys_platform == 'darwin'",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version >= '3.13' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
     "python_full_version == '3.12.*' and sys_platform == 'darwin'",
     "python_full_version < '3.12' and sys_platform == 'darwin'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version < '3.12' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
 ]
 dependencies = [
     { name = "torch", version = "2.8.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform == 'darwin'" },
@@ -5960,60 +6272,38 @@ wheels = [
 ]
 
 [[package]]
-name = "torchaudio"
-version = "2.8.0+cu128"
-source = { registry = "https://download.pytorch.org/whl/cu128" }
-resolution-markers = [
-    "python_full_version >= '3.13' and sys_platform == 'Linux'",
-    "python_full_version >= '3.13' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' in sys_platform",
-    "python_full_version >= '3.13' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version >= '3.13' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version >= '3.13' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version >= '3.13' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version >= '3.13' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version == '3.12.*' and sys_platform == 'Linux'",
-    "python_full_version < '3.12' and sys_platform == 'Linux'",
-    "python_full_version == '3.12.*' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' in sys_platform",
-    "python_full_version < '3.12' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' in sys_platform",
-    "python_full_version == '3.12.*' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version < '3.12' and sys_platform != 'Linux' and sys_platform != 'darwin' and sys_platform != 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version < '3.12' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version < '3.12' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version == '3.12.*' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version < '3.12' and platform_machine != 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-    "python_full_version < '3.12' and platform_machine == 'aarch64' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
-]
+name = "torchcrepe"
+version = "0.0.24"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "torch", version = "2.8.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "sys_platform != 'darwin'" },
+    { name = "librosa", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "resampy", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "scipy", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "torch", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'windows'" },
+    { name = "torch", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'linux'" },
+    { name = "torchaudio", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'windows'" },
+    { name = "torchaudio", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'linux'" },
+    { name = "tqdm", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/c8/98/0da59205962218ed1be90034aa11db3e2e10a54293508ef0aa07a1e5ceb9/torchcrepe-0.0.24.tar.gz", hash = "sha256:7eebdd59bdfed822ac19820cb73823335e4eba88f1c76c411a7ab05f7ca6db0a", size = 72329307, upload-time = "2025-05-16T18:41:41.393Z" }
 wheels = [
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.8.0%2Bcu128-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:f4409df567d0723a7a3a89d32c7552a17e0ff6f137ea26a0d268c665259b2995" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.8.0%2Bcu128-cp311-cp311-win_amd64.whl", hash = "sha256:7a1eb6154e05b8056b34c7a41495e09d57f79eb0180eb4e7f3bb2a61845ca8ea" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.8.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:145b8a0c21cfcaa1705c67173c5d439087e0e120d5da9bc344746f937901d243" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.8.0%2Bcu128-cp312-cp312-win_amd64.whl", hash = "sha256:cce3a60cd9a97f7360c8f95504ac349311fb7d6b9b826135936764f4de5f782d" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.8.0%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:410bb8ea46225efe658e5d27a3802c181a2255913003621a5d25a51aca8018d9" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.8.0%2Bcu128-cp313-cp313-win_amd64.whl", hash = "sha256:3146bbd48992d215f6bb1aef9626d734c3180b377791ded2a4d4d2c0e63c0cc2" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.8.0%2Bcu128-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:04b410f93337fc6c16576d0c88e2a31091aef9d1fd212ebb8cd26899dba175e0" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.8.0%2Bcu128-cp313-cp313t-win_amd64.whl", hash = "sha256:1054e0a7613cac54ed9b3784a5fcbe023748a70004d9cca74c5f9ae00a1fdfd1" },
+    { url = "https://files.pythonhosted.org/packages/9b/a9/799d00b9dc7a18bb0ff53fccc187b1d83c690e337d078345c17ec0a1a224/torchcrepe-0.0.24-py3-none-any.whl", hash = "sha256:ec054c23c9d45328f213f93a0131570a3f0e5903e9382792bed95f17a8c36d5a", size = 72326298, upload-time = "2025-05-16T18:41:13.419Z" },
 ]
 
 [[package]]
-name = "torchsde"
-version = "0.2.6"
+name = "torchmetrics"
+version = "1.8.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy" },
-    { name = "scipy" },
-    { name = "torch", version = "2.8.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "torch", version = "2.8.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "sys_platform != 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
-    { name = "trampoline" },
+    { name = "lightning-utilities", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "numpy", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "packaging", marker = "(python_full_version >= '3.13' and sys_platform == 'linux') or (python_full_version >= '3.13' and sys_platform == 'windows')" },
+    { name = "torch", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'windows'" },
+    { name = "torch", version = "2.8.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' and sys_platform == 'linux'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/71/a5/ae18ee6de023b3a5462122a43a4c9812c11d275cc585a3d08bf24945c02a/torchsde-0.2.6.tar.gz", hash = "sha256:81d074d3504f9d190f1694fb526395afbe4608ee43a88adb1262a639e5b4778b", size = 48840, upload-time = "2023-09-26T21:52:20.614Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/78/1f/2cd9eb8f3390c3ec4693ac0871913d4b468964b3833638e4091a70817e0a/torchmetrics-1.8.1.tar.gz", hash = "sha256:04ca021105871637c5d34d0a286b3ab665a1e3d2b395e561f14188a96e862fdb", size = 580373, upload-time = "2025-08-07T20:44:44.631Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dd/1f/b67ebd7e19ffe259f05d3cf4547326725c3113d640c277030be3e9998d6f/torchsde-0.2.6-py3-none-any.whl", hash = "sha256:19bf7ff02eec7e8e46ba1cdb4aa0f9db1c51d492524a16975234b467f7fc463b", size = 61232, upload-time = "2023-09-26T21:52:19.274Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/59/5c1c1cb08c494621901cf549a543f87143019fac1e6dd191eb4630bbc8fb/torchmetrics-1.8.1-py3-none-any.whl", hash = "sha256:2437501351e0da3d294c71210ce8139b9c762b5e20604f7a051a725443db8f4b", size = 982961, upload-time = "2025-08-07T20:44:42.608Z" },
 ]
 
 [[package]]
@@ -6050,8 +6340,17 @@ version = "0.23.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.13' and sys_platform == 'darwin'",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version >= '3.13' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
     "python_full_version == '3.12.*' and sys_platform == 'darwin'",
     "python_full_version < '3.12' and sys_platform == 'darwin'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version < '3.12' and sys_platform == 'linux' and 'freebsd' not in sys_platform",
+    "python_full_version == '3.12.*' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
+    "python_full_version < '3.12' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'windows'",
 ]
 dependencies = [
     { name = "numpy", marker = "sys_platform == 'darwin'" },
@@ -6486,7 +6785,7 @@ name = "triton"
 version = "3.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "setuptools", marker = "sys_platform != 'darwin'" },
+    { name = "setuptools", version = "80.9.0", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'linux'" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7d/39/43325b3b651d50187e591eefa22e236b2981afcebaefd4f2fc0ea99df191/triton-3.4.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:7b70f5e6a41e52e48cfc087436c8a28c17ff98db369447bcaff3b887a3ab4467", size = 155531138, upload-time = "2025-07-30T19:58:29.908Z" },
@@ -6997,8 +7296,8 @@ version = "0.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "dspy" },
-    { name = "ftfy" },
-    { name = "litellm" },
+    { name = "litellm", version = "1.75.3", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'windows'" },
+    { name = "litellm", version = "1.75.5.post1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform != 'windows'" },
     { name = "matplotlib" },
     { name = "networkx" },
     { name = "nnll", extra = ["dev"] },

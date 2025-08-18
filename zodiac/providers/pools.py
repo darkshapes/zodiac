@@ -166,10 +166,6 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
                 entry_data = {
                     "tags": [],
                 }
-            print(repo.repo_id)
-            if "cvssp/audioldm-s-full-v2" == repo.repo_id:
-                entry_data.setdefault("mode", "text-to-audio")
-                entry_data.setdefault("tags", ["text-to-audio"])
             nfo(mir_tags if mir_tags[0] else f"mir tag not found for {repo.repo_id}")
             entry = RegistryEntry.create_entry(
                 model=repo.repo_id,
