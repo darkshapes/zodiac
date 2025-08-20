@@ -31,13 +31,12 @@ async def best_package(pkg_data: RegistryEntry | dict[int | str, Any], ready_lis
 
     if isinstance(pkg_data, RegistryEntry):
         pkg_loop: list = await ancestor_data(pkg_data)
-        print(pkg_loop)
+        # print(pkg_loop)
         pkg_loop.insert(0, pkg_data.modules | pkg_loop[0])
 
-        print(pkg_data.modules)
+        # print(pkg_data.modules)
     else:
         pkg_loop = [pkg_data]  # normalize to list
-    print(pkg_loop)
     for processor in ready_list:
         for pkg_type in processor[2]:
             if pkg_type.value[0]:  # Determine if the package is available

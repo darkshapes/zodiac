@@ -419,13 +419,7 @@ VALID_TASKS = {  # normalized to lowercase
             "image-to-image",
             "any-to-any",
         ],
-        ("text", "image"): [
-            "kolors",
-            "kolorspipeline",
-            "image-generation",
-            "any-to-any",
-            "text-to-image",
-        ],
+        ("text", "image"): ["kolors", "kolorspipeline", "image-generation", "any-to-any", "text-to-image", "chromapipeline"],
         ("image", "text"): [
             "image-classification",
             "image-to-text",
@@ -451,7 +445,7 @@ VALID_TASKS = {  # normalized to lowercase
         ],
         ("image", "video"): ["image-to-video", "i2v", "reference-to-video", "refernce-to-video"],
         ("video", "text"): ["video-classification"],
-        ("text", "video"): ["video generation", "t2v", "text-to-video"],
+        ("text", "video"): ["video generation", "t2v", "text-to-video", "HunyuanVideoPipeline"],
         ("text", "text"): [
             "any-to-any",
             "named entity recognition",
@@ -479,7 +473,7 @@ VALID_TASKS = {  # normalized to lowercase
             "chatglm",
             "exbert",
         ],
-        ("text", "audio"): ["text-to-audio", "t2a", "any-to-any", "musicgen", "audiocraft", "audiogen", "audioldmpipeline", "audioldm2pipeline"],
+        ("text", "audio"): ["text-to-audio", "t2a", "any-to-any", "text-to-audio", " musicldmpipeline", "musicgen", "audiocraft", "audiogen", "AudioLDMPipeline", "AudioLDM2Pipeline"],
         ("audio", "text"): ["zero-shot-audio-classification", "audio-classification", "a2t", "audio-text-to-text", "any-to-any"],
         ("text", "speech"): [
             "text-to-speech",

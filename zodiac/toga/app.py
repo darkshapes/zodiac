@@ -59,7 +59,8 @@ class Interface(toga.App):
             context_data, predictor_data = await ready_predictor(self.registry_entry, dspy_stream=stream, async_stream=stream, cache=cache)
             await self.stream_text(prompts, context_data, predictor_data)
         else:
-            await self.generate_media(prompts, self.registry_entry)  # context_data, predictor_data)
+            content = await self.generate_media(prompts, self.registry_entry)  # context_data, predictor_data)
+            return widget
         return widget
 
     async def stream_text(self, prompts, context_data, predictor_data):
@@ -90,9 +91,9 @@ class Interface(toga.App):
 
         pkg_data = await best_package(pkg_data=registry_entry)
         constructor = ConstructPipeline()
-        pipe_data = constructor.create_pipeline(registry_entry, pkg_data, MIR_DB)
-        return run_inference(pipe_data, prompts, out_type=self.output_types.value)
-
+        pipe_data = await constructor.create_pipeline(registry_entry, pkg_data, MIR_DB)
+        content = await run_inference(pipe_data, prompts, out_type=self.output_types.value)
+        return content
         # from zodiac.toga.signatures import Predictor
 
         # return prediction
