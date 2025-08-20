@@ -358,6 +358,7 @@ class Interface(toga.App):
         self.model_stream = ModelStream()
         self.task_stream = TaskStream()
         self.token_stream = TokenStream()
+        self.token_stream = TokenStream()
 
         start = toga.Command(
             self.ticker,
