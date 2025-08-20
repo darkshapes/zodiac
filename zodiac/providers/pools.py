@@ -276,7 +276,14 @@ async def llamafile_pool(mir_db: Callable, api_data: Dict[str, Any], entries: Li
         if hasattr(model, id):
             if mir_tag := await model_id.label_model(model.id, CueType.LLAMAFILE.value[1]):
                 entry_data = await generate_entry(mir_tag=mir_tag[0], mir_db=mir_db, tags=["text"])
-        entry = RegistryEntry.create_entry(model=f"{api_data[CueType.LLAMAFILE.value[1]].get('prefix')}{model.id}", size=0, cuetype=CueType.LLAMAFILE, api_kwargs=config["api_kwargs"], timestamp=int(model.created), **entry_data)
+        entry = RegistryEntry.create_entry(
+            model=f"{api_data[CueType.LLAMAFILE.value[1]].get('prefix')}{model.id}",
+            size=0,
+            cuetype=CueType.LLAMAFILE,
+            api_kwargs=config["api_kwargs"],
+            timestamp=int(model.created),
+            **entry_data,
+        )
         entries.append(entry)
     return entries
 
