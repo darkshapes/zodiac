@@ -90,6 +90,7 @@ class Interface(toga.App):
         from zodiac.providers.constants import MIR_DB
 
         pkg_data = await best_package(pkg_data=registry_entry)
+        print(pkg_data)
         constructor = ConstructPipeline()
         pipe_data = await constructor.create_pipeline(registry_entry, pkg_data, MIR_DB)
         content = await run_inference(pipe_data, prompts, out_type=self.output_types.value)

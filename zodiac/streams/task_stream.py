@@ -62,16 +62,27 @@ class TaskStream(Source):
         if task_names:
             for task_class in task_names:
                 for snip in class_snippets:
-                    subtracted_name = task_class.replace(snip, "")
-                    snip_words.add(subtracted_name)
+                    if task_class and isinstance(task_class, str):
+                        snip_words.add(task_class.replace(snip, ""))
+                    elif task_class[0]:
+                        snip_words.add(task_class[0].replace(snip, ""))
                 task_data = set()
                 for pipe in task_names:
-                    pattern = "|".join(map(re.escape, snip_words))
-                    pipe = re.sub(pattern, "", pipe)
-                    if pipe:
-                        for task in self.tasks:
-                            if task in pipe:
-                                task_data.add(pipe)
+                    if isinstance(pipe, list):
+                        for sub_pipe in pipe:
+                            for word in snip_words:
+                                sub_pipe = sub_pipe.replace(word, "")
+                                if sub_pipe:
+                                    for task in self.tasks:
+                                        if task in sub_pipe:
+                                            task_data.add(sub_pipe)
+                    else:
+                        for word in snip_words:
+                            pipe = pipe.replace(word, "")
+                            if pipe:
+                                for task in self.tasks:
+                                    if task in pipe:
+                                        task_data.add(pipe)
                 task_data = list(task_data)
                 task_data.sort()
             return task_data
