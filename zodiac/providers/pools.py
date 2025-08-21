@@ -41,12 +41,12 @@ async def add_pkg_types(pkg_data: dict, mode: str, mir_tag: list[str]) -> dict[i
     package_name = pkg_data.get(next(iter(pkg_data)))
     class_name = package_name.get(next(iter(package_name)))
     class_name = list(class_name)[0]
-    if class_name == "FluxPipeline" and PkgType.MFLUX.value[0]:
-        alias = "schnell" if "schnell" in mir_tag[0] else "dev"
-        class_data = {
-            f"{PkgType.MFLUX.value[1].lower()}": {"flux.flux.Flux1": {"alias": alias}},
-        }
-        pkg_data.setdefault(str(len(pkg_data)), class_data)
+    # if (class_name == "FluxPipeline" or "flux1" in mir_tag[0]) and PkgType.MFLUX.value[0]:
+    #     alias = "schnell" if "schnell" in mir_tag[0] else "dev"
+    #     class_data = {
+    #         f"{PkgType.MFLUX.value[1].lower()}": "flux.flux.Flux1",
+    #     }
+    # pkg_data.setdefault(str(len(pkg_data)), class_data)
     if class_name == "ChromaPipeline" and PkgType.MLX_CHROMA.value[0]:
         pkg_data.setdefault(str(len(pkg_data)), {PkgType.MLX_CHROMA.value[1].lower(): "ChromaPipeline"})
     if mode in VALID_TASKS[CueType.HUB][("text", "text")] and PkgType.MLX_LM.value[0]:

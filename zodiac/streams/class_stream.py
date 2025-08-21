@@ -33,18 +33,15 @@ async def best_package(pkg_data: RegistryEntry | dict[int | str, Any], ready_lis
         pkg_loop: list = await ancestor_data(pkg_data)
         # print(pkg_loop)
         pkg_loop.insert(0, pkg_data.modules | pkg_loop[0])
-
-        # print(pkg_data.modules)
     else:
-        pkg_loop = [pkg_data]  # normalize to list
+        pkg_loop = [pkg_data]  # await ancestor_data(pkg_data)  # normalize to list
     for processor in ready_list:
         for pkg_type in processor[2]:
             if pkg_type.value[0]:  # Determine if the package is available
                 package_name = pkg_type.value[1].lower()
                 for index, data in next(iter(pkg_loop)).items():
                     if package_name in data:
-                        class_name = data[package_name]
-                        return (index, class_name, pkg_type)
+                        return (index, data, pkg_type)
 
 
 async def find_package(entry: RegistryEntry = None, mir_entry: list[str] | None = None) -> Tuple[str]:
@@ -56,7 +53,7 @@ async def find_package(entry: RegistryEntry = None, mir_entry: list[str] | None 
 
     mir_base = entry.mir[0] if not mir_entry else mir_entry[0]
     mir_comp = entry.mir[1] if not mir_entry else mir_entry[1]
-    mir_ids = [mir_comp, "*"]
+    mir_ids = [mir_comp, "diffusers", "*"]
     suffixes = VERSIONS_CONFIG.get("suffixes")
     if suffixes:
         for compatibility, model_data in MIR_DB.database[mir_base].items():
