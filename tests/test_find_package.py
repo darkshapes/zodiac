@@ -63,7 +63,7 @@ async def test_lookup(mock_gpu_available):
         from zodiac.streams.class_stream import find_package
 
         result = await find_package(entry)
-        assert result == (0, "FluxPipeline", MockPackage.DIFFUSERS)
+        assert result == (0, {"diffusers": "FluxPipeline"}, MockPackage.DIFFUSERS)
 
 
 # @patch("zodiac.providers.constants.has_api", return_value=True)
@@ -76,7 +76,7 @@ async def test_lookup_transformers(mock_cpu_available):
     entry = Entry()
     with patch("zodiac.streams.class_stream.MIR_DB.database", new={"info.vit.blip-vqa": {"base": {"pkg": {0: {"transformers": "BlipModel"}}}}}):
         result = await find_package(entry)
-        assert result == (0, "BlipModel", MockPackage.TRANSFORMERS)  # This should pass with correct mock data
+        assert result == (0, {"transformers": "BlipModel"}, MockPackage.TRANSFORMERS)  # This should pass with correct mock data
 
 
 async def test_lookup_with_reverse_position(mock_cpu_available):
@@ -96,7 +96,7 @@ async def test_lookup_with_reverse_position(mock_cpu_available):
         },
     ):
         result = await find_package(entry)
-        assert result == (0, "FluxPipeline", MockPackage.DIFFUSERS)
+        assert result == (0, {"diffusers": "FluxPipeline"}, MockPackage.DIFFUSERS)
 
 
 # def test_lookup_with_reverse_position(mock_cpu_available, mock_package_available):
