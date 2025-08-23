@@ -75,7 +75,8 @@ async def generate_entry(mir_tag: List[str], mir_db: dict, model_tags: list[str]
         mir_info = {}
     else:
         pkg_data = mir_info.get("pkg")
-        pkg_data: dict = await add_pkg_types(pkg_data, mode_data, mir_tag)
+        if pkg_data:
+            pkg_data: dict = await add_pkg_types(pkg_data, mode_data, mir_tag)
     pipe_data = mir_info.get("pipe_names")
     if not pipe_data:
         pipe_data: list[dict] = await ancestor_data(mir_tag, field_name="pipe_names")
