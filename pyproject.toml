@@ -49,7 +49,7 @@ dependencies = [
     "networkx>=3.5",
     "sounddevice>=0.5.2",
     "soundfile>=0.13.1",
-    "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
+    "nnll[dev] @ git+https://github.com/darkshapes/nnll@0.1.dev799",
     "tiktoken>=0.9.0",
     "viztracer>=1.0.4",
     "matplotlib>=3.10.3",
@@ -88,7 +88,7 @@ dev = [
     "pytest>=8.4.0",
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
-    "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
+    "nnll[dev] @ git+https://github.com/darkshapes/nnll@0.1.dev799",
     "zodiac[full,console]",
 ]
 
@@ -146,4 +146,4 @@ files.extend-exclude = ["^tests/.*$", "test.*$"]
 default.extend-words = { "ot" = "ot" }
 
 [tool.uv.sources]
-nnll = { git = "https://github.com/darkshapes/nnll", rev = "main" }
+nnll = { git = "https://github.com/darkshapes/nnll", rev = "0.1.dev799" }

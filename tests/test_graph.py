@@ -7,6 +7,7 @@
 import datetime
 from pathlib import PosixPath
 from unittest import mock
+from unittest.mock import patch, MagicMock
 import pytest
 import pytest_asyncio
 from zodiac.providers.constants import VALID_CONVERSIONS
@@ -50,7 +51,7 @@ def mock_ollama_data():
         data = ListResponse(
             models=[
                 Model(
-                    model="hf.co/unsloth/x:Q8_0",
+                    model="hf.co/unsloth/qwen3:Q8_0",
                     modified_at=datetime.datetime(2025, 3, 19, 12, 21, 19, 112890, tzinfo=None),
                     digest="965289b1e3e63c66bfc018051b6a907b2f0b18620d5721dd1cdfad759b679a2c",
                     size=29565711760,
@@ -81,15 +82,13 @@ class ShowResponse:
 
     def __init__(self):
         self.modelinfo = {"general.architecture": "🤡"}
+        self.modelfile = "🤡"
 
 
-@pytest_asyncio.fixture(loop_scope="session")
-async def mock_ollama_show():
-    """Mock ollama response"""
-    with mock.patch("ollama.show", autospec=True) as mock_the_fk_up:
-        data = ShowResponse()
-        mock_the_fk_up.return_value = data
-        return mock_the_fk_up
+@pytest.fixture
+def mock_ollama_show():
+    """Mock ollama show function - returns ShowResponse synchronously"""
+    return ShowResponse
 
 
 class HFCacheInfo:
@@ -158,7 +157,7 @@ async def test_mocked_ollama(mock_ollama_data, mock_ollama_show):
 
     assert len(result.models) == 3
     next_model = next(iter(result.models))
-    assert next_model.model == "hf.co/unsloth/x:Q8_0"
+    assert next_model.model == "hf.co/unsloth/qwen3:Q8_0"
     assert next_model.size == 29565711760
 
 
@@ -187,7 +186,12 @@ async def test_create_graph(mock_ollama_data, mock_hub_data, mock_ollama_show):
     result = mock_ollama_data()
 
     int_proc = IntentProcessor()
-    data = await register_models()
+
+    # Fix the mock_ollama_show to return ShowResponse directly (synchronous)
+    # Patch ollama.show where it's imported inside generate_cache_data
+    with patch("ollama.show", return_value=ShowResponse()):
+        data = await register_models()
+
     if not data:
         asyncio.sleep(2)
     nx_graph = await int_proc.calc_graph(data)
