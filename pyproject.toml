@@ -66,6 +66,7 @@ dev = [
     "ruff>=0.11.12",
     "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
     "zodiac[full,console]",
+    "pdoc>=16.0.0",
 ]
 
 
