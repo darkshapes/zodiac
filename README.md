@@ -17,7 +17,7 @@ license_name: MPL-2.0 + Commons Clause 1.0
 
 ### [ [Windows](https://github.com/darkshapes/sdbx/wiki/Develop) | [MacOS](https://github.com/darkshapes/sdbx/wiki/Develop) | [Linux](https://github.com/darkshapes/sdbx/wiki/Develop) ]
 
-![A dark theme screenshot of the image](img_src/screenshot07-14.png)
+![A dark theme screenshot of the image](https://github.com/darkshapes/zodiac/blob/x/dev/img_src/screenshot07-14.png?raw=true)
 
  <hr>
  </div>
