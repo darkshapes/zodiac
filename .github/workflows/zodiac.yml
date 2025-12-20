@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies and run tests
         run: |
           sudo apt-get update
-          sudo apt-get -y install libportaudio2 ffmpeg build-essential pkg-config
+          sudo apt-get -y install cairo libportaudio2 ffmpeg build-essential pkg-config
           pip cache purge
           rm -rf .venv
           python -m venv .venv
