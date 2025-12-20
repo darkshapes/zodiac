@@ -26,14 +26,12 @@ jobs:
       - name: Install dependencies and run tests
         run: |
           sudo apt-get update
-          sudo apt-get -y install cairo libportaudio2 ffmpeg build-essential pkg-config
+          sudo apt-get -y install libcairo2-dev pkg-config python3-dev libportaudio2 ffmpeg build-essential
           pip cache purge
           rm -rf .venv
           python -m venv .venv
           source .venv/bin/activate
           python3 -m pip install --upgrade pip
-          python3 -m pip install cyclonedx-bom
-          python3 -m cyclonedx_py environment --spec-version 1.6 --output-format JSON --output-file zodiac-sbom.json
           pip install ".[dev]"
           cd tests
           pytest -v
