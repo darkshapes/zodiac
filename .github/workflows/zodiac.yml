@@ -25,8 +25,8 @@ jobs:
           python-version: 3.13
       - name: Install dependencies and run tests
         run: |
-          sudp apt-get update
-          sudp apt-get -y install cairo
+          sudo apt-get update
+          sudo apt-get -y install cairo
           pip cache purge
           rm -rf .venv
           python -m venv .venv
