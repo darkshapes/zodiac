@@ -44,6 +44,7 @@ classifiers = [
 ]
 dependencies = [
     "dspy>=2.6.27",
+    "pycairo>=1.29.0",
     "litellm>=1.72.0",
     "tokenizers==0.21.2",                                      #force for non linux
     "networkx>=3.5",
