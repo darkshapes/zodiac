@@ -25,7 +25,7 @@ jobs:
           python-version: 3.13
       - name: Install dependencies and run tests
         run: |
-          sudp apt-get update
+          sudo apt-get update
           sudo apt-get -y install libportaudio2 ffmpeg build-essential pkg-config
           pip cache purge
           rm -rf .venv
