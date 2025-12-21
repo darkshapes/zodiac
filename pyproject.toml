@@ -44,6 +44,7 @@ classifiers = [
 ]
 dependencies = [
     "dspy>=2.6.27",
+
     "litellm>=1.72.0",
     "tokenizers==0.21.2",                                      #force for non linux
     "networkx>=3.5",
@@ -64,15 +65,15 @@ dev = [
     "pytest>=8.4.0",
     "pytest-asyncio>=1.0.0",
     "ruff>=0.11.12",
-    "nnll[dev] @ git+https://github.com/darkshapes/nnll@main",
+    "nnll[dev] @ git+https://github.com/darkshapes/nnll@0.1.dev799",
     "zodiac[full,console]",
     "pdoc>=16.0.0",
 ]
 
 
 [project.optional-dependencies]
-mps  = ["nnll[mps]@  git+https://github.com/darkshapes/nnll@main"]
-cuda = ["nnll[cuda ]@ git+https://github.com/darkshapes/nnll@main"]
+mps  = ["nnll[mps]@  git+https://github.com/darkshapes/nnll@0.1.dev799"]
+cuda = ["nnll[cuda ]@ git+https://github.com/darkshapes/nnll@0.1.dev799"]
 
 console = [
     # "toga-textual>=0.5.1",

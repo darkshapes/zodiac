@@ -226,3 +226,4 @@ tests/log/
 result.json
 textual.log
 .DS_Store
+.aider*
