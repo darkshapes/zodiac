@@ -46,8 +46,3 @@ jobs:
           source $HOME/.venv/bin/activate
           cd tests
           pytest -v
-
-      - name: Clean up caches (optional, just to be safe)
-        if: always()
-        run: |
-          rm -rf $HOME/.cache/pip $HF_HOME $RUNNER_TEMP/*
