@@ -1,18 +1,16 @@
 ---
 title: "Code of Conduct"
-date-last-modified: 2025-20-12,
+date-last-modified: 2025-22-12
 authors:
-  name: ["˶𝞢⤬⫒ⵖsᐼ˶"],
-  pronouns: ["she/her"]
-  name: ["Marinus Savoritias"]
-  pronouns: ["fae/faer, ve/veirs"]
+  - { name: "˶𝞢⤬⫒ⵖsᐼ˶", pronouns: "she/her" }
+  - { name: "Marinus Savoritias", pronouns: "fae/faer, ve/veirs" }
 license: CC0-1.0
-version: 0.0.4
+version: 0.0.5
 ---
 
 # Code of Conduct Quick Reference
 
-Version = 0.0.4_2025-20-12
+Version = 0.0.5_2025-22-12
 
 ## Behavior Guide
 
