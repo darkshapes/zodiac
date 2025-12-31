@@ -56,6 +56,8 @@ dependencies = [
     "toga>=0.5.1",
     "pyperclip>=1.9.0",
     "ftfy>=6.3.1",
+    "pdoc>=16.0.0",
+
 ]
 
 [dependency-groups]
@@ -66,7 +68,6 @@ dev = [
     "ruff>=0.11.12",
     "nnll[dev] @ git+https://github.com/darkshapes/nnll@0.1.dev799",
     "zodiac[full,console]",
-    "pdoc>=16.0.0",
 ]
 
 
