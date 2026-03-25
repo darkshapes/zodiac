@@ -26,7 +26,7 @@ OS_NAME = platform.system  # replace with config from sdbx later
 class Interface(toga.App):
     formatted_units = [" ❖ chr", " ⟐ tok", ' " sec ']
     bg_graph = "#070708"
-    bg_text = "#1B1B1B"  # "#1B1B1B"  # "#09090B"
+    bg_text = "#1E1C1D"  # "#1B1B1B"  # "#09090B"
     bg = bg_text
     bg_static = "#5D5E62"
     activity = "#8122C4"
@@ -53,33 +53,29 @@ class Interface(toga.App):
         if self.message_panel.value:
             cache = False
             prompts.setdefault("text", self.message_panel.value)
-        # prompts.setdefault("audio",[0]) if else []
-        # prompts.setdefault("image",[]) if image": []
         if stream := self.output_types.value == "text":
             context_data, predictor_data = await ready_predictor(self.registry_entry, dspy_stream=stream, async_stream=stream, cache=cache)
             await self.stream_text(prompts, context_data, predictor_data)
         else:
-            content = await self.generate_media(prompts, self.registry_entry)  # context_data, predictor_data)
             return widget
         return widget
 
     async def stream_text(self, prompts, context_data, predictor_data):
         from zodiac.toga.signatures import Predictor
-        from litellm.types.utils import ModelResponseStream  # StatusStreamingCallback
         from dspy.streaming import StatusMessage, StreamResponse
 
         self.response_panel.scroll_to_bottom()
         with dspy_context(**context_data):
             self.program = streamify(Predictor(), **predictor_data)
             async for prediction in self.program(question=prompts["text"]):
-                if isinstance(prediction, ModelResponseStream) and prediction["choices"][0]["delta"]["content"]:
-                    self.response_panel.value += prediction["choices"][0]["delta"]["content"]
-                elif isinstance(prediction, StreamResponse) or hasattr(prediction, "chunk"):
+                if isinstance(prediction, StreamResponse) or hasattr(prediction, "chunk"):
                     self.response_panel.value += str(prediction.chunk)
                 elif isinstance(prediction, Prediction) or hasattr(prediction, "answer"):
                     self.response_panel.value += str(prediction.answer)
                 elif isinstance(prediction, StatusMessage) or hasattr(prediction, "message"):
                     self.status_display.text = self.status_text_prefix + str(prediction.message)
+                elif prediction["choices"][0]["delta"].get("content"):
+                    self.response_panel.value += prediction["choices"][0]["delta"]["content"]
         self.response_panel.value += "\n--\n\n"
         return prediction
 

@@ -48,23 +48,6 @@ def set_env(args: argparse.ArgumentParser):
         os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = str(not args.diag)
         os.environ["HF_HUB_OFFLINE"] = str(int(not args.net or not args.diag))
 
-        os.environ["DISABLE_HF_TOKENIZER_DOWNLOAD"] = str(not args.net or not args.diag)  # litellm
-        # huggingface_hub.constants.HF_HUB_VERBOSITY
-
-    try:
-        import litellm
-    except (ImportError, ModuleNotFoundError, Exception):  # pylint: disable=broad-exception-caught
-        pass
-    else:
-        litellm.disable_token_counter = False
-        litellm.disable_streaming_logging = True
-        litellm.turn_off_message_logging = True
-        litellm.suppress_debug_info = False
-        litellm.json_logs = False  # type: ignore
-        litellm.disable_end_user_cost_tracking = True
-        litellm.telemetry = False
-        litellm.disable_hf_tokenizer_download = not args.net  # -net = True -> disable download = False/0
-        os.environ["DISABLE_END_USER_COST_TRACKING"] = "True"
     return True
 
 

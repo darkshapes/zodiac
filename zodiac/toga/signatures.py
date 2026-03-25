@@ -87,15 +87,14 @@ class Predictor(dspy.Module):
         self.program = dspy.Predict(signature=QATask)
 
     def __call__(self, question: str):
-        from litellm.exceptions import APIConnectionError
-        from litellm.llms.ollama.common_utils import OllamaError
+        from any_llm.utils.exception_handler import AnyLLMError
         from httpx import ConnectError
         from dspy.utils.exceptions import AdapterParseError
         from aiohttp.client_exceptions import ClientConnectorError
 
         try:
             return self.program(question=question)
-        except (ClientConnectorError, ConnectError, AdapterParseError, APIConnectionError, OllamaError, OSError):
+        except (ClientConnectorError, ConnectError, AdapterParseError, AnyLLMError, OSError):
             pass
 
     # from nnll.tensor_pipe import segments

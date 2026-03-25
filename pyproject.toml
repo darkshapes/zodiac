@@ -1,20 +1,21 @@
+# SPDX-License-Identifier: MPL-2.0 AND LicenseRef-Commons-Clause-License-Condition-1.0
+# <!-- // /*  d a r k s h a p e s */ -->
+
 [build-system]
-requires      = ["setuptools", "setuptools-scm"]
+requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-
 authors = [
     { name = "darkshapes", email = "91800957+exdysa@users.noreply.github.com" },
 ]
-description = "Multimodal generative media sequencer"
-license = { file = "LICENSE" }
 name = "zodiac"
+description = "Multimodal generative media sequencer"
 readme = "README.md"
-requires-python = ">=3.11"
 version = "0.0.2"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
 keywords = ["ML", "AI", "TUI", "no-code", "diffusion", "LLM", "torch"]
-
 classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -42,10 +43,10 @@ classifiers = [
     "Topic :: Multimedia :: Video :: Non-Linear Editor",
 
 ]
+
 dependencies = [
     "dspy>=2.6.27",
-    "litellm>=1.72.0",
-    "tokenizers==0.21.2",                                      #force for non linux
+    "tokenizers==0.21.2",                                            #force for non linux
     "networkx>=3.5",
     "sounddevice>=0.5.2",
     "soundfile>=0.13.1",
@@ -57,7 +58,7 @@ dependencies = [
     "pyperclip>=1.9.0",
     "ftfy>=6.3.1",
     "pdoc>=16.0.0",
-
+    "any-llm-sdk[ollama,openai]>=1.13.0",
 ]
 
 [dependency-groups]
@@ -72,7 +73,7 @@ dev = [
 
 
 [project.optional-dependencies]
-mps  = ["nnll[mps]@  git+https://github.com/darkshapes/nnll@0.1.dev799"]
+mps = ["nnll[mps]@  git+https://github.com/darkshapes/nnll@0.1.dev799"]
 cuda = ["nnll[cuda ]@ git+https://github.com/darkshapes/nnll@0.1.dev799"]
 
 console = [
@@ -95,13 +96,13 @@ dev = [
 ]
 
 [project.urls]
-Homepage      = "https://github.com/darkshapes/zodiac"
+Homepage = "https://github.com/darkshapes/zodiac"
 Documentation = "https://github.com/darkshapes/sdbx/wiki"
 
 [project.scripts]
-zdac      = "zodiac.toga.__main__:main"
+zdac = "zodiac.toga.__main__:main"
 zdac-pool = "zodiac.providers.pools:generate_pool"
-zodiac    = "zodiac.toga.__main__:main"
+zodiac = "zodiac.toga.__main__:main"
 
 [tool.setuptools]
 packages = ["zodiac"]
@@ -119,8 +120,8 @@ conflicts = [
     ],
 ]
 [tool.ruff]
-line-length    = 140
-include        = ["*.py"]
+line-length = 140
+include = ["*.py"]
 extend-exclude = ["^tests/.*$", "test.*$"]
 
 # [tool.ruff.format]
@@ -128,7 +129,7 @@ extend-exclude = ["^tests/.*$", "test.*$"]
 
 [tool.pylint]
 max-line-length = 140
-ignore-paths    = ["^tests/.*$", "test_.*$"]
+ignore-paths = ["^tests/.*$", "test_.*$"]
 
 [tool.pylint.messages_control]
 disable = ["C0415"]
@@ -140,7 +141,7 @@ ignore = ["E731"]
 convention = "numpy"
 
 [tool.ruff.lint.pycodestyle]
-max-line-length               = 140
+max-line-length = 140
 ignore-overlong-task-comments = true
 
 [tool.typos]

@@ -298,10 +298,52 @@ wheels = [
 ]
 
 [[package]]
+name = "anthropic"
+version = "0.86.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "distro" },
+    { name = "docstring-parser" },
+    { name = "httpx" },
+    { name = "jiter" },
+    { name = "pydantic" },
+    { name = "sniffio" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/37/7a/8b390dc47945d3169875d342847431e5f7d5fa716b2e37494d57cfc1db10/anthropic-0.86.0.tar.gz", hash = "sha256:60023a7e879aa4fbb1fed99d487fe407b2ebf6569603e5047cfe304cebdaa0e5", size = 583820, upload-time = "2026-03-18T18:43:08.017Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/63/5f/67db29c6e5d16c8c9c4652d3efb934d89cb750cad201539141781d8eae14/anthropic-0.86.0-py3-none-any.whl", hash = "sha256:9d2bbd339446acce98858c5627d33056efe01f70435b22b63546fe7edae0cd57", size = 469400, upload-time = "2026-03-18T18:43:06.526Z" },
+]
+
+[[package]]
 name = "antlr4-python3-runtime"
 version = "4.9.3"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/3e/38/7859ff46355f76f8d19459005ca000b6e7012f2f1ca597746cbcd1fbfe5e/antlr4-python3-runtime-4.9.3.tar.gz", hash = "sha256:f224469b4168294902bb1efa80a8bf7855f24c99aef99cbefc1bcd3cce77881b", size = 117034, upload-time = "2021-11-06T17:52:23.524Z" }
+
+[[package]]
+name = "any-llm-sdk"
+version = "1.13.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anthropic" },
+    { name = "httpx" },
+    { name = "openai" },
+    { name = "openresponses-types" },
+    { name = "pydantic" },
+    { name = "rich" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/87/4b/dea4eeeb5e4e3e55fa6b37a7ec033a18a2527aabf565bd598071d6308fbd/any_llm_sdk-1.13.0.tar.gz", hash = "sha256:967c5f4dd099f5f6cc9673f2888d5550f6e821d25341d31133a05741c1ce903e", size = 153753, upload-time = "2026-03-23T10:27:29.843Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/64/a1/0106667efdf870595981a0fc3e807675d1f8ded8dc8c20e936e6c42bcd95/any_llm_sdk-1.13.0-py3-none-any.whl", hash = "sha256:7e456a843cec249ae1cb3a498aa89df5baff8aa62d76a24718babb3b8a51e495", size = 216557, upload-time = "2026-03-23T10:27:28.306Z" },
+]
+
+[package.optional-dependencies]
+ollama = [
+    { name = "ollama" },
+]
 
 [[package]]
 name = "anyio"
@@ -1308,6 +1350,15 @@ name = "docopt"
 version = "0.6.2"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/a2/55/8f8cab2afd404cf578136ef2cc5dfb50baa1761b68c9da1fb1e4eed343c9/docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491", size = 25901, upload-time = "2014-06-16T11:18:57.406Z" }
+
+[[package]]
+name = "docstring-parser"
+version = "0.17.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b2/9d/c3b43da9515bd270df0f80548d9944e389870713cc1fe2b8fb35fe2bcefd/docstring_parser-0.17.0.tar.gz", hash = "sha256:583de4a309722b3315439bb31d64ba3eebada841f2e2cee23b99df001434c912", size = 27442, upload-time = "2025-07-21T07:35:01.868Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/55/e2/2537ebcff11c1ee1ff17d8d0b6f4db75873e3b0fb32c2d4a2ee31ecb310a/docstring_parser-0.17.0-py3-none-any.whl", hash = "sha256:cf2569abd23dce8099b300f9b4fa8191e9582dda731fd533daf54c4551658708", size = 36896, upload-time = "2025-07-21T07:35:00.684Z" },
+]
 
 [[package]]
 name = "docutils"
@@ -3972,6 +4023,18 @@ wheels = [
 ]
 
 [[package]]
+name = "openresponses-types"
+version = "2.3.0.post1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d9/26/b612c3215f5599714fa94d63eb5ee59b4eb66dbdeeaf86bb4d848359484d/openresponses_types-2.3.0.post1.tar.gz", hash = "sha256:11b8896d3621d2ac2439f6ff106f34ddcb1bbd517c317a6c852a9df2e98a0753", size = 19254, upload-time = "2026-01-22T20:02:03.933Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b2/5f/e16dad89ed24f586da5b01b9b206d3adbf21fe1af8e4dc55d5b93158fde6/openresponses_types-2.3.0.post1-py3-none-any.whl", hash = "sha256:88f6abcef9cad839203abff420dd080978bf6eb33cc06ddc5d78da4ccdba7613", size = 13847, upload-time = "2026-01-22T20:02:02.582Z" },
+]
+
+[[package]]
 name = "opt-einsum"
 version = "3.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -6524,12 +6587,12 @@ dependencies = [
     { name = "typing-extensions", marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp311-none-macosx_11_0_arm64.whl" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp312-none-macosx_11_0_arm64.whl" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp313-cp313t-macosx_11_0_arm64.whl" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp313-none-macosx_11_0_arm64.whl" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp314-cp314-macosx_11_0_arm64.whl" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp314-cp314t-macosx_11_0_arm64.whl" },
+    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp311-none-macosx_11_0_arm64.whl", hash = "sha256:a52952a8c90a422c14627ea99b9826b7557203b46b4d0772d3ca5c7699692425" },
+    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp312-none-macosx_11_0_arm64.whl", hash = "sha256:287242dd1f830846098b5eca847f817aa5c6015ea57ab4c1287809efea7b77eb" },
+    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp313-cp313t-macosx_11_0_arm64.whl", hash = "sha256:8924d10d36eac8fe0652a060a03fc2ae52980841850b9a1a2ddb0f27a4f181cd" },
+    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp313-none-macosx_11_0_arm64.whl", hash = "sha256:bcee64ae7aa65876ceeae6dcaebe75109485b213528c74939602208a20706e3f" },
+    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:defadbeb055cfcf5def58f70937145aecbd7a4bc295238ded1d0e85ae2cf0e1d" },
+    { url = "https://download.pytorch.org/whl/cpu/torch-2.9.1-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:886f84b181f766f53265ba0a1d503011e60f53fff9d569563ef94f24160e1072" },
 ]
 
 [[package]]
@@ -6585,24 +6648,24 @@ dependencies = [
     { name = "typing-extensions", marker = "sys_platform != 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp311-cp311-manylinux_2_28_aarch64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp311-cp311-manylinux_2_28_x86_64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp311-cp311-win_amd64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp312-cp312-manylinux_2_28_aarch64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp312-cp312-win_amd64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313-manylinux_2_28_aarch64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313-win_amd64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313t-manylinux_2_28_aarch64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313t-manylinux_2_28_x86_64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313t-win_amd64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314-manylinux_2_28_aarch64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314-manylinux_2_28_x86_64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314-win_amd64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314t-manylinux_2_28_aarch64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314t-manylinux_2_28_x86_64.whl" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314t-win_amd64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:cf4ad82430824a80a9f398e29369524ed26c152cf00c2c12002e5400b35e260d" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:2a1da940f0757621d098c9755f7504d791a72a40920ec85a4fd98b20253fca4e" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp311-cp311-win_amd64.whl", hash = "sha256:633005a3700e81b5be0df2a7d3c1d48aced23ed927653797a3bd2b144a3aeeb6" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:1176f250311fa95cc3bca8077af323e0d73ea385ba266e096af82e7e2b91f256" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:7cb4018f4ce68b61fd3ef87dc1c4ca520731c7b5b200e360ad47b612d7844063" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp312-cp312-win_amd64.whl", hash = "sha256:3a01f0b64c10a82d444d9fd06b3e8c567b1158b76b2764b8f51bfd8f535064b0" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:0b80b7555dcd0a75b7b06016991f01281a0bb078cf28fa2d1dfb949fad2fbd07" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:63381a109a569b280ed3319da89d3afe5cf9ab5c879936382a212affb5c90552" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313-win_amd64.whl", hash = "sha256:ad9183864acdd99fc5143d7ca9d3d2e7ddfc9a9600ff43217825d4e5e9855ccc" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:2314521c74d76e513c53bb72c0ce3511ef0295ff657a432790df6c207e5d7962" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:4454a4faca31af81566e3a4208f10f20b8a6d9cfe42791b0ca7ff134326468fc" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313t-win_amd64.whl", hash = "sha256:24420e430e77136f7079354134b34e7ba9d87e539f5ac84c33b08e5c13412ebe" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:32c036296c557f19a1537ce981c40533650097114e1720a321a39a3b08d9df56" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:7788d3d03d939cf00f93ac0da5ab520846f66411e339cfbf519a806e8facf519" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314-win_amd64.whl", hash = "sha256:7bcd40cbffac475b478d6ce812f03da84e9a4894956efb89c3b7bcca5dbd4f91" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:e88c78e5b08ae9303aa15da43b68b44287ecbec16d898d9fad6998832fe626a5" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:7d8769bdf3200ca16a92f14df404c3370171ac3732996528a8973d753eac562f" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314t-win_amd64.whl", hash = "sha256:0c784b600959ec70ee01cb23e8bc870a0e0475af30378ff5e39f4abed8b7c1cc" },
 ]
 
 [[package]]
@@ -6618,18 +6681,18 @@ dependencies = [
     { name = "torch", version = "2.9.1", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "sys_platform == 'darwin' or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:e6a4c796b1b5dbd820be83388c209d0f163ef5d74a43a06d519360fdacd36ed1" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:9d3956e2bcf8a67e7e8468d760209aed0a5de3cfbdd46e4adfba80a3bc2d0d7b" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:c779c0380fbba12d63f56c093dd93be1222d6cc3caf140ad1d89c4a60b28eff1" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:f6fa882b750385fdb0a2aa5215a6a04b97cf9668b37617038a814c7630b2dc8d" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp313-cp313-macosx_12_0_arm64.whl", hash = "sha256:1c521e9f70fab2e825f6b831ac314a79dc37f51c8d11cd5498c0f3c880a122e1" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:0b3fecc6bcfe46fcb905ea826ef63e9a052a6d9d1e2cd713f59a53a509fc8b5c" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp313-cp313t-macosx_11_0_arm64.whl", hash = "sha256:976c4106f9f1d86ecd74c1a6e1fbf903403f2a37547ba2ece262f82b0daae300" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:f5b0595fa19ee8c5ac6a997c0d14b662d9c92a08c43771698ae4c9e3f2273fdf" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:32b67a55103e9b112534312b1d196c2a6b67e21a5763bab308f35bf479857185" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:0a70353ee9452068ade21d6181b5da0959f51d3869a1c811ecef17cb4d67181c" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:48dd2eba10e1a8e890548cae409511fbf03bca70ab973ba3719924dd9d72d229" },
-    { url = "https://download.pytorch.org/whl/cpu/torchaudio-2.9.1-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:04c2396bf24cd517d3b7e9fb41f1098cfac445b0a9f8ee52a1530dbc88493b29" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:e6a4c796b1b5dbd820be83388c209d0f163ef5d74a43a06d519360fdacd36ed1" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:9d3956e2bcf8a67e7e8468d760209aed0a5de3cfbdd46e4adfba80a3bc2d0d7b" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:c779c0380fbba12d63f56c093dd93be1222d6cc3caf140ad1d89c4a60b28eff1" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:f6fa882b750385fdb0a2aa5215a6a04b97cf9668b37617038a814c7630b2dc8d" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp313-cp313-macosx_12_0_arm64.whl", hash = "sha256:1c521e9f70fab2e825f6b831ac314a79dc37f51c8d11cd5498c0f3c880a122e1" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:0b3fecc6bcfe46fcb905ea826ef63e9a052a6d9d1e2cd713f59a53a509fc8b5c" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp313-cp313t-macosx_11_0_arm64.whl", hash = "sha256:976c4106f9f1d86ecd74c1a6e1fbf903403f2a37547ba2ece262f82b0daae300" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:f5b0595fa19ee8c5ac6a997c0d14b662d9c92a08c43771698ae4c9e3f2273fdf" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:32b67a55103e9b112534312b1d196c2a6b67e21a5763bab308f35bf479857185" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:0a70353ee9452068ade21d6181b5da0959f51d3869a1c811ecef17cb4d67181c" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:48dd2eba10e1a8e890548cae409511fbf03bca70ab973ba3719924dd9d72d229" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.9.1-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:04c2396bf24cd517d3b7e9fb41f1098cfac445b0a9f8ee52a1530dbc88493b29" },
 ]
 
 [[package]]
@@ -6648,12 +6711,12 @@ dependencies = [
     { name = "torch", version = "2.9.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:ddb720f4abf3dd284a932b61eaf5fbc0f224195380be98551aef710a4fe34e91" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:59f70f6aa6a7e77a1fd51756d7d25fec22bead0b50ce7bed4ede75a5fa6b21d1" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:ea6fe3b9525493df0a5eb5eed5c22925065b5830f6999980ed76bb36c4592d34" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:9d3cfd604a617a245d26a5381ad7d669047ac1c152896227d8a006aad12151f8" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:bb790f968539f6b4115e637dbf3aab71f3f92e41f0c12e6bc7d52324f0051113" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:7d8da8816dfa25869da206eb4cdddb11603b042ab59326c6466a65b6e64d2684" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:ddb720f4abf3dd284a932b61eaf5fbc0f224195380be98551aef710a4fe34e91" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:59f70f6aa6a7e77a1fd51756d7d25fec22bead0b50ce7bed4ede75a5fa6b21d1" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:ea6fe3b9525493df0a5eb5eed5c22925065b5830f6999980ed76bb36c4592d34" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:9d3cfd604a617a245d26a5381ad7d669047ac1c152896227d8a006aad12151f8" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:bb790f968539f6b4115e637dbf3aab71f3f92e41f0c12e6bc7d52324f0051113" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:7d8da8816dfa25869da206eb4cdddb11603b042ab59326c6466a65b6e64d2684" },
 ]
 
 [[package]]
@@ -6681,18 +6744,18 @@ dependencies = [
     { name = "torch", version = "2.9.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(platform_machine != 'aarch64' and sys_platform == 'linux') or (sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:430c22ecddd9b184117bf64d41d5f4d8d3f0353bb684f3182363bf8180e3e8a5" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp311-cp311-win_amd64.whl", hash = "sha256:c91eea923573e7b02611a324232e4adb7aad5f828aa875b1f48241c228980899" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:54eb19e634b8c567886a1b53b4184506d943c3ba5139198e9fe1b941bc566f30" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp312-cp312-win_amd64.whl", hash = "sha256:88896c7bfa486102439fab6c85ac834176617e9c06eb0be9074c07ee1183b47d" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:52297b7dfb7c42e311385572bc9c0186e602ea1a5f20c42923765baea99aff83" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp313-cp313-win_amd64.whl", hash = "sha256:abb0ee5a40c883ad17d90cdd45965c06deef42a0a2ffc58c51e32729642292f0" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:ddc7410908858693d3b81346f53b5e5e51f987b3b7128978be6c774314377204" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp313-cp313t-win_amd64.whl", hash = "sha256:9d29dc3a2e0c43da66d33bcb9e22ad58c58f0ae1b6dcfe2d8d94bda279ddcf89" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:12c3e3d3aaf856d679328a5a9d46d866bc88b4c5290f2128f306abff975fa51e" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp314-cp314-win_amd64.whl", hash = "sha256:eb6c714557c8d47f4fc65ec58b14a21cb4150940c242fe77e7517636c20ed3c3" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:6d9f5d53861b2fc057c1dd5051721f60b2253176c44a856d0f19100e312add3f" },
-    { url = "https://download.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp314-cp314t-win_amd64.whl", hash = "sha256:150a8d7d51df9f667b5386cff5850f685b6059c59db51e056d7157955aad9e75" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:430c22ecddd9b184117bf64d41d5f4d8d3f0353bb684f3182363bf8180e3e8a5" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp311-cp311-win_amd64.whl", hash = "sha256:c91eea923573e7b02611a324232e4adb7aad5f828aa875b1f48241c228980899" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:54eb19e634b8c567886a1b53b4184506d943c3ba5139198e9fe1b941bc566f30" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp312-cp312-win_amd64.whl", hash = "sha256:88896c7bfa486102439fab6c85ac834176617e9c06eb0be9074c07ee1183b47d" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:52297b7dfb7c42e311385572bc9c0186e602ea1a5f20c42923765baea99aff83" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp313-cp313-win_amd64.whl", hash = "sha256:abb0ee5a40c883ad17d90cdd45965c06deef42a0a2ffc58c51e32729642292f0" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:ddc7410908858693d3b81346f53b5e5e51f987b3b7128978be6c774314377204" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp313-cp313t-win_amd64.whl", hash = "sha256:9d29dc3a2e0c43da66d33bcb9e22ad58c58f0ae1b6dcfe2d8d94bda279ddcf89" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:12c3e3d3aaf856d679328a5a9d46d866bc88b4c5290f2128f306abff975fa51e" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp314-cp314-win_amd64.whl", hash = "sha256:eb6c714557c8d47f4fc65ec58b14a21cb4150940c242fe77e7517636c20ed3c3" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:6d9f5d53861b2fc057c1dd5051721f60b2253176c44a856d0f19100e312add3f" },
+    { url = "https://download-r2.pytorch.org/whl/cu128/torchaudio-2.9.1%2Bcu128-cp314-cp314t-win_amd64.whl", hash = "sha256:150a8d7d51df9f667b5386cff5850f685b6059c59db51e056d7157955aad9e75" },
 ]
 
 [[package]]
@@ -6729,18 +6792,18 @@ dependencies = [
     { name = "torch", version = "2.9.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (platform_machine != 'aarch64' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform != 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:73481f7c0da38ec1a04021f2d967282c87da48a2f8332be960091672cffe806b" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:4527308ffb57f6d2c17e82ee08e25bfbd0a41f137df6d0ea8805b23ef2af0e6b" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:4f0956825bab5932dd53394de8e1105ed9182502b367ff0475dbf0e699550612" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:28157649758fb97491de0db478d5d6e73c23b508e54de20adbc35e6b3aa72443" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp313-cp313-macosx_12_0_arm64.whl", hash = "sha256:c858f944efea2170acbda2f801613b15193be49e8419c98c204e9f5e8c65a955" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:59ddbe5779943af99a897fcd5894757ae7cffeb1c25a519b79cd9338188a8664" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp313-cp313t-macosx_11_0_arm64.whl", hash = "sha256:fff7b030a51c0b96ed0a7a163e9ccd23d4d1b6bb406decaba7ac25933f73ef91" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:0227e8cb5a418ab47e0ed0f70e0ea2fea2febb54b31ced8cd753d2efb49551df" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:9839848aff47d98e7724abd1a3076121db96066c32ddb319b685dfe077360f40" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:32a5ce99ec2081fd5ab304da0aa9691b6ec047d12a329c0d991c69d0a1beee45" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:7df2c98665e3e5532da320b7d94ca228799b6c7a41700e772536bd4de2d324c7" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:e789fc690ff1307eb46540b4b8b76a8a3e06281078cf29c51b636e747373498a" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:73481f7c0da38ec1a04021f2d967282c87da48a2f8332be960091672cffe806b" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:4527308ffb57f6d2c17e82ee08e25bfbd0a41f137df6d0ea8805b23ef2af0e6b" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:4f0956825bab5932dd53394de8e1105ed9182502b367ff0475dbf0e699550612" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:28157649758fb97491de0db478d5d6e73c23b508e54de20adbc35e6b3aa72443" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp313-cp313-macosx_12_0_arm64.whl", hash = "sha256:c858f944efea2170acbda2f801613b15193be49e8419c98c204e9f5e8c65a955" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:59ddbe5779943af99a897fcd5894757ae7cffeb1c25a519b79cd9338188a8664" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp313-cp313t-macosx_11_0_arm64.whl", hash = "sha256:fff7b030a51c0b96ed0a7a163e9ccd23d4d1b6bb406decaba7ac25933f73ef91" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:0227e8cb5a418ab47e0ed0f70e0ea2fea2febb54b31ced8cd753d2efb49551df" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:9839848aff47d98e7724abd1a3076121db96066c32ddb319b685dfe077360f40" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:32a5ce99ec2081fd5ab304da0aa9691b6ec047d12a329c0d991c69d0a1beee45" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:7df2c98665e3e5532da320b7d94ca228799b6c7a41700e772536bd4de2d324c7" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:e789fc690ff1307eb46540b4b8b76a8a3e06281078cf29c51b636e747373498a" },
 ]
 
 [[package]]
@@ -6812,9 +6875,9 @@ dependencies = [
     { name = "torch", version = "2.9.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(platform_machine != 'aarch64' and sys_platform == 'linux') or (sys_platform != 'darwin' and sys_platform != 'linux') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'darwin' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-mps') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-cuda' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-rocm') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-mps' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-torch') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-rocm' and extra == 'extra-6-zodiac-xpu') or (sys_platform == 'linux' and extra == 'extra-6-zodiac-torch' and extra == 'extra-6-zodiac-xpu')" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1%2Bd801a34-cp311-cp311-win_arm64.whl", hash = "sha256:6af503ffb082820f4a0d619e33091d95137a21bc9cf76bc1350cc814bade591f" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1%2Bd801a34-cp312-cp312-win_arm64.whl", hash = "sha256:f5568bb4dc4069a1e1b1b56bf797db35a37a582e08d227c59f765193f336735c" },
-    { url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1%2Bd801a34-cp313-cp313-win_arm64.whl", hash = "sha256:a94e23ae2d5f27000152d199d32871a4b4d800c71832d7980a60c3f499f87a9c" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1%2Bd801a34-cp311-cp311-win_arm64.whl", hash = "sha256:6af503ffb082820f4a0d619e33091d95137a21bc9cf76bc1350cc814bade591f" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1%2Bd801a34-cp312-cp312-win_arm64.whl", hash = "sha256:f5568bb4dc4069a1e1b1b56bf797db35a37a582e08d227c59f765193f336735c" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchvision-0.24.1%2Bd801a34-cp313-cp313-win_arm64.whl", hash = "sha256:a94e23ae2d5f27000152d199d32871a4b4d800c71832d7980a60c3f499f87a9c" },
 ]
 
 [[package]]
@@ -7792,12 +7855,13 @@ name = "zodiac"
 version = "0.0.2"
 source = { editable = "." }
 dependencies = [
+    { name = "any-llm-sdk", extra = ["ollama"] },
     { name = "dspy" },
     { name = "ftfy" },
-    { name = "litellm" },
     { name = "matplotlib" },
     { name = "networkx" },
     { name = "nnll", extra = ["dev"] },
+    { name = "pdoc" },
     { name = "pyperclip" },
     { name = "sounddevice" },
     { name = "soundfile" },
@@ -7841,7 +7905,6 @@ toga = [
 dev = [
     { name = "matplotlib" },
     { name = "nnll", extra = ["dev"] },
-    { name = "pdoc" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "ruff" },
@@ -7850,9 +7913,9 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "any-llm-sdk", extras = ["ollama", "openai"], specifier = ">=1.13.0" },
     { name = "dspy", specifier = ">=2.6.27" },
     { name = "ftfy", specifier = ">=6.3.1" },
-    { name = "litellm", specifier = ">=1.72.0" },
     { name = "matplotlib", specifier = ">=3.10.3" },
     { name = "matplotlib", marker = "extra == 'dev'", specifier = ">=3.10.3" },
     { name = "networkx", specifier = ">=3.5" },
@@ -7860,6 +7923,7 @@ requires-dist = [
     { name = "nnll", extras = ["dev"], git = "https://github.com/darkshapes/nnll?rev=0.1.dev799" },
     { name = "nnll", extras = ["dev"], marker = "extra == 'dev'", git = "https://github.com/darkshapes/nnll?rev=0.1.dev799" },
     { name = "nnll", extras = ["mps"], marker = "extra == 'mps'", git = "https://github.com/darkshapes/nnll?rev=0.1.dev799" },
+    { name = "pdoc", specifier = ">=16.0.0" },
     { name = "pyperclip", specifier = ">=1.9.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.4.0" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=1.0.0" },
@@ -7883,7 +7947,6 @@ provides-extras = ["mps", "cuda", "console", "toga", "full", "dev"]
 dev = [
     { name = "matplotlib", specifier = ">=3.10.3" },
     { name = "nnll", extras = ["dev"], git = "https://github.com/darkshapes/nnll?rev=0.1.dev799" },
-    { name = "pdoc", specifier = ">=16.0.0" },
     { name = "pytest", specifier = ">=8.4.0" },
     { name = "pytest-asyncio", specifier = ">=1.0.0" },
     { name = "ruff", specifier = ">=0.11.12" },

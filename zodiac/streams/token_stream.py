@@ -3,16 +3,23 @@
 
 # pylint: disable=import-error
 
-
-import warnings
-from pathlib import Path
 from typing import Callable, Optional
 
-warnings.filterwarnings("ignore", category=DeprecationWarning)
-
-from litellm.utils import create_tokenizer, token_counter
+import tiktoken
 from toga.sources import Source
 from zodiac.providers.registry_entry import RegistryEntry
+
+
+async def tiktoken_counter(model="cl100k_base", message: str = ""):
+    """
+    Return token count of gpt based on model\n
+    :param model: Model path to lookup tokenizer for
+    :param message: Message to tokenize
+    :return: `int` Number of tokens needed to represent message
+    """
+
+    encoding = tiktoken.get_encoding(model)
+    return len(encoding.encode(message))
 
 
 class TokenStream(Source):
@@ -27,18 +34,7 @@ class TokenStream(Source):
         :param message: Text to encode
         :return: Token embeddings for the model"""
 
-        import json
-
-        if registry_entry.tokenizer:
-            with open(str(registry_entry.tokenizer), encoding="UTF-8") as file_obj:
-                tokenizer_json = json.load(file_obj)
-                tokenizer_data = json.dumps(tokenizer_json)
-                self.tokenizer_args = {"custom_tokenizer": create_tokenizer(tokenizer_data)}
-        else:
-            # model_name = os.path.split(registry_entry.model)
-            # model_name = os.path.join(os.path.split(model_name[0])[-1], model_name[-1])
-            # self.status_log.registry_entry.model
-            self.tokenizer_args = {"model": registry_entry.model}
+        self.tokenizer_args = {}  # Disabled until suitable replacement is found
 
     async def token_count(
         self,
@@ -52,4 +48,4 @@ class TokenStream(Source):
 
         warnings.filterwarnings("ignore", category=DeprecationWarning)
         character_count = len(message)
-        return token_counter(text=message, **self.tokenizer_args), character_count
+        return tiktoken_counter(text=message, **self.tokenizer_args), character_count
