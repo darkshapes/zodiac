@@ -13,6 +13,7 @@ class CommandPalette:
         :param external: Indicates whether the processing should be handled externally (e.g., via clipboard), defaults to False
         :type external: bool"""
         from zodiac.toga.signatures import ready_predictor
+        import os
 
         self.response_panel.value += f"{os.path.basename(self.registry_entry.model)} :\n"
 
@@ -34,21 +35,22 @@ class CommandPalette:
 
     async def stream_text(self, prompts, context_data, predictor_data):
         from zodiac.toga.signatures import Predictor
-        from litellm.types.utils import ModelResponseStream  # StatusStreamingCallback
+
+        from dspy import Prediction, context as dspy_context, streamify
         from dspy.streaming import StatusMessage, StreamResponse
 
         self.response_panel.scroll_to_bottom()
         with dspy_context(**context_data):
             self.program = streamify(Predictor(), **predictor_data)
             async for prediction in self.program(question=prompts["text"]):
-                if isinstance(prediction, ModelResponseStream) and prediction["choices"][0]["delta"]["content"]:
-                    self.response_panel.value += prediction["choices"][0]["delta"]["content"]
-                elif isinstance(prediction, StreamResponse) or hasattr(prediction, "chunk"):
+                if isinstance(prediction, StreamResponse) or hasattr(prediction, "chunk"):
                     self.response_panel.value += str(prediction.chunk)
                 elif isinstance(prediction, Prediction) or hasattr(prediction, "answer"):
                     self.response_panel.value += str(prediction.answer)
                 elif isinstance(prediction, StatusMessage) or hasattr(prediction, "message"):
                     self.status_display.text = self.status_text_prefix + str(prediction.message)
+                elif prediction["choices"][0]["delta"].get("content"):
+                    self.response_panel.value += prediction["choices"][0]["delta"]["content"]
         self.response_panel.value += "\n--\n\n"
         return prediction
 
