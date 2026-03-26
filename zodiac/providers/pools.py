@@ -112,7 +112,7 @@ async def hub_pool(mir_db: Callable, api_data: Dict[str, Any], entries: List[Reg
         try:
             cache_dir = scan_cache_dir()
         except CacheNotFound:
-            nfo("Cache error")
+            nfo("Cache error: No HuggingFace cache found")
             yield None, None
         else:
             for repo in cache_dir.repos:

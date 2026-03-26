@@ -1,12 +1,10 @@
 [build-system]
-requires      = ["setuptools", "setuptools-scm"]
+requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
 
-authors = [
-    { name = "darkshapes", email = "91800957+exdysa@users.noreply.github.com" },
-]
+authors = [{ name = "darkshapes", email = "91800957+exdysa@users.noreply.github.com" }]
 description = "Multimodal generative media sequencer"
 license = { file = "LICENSE" }
 name = "zodiac"
@@ -44,8 +42,8 @@ classifiers = [
 ]
 dependencies = [
     "dspy>=2.6.27",
-    "litellm>=1.72.0",
-    "tokenizers==0.21.2",                                      #force for non linux
+    "litellm==1.80.7",
+    "tokenizers==0.21.2",                                            #force for non linux
     "networkx>=3.5",
     "sounddevice>=0.5.2",
     "soundfile>=0.13.1",
@@ -69,9 +67,8 @@ dev = [
     "pdoc>=16.0.0",
 ]
 
-
 [project.optional-dependencies]
-mps  = ["nnll[mps]@  git+https://github.com/darkshapes/nnll@0.1.dev799"]
+mps = ["nnll[mps]@  git+https://github.com/darkshapes/nnll@0.1.dev799"]
 cuda = ["nnll[cuda ]@ git+https://github.com/darkshapes/nnll@0.1.dev799"]
 
 console = [
@@ -83,24 +80,16 @@ console = [
 toga = ["toga>=0.5.1"]
 full = ["zodiac[toga]"]
 
-
-dev = [
-    "matplotlib>=3.10.3",
-    "pytest>=8.4.0",
-    "pytest-asyncio>=1.0.0",
-    "ruff>=0.11.12",
-    "nnll[dev] @ git+https://github.com/darkshapes/nnll@0.1.dev799",
-    "zodiac[full,console]",
-]
+dev = ["matplotlib>=3.10.3", "pytest>=8.4.0", "pytest-asyncio>=1.0.0", "ruff>=0.11.12", "nnll[dev] @ git+https://github.com/darkshapes/nnll@0.1.dev799", "zodiac[full,console]"]
 
 [project.urls]
-Homepage      = "https://github.com/darkshapes/zodiac"
+Homepage = "https://github.com/darkshapes/zodiac"
 Documentation = "https://github.com/darkshapes/sdbx/wiki"
 
 [project.scripts]
-zdac      = "zodiac.toga.__main__:main"
+zdac = "zodiac.toga.__main__:main"
 zdac-pool = "zodiac.providers.pools:generate_pool"
-zodiac    = "zodiac.toga.__main__:main"
+zodiac = "zodiac.toga.__main__:main"
 
 [tool.setuptools]
 packages = ["zodiac"]
@@ -108,18 +97,10 @@ packages = ["zodiac"]
 [tool.uv]
 preview = true
 prerelease = "allow"
-conflicts = [
-    [
-        { extra = "torch" },
-        { extra = "mps" },
-        { extra = "cuda" },
-        { extra = "xpu" },
-        { extra = "rocm" },
-    ],
-]
+conflicts = [[{ extra = "torch" }, { extra = "mps" }, { extra = "cuda" }, { extra = "xpu" }, { extra = "rocm" }]]
 [tool.ruff]
-line-length    = 140
-include        = ["*.py"]
+line-length = 140
+include = ["*.py"]
 extend-exclude = ["^tests/.*$", "test.*$"]
 
 # [tool.ruff.format]
@@ -127,7 +108,7 @@ extend-exclude = ["^tests/.*$", "test.*$"]
 
 [tool.pylint]
 max-line-length = 140
-ignore-paths    = ["^tests/.*$", "test_.*$"]
+ignore-paths = ["^tests/.*$", "test_.*$"]
 
 [tool.pylint.messages_control]
 disable = ["C0415"]
@@ -139,7 +120,7 @@ ignore = ["E731"]
 convention = "numpy"
 
 [tool.ruff.lint.pycodestyle]
-max-line-length               = 140
+max-line-length = 140
 ignore-overlong-task-comments = true
 
 [tool.typos]

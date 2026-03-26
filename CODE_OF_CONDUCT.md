@@ -25,6 +25,9 @@ Version = 0.0.5_2025-22-12
 |       Creepy Vibes... | Unacceptable. Words and flirts CAN hurt. End coercion.      |
 |   Users vs Developers | Everyone involved, anywhere. Skill DIVERSITY, not division. |
 
+\*More behavior guidelines
+https://www.recurse.com/social-rules
+
 ## Constructive Criticism Guide:
 
 - Ask consent first. Don't forget to wait for the answer!
