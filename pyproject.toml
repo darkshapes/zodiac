@@ -6,13 +6,11 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-authors = [
-    { name = "darkshapes", email = "91800957+exdysa@users.noreply.github.com" },
-]
+authors = [{ name = "darkshapes", email = "91800957+exdysa@users.noreply.github.com" }]
 name = "zodiac"
 description = "Multimodal generative media sequencer"
 readme = "README.md"
-version = "0.0.2"
+version = "0.0.3"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
 keywords = ["ML", "AI", "TUI", "no-code", "diffusion", "LLM", "torch"]
@@ -62,38 +60,15 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = [
-    "matplotlib>=3.10.3",
-    "pytest>=8.4.0",
-    "pytest-asyncio>=1.0.0",
-    "ruff>=0.11.12",
-    "nnll[dev] @ git+https://github.com/darkshapes/nnll@0.1.dev799",
-    "zodiac[full,console]",
-]
-
+dev = ["matplotlib>=3.10.3", "pytest>=8.4.0", "pytest-asyncio>=1.0.0", "ruff>=0.11.12", "nnll[dev] @ git+https://github.com/darkshapes/nnll@0.1.dev799", "zodiac[full]"]
 
 [project.optional-dependencies]
 mps = ["nnll[mps]@  git+https://github.com/darkshapes/nnll@0.1.dev799"]
 cuda = ["nnll[cuda ]@ git+https://github.com/darkshapes/nnll@0.1.dev799"]
-
-console = [
-    # "toga-textual>=0.5.1",
-    "textual-dev>=1.7.0",
-    "textual-plotext>=1.0.1",
-    "textual[syntax]>=3.3.0",
-]
 toga = ["toga>=0.5.1"]
 full = ["zodiac[toga]"]
 
-
-dev = [
-    "matplotlib>=3.10.3",
-    "pytest>=8.4.0",
-    "pytest-asyncio>=1.0.0",
-    "ruff>=0.11.12",
-    "nnll[dev] @ git+https://github.com/darkshapes/nnll@0.1.dev799",
-    "zodiac[full,console]",
-]
+dev = ["matplotlib>=3.10.3", "pytest>=8.4.0", "pytest-asyncio>=1.0.0", "ruff>=0.11.12", "nnll[dev] @ git+https://github.com/darkshapes/nnll@0.1.dev799", "zodiac[full]"]
 
 [project.urls]
 Homepage = "https://github.com/darkshapes/zodiac"
@@ -110,15 +85,7 @@ packages = ["zodiac"]
 [tool.uv]
 preview = true
 prerelease = "allow"
-conflicts = [
-    [
-        { extra = "torch" },
-        { extra = "mps" },
-        { extra = "cuda" },
-        { extra = "xpu" },
-        { extra = "rocm" },
-    ],
-]
+conflicts = [[{ extra = "torch" }, { extra = "mps" }, { extra = "cuda" }, { extra = "xpu" }, { extra = "rocm" }]]
 [tool.ruff]
 line-length = 140
 include = ["*.py"]
